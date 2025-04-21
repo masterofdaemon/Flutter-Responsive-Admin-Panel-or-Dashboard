@@ -1,5 +1,9 @@
+import 'package:admin/controllers/menu_app_controller.dart';
+import 'package:admin/screens/client_list_screen.dart'; // Import the new screen
+import 'package:admin/screens/dashboard/dashboard_screen.dart'; // Import DashboardScreen
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart'; // Import Provider
 
 class SideMenu extends StatelessWidget {
   const SideMenu({
@@ -8,6 +12,9 @@ class SideMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Access the controller
+    final menuAppController = Provider.of<MenuAppController>(context);
+
     return Drawer(
       child: ListView(
         children: [
@@ -17,11 +24,24 @@ class SideMenu extends StatelessWidget {
           DrawerListTile(
             title: "Dashboard",
             svgSrc: "assets/icons/menu_dashboard.svg",
-            press: () {},
+            // Update press callback
+            press: () {
+              menuAppController.setSelectedScreen(DashboardScreen());
+            },
+          ),
+          // Add the new Client List Tile
+          DrawerListTile(
+            title: "Clients",
+            svgSrc:
+                "assets/icons/menu_profile.svg", // Using profile icon for now
+            press: () {
+              menuAppController.setSelectedScreen(const ClientListScreen());
+            },
           ),
           DrawerListTile(
             title: "Transaction",
             svgSrc: "assets/icons/menu_tran.svg",
+            // Placeholder for other screens - update later if needed
             press: () {},
           ),
           DrawerListTile(

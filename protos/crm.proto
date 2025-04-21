@@ -1,0 +1,615 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "crm/proto"; // Reverted to simpler path
+
+import "google/protobuf/timestamp.proto"; // Needed for time fields
+import "google/protobuf/struct.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto"; // Useful for optional basic types if needed
+
+// --- Message Definitions ---
+
+// Client represents a customer in the CRM system.
+// All fields are required unless marked as optional.
+message Client {
+  // Unique identifier for the client (UUID format)
+  string client_id = 1;
+  // Client's first name (min 2 chars, max 255 chars)
+  string first_name = 2;
+  // Client's last name (min 2 chars, max 255 chars)
+  string last_name = 3;
+  // Client's phone number (E.164 format)
+  string phone = 4;
+  // Client's email address (valid email format)
+  optional string email = 5;
+  // Client's Telegram ID
+  optional string telegram_id = 6;
+  // Client's WhatsApp number (E.164 format)
+  optional string whatsapp_number = 7;
+  // Source of the client
+  optional string source = 8;
+  // Client's passport data (stored as JSON)
+  optional google.protobuf.Value passport_data = 9;
+  // Relationships omitted for brevity in proto messages, handled by IDs
+}
+
+// User represents a system user with authentication credentials.
+// All fields are required unless marked as optional.
+message User {
+  // Unique identifier for the user (UUID format)
+  string user_id = 1;
+  // User's login name (min 3 chars, max 100 chars, alphanumeric only)
+  string login = 2;
+  // PasswordHash is intentionally omitted from proto messages for security
+  optional google.protobuf.Timestamp last_login = 3;
+}
+
+message Employee {
+  string employee_id = 1;
+  string user_id = 2; // Link to User
+  string name = 3;
+  string role = 4; // Consider using an enum later
+  string office_id = 5; // Link to Office
+  optional string telegram_id = 6;
+  optional string whatsapp_number = 7;
+  string email = 8;
+  bool is_active = 9;
+  // Relationships omitted for brevity
+}
+
+message Office {
+  string office_id = 1;
+  string city = 2;
+  optional string address = 3;
+  optional string phone = 4;
+  // Relationships omitted (e.g., list of employee_ids or partner_ids could be added if needed)
+}
+
+message LegalCase {
+  string case_id = 1;
+  string client_id = 2;
+  string manager_id = 3;
+  string issue_type_id = 4;
+  optional string partner_id = 5;
+  optional google.protobuf.Timestamp consultation_date = 6;
+  optional google.protobuf.Timestamp contract_date = 7;
+  double contract_amount = 8;
+  double expected_commission = 9; // Calculated field
+  string status = 10; // Consider enum
+  optional string payment_id = 11;
+}
+
+message TranslationOrder {
+  string order_id = 1;
+  string client_id = 2;
+  string manager_id = 3;
+  optional string translator_id = 4;
+  string office_id = 5;
+  optional string document_type = 6;
+  optional string target_language = 7;
+  optional int32 page_count = 8;
+  double translation_sum = 9; // Calculated
+  double notarial_sum = 10;
+  double total_sum = 11; // Calculated
+  optional string priority = 12; // Consider enum
+  string status = 13; // Consider enum
+  optional string payment_id = 14;
+  optional google.protobuf.Value document_blanks = 15; // Represents JSON array
+}
+
+message InsurancePolicy {
+  string policy_id = 1;
+  string client_id = 2;
+  string manager_id = 3;
+  string policy_number = 4;
+  google.protobuf.Timestamp start_date = 5;
+  google.protobuf.Timestamp expiry_date = 6;
+  double amount = 7;
+  string status = 8; // Consider enum
+  optional string renewal_status = 9; // Consider enum
+}
+
+message TrainingEnrollment {
+  string enrollment_id = 1;
+  string client_id = 2;
+  string manager_id = 3;
+  string course_id = 4;
+  optional google.protobuf.Timestamp contract_date = 5;
+  string status = 6; // Consider enum
+  optional string payment_id = 7;
+}
+
+message AccountOpeningRequest {
+  string request_id = 1;
+  string client_id = 2;
+  string manager_id = 3;
+  string bank_id = 4;
+  string status = 5; // Consider enum
+  optional google.protobuf.Timestamp application_date = 6;
+  optional google.protobuf.Timestamp opened_date = 7;
+  optional string payment_id = 8;
+}
+
+message BusinessRegistration {
+  string request_id = 1;
+  string client_id = 2;
+  string manager_id = 3;
+  string bank_id = 4;
+  string registration_type = 5; // Consider enum "IP", "OOO"
+  string status = 6; // Consider enum
+  optional google.protobuf.Timestamp application_date = 7;
+  optional google.protobuf.Timestamp registration_date = 8;
+  optional string payment_id = 9;
+}
+
+message LendingApplication {
+  string request_id = 1;
+  string client_id = 2;
+  string manager_id = 3;
+  string bank_id = 4;
+  double requested_amount = 5;
+  optional double approved_amount = 6;
+  optional google.protobuf.Timestamp application_date = 7;
+  optional google.protobuf.Timestamp approval_date = 8;
+  optional google.protobuf.Timestamp funds_received_date = 9;
+  optional google.protobuf.Timestamp company_contract_date = 10;
+  double expected_commission = 11; // Calculated
+  string status = 12; // Consider enum
+  optional string payment_id = 13;
+}
+
+message Partner {
+  string partner_id = 1;
+  string name = 2;
+  optional string city_of_residence = 3;
+  optional string contact_info = 4;
+  optional string status = 5; // Consider enum
+  // M2M relationships omitted, handled by separate tables/queries
+}
+
+message LegalIssueType {
+  string issue_type_id = 1;
+  string name = 2;
+  optional string description = 3;
+}
+
+message TrainingCourse {
+  string course_id = 1;
+  string name = 2;
+  double price = 3;
+  double commission_percent = 4;
+  optional string description = 5;
+}
+
+message Bank {
+  string bank_id = 1;
+  string name = 2;
+  double account_opening_commission = 3;
+  double ip_registration_commission = 4;
+  double ooo_registration_commission = 5;
+  optional double lending_commission_percent = 6;
+}
+
+message Interaction {
+  string interaction_id = 1;
+  string client_id = 2;
+  optional string employee_id = 3;
+  google.protobuf.Timestamp date = 4;
+  string type = 5; // Consider enum
+  optional string description = 6;
+}
+
+message Payment {
+  string payment_id = 1;
+  string related_entity_id = 2;
+  string related_entity_type = 3; // Discriminator: "LegalCase", "TranslationOrder", etc.
+  string client_id = 4; // Denormalized
+  double expected_amount = 5;
+  optional double actual_amount_received = 6;
+  optional google.protobuf.Timestamp payment_date = 7;
+  optional string payment_method = 8; // Consider enum
+  string status = 9; // Consider enum
+  bool verified_by_accountant = 10;
+  optional google.protobuf.Timestamp created_at_entity = 11; // Timestamp of original service
+}
+
+
+// --- Request/Response Messages ---
+
+// Client CRUD
+message CreateClientRequest {
+  Client client = 1; // ID will likely be ignored/generated by server
+}
+message CreateClientResponse {
+  string client_id = 1; // Return the generated ID
+}
+
+message GetClientRequest {
+  string client_id = 1;
+}
+message GetClientResponse {
+  Client client = 1;
+}
+
+message UpdateClientRequest {
+  string client_id = 1; // ID to identify the client
+  Client client_data = 2; // Fields to update (server should handle partial updates)
+}
+// Update often returns Empty or the updated resource
+message UpdateClientResponse {
+  Client client = 1;
+}
+
+message DeleteClientRequest {
+  string client_id = 1;
+}
+// Delete often returns Empty
+message DeleteClientResponse {
+  google.protobuf.Empty response = 1;
+}
+
+message ListClientsRequest {
+  // Add pagination, filtering fields later if needed
+  int32 page_size = 1;
+  string page_token = 2; // For pagination
+}
+message ListClientsResponse {
+  repeated Client clients = 1;
+  string next_page_token = 2; // For pagination
+}
+
+
+// Employee CRUD (Similar structure)
+message CreateEmployeeRequest {
+  Employee employee = 1; // ID ignored/generated
+  // Might need User info too if creating User simultaneously
+  string user_login = 2;
+  string user_password = 3; // Handle password securely!
+}
+message CreateEmployeeResponse {
+  string employee_id = 1;
+  string user_id = 2;
+}
+
+message GetEmployeeRequest {
+  string employee_id = 1;
+}
+message GetEmployeeResponse {
+  Employee employee = 1;
+  // Optionally include related User/Office info
+}
+
+message UpdateEmployeeRequest {
+  string employee_id = 1;
+  Employee employee_data = 2; // Fields to update
+  // Optionally allow updating related User info
+}
+message UpdateEmployeeResponse {
+  Employee employee = 1;
+}
+
+message DeleteEmployeeRequest {
+  string employee_id = 1;
+}
+message DeleteEmployeeResponse {
+  google.protobuf.Empty response = 1;
+}
+
+message ListEmployeesRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+}
+message ListEmployeesResponse {
+  repeated Employee employees = 1;
+  string next_page_token = 2;
+}
+
+
+// --- Service Definition ---
+
+service CrmService {
+  // Client Methods
+  rpc CreateClient(CreateClientRequest) returns (CreateClientResponse);
+  rpc GetClient(GetClientRequest) returns (GetClientResponse);
+  rpc UpdateClient(UpdateClientRequest) returns (UpdateClientResponse);
+  rpc DeleteClient(DeleteClientRequest) returns (DeleteClientResponse);
+  rpc ListClients(ListClientsRequest) returns (ListClientsResponse);
+
+  // Employee Methods
+  rpc CreateEmployee(CreateEmployeeRequest) returns (CreateEmployeeResponse);
+  rpc GetEmployee(GetEmployeeRequest) returns (GetEmployeeResponse);
+  rpc UpdateEmployee(UpdateEmployeeRequest) returns (UpdateEmployeeResponse);
+  rpc DeleteEmployee(DeleteEmployeeRequest) returns (DeleteEmployeeResponse);
+  rpc ListEmployees(ListEmployeesRequest) returns (ListEmployeesResponse);
+
+  // User Methods (Password handling is NOT done via gRPC for security)
+  rpc CreateUser(CreateUserRequest) returns (CreateUserResponse); // Only creates user record, password set separately/securely
+  rpc GetUser(GetUserRequest) returns (GetUserResponse);
+  rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse); // Cannot update password via this
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
+  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
+  // Add separate secure methods for password management if needed
+
+  // Office Methods
+  rpc CreateOffice(CreateOfficeRequest) returns (CreateOfficeResponse);
+  rpc GetOffice(GetOfficeRequest) returns (GetOfficeResponse);
+  rpc UpdateOffice(UpdateOfficeRequest) returns (UpdateOfficeResponse);
+  rpc DeleteOffice(DeleteOfficeRequest) returns (DeleteOfficeResponse);
+  rpc ListOffices(ListOfficesRequest) returns (ListOfficesResponse);
+
+  // LegalCase Methods
+  rpc CreateLegalCase(CreateLegalCaseRequest) returns (CreateLegalCaseResponse);
+  rpc GetLegalCase(GetLegalCaseRequest) returns (GetLegalCaseResponse);
+  rpc UpdateLegalCase(UpdateLegalCaseRequest) returns (UpdateLegalCaseResponse);
+  rpc DeleteLegalCase(DeleteLegalCaseRequest) returns (DeleteLegalCaseResponse);
+  rpc ListLegalCases(ListLegalCasesRequest) returns (ListLegalCasesResponse);
+
+  // TranslationOrder Methods
+  rpc CreateTranslationOrder(CreateTranslationOrderRequest) returns (CreateTranslationOrderResponse);
+  rpc GetTranslationOrder(GetTranslationOrderRequest) returns (GetTranslationOrderResponse);
+  rpc UpdateTranslationOrder(UpdateTranslationOrderRequest) returns (UpdateTranslationOrderResponse);
+  rpc DeleteTranslationOrder(DeleteTranslationOrderRequest) returns (DeleteTranslationOrderResponse);
+  rpc ListTranslationOrders(ListTranslationOrdersRequest) returns (ListTranslationOrdersResponse);
+
+  // InsurancePolicy Methods
+  rpc CreateInsurancePolicy(CreateInsurancePolicyRequest) returns (CreateInsurancePolicyResponse);
+  rpc GetInsurancePolicy(GetInsurancePolicyRequest) returns (GetInsurancePolicyResponse);
+  rpc UpdateInsurancePolicy(UpdateInsurancePolicyRequest) returns (UpdateInsurancePolicyResponse);
+  rpc DeleteInsurancePolicy(DeleteInsurancePolicyRequest) returns (DeleteInsurancePolicyResponse);
+  rpc ListInsurancePolicies(ListInsurancePoliciesRequest) returns (ListInsurancePoliciesResponse);
+
+  // TrainingEnrollment Methods
+  rpc CreateTrainingEnrollment(CreateTrainingEnrollmentRequest) returns (CreateTrainingEnrollmentResponse);
+  rpc GetTrainingEnrollment(GetTrainingEnrollmentRequest) returns (GetTrainingEnrollmentResponse);
+  rpc UpdateTrainingEnrollment(UpdateTrainingEnrollmentRequest) returns (UpdateTrainingEnrollmentResponse);
+  rpc DeleteTrainingEnrollment(DeleteTrainingEnrollmentRequest) returns (DeleteTrainingEnrollmentResponse);
+  rpc ListTrainingEnrollments(ListTrainingEnrollmentsRequest) returns (ListTrainingEnrollmentsResponse);
+
+  // AccountOpeningRequest Methods
+  rpc CreateAccountOpeningRequest(CreateAccountOpeningRequestRequest) returns (CreateAccountOpeningRequestResponse);
+  rpc GetAccountOpeningRequest(GetAccountOpeningRequestRequest) returns (GetAccountOpeningRequestResponse);
+  rpc UpdateAccountOpeningRequest(UpdateAccountOpeningRequestRequest) returns (UpdateAccountOpeningRequestResponse);
+  rpc DeleteAccountOpeningRequest(DeleteAccountOpeningRequestRequest) returns (DeleteAccountOpeningRequestResponse);
+  rpc ListAccountOpeningRequests(ListAccountOpeningRequestsRequest) returns (ListAccountOpeningRequestsResponse);
+
+  // BusinessRegistration Methods
+  rpc CreateBusinessRegistration(CreateBusinessRegistrationRequest) returns (CreateBusinessRegistrationResponse);
+  rpc GetBusinessRegistration(GetBusinessRegistrationRequest) returns (GetBusinessRegistrationResponse);
+  rpc UpdateBusinessRegistration(UpdateBusinessRegistrationRequest) returns (UpdateBusinessRegistrationResponse);
+  rpc DeleteBusinessRegistration(DeleteBusinessRegistrationRequest) returns (DeleteBusinessRegistrationResponse);
+  rpc ListBusinessRegistrations(ListBusinessRegistrationsRequest) returns (ListBusinessRegistrationsResponse);
+
+  // LendingApplication Methods
+  rpc CreateLendingApplication(CreateLendingApplicationRequest) returns (CreateLendingApplicationResponse);
+  rpc GetLendingApplication(GetLendingApplicationRequest) returns (GetLendingApplicationResponse);
+  rpc UpdateLendingApplication(UpdateLendingApplicationRequest) returns (UpdateLendingApplicationResponse);
+  rpc DeleteLendingApplication(DeleteLendingApplicationRequest) returns (DeleteLendingApplicationResponse);
+  rpc ListLendingApplications(ListLendingApplicationsRequest) returns (ListLendingApplicationsResponse);
+
+  // Partner Methods
+  rpc CreatePartner(CreatePartnerRequest) returns (CreatePartnerResponse);
+  rpc GetPartner(GetPartnerRequest) returns (GetPartnerResponse);
+  rpc UpdatePartner(UpdatePartnerRequest) returns (UpdatePartnerResponse);
+  rpc DeletePartner(DeletePartnerRequest) returns (DeletePartnerResponse);
+  rpc ListPartners(ListPartnersRequest) returns (ListPartnersResponse);
+
+  // LegalIssueType Methods
+  rpc CreateLegalIssueType(CreateLegalIssueTypeRequest) returns (CreateLegalIssueTypeResponse);
+  rpc GetLegalIssueType(GetLegalIssueTypeRequest) returns (GetLegalIssueTypeResponse);
+  rpc UpdateLegalIssueType(UpdateLegalIssueTypeRequest) returns (UpdateLegalIssueTypeResponse);
+  rpc DeleteLegalIssueType(DeleteLegalIssueTypeRequest) returns (DeleteLegalIssueTypeResponse);
+  rpc ListLegalIssueTypes(ListLegalIssueTypesRequest) returns (ListLegalIssueTypesResponse);
+
+  // TrainingCourse Methods
+  rpc CreateTrainingCourse(CreateTrainingCourseRequest) returns (CreateTrainingCourseResponse);
+  rpc GetTrainingCourse(GetTrainingCourseRequest) returns (GetTrainingCourseResponse);
+  rpc UpdateTrainingCourse(UpdateTrainingCourseRequest) returns (UpdateTrainingCourseResponse);
+  rpc DeleteTrainingCourse(DeleteTrainingCourseRequest) returns (DeleteTrainingCourseResponse);
+  rpc ListTrainingCourses(ListTrainingCoursesRequest) returns (ListTrainingCoursesResponse);
+
+  // Bank Methods
+  rpc CreateBank(CreateBankRequest) returns (CreateBankResponse);
+  rpc GetBank(GetBankRequest) returns (GetBankResponse);
+  rpc UpdateBank(UpdateBankRequest) returns (UpdateBankResponse);
+  rpc DeleteBank(DeleteBankRequest) returns (DeleteBankResponse);
+  rpc ListBanks(ListBanksRequest) returns (ListBanksResponse);
+
+  // Interaction Methods
+  rpc CreateInteraction(CreateInteractionRequest) returns (CreateInteractionResponse);
+  rpc GetInteraction(GetInteractionRequest) returns (GetInteractionResponse);
+  rpc UpdateInteraction(UpdateInteractionRequest) returns (UpdateInteractionResponse);
+  rpc DeleteInteraction(DeleteInteractionRequest) returns (DeleteInteractionResponse);
+  rpc ListInteractions(ListInteractionsRequest) returns (ListInteractionsResponse);
+
+  // Payment Methods
+  rpc CreatePayment(CreatePaymentRequest) returns (CreatePaymentResponse);
+  rpc GetPayment(GetPaymentRequest) returns (GetPaymentResponse);
+  rpc UpdatePayment(UpdatePaymentRequest) returns (UpdatePaymentResponse);
+  rpc DeletePayment(DeletePaymentRequest) returns (DeletePaymentResponse);
+  rpc ListPayments(ListPaymentsRequest) returns (ListPaymentsResponse);
+
+}
+
+// --- CRUD Messages for Added Entities ---
+
+// User (Password handled separately)
+message CreateUserRequest { User user = 1; string password = 2; } // Password only for creation, handled securely server-side
+message CreateUserResponse { string user_id = 1; }
+message GetUserRequest { string user_id = 1; }
+message GetUserResponse { User user = 1; }
+message UpdateUserRequest { string user_id = 1; User user_data = 2; } // No password update here
+message UpdateUserResponse { User user = 1; }
+message DeleteUserRequest { string user_id = 1; }
+message DeleteUserResponse { google.protobuf.Empty response = 1; }
+message ListUsersRequest { int32 page_size = 1; string page_token = 2; }
+message ListUsersResponse { repeated User users = 1; string next_page_token = 2; }
+
+// Office
+message CreateOfficeRequest { Office office = 1; }
+message CreateOfficeResponse { string office_id = 1; }
+message GetOfficeRequest { string office_id = 1; }
+message GetOfficeResponse { Office office = 1; }
+message UpdateOfficeRequest { string office_id = 1; Office office_data = 2; }
+message UpdateOfficeResponse { Office office = 1; }
+message DeleteOfficeRequest { string office_id = 1; }
+message DeleteOfficeResponse { google.protobuf.Empty response = 1; }
+message ListOfficesRequest { int32 page_size = 1; string page_token = 2; }
+message ListOfficesResponse { repeated Office offices = 1; string next_page_token = 2; }
+
+// LegalCase
+message CreateLegalCaseRequest { LegalCase legal_case = 1; }
+message CreateLegalCaseResponse { string case_id = 1; }
+message GetLegalCaseRequest { string case_id = 1; }
+message GetLegalCaseResponse { LegalCase legal_case = 1; }
+message UpdateLegalCaseRequest { string case_id = 1; LegalCase case_data = 2; }
+message UpdateLegalCaseResponse { LegalCase legal_case = 1; }
+message DeleteLegalCaseRequest { string case_id = 1; }
+message DeleteLegalCaseResponse { google.protobuf.Empty response = 1; }
+message ListLegalCasesRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
+message ListLegalCasesResponse { repeated LegalCase legal_cases = 1; string next_page_token = 2; }
+
+// TranslationOrder
+message CreateTranslationOrderRequest { TranslationOrder translation_order = 1; }
+message CreateTranslationOrderResponse { string order_id = 1; }
+message GetTranslationOrderRequest { string order_id = 1; }
+message GetTranslationOrderResponse { TranslationOrder translation_order = 1; }
+message UpdateTranslationOrderRequest { string order_id = 1; TranslationOrder order_data = 2; }
+message UpdateTranslationOrderResponse { TranslationOrder translation_order = 1; }
+message DeleteTranslationOrderRequest { string order_id = 1; }
+message DeleteTranslationOrderResponse { google.protobuf.Empty response = 1; }
+message ListTranslationOrdersRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
+message ListTranslationOrdersResponse { repeated TranslationOrder translation_orders = 1; string next_page_token = 2; }
+
+// InsurancePolicy
+message CreateInsurancePolicyRequest { InsurancePolicy insurance_policy = 1; }
+message CreateInsurancePolicyResponse { string policy_id = 1; }
+message GetInsurancePolicyRequest { string policy_id = 1; }
+message GetInsurancePolicyResponse { InsurancePolicy insurance_policy = 1; }
+message UpdateInsurancePolicyRequest { string policy_id = 1; InsurancePolicy policy_data = 2; }
+message UpdateInsurancePolicyResponse { InsurancePolicy insurance_policy = 1; }
+message DeleteInsurancePolicyRequest { string policy_id = 1; }
+message DeleteInsurancePolicyResponse { google.protobuf.Empty response = 1; }
+message ListInsurancePoliciesRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
+message ListInsurancePoliciesResponse { repeated InsurancePolicy insurance_policies = 1; string next_page_token = 2; }
+
+// TrainingEnrollment
+message CreateTrainingEnrollmentRequest { TrainingEnrollment training_enrollment = 1; }
+message CreateTrainingEnrollmentResponse { string enrollment_id = 1; }
+message GetTrainingEnrollmentRequest { string enrollment_id = 1; }
+message GetTrainingEnrollmentResponse { TrainingEnrollment training_enrollment = 1; }
+message UpdateTrainingEnrollmentRequest { string enrollment_id = 1; TrainingEnrollment enrollment_data = 2; }
+message UpdateTrainingEnrollmentResponse { TrainingEnrollment training_enrollment = 1; }
+message DeleteTrainingEnrollmentRequest { string enrollment_id = 1; }
+message DeleteTrainingEnrollmentResponse { google.protobuf.Empty response = 1; }
+message ListTrainingEnrollmentsRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
+message ListTrainingEnrollmentsResponse { repeated TrainingEnrollment training_enrollments = 1; string next_page_token = 2; }
+
+// AccountOpeningRequest
+message CreateAccountOpeningRequestRequest { AccountOpeningRequest account_opening_request = 1; }
+message CreateAccountOpeningRequestResponse { string request_id = 1; }
+message GetAccountOpeningRequestRequest { string request_id = 1; }
+message GetAccountOpeningRequestResponse { AccountOpeningRequest account_opening_request = 1; }
+message UpdateAccountOpeningRequestRequest { string request_id = 1; AccountOpeningRequest request_data = 2; }
+message UpdateAccountOpeningRequestResponse { AccountOpeningRequest account_opening_request = 1; }
+message DeleteAccountOpeningRequestRequest { string request_id = 1; }
+message DeleteAccountOpeningRequestResponse { google.protobuf.Empty response = 1; }
+message ListAccountOpeningRequestsRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
+message ListAccountOpeningRequestsResponse { repeated AccountOpeningRequest account_opening_requests = 1; string next_page_token = 2; }
+
+// BusinessRegistration
+message CreateBusinessRegistrationRequest { BusinessRegistration business_registration = 1; }
+message CreateBusinessRegistrationResponse { string request_id = 1; }
+message GetBusinessRegistrationRequest { string request_id = 1; }
+message GetBusinessRegistrationResponse { BusinessRegistration business_registration = 1; }
+message UpdateBusinessRegistrationRequest { string request_id = 1; BusinessRegistration registration_data = 2; }
+message UpdateBusinessRegistrationResponse { BusinessRegistration business_registration = 1; }
+message DeleteBusinessRegistrationRequest { string request_id = 1; }
+message DeleteBusinessRegistrationResponse { google.protobuf.Empty response = 1; }
+message ListBusinessRegistrationsRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
+message ListBusinessRegistrationsResponse { repeated BusinessRegistration business_registrations = 1; string next_page_token = 2; }
+
+// LendingApplication
+message CreateLendingApplicationRequest { LendingApplication lending_application = 1; }
+message CreateLendingApplicationResponse { string request_id = 1; }
+message GetLendingApplicationRequest { string request_id = 1; }
+message GetLendingApplicationResponse { LendingApplication lending_application = 1; }
+message UpdateLendingApplicationRequest { string request_id = 1; LendingApplication application_data = 2; }
+message UpdateLendingApplicationResponse { LendingApplication lending_application = 1; }
+message DeleteLendingApplicationRequest { string request_id = 1; }
+message DeleteLendingApplicationResponse { google.protobuf.Empty response = 1; }
+message ListLendingApplicationsRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
+message ListLendingApplicationsResponse { repeated LendingApplication lending_applications = 1; string next_page_token = 2; }
+
+// Partner
+message CreatePartnerRequest { Partner partner = 1; }
+message CreatePartnerResponse { string partner_id = 1; }
+message GetPartnerRequest { string partner_id = 1; }
+message GetPartnerResponse { Partner partner = 1; }
+message UpdatePartnerRequest { string partner_id = 1; Partner partner_data = 2; }
+message UpdatePartnerResponse { Partner partner = 1; }
+message DeletePartnerRequest { string partner_id = 1; }
+message DeletePartnerResponse { google.protobuf.Empty response = 1; }
+message ListPartnersRequest { int32 page_size = 1; string page_token = 2; }
+message ListPartnersResponse { repeated Partner partners = 1; string next_page_token = 2; }
+
+// LegalIssueType
+message CreateLegalIssueTypeRequest { LegalIssueType legal_issue_type = 1; }
+message CreateLegalIssueTypeResponse { string issue_type_id = 1; }
+message GetLegalIssueTypeRequest { string issue_type_id = 1; }
+message GetLegalIssueTypeResponse { LegalIssueType legal_issue_type = 1; }
+message UpdateLegalIssueTypeRequest { string issue_type_id = 1; LegalIssueType issue_type_data = 2; }
+message UpdateLegalIssueTypeResponse { LegalIssueType legal_issue_type = 1; }
+message DeleteLegalIssueTypeRequest { string issue_type_id = 1; }
+message DeleteLegalIssueTypeResponse { google.protobuf.Empty response = 1; }
+message ListLegalIssueTypesRequest { int32 page_size = 1; string page_token = 2; }
+message ListLegalIssueTypesResponse { repeated LegalIssueType legal_issue_types = 1; string next_page_token = 2; }
+
+// TrainingCourse
+message CreateTrainingCourseRequest { TrainingCourse training_course = 1; }
+message CreateTrainingCourseResponse { string course_id = 1; }
+message GetTrainingCourseRequest { string course_id = 1; }
+message GetTrainingCourseResponse { TrainingCourse training_course = 1; }
+message UpdateTrainingCourseRequest { string course_id = 1; TrainingCourse course_data = 2; }
+message UpdateTrainingCourseResponse { TrainingCourse training_course = 1; }
+message DeleteTrainingCourseRequest { string course_id = 1; }
+message DeleteTrainingCourseResponse { google.protobuf.Empty response = 1; }
+message ListTrainingCoursesRequest { int32 page_size = 1; string page_token = 2; }
+message ListTrainingCoursesResponse { repeated TrainingCourse training_courses = 1; string next_page_token = 2; }
+
+// Bank
+message CreateBankRequest { Bank bank = 1; }
+message CreateBankResponse { string bank_id = 1; }
+message GetBankRequest { string bank_id = 1; }
+message GetBankResponse { Bank bank = 1; }
+message UpdateBankRequest { string bank_id = 1; Bank bank_data = 2; }
+message UpdateBankResponse { Bank bank = 1; }
+message DeleteBankRequest { string bank_id = 1; }
+message DeleteBankResponse { google.protobuf.Empty response = 1; }
+message ListBanksRequest { int32 page_size = 1; string page_token = 2; }
+message ListBanksResponse { repeated Bank banks = 1; string next_page_token = 2; }
+
+// Interaction
+message CreateInteractionRequest { Interaction interaction = 1; }
+message CreateInteractionResponse { string interaction_id = 1; }
+message GetInteractionRequest { string interaction_id = 1; }
+message GetInteractionResponse { Interaction interaction = 1; }
+message UpdateInteractionRequest { string interaction_id = 1; Interaction interaction_data = 2; }
+message UpdateInteractionResponse { Interaction interaction = 1; }
+message DeleteInteractionRequest { string interaction_id = 1; }
+message DeleteInteractionResponse { google.protobuf.Empty response = 1; }
+message ListInteractionsRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
+message ListInteractionsResponse { repeated Interaction interactions = 1; string next_page_token = 2; }
+
+// Payment
+message CreatePaymentRequest { Payment payment = 1; }
+message CreatePaymentResponse { string payment_id = 1; }
+message GetPaymentRequest { string payment_id = 1; }
+message GetPaymentResponse { Payment payment = 1; }
+message UpdatePaymentRequest { string payment_id = 1; Payment payment_data = 2; }
+message UpdatePaymentResponse { Payment payment = 1; }
+message DeletePaymentRequest { string payment_id = 1; }
+message DeletePaymentResponse { google.protobuf.Empty response = 1; }
+message ListPaymentsRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
+message ListPaymentsResponse { repeated Payment payments = 1; string next_page_token = 2; }

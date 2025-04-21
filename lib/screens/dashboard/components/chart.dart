@@ -71,7 +71,7 @@ List<PieChartSectionData> paiChartSelectionData = [
     radius: 16,
   ),
   PieChartSectionData(
-    color: primaryColor.withOpacity(0.1),
+    color: primaryColor.withAlpha((255 * 0.1).round()),
     value: 25,
     showTitle: false,
     radius: 13,
