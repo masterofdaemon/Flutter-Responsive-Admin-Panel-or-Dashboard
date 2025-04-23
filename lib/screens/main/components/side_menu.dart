@@ -1,6 +1,7 @@
 import 'package:admin/controllers/menu_app_controller.dart';
 import 'package:admin/screens/client_list_screen.dart'; // Import the new screen
 import 'package:admin/screens/dashboard/dashboard_screen.dart'; // Import DashboardScreen
+import 'package:admin/screens/employee_list_screen.dart'; // Import the new Employee list screen
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart'; // Import Provider
@@ -38,11 +39,14 @@ class SideMenu extends StatelessWidget {
               menuAppController.setSelectedScreen(const ClientListScreen());
             },
           ),
+          // Change Transaction to Employees
           DrawerListTile(
-            title: "Transaction",
-            svgSrc: "assets/icons/menu_tran.svg",
-            // Placeholder for other screens - update later if needed
-            press: () {},
+            title: "Employees",
+            svgSrc:
+                "assets/icons/menu_tran.svg", // you may update to a dedicated employee icon
+            press: () {
+              menuAppController.setSelectedScreen(const EmployeeListScreen());
+            },
           ),
           DrawerListTile(
             title: "Task",
