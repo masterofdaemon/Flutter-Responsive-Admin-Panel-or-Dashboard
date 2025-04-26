@@ -26,6 +26,7 @@ const Client$json = {
     {'1': 'whatsapp_number', '3': 7, '4': 1, '5': 9, '9': 2, '10': 'whatsappNumber', '17': true},
     {'1': 'source', '3': 8, '4': 1, '5': 9, '9': 3, '10': 'source', '17': true},
     {'1': 'passport_data', '3': 9, '4': 1, '5': 11, '6': '.google.protobuf.Value', '9': 4, '10': 'passportData', '17': true},
+    {'1': 'notes', '3': 10, '4': 1, '5': 9, '9': 5, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_email'},
@@ -33,6 +34,7 @@ const Client$json = {
     {'1': '_whatsapp_number'},
     {'1': '_source'},
     {'1': '_passport_data'},
+    {'1': '_notes'},
   ],
 };
 
@@ -43,9 +45,9 @@ final $typed_data.Uint8List clientDescriptor = $convert.base64Decode(
     'CVIFcGhvbmUSGQoFZW1haWwYBSABKAlIAFIFZW1haWyIAQESJAoLdGVsZWdyYW1faWQYBiABKA'
     'lIAVIKdGVsZWdyYW1JZIgBARIsCg93aGF0c2FwcF9udW1iZXIYByABKAlIAlIOd2hhdHNhcHBO'
     'dW1iZXKIAQESGwoGc291cmNlGAggASgJSANSBnNvdXJjZYgBARJACg1wYXNzcG9ydF9kYXRhGA'
-    'kgASgLMhYuZ29vZ2xlLnByb3RvYnVmLlZhbHVlSARSDHBhc3Nwb3J0RGF0YYgBAUIICgZfZW1h'
-    'aWxCDgoMX3RlbGVncmFtX2lkQhIKEF93aGF0c2FwcF9udW1iZXJCCQoHX3NvdXJjZUIQCg5fcG'
-    'Fzc3BvcnRfZGF0YQ==');
+    'kgASgLMhYuZ29vZ2xlLnByb3RvYnVmLlZhbHVlSARSDHBhc3Nwb3J0RGF0YYgBARIZCgVub3Rl'
+    'cxgKIAEoCUgFUgVub3Rlc4gBAUIICgZfZW1haWxCDgoMX3RlbGVncmFtX2lkQhIKEF93aGF0c2'
+    'FwcF9udW1iZXJCCQoHX3NvdXJjZUIQCg5fcGFzc3BvcnRfZGF0YUIICgZfbm90ZXM=');
 
 @$core.Deprecated('Use userDescriptor instead')
 const User$json = {
@@ -54,9 +56,11 @@ const User$json = {
     {'1': 'user_id', '3': 1, '4': 1, '5': 9, '10': 'userId'},
     {'1': 'login', '3': 2, '4': 1, '5': 9, '10': 'login'},
     {'1': 'last_login', '3': 3, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 0, '10': 'lastLogin', '17': true},
+    {'1': 'notes', '3': 4, '4': 1, '5': 9, '9': 1, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_last_login'},
+    {'1': '_notes'},
   ],
 };
 
@@ -64,7 +68,8 @@ const User$json = {
 final $typed_data.Uint8List userDescriptor = $convert.base64Decode(
     'CgRVc2VyEhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBIUCgVsb2dpbhgCIAEoCVIFbG9naW4SPg'
     'oKbGFzdF9sb2dpbhgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBIAFIJbGFzdExv'
-    'Z2luiAEBQg0KC19sYXN0X2xvZ2lu');
+    'Z2luiAEBEhkKBW5vdGVzGAQgASgJSAFSBW5vdGVziAEBQg0KC19sYXN0X2xvZ2luQggKBl9ub3'
+    'Rlcw==');
 
 @$core.Deprecated('Use employeeDescriptor instead')
 const Employee$json = {
@@ -79,10 +84,12 @@ const Employee$json = {
     {'1': 'whatsapp_number', '3': 7, '4': 1, '5': 9, '9': 1, '10': 'whatsappNumber', '17': true},
     {'1': 'email', '3': 8, '4': 1, '5': 9, '10': 'email'},
     {'1': 'is_active', '3': 9, '4': 1, '5': 8, '10': 'isActive'},
+    {'1': 'notes', '3': 10, '4': 1, '5': 9, '9': 2, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_telegram_id'},
     {'1': '_whatsapp_number'},
+    {'1': '_notes'},
   ],
 };
 
@@ -92,8 +99,9 @@ final $typed_data.Uint8List employeeDescriptor = $convert.base64Decode(
     'IgASgJUgZ1c2VySWQSEgoEbmFtZRgDIAEoCVIEbmFtZRISCgRyb2xlGAQgASgJUgRyb2xlEhsK'
     'CW9mZmljZV9pZBgFIAEoCVIIb2ZmaWNlSWQSJAoLdGVsZWdyYW1faWQYBiABKAlIAFIKdGVsZW'
     'dyYW1JZIgBARIsCg93aGF0c2FwcF9udW1iZXIYByABKAlIAVIOd2hhdHNhcHBOdW1iZXKIAQES'
-    'FAoFZW1haWwYCCABKAlSBWVtYWlsEhsKCWlzX2FjdGl2ZRgJIAEoCFIIaXNBY3RpdmVCDgoMX3'
-    'RlbGVncmFtX2lkQhIKEF93aGF0c2FwcF9udW1iZXI=');
+    'FAoFZW1haWwYCCABKAlSBWVtYWlsEhsKCWlzX2FjdGl2ZRgJIAEoCFIIaXNBY3RpdmUSGQoFbm'
+    '90ZXMYCiABKAlIAlIFbm90ZXOIAQFCDgoMX3RlbGVncmFtX2lkQhIKEF93aGF0c2FwcF9udW1i'
+    'ZXJCCAoGX25vdGVz');
 
 @$core.Deprecated('Use officeDescriptor instead')
 const Office$json = {
@@ -103,10 +111,12 @@ const Office$json = {
     {'1': 'city', '3': 2, '4': 1, '5': 9, '10': 'city'},
     {'1': 'address', '3': 3, '4': 1, '5': 9, '9': 0, '10': 'address', '17': true},
     {'1': 'phone', '3': 4, '4': 1, '5': 9, '9': 1, '10': 'phone', '17': true},
+    {'1': 'notes', '3': 5, '4': 1, '5': 9, '9': 2, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_address'},
     {'1': '_phone'},
+    {'1': '_notes'},
   ],
 };
 
@@ -114,7 +124,8 @@ const Office$json = {
 final $typed_data.Uint8List officeDescriptor = $convert.base64Decode(
     'CgZPZmZpY2USGwoJb2ZmaWNlX2lkGAEgASgJUghvZmZpY2VJZBISCgRjaXR5GAIgASgJUgRjaX'
     'R5Eh0KB2FkZHJlc3MYAyABKAlIAFIHYWRkcmVzc4gBARIZCgVwaG9uZRgEIAEoCUgBUgVwaG9u'
-    'ZYgBAUIKCghfYWRkcmVzc0IICgZfcGhvbmU=');
+    'ZYgBARIZCgVub3RlcxgFIAEoCUgCUgVub3Rlc4gBAUIKCghfYWRkcmVzc0IICgZfcGhvbmVCCA'
+    'oGX25vdGVz');
 
 @$core.Deprecated('Use legalCaseDescriptor instead')
 const LegalCase$json = {
@@ -131,12 +142,14 @@ const LegalCase$json = {
     {'1': 'expected_commission', '3': 9, '4': 1, '5': 1, '10': 'expectedCommission'},
     {'1': 'status', '3': 10, '4': 1, '5': 9, '10': 'status'},
     {'1': 'payment_id', '3': 11, '4': 1, '5': 9, '9': 3, '10': 'paymentId', '17': true},
+    {'1': 'notes', '3': 12, '4': 1, '5': 9, '9': 4, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_partner_id'},
     {'1': '_consultation_date'},
     {'1': '_contract_date'},
     {'1': '_payment_id'},
+    {'1': '_notes'},
   ],
 };
 
@@ -150,8 +163,9 @@ final $typed_data.Uint8List legalCaseDescriptor = $convert.base64Decode(
     'UucHJvdG9idWYuVGltZXN0YW1wSAJSDGNvbnRyYWN0RGF0ZYgBARInCg9jb250cmFjdF9hbW91'
     'bnQYCCABKAFSDmNvbnRyYWN0QW1vdW50Ei8KE2V4cGVjdGVkX2NvbW1pc3Npb24YCSABKAFSEm'
     'V4cGVjdGVkQ29tbWlzc2lvbhIWCgZzdGF0dXMYCiABKAlSBnN0YXR1cxIiCgpwYXltZW50X2lk'
-    'GAsgASgJSANSCXBheW1lbnRJZIgBAUINCgtfcGFydG5lcl9pZEIUChJfY29uc3VsdGF0aW9uX2'
-    'RhdGVCEAoOX2NvbnRyYWN0X2RhdGVCDQoLX3BheW1lbnRfaWQ=');
+    'GAsgASgJSANSCXBheW1lbnRJZIgBARIZCgVub3RlcxgMIAEoCUgEUgVub3Rlc4gBAUINCgtfcG'
+    'FydG5lcl9pZEIUChJfY29uc3VsdGF0aW9uX2RhdGVCEAoOX2NvbnRyYWN0X2RhdGVCDQoLX3Bh'
+    'eW1lbnRfaWRCCAoGX25vdGVz');
 
 @$core.Deprecated('Use translationOrderDescriptor instead')
 const TranslationOrder$json = {
@@ -172,6 +186,7 @@ const TranslationOrder$json = {
     {'1': 'status', '3': 13, '4': 1, '5': 9, '10': 'status'},
     {'1': 'payment_id', '3': 14, '4': 1, '5': 9, '9': 5, '10': 'paymentId', '17': true},
     {'1': 'document_blanks', '3': 15, '4': 1, '5': 11, '6': '.google.protobuf.Value', '9': 6, '10': 'documentBlanks', '17': true},
+    {'1': 'notes', '3': 16, '4': 1, '5': 9, '9': 7, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_translator_id'},
@@ -181,6 +196,7 @@ const TranslationOrder$json = {
     {'1': '_priority'},
     {'1': '_payment_id'},
     {'1': '_document_blanks'},
+    {'1': '_notes'},
   ],
 };
 
@@ -196,9 +212,10 @@ final $typed_data.Uint8List translationOrderDescriptor = $convert.base64Decode(
     '0YCyABKAFSCHRvdGFsU3VtEh8KCHByaW9yaXR5GAwgASgJSARSCHByaW9yaXR5iAEBEhYKBnN0'
     'YXR1cxgNIAEoCVIGc3RhdHVzEiIKCnBheW1lbnRfaWQYDiABKAlIBVIJcGF5bWVudElkiAEBEk'
     'QKD2RvY3VtZW50X2JsYW5rcxgPIAEoCzIWLmdvb2dsZS5wcm90b2J1Zi5WYWx1ZUgGUg5kb2N1'
-    'bWVudEJsYW5rc4gBAUIQCg5fdHJhbnNsYXRvcl9pZEIQCg5fZG9jdW1lbnRfdHlwZUISChBfdG'
-    'FyZ2V0X2xhbmd1YWdlQg0KC19wYWdlX2NvdW50QgsKCV9wcmlvcml0eUINCgtfcGF5bWVudF9p'
-    'ZEISChBfZG9jdW1lbnRfYmxhbmtz');
+    'bWVudEJsYW5rc4gBARIZCgVub3RlcxgQIAEoCUgHUgVub3Rlc4gBAUIQCg5fdHJhbnNsYXRvcl'
+    '9pZEIQCg5fZG9jdW1lbnRfdHlwZUISChBfdGFyZ2V0X2xhbmd1YWdlQg0KC19wYWdlX2NvdW50'
+    'QgsKCV9wcmlvcml0eUINCgtfcGF5bWVudF9pZEISChBfZG9jdW1lbnRfYmxhbmtzQggKBl9ub3'
+    'Rlcw==');
 
 @$core.Deprecated('Use insurancePolicyDescriptor instead')
 const InsurancePolicy$json = {
@@ -213,9 +230,11 @@ const InsurancePolicy$json = {
     {'1': 'amount', '3': 7, '4': 1, '5': 1, '10': 'amount'},
     {'1': 'status', '3': 8, '4': 1, '5': 9, '10': 'status'},
     {'1': 'renewal_status', '3': 9, '4': 1, '5': 9, '9': 0, '10': 'renewalStatus', '17': true},
+    {'1': 'notes', '3': 10, '4': 1, '5': 9, '9': 1, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_renewal_status'},
+    {'1': '_notes'},
   ],
 };
 
@@ -227,7 +246,8 @@ final $typed_data.Uint8List insurancePolicyDescriptor = $convert.base64Decode(
     'dvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCXN0YXJ0RGF0ZRI7CgtleHBpcnlfZGF0ZRgGIAEo'
     'CzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCmV4cGlyeURhdGUSFgoGYW1vdW50GAcgAS'
     'gBUgZhbW91bnQSFgoGc3RhdHVzGAggASgJUgZzdGF0dXMSKgoOcmVuZXdhbF9zdGF0dXMYCSAB'
-    'KAlIAFINcmVuZXdhbFN0YXR1c4gBAUIRCg9fcmVuZXdhbF9zdGF0dXM=');
+    'KAlIAFINcmVuZXdhbFN0YXR1c4gBARIZCgVub3RlcxgKIAEoCUgBUgVub3Rlc4gBAUIRCg9fcm'
+    'VuZXdhbF9zdGF0dXNCCAoGX25vdGVz');
 
 @$core.Deprecated('Use trainingEnrollmentDescriptor instead')
 const TrainingEnrollment$json = {
@@ -240,10 +260,12 @@ const TrainingEnrollment$json = {
     {'1': 'contract_date', '3': 5, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 0, '10': 'contractDate', '17': true},
     {'1': 'status', '3': 6, '4': 1, '5': 9, '10': 'status'},
     {'1': 'payment_id', '3': 7, '4': 1, '5': 9, '9': 1, '10': 'paymentId', '17': true},
+    {'1': 'notes', '3': 8, '4': 1, '5': 9, '9': 2, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_contract_date'},
     {'1': '_payment_id'},
+    {'1': '_notes'},
   ],
 };
 
@@ -253,8 +275,9 @@ final $typed_data.Uint8List trainingEnrollmentDescriptor = $convert.base64Decode
     'lkEhsKCWNsaWVudF9pZBgCIAEoCVIIY2xpZW50SWQSHQoKbWFuYWdlcl9pZBgDIAEoCVIJbWFu'
     'YWdlcklkEhsKCWNvdXJzZV9pZBgEIAEoCVIIY291cnNlSWQSRAoNY29udHJhY3RfZGF0ZRgFIA'
     'EoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBIAFIMY29udHJhY3REYXRliAEBEhYKBnN0'
-    'YXR1cxgGIAEoCVIGc3RhdHVzEiIKCnBheW1lbnRfaWQYByABKAlIAVIJcGF5bWVudElkiAEBQh'
-    'AKDl9jb250cmFjdF9kYXRlQg0KC19wYXltZW50X2lk');
+    'YXR1cxgGIAEoCVIGc3RhdHVzEiIKCnBheW1lbnRfaWQYByABKAlIAVIJcGF5bWVudElkiAEBEh'
+    'kKBW5vdGVzGAggASgJSAJSBW5vdGVziAEBQhAKDl9jb250cmFjdF9kYXRlQg0KC19wYXltZW50'
+    'X2lkQggKBl9ub3Rlcw==');
 
 @$core.Deprecated('Use accountOpeningRequestDescriptor instead')
 const AccountOpeningRequest$json = {
@@ -268,11 +291,13 @@ const AccountOpeningRequest$json = {
     {'1': 'application_date', '3': 6, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 0, '10': 'applicationDate', '17': true},
     {'1': 'opened_date', '3': 7, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 1, '10': 'openedDate', '17': true},
     {'1': 'payment_id', '3': 8, '4': 1, '5': 9, '9': 2, '10': 'paymentId', '17': true},
+    {'1': 'notes', '3': 9, '4': 1, '5': 9, '9': 3, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_application_date'},
     {'1': '_opened_date'},
     {'1': '_payment_id'},
+    {'1': '_notes'},
   ],
 };
 
@@ -284,8 +309,8 @@ final $typed_data.Uint8List accountOpeningRequestDescriptor = $convert.base64Dec
     'BhcHBsaWNhdGlvbl9kYXRlGAYgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEgAUg9h'
     'cHBsaWNhdGlvbkRhdGWIAQESQAoLb3BlbmVkX2RhdGUYByABKAsyGi5nb29nbGUucHJvdG9idW'
     'YuVGltZXN0YW1wSAFSCm9wZW5lZERhdGWIAQESIgoKcGF5bWVudF9pZBgIIAEoCUgCUglwYXlt'
-    'ZW50SWSIAQFCEwoRX2FwcGxpY2F0aW9uX2RhdGVCDgoMX29wZW5lZF9kYXRlQg0KC19wYXltZW'
-    '50X2lk');
+    'ZW50SWSIAQESGQoFbm90ZXMYCSABKAlIA1IFbm90ZXOIAQFCEwoRX2FwcGxpY2F0aW9uX2RhdG'
+    'VCDgoMX29wZW5lZF9kYXRlQg0KC19wYXltZW50X2lkQggKBl9ub3Rlcw==');
 
 @$core.Deprecated('Use businessRegistrationDescriptor instead')
 const BusinessRegistration$json = {
@@ -300,11 +325,13 @@ const BusinessRegistration$json = {
     {'1': 'application_date', '3': 7, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 0, '10': 'applicationDate', '17': true},
     {'1': 'registration_date', '3': 8, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 1, '10': 'registrationDate', '17': true},
     {'1': 'payment_id', '3': 9, '4': 1, '5': 9, '9': 2, '10': 'paymentId', '17': true},
+    {'1': 'notes', '3': 10, '4': 1, '5': 9, '9': 3, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_application_date'},
     {'1': '_registration_date'},
     {'1': '_payment_id'},
+    {'1': '_notes'},
   ],
 };
 
@@ -317,8 +344,8 @@ final $typed_data.Uint8List businessRegistrationDescriptor = $convert.base64Deco
     'X2RhdGUYByABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wSABSD2FwcGxpY2F0aW9uRG'
     'F0ZYgBARJMChFyZWdpc3RyYXRpb25fZGF0ZRgIIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1l'
     'c3RhbXBIAVIQcmVnaXN0cmF0aW9uRGF0ZYgBARIiCgpwYXltZW50X2lkGAkgASgJSAJSCXBheW'
-    '1lbnRJZIgBAUITChFfYXBwbGljYXRpb25fZGF0ZUIUChJfcmVnaXN0cmF0aW9uX2RhdGVCDQoL'
-    'X3BheW1lbnRfaWQ=');
+    '1lbnRJZIgBARIZCgVub3RlcxgKIAEoCUgDUgVub3Rlc4gBAUITChFfYXBwbGljYXRpb25fZGF0'
+    'ZUIUChJfcmVnaXN0cmF0aW9uX2RhdGVCDQoLX3BheW1lbnRfaWRCCAoGX25vdGVz');
 
 @$core.Deprecated('Use lendingApplicationDescriptor instead')
 const LendingApplication$json = {
@@ -337,6 +364,7 @@ const LendingApplication$json = {
     {'1': 'expected_commission', '3': 11, '4': 1, '5': 1, '10': 'expectedCommission'},
     {'1': 'status', '3': 12, '4': 1, '5': 9, '10': 'status'},
     {'1': 'payment_id', '3': 13, '4': 1, '5': 9, '9': 5, '10': 'paymentId', '17': true},
+    {'1': 'notes', '3': 14, '4': 1, '5': 9, '9': 6, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_approved_amount'},
@@ -345,6 +373,7 @@ const LendingApplication$json = {
     {'1': '_funds_received_date'},
     {'1': '_company_contract_date'},
     {'1': '_payment_id'},
+    {'1': '_notes'},
   ],
 };
 
@@ -361,9 +390,10 @@ final $typed_data.Uint8List lendingApplicationDescriptor = $convert.base64Decode
     'ZERhdGWIAQESUwoVY29tcGFueV9jb250cmFjdF9kYXRlGAogASgLMhouZ29vZ2xlLnByb3RvYn'
     'VmLlRpbWVzdGFtcEgEUhNjb21wYW55Q29udHJhY3REYXRliAEBEi8KE2V4cGVjdGVkX2NvbW1p'
     'c3Npb24YCyABKAFSEmV4cGVjdGVkQ29tbWlzc2lvbhIWCgZzdGF0dXMYDCABKAlSBnN0YXR1cx'
-    'IiCgpwYXltZW50X2lkGA0gASgJSAVSCXBheW1lbnRJZIgBAUISChBfYXBwcm92ZWRfYW1vdW50'
-    'QhMKEV9hcHBsaWNhdGlvbl9kYXRlQhAKDl9hcHByb3ZhbF9kYXRlQhYKFF9mdW5kc19yZWNlaX'
-    'ZlZF9kYXRlQhgKFl9jb21wYW55X2NvbnRyYWN0X2RhdGVCDQoLX3BheW1lbnRfaWQ=');
+    'IiCgpwYXltZW50X2lkGA0gASgJSAVSCXBheW1lbnRJZIgBARIZCgVub3RlcxgOIAEoCUgGUgVu'
+    'b3Rlc4gBAUISChBfYXBwcm92ZWRfYW1vdW50QhMKEV9hcHBsaWNhdGlvbl9kYXRlQhAKDl9hcH'
+    'Byb3ZhbF9kYXRlQhYKFF9mdW5kc19yZWNlaXZlZF9kYXRlQhgKFl9jb21wYW55X2NvbnRyYWN0'
+    'X2RhdGVCDQoLX3BheW1lbnRfaWRCCAoGX25vdGVz');
 
 @$core.Deprecated('Use partnerDescriptor instead')
 const Partner$json = {
@@ -374,11 +404,13 @@ const Partner$json = {
     {'1': 'city_of_residence', '3': 3, '4': 1, '5': 9, '9': 0, '10': 'cityOfResidence', '17': true},
     {'1': 'contact_info', '3': 4, '4': 1, '5': 9, '9': 1, '10': 'contactInfo', '17': true},
     {'1': 'status', '3': 5, '4': 1, '5': 9, '9': 2, '10': 'status', '17': true},
+    {'1': 'notes', '3': 6, '4': 1, '5': 9, '9': 3, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_city_of_residence'},
     {'1': '_contact_info'},
     {'1': '_status'},
+    {'1': '_notes'},
   ],
 };
 
@@ -387,8 +419,8 @@ final $typed_data.Uint8List partnerDescriptor = $convert.base64Decode(
     'CgdQYXJ0bmVyEh0KCnBhcnRuZXJfaWQYASABKAlSCXBhcnRuZXJJZBISCgRuYW1lGAIgASgJUg'
     'RuYW1lEi8KEWNpdHlfb2ZfcmVzaWRlbmNlGAMgASgJSABSD2NpdHlPZlJlc2lkZW5jZYgBARIm'
     'Cgxjb250YWN0X2luZm8YBCABKAlIAVILY29udGFjdEluZm+IAQESGwoGc3RhdHVzGAUgASgJSA'
-    'JSBnN0YXR1c4gBAUIUChJfY2l0eV9vZl9yZXNpZGVuY2VCDwoNX2NvbnRhY3RfaW5mb0IJCgdf'
-    'c3RhdHVz');
+    'JSBnN0YXR1c4gBARIZCgVub3RlcxgGIAEoCUgDUgVub3Rlc4gBAUIUChJfY2l0eV9vZl9yZXNp'
+    'ZGVuY2VCDwoNX2NvbnRhY3RfaW5mb0IJCgdfc3RhdHVzQggKBl9ub3Rlcw==');
 
 @$core.Deprecated('Use legalIssueTypeDescriptor instead')
 const LegalIssueType$json = {
@@ -397,9 +429,11 @@ const LegalIssueType$json = {
     {'1': 'issue_type_id', '3': 1, '4': 1, '5': 9, '10': 'issueTypeId'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
     {'1': 'description', '3': 3, '4': 1, '5': 9, '9': 0, '10': 'description', '17': true},
+    {'1': 'notes', '3': 4, '4': 1, '5': 9, '9': 1, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_description'},
+    {'1': '_notes'},
   ],
 };
 
@@ -407,7 +441,7 @@ const LegalIssueType$json = {
 final $typed_data.Uint8List legalIssueTypeDescriptor = $convert.base64Decode(
     'Cg5MZWdhbElzc3VlVHlwZRIiCg1pc3N1ZV90eXBlX2lkGAEgASgJUgtpc3N1ZVR5cGVJZBISCg'
     'RuYW1lGAIgASgJUgRuYW1lEiUKC2Rlc2NyaXB0aW9uGAMgASgJSABSC2Rlc2NyaXB0aW9uiAEB'
-    'Qg4KDF9kZXNjcmlwdGlvbg==');
+    'EhkKBW5vdGVzGAQgASgJSAFSBW5vdGVziAEBQg4KDF9kZXNjcmlwdGlvbkIICgZfbm90ZXM=');
 
 @$core.Deprecated('Use trainingCourseDescriptor instead')
 const TrainingCourse$json = {
@@ -418,9 +452,11 @@ const TrainingCourse$json = {
     {'1': 'price', '3': 3, '4': 1, '5': 1, '10': 'price'},
     {'1': 'commission_percent', '3': 4, '4': 1, '5': 1, '10': 'commissionPercent'},
     {'1': 'description', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'description', '17': true},
+    {'1': 'notes', '3': 6, '4': 1, '5': 9, '9': 1, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_description'},
+    {'1': '_notes'},
   ],
 };
 
@@ -429,7 +465,8 @@ final $typed_data.Uint8List trainingCourseDescriptor = $convert.base64Decode(
     'Cg5UcmFpbmluZ0NvdXJzZRIbCgljb3Vyc2VfaWQYASABKAlSCGNvdXJzZUlkEhIKBG5hbWUYAi'
     'ABKAlSBG5hbWUSFAoFcHJpY2UYAyABKAFSBXByaWNlEi0KEmNvbW1pc3Npb25fcGVyY2VudBgE'
     'IAEoAVIRY29tbWlzc2lvblBlcmNlbnQSJQoLZGVzY3JpcHRpb24YBSABKAlIAFILZGVzY3JpcH'
-    'Rpb26IAQFCDgoMX2Rlc2NyaXB0aW9u');
+    'Rpb26IAQESGQoFbm90ZXMYBiABKAlIAVIFbm90ZXOIAQFCDgoMX2Rlc2NyaXB0aW9uQggKBl9u'
+    'b3Rlcw==');
 
 @$core.Deprecated('Use bankDescriptor instead')
 const Bank$json = {
@@ -441,9 +478,11 @@ const Bank$json = {
     {'1': 'ip_registration_commission', '3': 4, '4': 1, '5': 1, '10': 'ipRegistrationCommission'},
     {'1': 'ooo_registration_commission', '3': 5, '4': 1, '5': 1, '10': 'oooRegistrationCommission'},
     {'1': 'lending_commission_percent', '3': 6, '4': 1, '5': 1, '9': 0, '10': 'lendingCommissionPercent', '17': true},
+    {'1': 'notes', '3': 7, '4': 1, '5': 9, '9': 1, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_lending_commission_percent'},
+    {'1': '_notes'},
   ],
 };
 
@@ -454,8 +493,8 @@ final $typed_data.Uint8List bankDescriptor = $convert.base64Decode(
     'b24SPAoaaXBfcmVnaXN0cmF0aW9uX2NvbW1pc3Npb24YBCABKAFSGGlwUmVnaXN0cmF0aW9uQ2'
     '9tbWlzc2lvbhI+Chtvb29fcmVnaXN0cmF0aW9uX2NvbW1pc3Npb24YBSABKAFSGW9vb1JlZ2lz'
     'dHJhdGlvbkNvbW1pc3Npb24SQQoabGVuZGluZ19jb21taXNzaW9uX3BlcmNlbnQYBiABKAFIAF'
-    'IYbGVuZGluZ0NvbW1pc3Npb25QZXJjZW50iAEBQh0KG19sZW5kaW5nX2NvbW1pc3Npb25fcGVy'
-    'Y2VudA==');
+    'IYbGVuZGluZ0NvbW1pc3Npb25QZXJjZW50iAEBEhkKBW5vdGVzGAcgASgJSAFSBW5vdGVziAEB'
+    'Qh0KG19sZW5kaW5nX2NvbW1pc3Npb25fcGVyY2VudEIICgZfbm90ZXM=');
 
 @$core.Deprecated('Use interactionDescriptor instead')
 const Interaction$json = {
@@ -467,10 +506,20 @@ const Interaction$json = {
     {'1': 'date', '3': 4, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'date'},
     {'1': 'type', '3': 5, '4': 1, '5': 9, '10': 'type'},
     {'1': 'description', '3': 6, '4': 1, '5': 9, '9': 1, '10': 'description', '17': true},
+    {'1': 'subject', '3': 7, '4': 1, '5': 9, '9': 2, '10': 'subject', '17': true},
+    {'1': 'end_time', '3': 8, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 3, '10': 'endTime', '17': true},
+    {'1': 'is_scheduled', '3': 9, '4': 1, '5': 8, '9': 4, '10': 'isScheduled', '17': true},
+    {'1': 'is_completed', '3': 10, '4': 1, '5': 8, '9': 5, '10': 'isCompleted', '17': true},
+    {'1': 'notes', '3': 11, '4': 1, '5': 9, '9': 6, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_employee_id'},
     {'1': '_description'},
+    {'1': '_subject'},
+    {'1': '_end_time'},
+    {'1': '_is_scheduled'},
+    {'1': '_is_completed'},
+    {'1': '_notes'},
   ],
 };
 
@@ -480,7 +529,12 @@ final $typed_data.Uint8List interactionDescriptor = $convert.base64Decode(
     'ljbGllbnRfaWQYAiABKAlSCGNsaWVudElkEiQKC2VtcGxveWVlX2lkGAMgASgJSABSCmVtcGxv'
     'eWVlSWSIAQESLgoEZGF0ZRgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSBGRhdG'
     'USEgoEdHlwZRgFIAEoCVIEdHlwZRIlCgtkZXNjcmlwdGlvbhgGIAEoCUgBUgtkZXNjcmlwdGlv'
-    'bogBAUIOCgxfZW1wbG95ZWVfaWRCDgoMX2Rlc2NyaXB0aW9u');
+    'bogBARIdCgdzdWJqZWN0GAcgASgJSAJSB3N1YmplY3SIAQESOgoIZW5kX3RpbWUYCCABKAsyGi'
+    '5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wSANSB2VuZFRpbWWIAQESJgoMaXNfc2NoZWR1bGVk'
+    'GAkgASgISARSC2lzU2NoZWR1bGVkiAEBEiYKDGlzX2NvbXBsZXRlZBgKIAEoCEgFUgtpc0NvbX'
+    'BsZXRlZIgBARIZCgVub3RlcxgLIAEoCUgGUgVub3Rlc4gBAUIOCgxfZW1wbG95ZWVfaWRCDgoM'
+    'X2Rlc2NyaXB0aW9uQgoKCF9zdWJqZWN0QgsKCV9lbmRfdGltZUIPCg1faXNfc2NoZWR1bGVkQg'
+    '8KDV9pc19jb21wbGV0ZWRCCAoGX25vdGVz');
 
 @$core.Deprecated('Use paymentDescriptor instead')
 const Payment$json = {
@@ -497,12 +551,14 @@ const Payment$json = {
     {'1': 'status', '3': 9, '4': 1, '5': 9, '10': 'status'},
     {'1': 'verified_by_accountant', '3': 10, '4': 1, '5': 8, '10': 'verifiedByAccountant'},
     {'1': 'created_at_entity', '3': 11, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 3, '10': 'createdAtEntity', '17': true},
+    {'1': 'notes', '3': 12, '4': 1, '5': 9, '9': 4, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_actual_amount_received'},
     {'1': '_payment_date'},
     {'1': '_payment_method'},
     {'1': '_created_at_entity'},
+    {'1': '_notes'},
   ],
 };
 
@@ -517,9 +573,9 @@ final $typed_data.Uint8List paymentDescriptor = $convert.base64Decode(
     'cGF5bWVudF9tZXRob2QYCCABKAlIAlINcGF5bWVudE1ldGhvZIgBARIWCgZzdGF0dXMYCSABKA'
     'lSBnN0YXR1cxI0ChZ2ZXJpZmllZF9ieV9hY2NvdW50YW50GAogASgIUhR2ZXJpZmllZEJ5QWNj'
     'b3VudGFudBJLChFjcmVhdGVkX2F0X2VudGl0eRgLIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW'
-    '1lc3RhbXBIA1IPY3JlYXRlZEF0RW50aXR5iAEBQhkKF19hY3R1YWxfYW1vdW50X3JlY2VpdmVk'
-    'Qg8KDV9wYXltZW50X2RhdGVCEQoPX3BheW1lbnRfbWV0aG9kQhQKEl9jcmVhdGVkX2F0X2VudG'
-    'l0eQ==');
+    '1lc3RhbXBIA1IPY3JlYXRlZEF0RW50aXR5iAEBEhkKBW5vdGVzGAwgASgJSARSBW5vdGVziAEB'
+    'QhkKF19hY3R1YWxfYW1vdW50X3JlY2VpdmVkQg8KDV9wYXltZW50X2RhdGVCEQoPX3BheW1lbn'
+    'RfbWV0aG9kQhQKEl9jcmVhdGVkX2F0X2VudGl0eUIICgZfbm90ZXM=');
 
 @$core.Deprecated('Use createClientRequestDescriptor instead')
 const CreateClientRequest$json = {

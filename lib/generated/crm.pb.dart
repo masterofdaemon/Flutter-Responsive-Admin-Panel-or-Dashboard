@@ -32,6 +32,7 @@ class Client extends $pb.GeneratedMessage {
     $core.String? whatsappNumber,
     $core.String? source,
     $1.Value? passportData,
+    $core.String? notes,
   }) {
     final $result = create();
     if (clientId != null) {
@@ -61,6 +62,9 @@ class Client extends $pb.GeneratedMessage {
     if (passportData != null) {
       $result.passportData = passportData;
     }
+    if (notes != null) {
+      $result.notes = notes;
+    }
     return $result;
   }
   Client._() : super();
@@ -77,6 +81,7 @@ class Client extends $pb.GeneratedMessage {
     ..aOS(7, _omitFieldNames ? '' : 'whatsappNumber')
     ..aOS(8, _omitFieldNames ? '' : 'source')
     ..aOM<$1.Value>(9, _omitFieldNames ? '' : 'passportData', subBuilder: $1.Value.create)
+    ..aOS(10, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -192,6 +197,16 @@ class Client extends $pb.GeneratedMessage {
   void clearPassportData() => $_clearField(9);
   @$pb.TagNumber(9)
   $1.Value ensurePassportData() => $_ensure(8);
+
+  /// Notes about the client
+  @$pb.TagNumber(10)
+  $core.String get notes => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set notes($core.String v) { $_setString(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasNotes() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearNotes() => $_clearField(10);
 }
 
 /// User represents a system user with authentication credentials.
@@ -201,6 +216,7 @@ class User extends $pb.GeneratedMessage {
     $core.String? userId,
     $core.String? login,
     $2.Timestamp? lastLogin,
+    $core.String? notes,
   }) {
     final $result = create();
     if (userId != null) {
@@ -212,6 +228,9 @@ class User extends $pb.GeneratedMessage {
     if (lastLogin != null) {
       $result.lastLogin = lastLogin;
     }
+    if (notes != null) {
+      $result.notes = notes;
+    }
     return $result;
   }
   User._() : super();
@@ -222,6 +241,7 @@ class User extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'userId')
     ..aOS(2, _omitFieldNames ? '' : 'login')
     ..aOM<$2.Timestamp>(3, _omitFieldNames ? '' : 'lastLogin', subBuilder: $2.Timestamp.create)
+    ..aOS(4, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -277,6 +297,16 @@ class User extends $pb.GeneratedMessage {
   void clearLastLogin() => $_clearField(3);
   @$pb.TagNumber(3)
   $2.Timestamp ensureLastLogin() => $_ensure(2);
+
+  /// Notes about the user
+  @$pb.TagNumber(4)
+  $core.String get notes => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set notes($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasNotes() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearNotes() => $_clearField(4);
 }
 
 class Employee extends $pb.GeneratedMessage {
@@ -290,6 +320,7 @@ class Employee extends $pb.GeneratedMessage {
     $core.String? whatsappNumber,
     $core.String? email,
     $core.bool? isActive,
+    $core.String? notes,
   }) {
     final $result = create();
     if (employeeId != null) {
@@ -319,6 +350,9 @@ class Employee extends $pb.GeneratedMessage {
     if (isActive != null) {
       $result.isActive = isActive;
     }
+    if (notes != null) {
+      $result.notes = notes;
+    }
     return $result;
   }
   Employee._() : super();
@@ -335,6 +369,7 @@ class Employee extends $pb.GeneratedMessage {
     ..aOS(7, _omitFieldNames ? '' : 'whatsappNumber')
     ..aOS(8, _omitFieldNames ? '' : 'email')
     ..aOB(9, _omitFieldNames ? '' : 'isActive')
+    ..aOS(10, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -439,6 +474,16 @@ class Employee extends $pb.GeneratedMessage {
   $core.bool hasIsActive() => $_has(8);
   @$pb.TagNumber(9)
   void clearIsActive() => $_clearField(9);
+
+  /// Notes about the employee
+  @$pb.TagNumber(10)
+  $core.String get notes => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set notes($core.String v) { $_setString(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasNotes() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearNotes() => $_clearField(10);
 }
 
 class Office extends $pb.GeneratedMessage {
@@ -447,6 +492,7 @@ class Office extends $pb.GeneratedMessage {
     $core.String? city,
     $core.String? address,
     $core.String? phone,
+    $core.String? notes,
   }) {
     final $result = create();
     if (officeId != null) {
@@ -461,6 +507,9 @@ class Office extends $pb.GeneratedMessage {
     if (phone != null) {
       $result.phone = phone;
     }
+    if (notes != null) {
+      $result.notes = notes;
+    }
     return $result;
   }
   Office._() : super();
@@ -472,6 +521,7 @@ class Office extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'city')
     ..aOS(3, _omitFieldNames ? '' : 'address')
     ..aOS(4, _omitFieldNames ? '' : 'phone')
+    ..aOS(5, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -531,6 +581,16 @@ class Office extends $pb.GeneratedMessage {
   $core.bool hasPhone() => $_has(3);
   @$pb.TagNumber(4)
   void clearPhone() => $_clearField(4);
+
+  /// Notes about the office
+  @$pb.TagNumber(5)
+  $core.String get notes => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set notes($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasNotes() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearNotes() => $_clearField(5);
 }
 
 class LegalCase extends $pb.GeneratedMessage {
@@ -546,6 +606,7 @@ class LegalCase extends $pb.GeneratedMessage {
     $core.double? expectedCommission,
     $core.String? status,
     $core.String? paymentId,
+    $core.String? notes,
   }) {
     final $result = create();
     if (caseId != null) {
@@ -581,6 +642,9 @@ class LegalCase extends $pb.GeneratedMessage {
     if (paymentId != null) {
       $result.paymentId = paymentId;
     }
+    if (notes != null) {
+      $result.notes = notes;
+    }
     return $result;
   }
   LegalCase._() : super();
@@ -599,6 +663,7 @@ class LegalCase extends $pb.GeneratedMessage {
     ..a<$core.double>(9, _omitFieldNames ? '' : 'expectedCommission', $pb.PbFieldType.OD)
     ..aOS(10, _omitFieldNames ? '' : 'status')
     ..aOS(11, _omitFieldNames ? '' : 'paymentId')
+    ..aOS(12, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -725,6 +790,16 @@ class LegalCase extends $pb.GeneratedMessage {
   $core.bool hasPaymentId() => $_has(10);
   @$pb.TagNumber(11)
   void clearPaymentId() => $_clearField(11);
+
+  /// Notes about the legal case
+  @$pb.TagNumber(12)
+  $core.String get notes => $_getSZ(11);
+  @$pb.TagNumber(12)
+  set notes($core.String v) { $_setString(11, v); }
+  @$pb.TagNumber(12)
+  $core.bool hasNotes() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearNotes() => $_clearField(12);
 }
 
 class TranslationOrder extends $pb.GeneratedMessage {
@@ -744,6 +819,7 @@ class TranslationOrder extends $pb.GeneratedMessage {
     $core.String? status,
     $core.String? paymentId,
     $1.Value? documentBlanks,
+    $core.String? notes,
   }) {
     final $result = create();
     if (orderId != null) {
@@ -791,6 +867,9 @@ class TranslationOrder extends $pb.GeneratedMessage {
     if (documentBlanks != null) {
       $result.documentBlanks = documentBlanks;
     }
+    if (notes != null) {
+      $result.notes = notes;
+    }
     return $result;
   }
   TranslationOrder._() : super();
@@ -813,6 +892,7 @@ class TranslationOrder extends $pb.GeneratedMessage {
     ..aOS(13, _omitFieldNames ? '' : 'status')
     ..aOS(14, _omitFieldNames ? '' : 'paymentId')
     ..aOM<$1.Value>(15, _omitFieldNames ? '' : 'documentBlanks', subBuilder: $1.Value.create)
+    ..aOS(16, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -973,6 +1053,16 @@ class TranslationOrder extends $pb.GeneratedMessage {
   void clearDocumentBlanks() => $_clearField(15);
   @$pb.TagNumber(15)
   $1.Value ensureDocumentBlanks() => $_ensure(14);
+
+  /// Notes about the translation order
+  @$pb.TagNumber(16)
+  $core.String get notes => $_getSZ(15);
+  @$pb.TagNumber(16)
+  set notes($core.String v) { $_setString(15, v); }
+  @$pb.TagNumber(16)
+  $core.bool hasNotes() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearNotes() => $_clearField(16);
 }
 
 class InsurancePolicy extends $pb.GeneratedMessage {
@@ -986,6 +1076,7 @@ class InsurancePolicy extends $pb.GeneratedMessage {
     $core.double? amount,
     $core.String? status,
     $core.String? renewalStatus,
+    $core.String? notes,
   }) {
     final $result = create();
     if (policyId != null) {
@@ -1015,6 +1106,9 @@ class InsurancePolicy extends $pb.GeneratedMessage {
     if (renewalStatus != null) {
       $result.renewalStatus = renewalStatus;
     }
+    if (notes != null) {
+      $result.notes = notes;
+    }
     return $result;
   }
   InsurancePolicy._() : super();
@@ -1031,6 +1125,7 @@ class InsurancePolicy extends $pb.GeneratedMessage {
     ..a<$core.double>(7, _omitFieldNames ? '' : 'amount', $pb.PbFieldType.OD)
     ..aOS(8, _omitFieldNames ? '' : 'status')
     ..aOS(9, _omitFieldNames ? '' : 'renewalStatus')
+    ..aOS(10, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -1139,6 +1234,16 @@ class InsurancePolicy extends $pb.GeneratedMessage {
   $core.bool hasRenewalStatus() => $_has(8);
   @$pb.TagNumber(9)
   void clearRenewalStatus() => $_clearField(9);
+
+  /// Notes about the insurance policy
+  @$pb.TagNumber(10)
+  $core.String get notes => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set notes($core.String v) { $_setString(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasNotes() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearNotes() => $_clearField(10);
 }
 
 class TrainingEnrollment extends $pb.GeneratedMessage {
@@ -1150,6 +1255,7 @@ class TrainingEnrollment extends $pb.GeneratedMessage {
     $2.Timestamp? contractDate,
     $core.String? status,
     $core.String? paymentId,
+    $core.String? notes,
   }) {
     final $result = create();
     if (enrollmentId != null) {
@@ -1173,6 +1279,9 @@ class TrainingEnrollment extends $pb.GeneratedMessage {
     if (paymentId != null) {
       $result.paymentId = paymentId;
     }
+    if (notes != null) {
+      $result.notes = notes;
+    }
     return $result;
   }
   TrainingEnrollment._() : super();
@@ -1187,6 +1296,7 @@ class TrainingEnrollment extends $pb.GeneratedMessage {
     ..aOM<$2.Timestamp>(5, _omitFieldNames ? '' : 'contractDate', subBuilder: $2.Timestamp.create)
     ..aOS(6, _omitFieldNames ? '' : 'status')
     ..aOS(7, _omitFieldNames ? '' : 'paymentId')
+    ..aOS(8, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -1275,6 +1385,16 @@ class TrainingEnrollment extends $pb.GeneratedMessage {
   $core.bool hasPaymentId() => $_has(6);
   @$pb.TagNumber(7)
   void clearPaymentId() => $_clearField(7);
+
+  /// Notes about the training enrollment
+  @$pb.TagNumber(8)
+  $core.String get notes => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set notes($core.String v) { $_setString(7, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasNotes() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearNotes() => $_clearField(8);
 }
 
 class AccountOpeningRequest extends $pb.GeneratedMessage {
@@ -1287,6 +1407,7 @@ class AccountOpeningRequest extends $pb.GeneratedMessage {
     $2.Timestamp? applicationDate,
     $2.Timestamp? openedDate,
     $core.String? paymentId,
+    $core.String? notes,
   }) {
     final $result = create();
     if (requestId != null) {
@@ -1313,6 +1434,9 @@ class AccountOpeningRequest extends $pb.GeneratedMessage {
     if (paymentId != null) {
       $result.paymentId = paymentId;
     }
+    if (notes != null) {
+      $result.notes = notes;
+    }
     return $result;
   }
   AccountOpeningRequest._() : super();
@@ -1328,6 +1452,7 @@ class AccountOpeningRequest extends $pb.GeneratedMessage {
     ..aOM<$2.Timestamp>(6, _omitFieldNames ? '' : 'applicationDate', subBuilder: $2.Timestamp.create)
     ..aOM<$2.Timestamp>(7, _omitFieldNames ? '' : 'openedDate', subBuilder: $2.Timestamp.create)
     ..aOS(8, _omitFieldNames ? '' : 'paymentId')
+    ..aOS(9, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -1427,6 +1552,16 @@ class AccountOpeningRequest extends $pb.GeneratedMessage {
   $core.bool hasPaymentId() => $_has(7);
   @$pb.TagNumber(8)
   void clearPaymentId() => $_clearField(8);
+
+  /// Notes about the account opening request
+  @$pb.TagNumber(9)
+  $core.String get notes => $_getSZ(8);
+  @$pb.TagNumber(9)
+  set notes($core.String v) { $_setString(8, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasNotes() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearNotes() => $_clearField(9);
 }
 
 class BusinessRegistration extends $pb.GeneratedMessage {
@@ -1440,6 +1575,7 @@ class BusinessRegistration extends $pb.GeneratedMessage {
     $2.Timestamp? applicationDate,
     $2.Timestamp? registrationDate,
     $core.String? paymentId,
+    $core.String? notes,
   }) {
     final $result = create();
     if (requestId != null) {
@@ -1469,6 +1605,9 @@ class BusinessRegistration extends $pb.GeneratedMessage {
     if (paymentId != null) {
       $result.paymentId = paymentId;
     }
+    if (notes != null) {
+      $result.notes = notes;
+    }
     return $result;
   }
   BusinessRegistration._() : super();
@@ -1485,6 +1624,7 @@ class BusinessRegistration extends $pb.GeneratedMessage {
     ..aOM<$2.Timestamp>(7, _omitFieldNames ? '' : 'applicationDate', subBuilder: $2.Timestamp.create)
     ..aOM<$2.Timestamp>(8, _omitFieldNames ? '' : 'registrationDate', subBuilder: $2.Timestamp.create)
     ..aOS(9, _omitFieldNames ? '' : 'paymentId')
+    ..aOS(10, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -1593,6 +1733,16 @@ class BusinessRegistration extends $pb.GeneratedMessage {
   $core.bool hasPaymentId() => $_has(8);
   @$pb.TagNumber(9)
   void clearPaymentId() => $_clearField(9);
+
+  /// Notes about the business registration
+  @$pb.TagNumber(10)
+  $core.String get notes => $_getSZ(9);
+  @$pb.TagNumber(10)
+  set notes($core.String v) { $_setString(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasNotes() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearNotes() => $_clearField(10);
 }
 
 class LendingApplication extends $pb.GeneratedMessage {
@@ -1610,6 +1760,7 @@ class LendingApplication extends $pb.GeneratedMessage {
     $core.double? expectedCommission,
     $core.String? status,
     $core.String? paymentId,
+    $core.String? notes,
   }) {
     final $result = create();
     if (requestId != null) {
@@ -1651,6 +1802,9 @@ class LendingApplication extends $pb.GeneratedMessage {
     if (paymentId != null) {
       $result.paymentId = paymentId;
     }
+    if (notes != null) {
+      $result.notes = notes;
+    }
     return $result;
   }
   LendingApplication._() : super();
@@ -1671,6 +1825,7 @@ class LendingApplication extends $pb.GeneratedMessage {
     ..a<$core.double>(11, _omitFieldNames ? '' : 'expectedCommission', $pb.PbFieldType.OD)
     ..aOS(12, _omitFieldNames ? '' : 'status')
     ..aOS(13, _omitFieldNames ? '' : 'paymentId')
+    ..aOS(14, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -1819,6 +1974,16 @@ class LendingApplication extends $pb.GeneratedMessage {
   $core.bool hasPaymentId() => $_has(12);
   @$pb.TagNumber(13)
   void clearPaymentId() => $_clearField(13);
+
+  /// Notes about the lending application
+  @$pb.TagNumber(14)
+  $core.String get notes => $_getSZ(13);
+  @$pb.TagNumber(14)
+  set notes($core.String v) { $_setString(13, v); }
+  @$pb.TagNumber(14)
+  $core.bool hasNotes() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearNotes() => $_clearField(14);
 }
 
 class Partner extends $pb.GeneratedMessage {
@@ -1828,6 +1993,7 @@ class Partner extends $pb.GeneratedMessage {
     $core.String? cityOfResidence,
     $core.String? contactInfo,
     $core.String? status,
+    $core.String? notes,
   }) {
     final $result = create();
     if (partnerId != null) {
@@ -1845,6 +2011,9 @@ class Partner extends $pb.GeneratedMessage {
     if (status != null) {
       $result.status = status;
     }
+    if (notes != null) {
+      $result.notes = notes;
+    }
     return $result;
   }
   Partner._() : super();
@@ -1857,6 +2026,7 @@ class Partner extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'cityOfResidence')
     ..aOS(4, _omitFieldNames ? '' : 'contactInfo')
     ..aOS(5, _omitFieldNames ? '' : 'status')
+    ..aOS(6, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -1925,6 +2095,16 @@ class Partner extends $pb.GeneratedMessage {
   $core.bool hasStatus() => $_has(4);
   @$pb.TagNumber(5)
   void clearStatus() => $_clearField(5);
+
+  /// Notes about the partner
+  @$pb.TagNumber(6)
+  $core.String get notes => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set notes($core.String v) { $_setString(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasNotes() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearNotes() => $_clearField(6);
 }
 
 class LegalIssueType extends $pb.GeneratedMessage {
@@ -1932,6 +2112,7 @@ class LegalIssueType extends $pb.GeneratedMessage {
     $core.String? issueTypeId,
     $core.String? name,
     $core.String? description,
+    $core.String? notes,
   }) {
     final $result = create();
     if (issueTypeId != null) {
@@ -1943,6 +2124,9 @@ class LegalIssueType extends $pb.GeneratedMessage {
     if (description != null) {
       $result.description = description;
     }
+    if (notes != null) {
+      $result.notes = notes;
+    }
     return $result;
   }
   LegalIssueType._() : super();
@@ -1953,6 +2137,7 @@ class LegalIssueType extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'issueTypeId')
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
+    ..aOS(4, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -2003,6 +2188,16 @@ class LegalIssueType extends $pb.GeneratedMessage {
   $core.bool hasDescription() => $_has(2);
   @$pb.TagNumber(3)
   void clearDescription() => $_clearField(3);
+
+  /// Notes about the legal issue type
+  @$pb.TagNumber(4)
+  $core.String get notes => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set notes($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasNotes() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearNotes() => $_clearField(4);
 }
 
 class TrainingCourse extends $pb.GeneratedMessage {
@@ -2012,6 +2207,7 @@ class TrainingCourse extends $pb.GeneratedMessage {
     $core.double? price,
     $core.double? commissionPercent,
     $core.String? description,
+    $core.String? notes,
   }) {
     final $result = create();
     if (courseId != null) {
@@ -2029,6 +2225,9 @@ class TrainingCourse extends $pb.GeneratedMessage {
     if (description != null) {
       $result.description = description;
     }
+    if (notes != null) {
+      $result.notes = notes;
+    }
     return $result;
   }
   TrainingCourse._() : super();
@@ -2041,6 +2240,7 @@ class TrainingCourse extends $pb.GeneratedMessage {
     ..a<$core.double>(3, _omitFieldNames ? '' : 'price', $pb.PbFieldType.OD)
     ..a<$core.double>(4, _omitFieldNames ? '' : 'commissionPercent', $pb.PbFieldType.OD)
     ..aOS(5, _omitFieldNames ? '' : 'description')
+    ..aOS(6, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -2109,6 +2309,16 @@ class TrainingCourse extends $pb.GeneratedMessage {
   $core.bool hasDescription() => $_has(4);
   @$pb.TagNumber(5)
   void clearDescription() => $_clearField(5);
+
+  /// Notes about the training course
+  @$pb.TagNumber(6)
+  $core.String get notes => $_getSZ(5);
+  @$pb.TagNumber(6)
+  set notes($core.String v) { $_setString(5, v); }
+  @$pb.TagNumber(6)
+  $core.bool hasNotes() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearNotes() => $_clearField(6);
 }
 
 class Bank extends $pb.GeneratedMessage {
@@ -2119,6 +2329,7 @@ class Bank extends $pb.GeneratedMessage {
     $core.double? ipRegistrationCommission,
     $core.double? oooRegistrationCommission,
     $core.double? lendingCommissionPercent,
+    $core.String? notes,
   }) {
     final $result = create();
     if (bankId != null) {
@@ -2139,6 +2350,9 @@ class Bank extends $pb.GeneratedMessage {
     if (lendingCommissionPercent != null) {
       $result.lendingCommissionPercent = lendingCommissionPercent;
     }
+    if (notes != null) {
+      $result.notes = notes;
+    }
     return $result;
   }
   Bank._() : super();
@@ -2152,6 +2366,7 @@ class Bank extends $pb.GeneratedMessage {
     ..a<$core.double>(4, _omitFieldNames ? '' : 'ipRegistrationCommission', $pb.PbFieldType.OD)
     ..a<$core.double>(5, _omitFieldNames ? '' : 'oooRegistrationCommission', $pb.PbFieldType.OD)
     ..a<$core.double>(6, _omitFieldNames ? '' : 'lendingCommissionPercent', $pb.PbFieldType.OD)
+    ..aOS(7, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -2229,6 +2444,16 @@ class Bank extends $pb.GeneratedMessage {
   $core.bool hasLendingCommissionPercent() => $_has(5);
   @$pb.TagNumber(6)
   void clearLendingCommissionPercent() => $_clearField(6);
+
+  /// Notes about the bank
+  @$pb.TagNumber(7)
+  $core.String get notes => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set notes($core.String v) { $_setString(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasNotes() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearNotes() => $_clearField(7);
 }
 
 class Interaction extends $pb.GeneratedMessage {
@@ -2239,6 +2464,11 @@ class Interaction extends $pb.GeneratedMessage {
     $2.Timestamp? date,
     $core.String? type,
     $core.String? description,
+    $core.String? subject,
+    $2.Timestamp? endTime,
+    $core.bool? isScheduled,
+    $core.bool? isCompleted,
+    $core.String? notes,
   }) {
     final $result = create();
     if (interactionId != null) {
@@ -2259,6 +2489,21 @@ class Interaction extends $pb.GeneratedMessage {
     if (description != null) {
       $result.description = description;
     }
+    if (subject != null) {
+      $result.subject = subject;
+    }
+    if (endTime != null) {
+      $result.endTime = endTime;
+    }
+    if (isScheduled != null) {
+      $result.isScheduled = isScheduled;
+    }
+    if (isCompleted != null) {
+      $result.isCompleted = isCompleted;
+    }
+    if (notes != null) {
+      $result.notes = notes;
+    }
     return $result;
   }
   Interaction._() : super();
@@ -2272,6 +2517,11 @@ class Interaction extends $pb.GeneratedMessage {
     ..aOM<$2.Timestamp>(4, _omitFieldNames ? '' : 'date', subBuilder: $2.Timestamp.create)
     ..aOS(5, _omitFieldNames ? '' : 'type')
     ..aOS(6, _omitFieldNames ? '' : 'description')
+    ..aOS(7, _omitFieldNames ? '' : 'subject')
+    ..aOM<$2.Timestamp>(8, _omitFieldNames ? '' : 'endTime', subBuilder: $2.Timestamp.create)
+    ..aOB(9, _omitFieldNames ? '' : 'isScheduled')
+    ..aOB(10, _omitFieldNames ? '' : 'isCompleted')
+    ..aOS(11, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -2351,6 +2601,53 @@ class Interaction extends $pb.GeneratedMessage {
   $core.bool hasDescription() => $_has(5);
   @$pb.TagNumber(6)
   void clearDescription() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get subject => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set subject($core.String v) { $_setString(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasSubject() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearSubject() => $_clearField(7);
+
+  @$pb.TagNumber(8)
+  $2.Timestamp get endTime => $_getN(7);
+  @$pb.TagNumber(8)
+  set endTime($2.Timestamp v) { $_setField(8, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasEndTime() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearEndTime() => $_clearField(8);
+  @$pb.TagNumber(8)
+  $2.Timestamp ensureEndTime() => $_ensure(7);
+
+  @$pb.TagNumber(9)
+  $core.bool get isScheduled => $_getBF(8);
+  @$pb.TagNumber(9)
+  set isScheduled($core.bool v) { $_setBool(8, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasIsScheduled() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearIsScheduled() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.bool get isCompleted => $_getBF(9);
+  @$pb.TagNumber(10)
+  set isCompleted($core.bool v) { $_setBool(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasIsCompleted() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearIsCompleted() => $_clearField(10);
+
+  @$pb.TagNumber(11)
+  $core.String get notes => $_getSZ(10);
+  @$pb.TagNumber(11)
+  set notes($core.String v) { $_setString(10, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasNotes() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearNotes() => $_clearField(11);
 }
 
 class Payment extends $pb.GeneratedMessage {
@@ -2366,6 +2663,7 @@ class Payment extends $pb.GeneratedMessage {
     $core.String? status,
     $core.bool? verifiedByAccountant,
     $2.Timestamp? createdAtEntity,
+    $core.String? notes,
   }) {
     final $result = create();
     if (paymentId != null) {
@@ -2401,6 +2699,9 @@ class Payment extends $pb.GeneratedMessage {
     if (createdAtEntity != null) {
       $result.createdAtEntity = createdAtEntity;
     }
+    if (notes != null) {
+      $result.notes = notes;
+    }
     return $result;
   }
   Payment._() : super();
@@ -2419,6 +2720,7 @@ class Payment extends $pb.GeneratedMessage {
     ..aOS(9, _omitFieldNames ? '' : 'status')
     ..aOB(10, _omitFieldNames ? '' : 'verifiedByAccountant')
     ..aOM<$2.Timestamp>(11, _omitFieldNames ? '' : 'createdAtEntity', subBuilder: $2.Timestamp.create)
+    ..aOS(12, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -2545,6 +2847,16 @@ class Payment extends $pb.GeneratedMessage {
   void clearCreatedAtEntity() => $_clearField(11);
   @$pb.TagNumber(11)
   $2.Timestamp ensureCreatedAtEntity() => $_ensure(10);
+
+  /// Notes about the payment
+  @$pb.TagNumber(12)
+  $core.String get notes => $_getSZ(11);
+  @$pb.TagNumber(12)
+  set notes($core.String v) { $_setString(11, v); }
+  @$pb.TagNumber(12)
+  $core.bool hasNotes() => $_has(11);
+  @$pb.TagNumber(12)
+  void clearNotes() => $_clearField(12);
 }
 
 /// Client CRUD

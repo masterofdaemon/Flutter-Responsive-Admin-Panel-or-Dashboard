@@ -144,6 +144,11 @@ class _ClientListScreenState extends State<ClientListScreen> {
                       DataColumn(label: Text('Last Name')),
                       DataColumn(label: Text('Phone')),
                       DataColumn(label: Text('Email')),
+                      DataColumn(label: Text('Telegram ID')),
+                      DataColumn(label: Text('WhatsApp')),
+                      DataColumn(label: Text('Source')),
+                      DataColumn(label: Text('Passport Data')),
+                      DataColumn(label: Text('Notes')),
                       DataColumn(label: Text('Actions')),
                     ],
                     rows: clients.map((client) {
@@ -154,7 +159,14 @@ class _ClientListScreenState extends State<ClientListScreen> {
                         DataCell(Text(client.firstName)),
                         DataCell(Text(client.lastName)),
                         DataCell(Text(client.phone)),
-                        DataCell(Text(client.email)), // Handle optional field
+                        DataCell(Text(client.email)),
+                        DataCell(Text(client.telegramId)),
+                        DataCell(Text(client.whatsappNumber)),
+                        DataCell(Text(client.source)),
+                        DataCell(Text(client.hasPassportData()
+                            ? client.passportData.toString()
+                            : '-')),
+                        DataCell(Text(client.notes)),
                         DataCell(Row(
                           mainAxisSize: MainAxisSize
                               .min, // Prevent row expanding unnecessarily

@@ -105,6 +105,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                     DataColumn(label: Text('WhatsApp')),
                     DataColumn(label: Text('Email')),
                     DataColumn(label: Text('Active')),
+                    DataColumn(label: Text('Notes')),
                     DataColumn(label: Text('Actions')),
                   ],
                   rows: list.map((e) {
@@ -117,6 +118,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                       DataCell(Text(e.whatsappNumber)),
                       DataCell(Text(e.email)),
                       DataCell(Text(e.isActive ? 'Yes' : 'No')),
+                      DataCell(Text(e.notes)),
                       DataCell(Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

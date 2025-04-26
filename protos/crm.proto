@@ -32,6 +32,8 @@ message Client {
   optional string source = 8;
   // Client's passport data (stored as JSON)
   optional google.protobuf.Value passport_data = 9;
+  // Notes about the client
+  optional string notes = 10;
   // Relationships omitted for brevity in proto messages, handled by IDs
 }
 
@@ -44,6 +46,8 @@ message User {
   string login = 2;
   // PasswordHash is intentionally omitted from proto messages for security
   optional google.protobuf.Timestamp last_login = 3;
+  // Notes about the user
+  optional string notes = 4;
 }
 
 message Employee {
@@ -56,6 +60,8 @@ message Employee {
   optional string whatsapp_number = 7;
   string email = 8;
   bool is_active = 9;
+  // Notes about the employee
+  optional string notes = 10;
   // Relationships omitted for brevity
 }
 
@@ -64,6 +70,8 @@ message Office {
   string city = 2;
   optional string address = 3;
   optional string phone = 4;
+  // Notes about the office
+  optional string notes = 5;
   // Relationships omitted (e.g., list of employee_ids or partner_ids could be added if needed)
 }
 
@@ -79,6 +87,8 @@ message LegalCase {
   double expected_commission = 9; // Calculated field
   string status = 10; // Consider enum
   optional string payment_id = 11;
+  // Notes about the legal case
+  optional string notes = 12;
 }
 
 message TranslationOrder {
@@ -97,6 +107,8 @@ message TranslationOrder {
   string status = 13; // Consider enum
   optional string payment_id = 14;
   optional google.protobuf.Value document_blanks = 15; // Represents JSON array
+  // Notes about the translation order
+  optional string notes = 16;
 }
 
 message InsurancePolicy {
@@ -109,6 +121,8 @@ message InsurancePolicy {
   double amount = 7;
   string status = 8; // Consider enum
   optional string renewal_status = 9; // Consider enum
+  // Notes about the insurance policy
+  optional string notes = 10;
 }
 
 message TrainingEnrollment {
@@ -119,6 +133,8 @@ message TrainingEnrollment {
   optional google.protobuf.Timestamp contract_date = 5;
   string status = 6; // Consider enum
   optional string payment_id = 7;
+  // Notes about the training enrollment
+  optional string notes = 8;
 }
 
 message AccountOpeningRequest {
@@ -130,6 +146,8 @@ message AccountOpeningRequest {
   optional google.protobuf.Timestamp application_date = 6;
   optional google.protobuf.Timestamp opened_date = 7;
   optional string payment_id = 8;
+  // Notes about the account opening request
+  optional string notes = 9;
 }
 
 message BusinessRegistration {
@@ -142,6 +160,8 @@ message BusinessRegistration {
   optional google.protobuf.Timestamp application_date = 7;
   optional google.protobuf.Timestamp registration_date = 8;
   optional string payment_id = 9;
+  // Notes about the business registration
+  optional string notes = 10;
 }
 
 message LendingApplication {
@@ -158,6 +178,8 @@ message LendingApplication {
   double expected_commission = 11; // Calculated
   string status = 12; // Consider enum
   optional string payment_id = 13;
+  // Notes about the lending application
+  optional string notes = 14;
 }
 
 message Partner {
@@ -166,6 +188,8 @@ message Partner {
   optional string city_of_residence = 3;
   optional string contact_info = 4;
   optional string status = 5; // Consider enum
+  // Notes about the partner
+  optional string notes = 6;
   // M2M relationships omitted, handled by separate tables/queries
 }
 
@@ -173,6 +197,8 @@ message LegalIssueType {
   string issue_type_id = 1;
   string name = 2;
   optional string description = 3;
+  // Notes about the legal issue type
+  optional string notes = 4;
 }
 
 message TrainingCourse {
@@ -181,6 +207,8 @@ message TrainingCourse {
   double price = 3;
   double commission_percent = 4;
   optional string description = 5;
+  // Notes about the training course
+  optional string notes = 6;
 }
 
 message Bank {
@@ -190,6 +218,8 @@ message Bank {
   double ip_registration_commission = 4;
   double ooo_registration_commission = 5;
   optional double lending_commission_percent = 6;
+  // Notes about the bank
+  optional string notes = 7;
 }
 
 message Interaction {
@@ -198,7 +228,12 @@ message Interaction {
   optional string employee_id = 3;
   google.protobuf.Timestamp date = 4;
   string type = 5; // Consider enum
-  optional string description = 6;
+  optional string description = 6; // Keep description for general info
+  optional string subject = 7; // Specific subject of the interaction
+  optional google.protobuf.Timestamp end_time = 8; // End time if it's a scheduled event
+  optional bool is_scheduled = 9; // Flag if it was scheduled
+  optional bool is_completed = 10; // Flag if a scheduled interaction was completed
+  optional string notes = 11; // Additional notes
 }
 
 message Payment {
@@ -213,6 +248,8 @@ message Payment {
   string status = 9; // Consider enum
   bool verified_by_accountant = 10;
   optional google.protobuf.Timestamp created_at_entity = 11; // Timestamp of original service
+  // Notes about the payment
+  optional string notes = 12;
 }
 
 

@@ -2,6 +2,7 @@ import 'package:admin/controllers/menu_app_controller.dart';
 import 'package:admin/screens/client_list_screen.dart'; // Import the new screen
 import 'package:admin/screens/dashboard/dashboard_screen.dart'; // Import DashboardScreen
 import 'package:admin/screens/employee_list_screen.dart'; // Import the new Employee list screen
+import 'package:admin/screens/interaction_list_screen.dart'; // Import the new Interaction list screen
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart'; // Import Provider
@@ -54,9 +55,12 @@ class SideMenu extends StatelessWidget {
             press: () {},
           ),
           DrawerListTile(
-            title: "Documents",
+            title: "Interactions",
             svgSrc: "assets/icons/menu_doc.svg",
-            press: () {},
+            press: () {
+              menuAppController
+                  .setSelectedScreen(const InteractionListScreen());
+            },
           ),
           DrawerListTile(
             title: "Store",

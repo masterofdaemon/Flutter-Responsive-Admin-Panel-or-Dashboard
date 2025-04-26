@@ -23,6 +23,7 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
   final _telegramCtrl = TextEditingController();
   final _whatsappCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
+  final _notesCtrl = TextEditingController();
   bool _active = true;
 
   @override
@@ -44,6 +45,7 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       _whatsappCtrl.text = e.whatsappNumber;
       _emailCtrl.text = e.email;
       _active = e.isActive;
+      _notesCtrl.text = e.notes;
     } catch (e) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Error loading: $e')));
@@ -66,6 +68,7 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       whatsappNumber: _whatsappCtrl.text.trim(),
       email: _emailCtrl.text.trim(),
       isActive: _active,
+      notes: _notesCtrl.text.trim(),
     );
     try {
       if (_isEdit) {
@@ -98,6 +101,7 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
     _telegramCtrl.dispose();
     _whatsappCtrl.dispose();
     _emailCtrl.dispose();
+    _notesCtrl.dispose();
     _service.shutdown();
     super.dispose();
   }
@@ -160,6 +164,12 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
                       controller: _emailCtrl,
                       decoration: InputDecoration(labelText: 'Email'),
                       keyboardType: TextInputType.emailAddress,
+                    ),
+                    SizedBox(height: 8),
+                    TextFormField(
+                      controller: _notesCtrl,
+                      decoration: InputDecoration(labelText: 'Notes'),
+                      maxLines: 2,
                     ),
                     SizedBox(height: 12),
                     Row(

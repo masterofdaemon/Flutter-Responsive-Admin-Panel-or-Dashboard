@@ -3,6 +3,8 @@
 import 'package:grpc/grpc.dart';
 import 'package:admin/generated/crm.pbgrpc.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
+import 'package:admin/services/grpc_client_service.dart';
+import 'package:admin/services/grpc_employee_service.dart';
 
 class GrpcInteractionService {
   late final ClientChannel _channel;
@@ -60,6 +62,18 @@ class GrpcInteractionService {
   Future<void> deleteInteraction(String interactionId) async {
     final request = crm.DeleteInteractionRequest(interactionId: interactionId);
     await _client.deleteInteraction(request);
+  }
+
+  /// Fetch all clients (for dropdowns, etc)
+  Future<List<crm.Client>> getAllClients() async {
+    final clientService = getGrpcClientService();
+    return await clientService.listClients();
+  }
+
+  /// Fetch all employees (for dropdowns, etc)
+  Future<List<crm.Employee>> getAllEmployees() async {
+    final employeeService = getGrpcEmployeeService();
+    return await employeeService.listEmployees();
   }
 
   Future<void> shutdown() async {
