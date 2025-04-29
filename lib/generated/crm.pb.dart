@@ -13,11 +13,14 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import 'crm.pbenum.dart';
 import 'google/protobuf/empty.pb.dart' as $3;
 import 'google/protobuf/struct.pb.dart' as $1;
 import 'google/protobuf/timestamp.pb.dart' as $2;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
+
+export 'crm.pbenum.dart';
 
 /// Client represents a customer in the CRM system.
 /// All fields are required unless marked as optional.
@@ -30,7 +33,7 @@ class Client extends $pb.GeneratedMessage {
     $core.String? email,
     $core.String? telegramId,
     $core.String? whatsappNumber,
-    $core.String? source,
+    ClientSource? source,
     $1.Value? passportData,
     $core.String? notes,
   }) {
@@ -79,7 +82,7 @@ class Client extends $pb.GeneratedMessage {
     ..aOS(5, _omitFieldNames ? '' : 'email')
     ..aOS(6, _omitFieldNames ? '' : 'telegramId')
     ..aOS(7, _omitFieldNames ? '' : 'whatsappNumber')
-    ..aOS(8, _omitFieldNames ? '' : 'source')
+    ..e<ClientSource>(8, _omitFieldNames ? '' : 'source', $pb.PbFieldType.OE, defaultOrMaker: ClientSource.CLIENT_SOURCE_UNSPECIFIED, valueOf: ClientSource.valueOf, enumValues: ClientSource.values)
     ..aOM<$1.Value>(9, _omitFieldNames ? '' : 'passportData', subBuilder: $1.Value.create)
     ..aOS(10, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
@@ -178,9 +181,9 @@ class Client extends $pb.GeneratedMessage {
 
   /// Source of the client
   @$pb.TagNumber(8)
-  $core.String get source => $_getSZ(7);
+  ClientSource get source => $_getN(7);
   @$pb.TagNumber(8)
-  set source($core.String v) { $_setString(7, v); }
+  set source(ClientSource v) { $_setField(8, v); }
   @$pb.TagNumber(8)
   $core.bool hasSource() => $_has(7);
   @$pb.TagNumber(8)
@@ -314,7 +317,7 @@ class Employee extends $pb.GeneratedMessage {
     $core.String? employeeId,
     $core.String? userId,
     $core.String? name,
-    $core.String? role,
+    EmployeeRole? role,
     $core.String? officeId,
     $core.String? telegramId,
     $core.String? whatsappNumber,
@@ -363,7 +366,7 @@ class Employee extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'employeeId')
     ..aOS(2, _omitFieldNames ? '' : 'userId')
     ..aOS(3, _omitFieldNames ? '' : 'name')
-    ..aOS(4, _omitFieldNames ? '' : 'role')
+    ..e<EmployeeRole>(4, _omitFieldNames ? '' : 'role', $pb.PbFieldType.OE, defaultOrMaker: EmployeeRole.EMPLOYEE_ROLE_UNSPECIFIED, valueOf: EmployeeRole.valueOf, enumValues: EmployeeRole.values)
     ..aOS(5, _omitFieldNames ? '' : 'officeId')
     ..aOS(6, _omitFieldNames ? '' : 'telegramId')
     ..aOS(7, _omitFieldNames ? '' : 'whatsappNumber')
@@ -422,9 +425,9 @@ class Employee extends $pb.GeneratedMessage {
   void clearName() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get role => $_getSZ(3);
+  EmployeeRole get role => $_getN(3);
   @$pb.TagNumber(4)
-  set role($core.String v) { $_setString(3, v); }
+  set role(EmployeeRole v) { $_setField(4, v); }
   @$pb.TagNumber(4)
   $core.bool hasRole() => $_has(3);
   @$pb.TagNumber(4)
@@ -604,9 +607,12 @@ class LegalCase extends $pb.GeneratedMessage {
     $2.Timestamp? contractDate,
     $core.double? contractAmount,
     $core.double? expectedCommission,
-    $core.String? status,
+    Status? status,
     $core.String? paymentId,
     $core.String? notes,
+    $2.Timestamp? consultationScheduledDate,
+    $core.String? consultationNotes,
+    $2.Timestamp? contractPlannedDate,
   }) {
     final $result = create();
     if (caseId != null) {
@@ -645,6 +651,15 @@ class LegalCase extends $pb.GeneratedMessage {
     if (notes != null) {
       $result.notes = notes;
     }
+    if (consultationScheduledDate != null) {
+      $result.consultationScheduledDate = consultationScheduledDate;
+    }
+    if (consultationNotes != null) {
+      $result.consultationNotes = consultationNotes;
+    }
+    if (contractPlannedDate != null) {
+      $result.contractPlannedDate = contractPlannedDate;
+    }
     return $result;
   }
   LegalCase._() : super();
@@ -661,9 +676,12 @@ class LegalCase extends $pb.GeneratedMessage {
     ..aOM<$2.Timestamp>(7, _omitFieldNames ? '' : 'contractDate', subBuilder: $2.Timestamp.create)
     ..a<$core.double>(8, _omitFieldNames ? '' : 'contractAmount', $pb.PbFieldType.OD)
     ..a<$core.double>(9, _omitFieldNames ? '' : 'expectedCommission', $pb.PbFieldType.OD)
-    ..aOS(10, _omitFieldNames ? '' : 'status')
+    ..e<Status>(10, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
     ..aOS(11, _omitFieldNames ? '' : 'paymentId')
     ..aOS(12, _omitFieldNames ? '' : 'notes')
+    ..aOM<$2.Timestamp>(13, _omitFieldNames ? '' : 'consultationScheduledDate', subBuilder: $2.Timestamp.create)
+    ..aOS(14, _omitFieldNames ? '' : 'consultationNotes')
+    ..aOM<$2.Timestamp>(15, _omitFieldNames ? '' : 'contractPlannedDate', subBuilder: $2.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -774,9 +792,9 @@ class LegalCase extends $pb.GeneratedMessage {
   void clearExpectedCommission() => $_clearField(9);
 
   @$pb.TagNumber(10)
-  $core.String get status => $_getSZ(9);
+  Status get status => $_getN(9);
   @$pb.TagNumber(10)
-  set status($core.String v) { $_setString(9, v); }
+  set status(Status v) { $_setField(10, v); }
   @$pb.TagNumber(10)
   $core.bool hasStatus() => $_has(9);
   @$pb.TagNumber(10)
@@ -800,6 +818,115 @@ class LegalCase extends $pb.GeneratedMessage {
   $core.bool hasNotes() => $_has(11);
   @$pb.TagNumber(12)
   void clearNotes() => $_clearField(12);
+
+  @$pb.TagNumber(13)
+  $2.Timestamp get consultationScheduledDate => $_getN(12);
+  @$pb.TagNumber(13)
+  set consultationScheduledDate($2.Timestamp v) { $_setField(13, v); }
+  @$pb.TagNumber(13)
+  $core.bool hasConsultationScheduledDate() => $_has(12);
+  @$pb.TagNumber(13)
+  void clearConsultationScheduledDate() => $_clearField(13);
+  @$pb.TagNumber(13)
+  $2.Timestamp ensureConsultationScheduledDate() => $_ensure(12);
+
+  @$pb.TagNumber(14)
+  $core.String get consultationNotes => $_getSZ(13);
+  @$pb.TagNumber(14)
+  set consultationNotes($core.String v) { $_setString(13, v); }
+  @$pb.TagNumber(14)
+  $core.bool hasConsultationNotes() => $_has(13);
+  @$pb.TagNumber(14)
+  void clearConsultationNotes() => $_clearField(14);
+
+  @$pb.TagNumber(15)
+  $2.Timestamp get contractPlannedDate => $_getN(14);
+  @$pb.TagNumber(15)
+  set contractPlannedDate($2.Timestamp v) { $_setField(15, v); }
+  @$pb.TagNumber(15)
+  $core.bool hasContractPlannedDate() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearContractPlannedDate() => $_clearField(15);
+  @$pb.TagNumber(15)
+  $2.Timestamp ensureContractPlannedDate() => $_ensure(14);
+}
+
+class TranslationOrder_BlankInfo extends $pb.GeneratedMessage {
+  factory TranslationOrder_BlankInfo({
+    $core.String? blankNumber,
+    $core.bool? isSpoiled,
+    $core.String? replacementBlankNumber,
+  }) {
+    final $result = create();
+    if (blankNumber != null) {
+      $result.blankNumber = blankNumber;
+    }
+    if (isSpoiled != null) {
+      $result.isSpoiled = isSpoiled;
+    }
+    if (replacementBlankNumber != null) {
+      $result.replacementBlankNumber = replacementBlankNumber;
+    }
+    return $result;
+  }
+  TranslationOrder_BlankInfo._() : super();
+  factory TranslationOrder_BlankInfo.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory TranslationOrder_BlankInfo.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TranslationOrder.BlankInfo', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'blankNumber')
+    ..aOB(2, _omitFieldNames ? '' : 'isSpoiled')
+    ..aOS(3, _omitFieldNames ? '' : 'replacementBlankNumber')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  TranslationOrder_BlankInfo clone() => TranslationOrder_BlankInfo()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  TranslationOrder_BlankInfo copyWith(void Function(TranslationOrder_BlankInfo) updates) => super.copyWith((message) => updates(message as TranslationOrder_BlankInfo)) as TranslationOrder_BlankInfo;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static TranslationOrder_BlankInfo create() => TranslationOrder_BlankInfo._();
+  TranslationOrder_BlankInfo createEmptyInstance() => create();
+  static $pb.PbList<TranslationOrder_BlankInfo> createRepeated() => $pb.PbList<TranslationOrder_BlankInfo>();
+  @$core.pragma('dart2js:noInline')
+  static TranslationOrder_BlankInfo getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<TranslationOrder_BlankInfo>(create);
+  static TranslationOrder_BlankInfo? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get blankNumber => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set blankNumber($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasBlankNumber() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearBlankNumber() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.bool get isSpoiled => $_getBF(1);
+  @$pb.TagNumber(2)
+  set isSpoiled($core.bool v) { $_setBool(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasIsSpoiled() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearIsSpoiled() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.String get replacementBlankNumber => $_getSZ(2);
+  @$pb.TagNumber(3)
+  set replacementBlankNumber($core.String v) { $_setString(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasReplacementBlankNumber() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearReplacementBlankNumber() => $_clearField(3);
 }
 
 class TranslationOrder extends $pb.GeneratedMessage {
@@ -809,17 +936,20 @@ class TranslationOrder extends $pb.GeneratedMessage {
     $core.String? managerId,
     $core.String? translatorId,
     $core.String? officeId,
-    $core.String? documentType,
+    DocumentType? documentType,
     $core.String? targetLanguage,
     $core.int? pageCount,
     $core.double? translationSum,
     $core.double? notarialSum,
     $core.double? totalSum,
-    $core.String? priority,
-    $core.String? status,
+    Priority? priority,
+    Status? status,
     $core.String? paymentId,
-    $1.Value? documentBlanks,
+    $core.Iterable<TranslationOrder_BlankInfo>? blanks,
     $core.String? notes,
+    $core.bool? isUrgent,
+    $core.bool? isSemiUrgent,
+    $core.bool? clientNotified,
   }) {
     final $result = create();
     if (orderId != null) {
@@ -864,11 +994,20 @@ class TranslationOrder extends $pb.GeneratedMessage {
     if (paymentId != null) {
       $result.paymentId = paymentId;
     }
-    if (documentBlanks != null) {
-      $result.documentBlanks = documentBlanks;
+    if (blanks != null) {
+      $result.blanks.addAll(blanks);
     }
     if (notes != null) {
       $result.notes = notes;
+    }
+    if (isUrgent != null) {
+      $result.isUrgent = isUrgent;
+    }
+    if (isSemiUrgent != null) {
+      $result.isSemiUrgent = isSemiUrgent;
+    }
+    if (clientNotified != null) {
+      $result.clientNotified = clientNotified;
     }
     return $result;
   }
@@ -882,17 +1021,20 @@ class TranslationOrder extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'managerId')
     ..aOS(4, _omitFieldNames ? '' : 'translatorId')
     ..aOS(5, _omitFieldNames ? '' : 'officeId')
-    ..aOS(6, _omitFieldNames ? '' : 'documentType')
+    ..e<DocumentType>(6, _omitFieldNames ? '' : 'documentType', $pb.PbFieldType.OE, defaultOrMaker: DocumentType.DOCUMENT_TYPE_UNSPECIFIED, valueOf: DocumentType.valueOf, enumValues: DocumentType.values)
     ..aOS(7, _omitFieldNames ? '' : 'targetLanguage')
     ..a<$core.int>(8, _omitFieldNames ? '' : 'pageCount', $pb.PbFieldType.O3)
     ..a<$core.double>(9, _omitFieldNames ? '' : 'translationSum', $pb.PbFieldType.OD)
     ..a<$core.double>(10, _omitFieldNames ? '' : 'notarialSum', $pb.PbFieldType.OD)
     ..a<$core.double>(11, _omitFieldNames ? '' : 'totalSum', $pb.PbFieldType.OD)
-    ..aOS(12, _omitFieldNames ? '' : 'priority')
-    ..aOS(13, _omitFieldNames ? '' : 'status')
+    ..e<Priority>(12, _omitFieldNames ? '' : 'priority', $pb.PbFieldType.OE, defaultOrMaker: Priority.PRIORITY_UNSPECIFIED, valueOf: Priority.valueOf, enumValues: Priority.values)
+    ..e<Status>(13, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
     ..aOS(14, _omitFieldNames ? '' : 'paymentId')
-    ..aOM<$1.Value>(15, _omitFieldNames ? '' : 'documentBlanks', subBuilder: $1.Value.create)
+    ..pc<TranslationOrder_BlankInfo>(15, _omitFieldNames ? '' : 'blanks', $pb.PbFieldType.PM, subBuilder: TranslationOrder_BlankInfo.create)
     ..aOS(16, _omitFieldNames ? '' : 'notes')
+    ..aOB(17, _omitFieldNames ? '' : 'isUrgent')
+    ..aOB(18, _omitFieldNames ? '' : 'isSemiUrgent')
+    ..aOB(19, _omitFieldNames ? '' : 'clientNotified')
     ..hasRequiredFields = false
   ;
 
@@ -963,9 +1105,9 @@ class TranslationOrder extends $pb.GeneratedMessage {
   void clearOfficeId() => $_clearField(5);
 
   @$pb.TagNumber(6)
-  $core.String get documentType => $_getSZ(5);
+  DocumentType get documentType => $_getN(5);
   @$pb.TagNumber(6)
-  set documentType($core.String v) { $_setString(5, v); }
+  set documentType(DocumentType v) { $_setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasDocumentType() => $_has(5);
   @$pb.TagNumber(6)
@@ -1017,18 +1159,18 @@ class TranslationOrder extends $pb.GeneratedMessage {
   void clearTotalSum() => $_clearField(11);
 
   @$pb.TagNumber(12)
-  $core.String get priority => $_getSZ(11);
+  Priority get priority => $_getN(11);
   @$pb.TagNumber(12)
-  set priority($core.String v) { $_setString(11, v); }
+  set priority(Priority v) { $_setField(12, v); }
   @$pb.TagNumber(12)
   $core.bool hasPriority() => $_has(11);
   @$pb.TagNumber(12)
   void clearPriority() => $_clearField(12);
 
   @$pb.TagNumber(13)
-  $core.String get status => $_getSZ(12);
+  Status get status => $_getN(12);
   @$pb.TagNumber(13)
-  set status($core.String v) { $_setString(12, v); }
+  set status(Status v) { $_setField(13, v); }
   @$pb.TagNumber(13)
   $core.bool hasStatus() => $_has(12);
   @$pb.TagNumber(13)
@@ -1044,15 +1186,7 @@ class TranslationOrder extends $pb.GeneratedMessage {
   void clearPaymentId() => $_clearField(14);
 
   @$pb.TagNumber(15)
-  $1.Value get documentBlanks => $_getN(14);
-  @$pb.TagNumber(15)
-  set documentBlanks($1.Value v) { $_setField(15, v); }
-  @$pb.TagNumber(15)
-  $core.bool hasDocumentBlanks() => $_has(14);
-  @$pb.TagNumber(15)
-  void clearDocumentBlanks() => $_clearField(15);
-  @$pb.TagNumber(15)
-  $1.Value ensureDocumentBlanks() => $_ensure(14);
+  $pb.PbList<TranslationOrder_BlankInfo> get blanks => $_getList(14);
 
   /// Notes about the translation order
   @$pb.TagNumber(16)
@@ -1063,6 +1197,33 @@ class TranslationOrder extends $pb.GeneratedMessage {
   $core.bool hasNotes() => $_has(15);
   @$pb.TagNumber(16)
   void clearNotes() => $_clearField(16);
+
+  @$pb.TagNumber(17)
+  $core.bool get isUrgent => $_getBF(16);
+  @$pb.TagNumber(17)
+  set isUrgent($core.bool v) { $_setBool(16, v); }
+  @$pb.TagNumber(17)
+  $core.bool hasIsUrgent() => $_has(16);
+  @$pb.TagNumber(17)
+  void clearIsUrgent() => $_clearField(17);
+
+  @$pb.TagNumber(18)
+  $core.bool get isSemiUrgent => $_getBF(17);
+  @$pb.TagNumber(18)
+  set isSemiUrgent($core.bool v) { $_setBool(17, v); }
+  @$pb.TagNumber(18)
+  $core.bool hasIsSemiUrgent() => $_has(17);
+  @$pb.TagNumber(18)
+  void clearIsSemiUrgent() => $_clearField(18);
+
+  @$pb.TagNumber(19)
+  $core.bool get clientNotified => $_getBF(18);
+  @$pb.TagNumber(19)
+  set clientNotified($core.bool v) { $_setBool(18, v); }
+  @$pb.TagNumber(19)
+  $core.bool hasClientNotified() => $_has(18);
+  @$pb.TagNumber(19)
+  void clearClientNotified() => $_clearField(19);
 }
 
 class InsurancePolicy extends $pb.GeneratedMessage {
@@ -1074,7 +1235,7 @@ class InsurancePolicy extends $pb.GeneratedMessage {
     $2.Timestamp? startDate,
     $2.Timestamp? expiryDate,
     $core.double? amount,
-    $core.String? status,
+    Status? status,
     $core.String? renewalStatus,
     $core.String? notes,
   }) {
@@ -1123,7 +1284,7 @@ class InsurancePolicy extends $pb.GeneratedMessage {
     ..aOM<$2.Timestamp>(5, _omitFieldNames ? '' : 'startDate', subBuilder: $2.Timestamp.create)
     ..aOM<$2.Timestamp>(6, _omitFieldNames ? '' : 'expiryDate', subBuilder: $2.Timestamp.create)
     ..a<$core.double>(7, _omitFieldNames ? '' : 'amount', $pb.PbFieldType.OD)
-    ..aOS(8, _omitFieldNames ? '' : 'status')
+    ..e<Status>(8, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
     ..aOS(9, _omitFieldNames ? '' : 'renewalStatus')
     ..aOS(10, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
@@ -1218,9 +1379,9 @@ class InsurancePolicy extends $pb.GeneratedMessage {
   void clearAmount() => $_clearField(7);
 
   @$pb.TagNumber(8)
-  $core.String get status => $_getSZ(7);
+  Status get status => $_getN(7);
   @$pb.TagNumber(8)
-  set status($core.String v) { $_setString(7, v); }
+  set status(Status v) { $_setField(8, v); }
   @$pb.TagNumber(8)
   $core.bool hasStatus() => $_has(7);
   @$pb.TagNumber(8)
@@ -1253,9 +1414,11 @@ class TrainingEnrollment extends $pb.GeneratedMessage {
     $core.String? managerId,
     $core.String? courseId,
     $2.Timestamp? contractDate,
-    $core.String? status,
+    Status? status,
     $core.String? paymentId,
     $core.String? notes,
+    $core.bool? paid,
+    $core.bool? accountantVerified,
   }) {
     final $result = create();
     if (enrollmentId != null) {
@@ -1282,6 +1445,12 @@ class TrainingEnrollment extends $pb.GeneratedMessage {
     if (notes != null) {
       $result.notes = notes;
     }
+    if (paid != null) {
+      $result.paid = paid;
+    }
+    if (accountantVerified != null) {
+      $result.accountantVerified = accountantVerified;
+    }
     return $result;
   }
   TrainingEnrollment._() : super();
@@ -1294,9 +1463,11 @@ class TrainingEnrollment extends $pb.GeneratedMessage {
     ..aOS(3, _omitFieldNames ? '' : 'managerId')
     ..aOS(4, _omitFieldNames ? '' : 'courseId')
     ..aOM<$2.Timestamp>(5, _omitFieldNames ? '' : 'contractDate', subBuilder: $2.Timestamp.create)
-    ..aOS(6, _omitFieldNames ? '' : 'status')
+    ..e<Status>(6, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
     ..aOS(7, _omitFieldNames ? '' : 'paymentId')
     ..aOS(8, _omitFieldNames ? '' : 'notes')
+    ..aOB(9, _omitFieldNames ? '' : 'paid')
+    ..aOB(10, _omitFieldNames ? '' : 'accountantVerified')
     ..hasRequiredFields = false
   ;
 
@@ -1369,9 +1540,9 @@ class TrainingEnrollment extends $pb.GeneratedMessage {
   $2.Timestamp ensureContractDate() => $_ensure(4);
 
   @$pb.TagNumber(6)
-  $core.String get status => $_getSZ(5);
+  Status get status => $_getN(5);
   @$pb.TagNumber(6)
-  set status($core.String v) { $_setString(5, v); }
+  set status(Status v) { $_setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasStatus() => $_has(5);
   @$pb.TagNumber(6)
@@ -1386,7 +1557,6 @@ class TrainingEnrollment extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   void clearPaymentId() => $_clearField(7);
 
-  /// Notes about the training enrollment
   @$pb.TagNumber(8)
   $core.String get notes => $_getSZ(7);
   @$pb.TagNumber(8)
@@ -1395,6 +1565,24 @@ class TrainingEnrollment extends $pb.GeneratedMessage {
   $core.bool hasNotes() => $_has(7);
   @$pb.TagNumber(8)
   void clearNotes() => $_clearField(8);
+
+  @$pb.TagNumber(9)
+  $core.bool get paid => $_getBF(8);
+  @$pb.TagNumber(9)
+  set paid($core.bool v) { $_setBool(8, v); }
+  @$pb.TagNumber(9)
+  $core.bool hasPaid() => $_has(8);
+  @$pb.TagNumber(9)
+  void clearPaid() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.bool get accountantVerified => $_getBF(9);
+  @$pb.TagNumber(10)
+  set accountantVerified($core.bool v) { $_setBool(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasAccountantVerified() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearAccountantVerified() => $_clearField(10);
 }
 
 class AccountOpeningRequest extends $pb.GeneratedMessage {
@@ -1403,11 +1591,12 @@ class AccountOpeningRequest extends $pb.GeneratedMessage {
     $core.String? clientId,
     $core.String? managerId,
     $core.String? bankId,
-    $core.String? status,
+    Status? status,
     $2.Timestamp? applicationDate,
     $2.Timestamp? openedDate,
     $core.String? paymentId,
     $core.String? notes,
+    $core.bool? agentCommissionReceived,
   }) {
     final $result = create();
     if (requestId != null) {
@@ -1437,6 +1626,9 @@ class AccountOpeningRequest extends $pb.GeneratedMessage {
     if (notes != null) {
       $result.notes = notes;
     }
+    if (agentCommissionReceived != null) {
+      $result.agentCommissionReceived = agentCommissionReceived;
+    }
     return $result;
   }
   AccountOpeningRequest._() : super();
@@ -1448,11 +1640,12 @@ class AccountOpeningRequest extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'clientId')
     ..aOS(3, _omitFieldNames ? '' : 'managerId')
     ..aOS(4, _omitFieldNames ? '' : 'bankId')
-    ..aOS(5, _omitFieldNames ? '' : 'status')
+    ..e<Status>(5, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
     ..aOM<$2.Timestamp>(6, _omitFieldNames ? '' : 'applicationDate', subBuilder: $2.Timestamp.create)
     ..aOM<$2.Timestamp>(7, _omitFieldNames ? '' : 'openedDate', subBuilder: $2.Timestamp.create)
     ..aOS(8, _omitFieldNames ? '' : 'paymentId')
     ..aOS(9, _omitFieldNames ? '' : 'notes')
+    ..aOB(10, _omitFieldNames ? '' : 'agentCommissionReceived')
     ..hasRequiredFields = false
   ;
 
@@ -1514,9 +1707,9 @@ class AccountOpeningRequest extends $pb.GeneratedMessage {
   void clearBankId() => $_clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get status => $_getSZ(4);
+  Status get status => $_getN(4);
   @$pb.TagNumber(5)
-  set status($core.String v) { $_setString(4, v); }
+  set status(Status v) { $_setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasStatus() => $_has(4);
   @$pb.TagNumber(5)
@@ -1553,7 +1746,6 @@ class AccountOpeningRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   void clearPaymentId() => $_clearField(8);
 
-  /// Notes about the account opening request
   @$pb.TagNumber(9)
   $core.String get notes => $_getSZ(8);
   @$pb.TagNumber(9)
@@ -1562,6 +1754,15 @@ class AccountOpeningRequest extends $pb.GeneratedMessage {
   $core.bool hasNotes() => $_has(8);
   @$pb.TagNumber(9)
   void clearNotes() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.bool get agentCommissionReceived => $_getBF(9);
+  @$pb.TagNumber(10)
+  set agentCommissionReceived($core.bool v) { $_setBool(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasAgentCommissionReceived() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearAgentCommissionReceived() => $_clearField(10);
 }
 
 class BusinessRegistration extends $pb.GeneratedMessage {
@@ -1570,12 +1771,13 @@ class BusinessRegistration extends $pb.GeneratedMessage {
     $core.String? clientId,
     $core.String? managerId,
     $core.String? bankId,
-    $core.String? registrationType,
-    $core.String? status,
+    RegistrationType? registrationType,
+    Status? status,
     $2.Timestamp? applicationDate,
     $2.Timestamp? registrationDate,
     $core.String? paymentId,
     $core.String? notes,
+    $core.bool? agentCommissionReceived,
   }) {
     final $result = create();
     if (requestId != null) {
@@ -1608,6 +1810,9 @@ class BusinessRegistration extends $pb.GeneratedMessage {
     if (notes != null) {
       $result.notes = notes;
     }
+    if (agentCommissionReceived != null) {
+      $result.agentCommissionReceived = agentCommissionReceived;
+    }
     return $result;
   }
   BusinessRegistration._() : super();
@@ -1619,12 +1824,13 @@ class BusinessRegistration extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'clientId')
     ..aOS(3, _omitFieldNames ? '' : 'managerId')
     ..aOS(4, _omitFieldNames ? '' : 'bankId')
-    ..aOS(5, _omitFieldNames ? '' : 'registrationType')
-    ..aOS(6, _omitFieldNames ? '' : 'status')
+    ..e<RegistrationType>(5, _omitFieldNames ? '' : 'registrationType', $pb.PbFieldType.OE, defaultOrMaker: RegistrationType.REGISTRATION_TYPE_UNSPECIFIED, valueOf: RegistrationType.valueOf, enumValues: RegistrationType.values)
+    ..e<Status>(6, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
     ..aOM<$2.Timestamp>(7, _omitFieldNames ? '' : 'applicationDate', subBuilder: $2.Timestamp.create)
     ..aOM<$2.Timestamp>(8, _omitFieldNames ? '' : 'registrationDate', subBuilder: $2.Timestamp.create)
     ..aOS(9, _omitFieldNames ? '' : 'paymentId')
     ..aOS(10, _omitFieldNames ? '' : 'notes')
+    ..aOB(11, _omitFieldNames ? '' : 'agentCommissionReceived')
     ..hasRequiredFields = false
   ;
 
@@ -1686,18 +1892,18 @@ class BusinessRegistration extends $pb.GeneratedMessage {
   void clearBankId() => $_clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get registrationType => $_getSZ(4);
+  RegistrationType get registrationType => $_getN(4);
   @$pb.TagNumber(5)
-  set registrationType($core.String v) { $_setString(4, v); }
+  set registrationType(RegistrationType v) { $_setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasRegistrationType() => $_has(4);
   @$pb.TagNumber(5)
   void clearRegistrationType() => $_clearField(5);
 
   @$pb.TagNumber(6)
-  $core.String get status => $_getSZ(5);
+  Status get status => $_getN(5);
   @$pb.TagNumber(6)
-  set status($core.String v) { $_setString(5, v); }
+  set status(Status v) { $_setField(6, v); }
   @$pb.TagNumber(6)
   $core.bool hasStatus() => $_has(5);
   @$pb.TagNumber(6)
@@ -1743,6 +1949,15 @@ class BusinessRegistration extends $pb.GeneratedMessage {
   $core.bool hasNotes() => $_has(9);
   @$pb.TagNumber(10)
   void clearNotes() => $_clearField(10);
+
+  @$pb.TagNumber(11)
+  $core.bool get agentCommissionReceived => $_getBF(10);
+  @$pb.TagNumber(11)
+  set agentCommissionReceived($core.bool v) { $_setBool(10, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasAgentCommissionReceived() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearAgentCommissionReceived() => $_clearField(11);
 }
 
 class LendingApplication extends $pb.GeneratedMessage {
@@ -1758,9 +1973,13 @@ class LendingApplication extends $pb.GeneratedMessage {
     $2.Timestamp? fundsReceivedDate,
     $2.Timestamp? companyContractDate,
     $core.double? expectedCommission,
-    $core.String? status,
+    Status? status,
     $core.String? paymentId,
     $core.String? notes,
+    $core.double? companyCommissionPercent,
+    $core.double? calculatedCommissionAmount,
+    $core.bool? commissionPaid,
+    $core.bool? agentCommissionReceived,
   }) {
     final $result = create();
     if (requestId != null) {
@@ -1805,6 +2024,18 @@ class LendingApplication extends $pb.GeneratedMessage {
     if (notes != null) {
       $result.notes = notes;
     }
+    if (companyCommissionPercent != null) {
+      $result.companyCommissionPercent = companyCommissionPercent;
+    }
+    if (calculatedCommissionAmount != null) {
+      $result.calculatedCommissionAmount = calculatedCommissionAmount;
+    }
+    if (commissionPaid != null) {
+      $result.commissionPaid = commissionPaid;
+    }
+    if (agentCommissionReceived != null) {
+      $result.agentCommissionReceived = agentCommissionReceived;
+    }
     return $result;
   }
   LendingApplication._() : super();
@@ -1823,9 +2054,13 @@ class LendingApplication extends $pb.GeneratedMessage {
     ..aOM<$2.Timestamp>(9, _omitFieldNames ? '' : 'fundsReceivedDate', subBuilder: $2.Timestamp.create)
     ..aOM<$2.Timestamp>(10, _omitFieldNames ? '' : 'companyContractDate', subBuilder: $2.Timestamp.create)
     ..a<$core.double>(11, _omitFieldNames ? '' : 'expectedCommission', $pb.PbFieldType.OD)
-    ..aOS(12, _omitFieldNames ? '' : 'status')
+    ..e<Status>(12, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
     ..aOS(13, _omitFieldNames ? '' : 'paymentId')
     ..aOS(14, _omitFieldNames ? '' : 'notes')
+    ..a<$core.double>(15, _omitFieldNames ? '' : 'companyCommissionPercent', $pb.PbFieldType.OD)
+    ..a<$core.double>(16, _omitFieldNames ? '' : 'calculatedCommissionAmount', $pb.PbFieldType.OD)
+    ..aOB(17, _omitFieldNames ? '' : 'commissionPaid')
+    ..aOB(18, _omitFieldNames ? '' : 'agentCommissionReceived')
     ..hasRequiredFields = false
   ;
 
@@ -1958,9 +2193,9 @@ class LendingApplication extends $pb.GeneratedMessage {
   void clearExpectedCommission() => $_clearField(11);
 
   @$pb.TagNumber(12)
-  $core.String get status => $_getSZ(11);
+  Status get status => $_getN(11);
   @$pb.TagNumber(12)
-  set status($core.String v) { $_setString(11, v); }
+  set status(Status v) { $_setField(12, v); }
   @$pb.TagNumber(12)
   $core.bool hasStatus() => $_has(11);
   @$pb.TagNumber(12)
@@ -1984,6 +2219,42 @@ class LendingApplication extends $pb.GeneratedMessage {
   $core.bool hasNotes() => $_has(13);
   @$pb.TagNumber(14)
   void clearNotes() => $_clearField(14);
+
+  @$pb.TagNumber(15)
+  $core.double get companyCommissionPercent => $_getN(14);
+  @$pb.TagNumber(15)
+  set companyCommissionPercent($core.double v) { $_setDouble(14, v); }
+  @$pb.TagNumber(15)
+  $core.bool hasCompanyCommissionPercent() => $_has(14);
+  @$pb.TagNumber(15)
+  void clearCompanyCommissionPercent() => $_clearField(15);
+
+  @$pb.TagNumber(16)
+  $core.double get calculatedCommissionAmount => $_getN(15);
+  @$pb.TagNumber(16)
+  set calculatedCommissionAmount($core.double v) { $_setDouble(15, v); }
+  @$pb.TagNumber(16)
+  $core.bool hasCalculatedCommissionAmount() => $_has(15);
+  @$pb.TagNumber(16)
+  void clearCalculatedCommissionAmount() => $_clearField(16);
+
+  @$pb.TagNumber(17)
+  $core.bool get commissionPaid => $_getBF(16);
+  @$pb.TagNumber(17)
+  set commissionPaid($core.bool v) { $_setBool(16, v); }
+  @$pb.TagNumber(17)
+  $core.bool hasCommissionPaid() => $_has(16);
+  @$pb.TagNumber(17)
+  void clearCommissionPaid() => $_clearField(17);
+
+  @$pb.TagNumber(18)
+  $core.bool get agentCommissionReceived => $_getBF(17);
+  @$pb.TagNumber(18)
+  set agentCommissionReceived($core.bool v) { $_setBool(17, v); }
+  @$pb.TagNumber(18)
+  $core.bool hasAgentCommissionReceived() => $_has(17);
+  @$pb.TagNumber(18)
+  void clearAgentCommissionReceived() => $_clearField(18);
 }
 
 class Partner extends $pb.GeneratedMessage {
@@ -1992,8 +2263,10 @@ class Partner extends $pb.GeneratedMessage {
     $core.String? name,
     $core.String? cityOfResidence,
     $core.String? contactInfo,
-    $core.String? status,
+    Status? status,
     $core.String? notes,
+    $core.Iterable<$core.String>? serviceAreaCities,
+    $core.Iterable<$core.String>? specializationIssueTypeIds,
   }) {
     final $result = create();
     if (partnerId != null) {
@@ -2014,6 +2287,12 @@ class Partner extends $pb.GeneratedMessage {
     if (notes != null) {
       $result.notes = notes;
     }
+    if (serviceAreaCities != null) {
+      $result.serviceAreaCities.addAll(serviceAreaCities);
+    }
+    if (specializationIssueTypeIds != null) {
+      $result.specializationIssueTypeIds.addAll(specializationIssueTypeIds);
+    }
     return $result;
   }
   Partner._() : super();
@@ -2025,8 +2304,10 @@ class Partner extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'cityOfResidence')
     ..aOS(4, _omitFieldNames ? '' : 'contactInfo')
-    ..aOS(5, _omitFieldNames ? '' : 'status')
+    ..e<Status>(5, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
     ..aOS(6, _omitFieldNames ? '' : 'notes')
+    ..pPS(7, _omitFieldNames ? '' : 'serviceAreaCities')
+    ..pPS(8, _omitFieldNames ? '' : 'specializationIssueTypeIds')
     ..hasRequiredFields = false
   ;
 
@@ -2088,9 +2369,9 @@ class Partner extends $pb.GeneratedMessage {
   void clearContactInfo() => $_clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get status => $_getSZ(4);
+  Status get status => $_getN(4);
   @$pb.TagNumber(5)
-  set status($core.String v) { $_setString(4, v); }
+  set status(Status v) { $_setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasStatus() => $_has(4);
   @$pb.TagNumber(5)
@@ -2105,6 +2386,12 @@ class Partner extends $pb.GeneratedMessage {
   $core.bool hasNotes() => $_has(5);
   @$pb.TagNumber(6)
   void clearNotes() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $pb.PbList<$core.String> get serviceAreaCities => $_getList(6);
+
+  @$pb.TagNumber(8)
+  $pb.PbList<$core.String> get specializationIssueTypeIds => $_getList(7);
 }
 
 class LegalIssueType extends $pb.GeneratedMessage {
@@ -2462,7 +2749,7 @@ class Interaction extends $pb.GeneratedMessage {
     $core.String? clientId,
     $core.String? employeeId,
     $2.Timestamp? date,
-    $core.String? type,
+    InteractionType? type,
     $core.String? description,
     $core.String? subject,
     $2.Timestamp? endTime,
@@ -2515,7 +2802,7 @@ class Interaction extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'clientId')
     ..aOS(3, _omitFieldNames ? '' : 'employeeId')
     ..aOM<$2.Timestamp>(4, _omitFieldNames ? '' : 'date', subBuilder: $2.Timestamp.create)
-    ..aOS(5, _omitFieldNames ? '' : 'type')
+    ..e<InteractionType>(5, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: InteractionType.INTERACTION_TYPE_UNSPECIFIED, valueOf: InteractionType.valueOf, enumValues: InteractionType.values)
     ..aOS(6, _omitFieldNames ? '' : 'description')
     ..aOS(7, _omitFieldNames ? '' : 'subject')
     ..aOM<$2.Timestamp>(8, _omitFieldNames ? '' : 'endTime', subBuilder: $2.Timestamp.create)
@@ -2585,9 +2872,9 @@ class Interaction extends $pb.GeneratedMessage {
   $2.Timestamp ensureDate() => $_ensure(3);
 
   @$pb.TagNumber(5)
-  $core.String get type => $_getSZ(4);
+  InteractionType get type => $_getN(4);
   @$pb.TagNumber(5)
-  set type($core.String v) { $_setString(4, v); }
+  set type(InteractionType v) { $_setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasType() => $_has(4);
   @$pb.TagNumber(5)
@@ -2659,8 +2946,8 @@ class Payment extends $pb.GeneratedMessage {
     $core.double? expectedAmount,
     $core.double? actualAmountReceived,
     $2.Timestamp? paymentDate,
-    $core.String? paymentMethod,
-    $core.String? status,
+    PaymentMethod? paymentMethod,
+    Status? status,
     $core.bool? verifiedByAccountant,
     $2.Timestamp? createdAtEntity,
     $core.String? notes,
@@ -2716,8 +3003,8 @@ class Payment extends $pb.GeneratedMessage {
     ..a<$core.double>(5, _omitFieldNames ? '' : 'expectedAmount', $pb.PbFieldType.OD)
     ..a<$core.double>(6, _omitFieldNames ? '' : 'actualAmountReceived', $pb.PbFieldType.OD)
     ..aOM<$2.Timestamp>(7, _omitFieldNames ? '' : 'paymentDate', subBuilder: $2.Timestamp.create)
-    ..aOS(8, _omitFieldNames ? '' : 'paymentMethod')
-    ..aOS(9, _omitFieldNames ? '' : 'status')
+    ..e<PaymentMethod>(8, _omitFieldNames ? '' : 'paymentMethod', $pb.PbFieldType.OE, defaultOrMaker: PaymentMethod.PAYMENT_METHOD_UNSPECIFIED, valueOf: PaymentMethod.valueOf, enumValues: PaymentMethod.values)
+    ..e<Status>(9, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
     ..aOB(10, _omitFieldNames ? '' : 'verifiedByAccountant')
     ..aOM<$2.Timestamp>(11, _omitFieldNames ? '' : 'createdAtEntity', subBuilder: $2.Timestamp.create)
     ..aOS(12, _omitFieldNames ? '' : 'notes')
@@ -2811,18 +3098,18 @@ class Payment extends $pb.GeneratedMessage {
   $2.Timestamp ensurePaymentDate() => $_ensure(6);
 
   @$pb.TagNumber(8)
-  $core.String get paymentMethod => $_getSZ(7);
+  PaymentMethod get paymentMethod => $_getN(7);
   @$pb.TagNumber(8)
-  set paymentMethod($core.String v) { $_setString(7, v); }
+  set paymentMethod(PaymentMethod v) { $_setField(8, v); }
   @$pb.TagNumber(8)
   $core.bool hasPaymentMethod() => $_has(7);
   @$pb.TagNumber(8)
   void clearPaymentMethod() => $_clearField(8);
 
   @$pb.TagNumber(9)
-  $core.String get status => $_getSZ(8);
+  Status get status => $_getN(8);
   @$pb.TagNumber(9)
-  set status($core.String v) { $_setString(8, v); }
+  set status(Status v) { $_setField(9, v); }
   @$pb.TagNumber(9)
   $core.bool hasStatus() => $_has(8);
   @$pb.TagNumber(9)
@@ -3997,6 +4284,107 @@ class ListEmployeesResponse extends $pb.GeneratedMessage {
   $core.bool hasNextPageToken() => $_has(1);
   @$pb.TagNumber(2)
   void clearNextPageToken() => $_clearField(2);
+}
+
+/// Self Profile
+class GetSelfProfileRequest extends $pb.GeneratedMessage {
+  factory GetSelfProfileRequest() => create();
+  GetSelfProfileRequest._() : super();
+  factory GetSelfProfileRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetSelfProfileRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetSelfProfileRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetSelfProfileRequest clone() => GetSelfProfileRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetSelfProfileRequest copyWith(void Function(GetSelfProfileRequest) updates) => super.copyWith((message) => updates(message as GetSelfProfileRequest)) as GetSelfProfileRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetSelfProfileRequest create() => GetSelfProfileRequest._();
+  GetSelfProfileRequest createEmptyInstance() => create();
+  static $pb.PbList<GetSelfProfileRequest> createRepeated() => $pb.PbList<GetSelfProfileRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetSelfProfileRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetSelfProfileRequest>(create);
+  static GetSelfProfileRequest? _defaultInstance;
+}
+
+class GetSelfProfileResponse extends $pb.GeneratedMessage {
+  factory GetSelfProfileResponse({
+    User? user,
+    Employee? employee,
+  }) {
+    final $result = create();
+    if (user != null) {
+      $result.user = user;
+    }
+    if (employee != null) {
+      $result.employee = employee;
+    }
+    return $result;
+  }
+  GetSelfProfileResponse._() : super();
+  factory GetSelfProfileResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetSelfProfileResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetSelfProfileResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
+    ..aOM<User>(1, _omitFieldNames ? '' : 'user', subBuilder: User.create)
+    ..aOM<Employee>(2, _omitFieldNames ? '' : 'employee', subBuilder: Employee.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetSelfProfileResponse clone() => GetSelfProfileResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetSelfProfileResponse copyWith(void Function(GetSelfProfileResponse) updates) => super.copyWith((message) => updates(message as GetSelfProfileResponse)) as GetSelfProfileResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetSelfProfileResponse create() => GetSelfProfileResponse._();
+  GetSelfProfileResponse createEmptyInstance() => create();
+  static $pb.PbList<GetSelfProfileResponse> createRepeated() => $pb.PbList<GetSelfProfileResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetSelfProfileResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetSelfProfileResponse>(create);
+  static GetSelfProfileResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  User get user => $_getN(0);
+  @$pb.TagNumber(1)
+  set user(User v) { $_setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasUser() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUser() => $_clearField(1);
+  @$pb.TagNumber(1)
+  User ensureUser() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  Employee get employee => $_getN(1);
+  @$pb.TagNumber(2)
+  set employee(Employee v) { $_setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasEmployee() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearEmployee() => $_clearField(2);
+  @$pb.TagNumber(2)
+  Employee ensureEmployee() => $_ensure(1);
 }
 
 /// User (Password handled separately)
@@ -12216,6 +12604,347 @@ class ListPaymentsResponse extends $pb.GeneratedMessage {
   $core.bool hasNextPageToken() => $_has(1);
   @$pb.TagNumber(2)
   void clearNextPageToken() => $_clearField(2);
+}
+
+class GetFinancialReportRequest extends $pb.GeneratedMessage {
+  factory GetFinancialReportRequest({
+    $2.Timestamp? startDate,
+    $2.Timestamp? endDate,
+    $core.Iterable<$core.String>? categoryFilters,
+  }) {
+    final $result = create();
+    if (startDate != null) {
+      $result.startDate = startDate;
+    }
+    if (endDate != null) {
+      $result.endDate = endDate;
+    }
+    if (categoryFilters != null) {
+      $result.categoryFilters.addAll(categoryFilters);
+    }
+    return $result;
+  }
+  GetFinancialReportRequest._() : super();
+  factory GetFinancialReportRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetFinancialReportRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetFinancialReportRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
+    ..aOM<$2.Timestamp>(1, _omitFieldNames ? '' : 'startDate', subBuilder: $2.Timestamp.create)
+    ..aOM<$2.Timestamp>(2, _omitFieldNames ? '' : 'endDate', subBuilder: $2.Timestamp.create)
+    ..pPS(3, _omitFieldNames ? '' : 'categoryFilters')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetFinancialReportRequest clone() => GetFinancialReportRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetFinancialReportRequest copyWith(void Function(GetFinancialReportRequest) updates) => super.copyWith((message) => updates(message as GetFinancialReportRequest)) as GetFinancialReportRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetFinancialReportRequest create() => GetFinancialReportRequest._();
+  GetFinancialReportRequest createEmptyInstance() => create();
+  static $pb.PbList<GetFinancialReportRequest> createRepeated() => $pb.PbList<GetFinancialReportRequest>();
+  @$core.pragma('dart2js:noInline')
+  static GetFinancialReportRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetFinancialReportRequest>(create);
+  static GetFinancialReportRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $2.Timestamp get startDate => $_getN(0);
+  @$pb.TagNumber(1)
+  set startDate($2.Timestamp v) { $_setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasStartDate() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearStartDate() => $_clearField(1);
+  @$pb.TagNumber(1)
+  $2.Timestamp ensureStartDate() => $_ensure(0);
+
+  @$pb.TagNumber(2)
+  $2.Timestamp get endDate => $_getN(1);
+  @$pb.TagNumber(2)
+  set endDate($2.Timestamp v) { $_setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasEndDate() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearEndDate() => $_clearField(2);
+  @$pb.TagNumber(2)
+  $2.Timestamp ensureEndDate() => $_ensure(1);
+
+  @$pb.TagNumber(3)
+  $pb.PbList<$core.String> get categoryFilters => $_getList(2);
+}
+
+class FinancialReportItem extends $pb.GeneratedMessage {
+  factory FinancialReportItem({
+    $core.String? category,
+    $core.double? expectedAmount,
+    $core.double? receivedAmount,
+  }) {
+    final $result = create();
+    if (category != null) {
+      $result.category = category;
+    }
+    if (expectedAmount != null) {
+      $result.expectedAmount = expectedAmount;
+    }
+    if (receivedAmount != null) {
+      $result.receivedAmount = receivedAmount;
+    }
+    return $result;
+  }
+  FinancialReportItem._() : super();
+  factory FinancialReportItem.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory FinancialReportItem.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'FinancialReportItem', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'category')
+    ..a<$core.double>(2, _omitFieldNames ? '' : 'expectedAmount', $pb.PbFieldType.OD)
+    ..a<$core.double>(3, _omitFieldNames ? '' : 'receivedAmount', $pb.PbFieldType.OD)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  FinancialReportItem clone() => FinancialReportItem()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  FinancialReportItem copyWith(void Function(FinancialReportItem) updates) => super.copyWith((message) => updates(message as FinancialReportItem)) as FinancialReportItem;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static FinancialReportItem create() => FinancialReportItem._();
+  FinancialReportItem createEmptyInstance() => create();
+  static $pb.PbList<FinancialReportItem> createRepeated() => $pb.PbList<FinancialReportItem>();
+  @$core.pragma('dart2js:noInline')
+  static FinancialReportItem getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FinancialReportItem>(create);
+  static FinancialReportItem? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get category => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set category($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasCategory() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearCategory() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.double get expectedAmount => $_getN(1);
+  @$pb.TagNumber(2)
+  set expectedAmount($core.double v) { $_setDouble(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasExpectedAmount() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearExpectedAmount() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.double get receivedAmount => $_getN(2);
+  @$pb.TagNumber(3)
+  set receivedAmount($core.double v) { $_setDouble(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasReceivedAmount() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearReceivedAmount() => $_clearField(3);
+}
+
+class GetFinancialReportResponse extends $pb.GeneratedMessage {
+  factory GetFinancialReportResponse({
+    $core.Iterable<FinancialReportItem>? items,
+    $core.double? totalExpected,
+    $core.double? totalReceived,
+  }) {
+    final $result = create();
+    if (items != null) {
+      $result.items.addAll(items);
+    }
+    if (totalExpected != null) {
+      $result.totalExpected = totalExpected;
+    }
+    if (totalReceived != null) {
+      $result.totalReceived = totalReceived;
+    }
+    return $result;
+  }
+  GetFinancialReportResponse._() : super();
+  factory GetFinancialReportResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetFinancialReportResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetFinancialReportResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
+    ..pc<FinancialReportItem>(1, _omitFieldNames ? '' : 'items', $pb.PbFieldType.PM, subBuilder: FinancialReportItem.create)
+    ..a<$core.double>(2, _omitFieldNames ? '' : 'totalExpected', $pb.PbFieldType.OD)
+    ..a<$core.double>(3, _omitFieldNames ? '' : 'totalReceived', $pb.PbFieldType.OD)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  GetFinancialReportResponse clone() => GetFinancialReportResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  GetFinancialReportResponse copyWith(void Function(GetFinancialReportResponse) updates) => super.copyWith((message) => updates(message as GetFinancialReportResponse)) as GetFinancialReportResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static GetFinancialReportResponse create() => GetFinancialReportResponse._();
+  GetFinancialReportResponse createEmptyInstance() => create();
+  static $pb.PbList<GetFinancialReportResponse> createRepeated() => $pb.PbList<GetFinancialReportResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetFinancialReportResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetFinancialReportResponse>(create);
+  static GetFinancialReportResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $pb.PbList<FinancialReportItem> get items => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.double get totalExpected => $_getN(1);
+  @$pb.TagNumber(2)
+  set totalExpected($core.double v) { $_setDouble(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasTotalExpected() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearTotalExpected() => $_clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.double get totalReceived => $_getN(2);
+  @$pb.TagNumber(3)
+  set totalReceived($core.double v) { $_setDouble(2, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasTotalReceived() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearTotalReceived() => $_clearField(3);
+}
+
+/// --- Auth Messages ---
+class LoginRequest extends $pb.GeneratedMessage {
+  factory LoginRequest({
+    $core.String? email,
+    $core.String? password,
+  }) {
+    final $result = create();
+    if (email != null) {
+      $result.email = email;
+    }
+    if (password != null) {
+      $result.password = password;
+    }
+    return $result;
+  }
+  LoginRequest._() : super();
+  factory LoginRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory LoginRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LoginRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'email')
+    ..aOS(2, _omitFieldNames ? '' : 'password')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  LoginRequest clone() => LoginRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  LoginRequest copyWith(void Function(LoginRequest) updates) => super.copyWith((message) => updates(message as LoginRequest)) as LoginRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static LoginRequest create() => LoginRequest._();
+  LoginRequest createEmptyInstance() => create();
+  static $pb.PbList<LoginRequest> createRepeated() => $pb.PbList<LoginRequest>();
+  @$core.pragma('dart2js:noInline')
+  static LoginRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LoginRequest>(create);
+  static LoginRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get email => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set email($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasEmail() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearEmail() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get password => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set password($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasPassword() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPassword() => $_clearField(2);
+}
+
+class LoginResponse extends $pb.GeneratedMessage {
+  factory LoginResponse({
+    $core.String? token,
+  }) {
+    final $result = create();
+    if (token != null) {
+      $result.token = token;
+    }
+    return $result;
+  }
+  LoginResponse._() : super();
+  factory LoginResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory LoginResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LoginResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'token')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  LoginResponse clone() => LoginResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  LoginResponse copyWith(void Function(LoginResponse) updates) => super.copyWith((message) => updates(message as LoginResponse)) as LoginResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static LoginResponse create() => LoginResponse._();
+  LoginResponse createEmptyInstance() => create();
+  static $pb.PbList<LoginResponse> createRepeated() => $pb.PbList<LoginResponse>();
+  @$core.pragma('dart2js:noInline')
+  static LoginResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LoginResponse>(create);
+  static LoginResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get token => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set token($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasToken() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearToken() => $_clearField(1);
 }
 
 

@@ -4,6 +4,14 @@ import 'package:flutter/material.dart';
 
 import 'package:admin/screens/client_form_screen.dart'; // Import the new form screen
 
+// Helper function to get user-friendly source name
+String getClientSourceName(ClientSource source) {
+  if (source == ClientSource.CLIENT_SOURCE_UNSPECIFIED) {
+    return 'Unspecified';
+  }
+  return source.name.replaceFirst('CLIENT_SOURCE_', '').replaceAll('_', ' ');
+}
+
 class ClientListScreen extends StatefulWidget {
   const ClientListScreen({super.key});
 
@@ -146,7 +154,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
                       DataColumn(label: Text('Email')),
                       DataColumn(label: Text('Telegram ID')),
                       DataColumn(label: Text('WhatsApp')),
-                      DataColumn(label: Text('Source')),
+                      DataColumn(label: Text('Source')), // Updated header
                       DataColumn(label: Text('Passport Data')),
                       DataColumn(label: Text('Notes')),
                       DataColumn(label: Text('Actions')),
@@ -162,7 +170,8 @@ class _ClientListScreenState extends State<ClientListScreen> {
                         DataCell(Text(client.email)),
                         DataCell(Text(client.telegramId)),
                         DataCell(Text(client.whatsappNumber)),
-                        DataCell(Text(client.source)),
+                        DataCell(Text(getClientSourceName(
+                            client.source))), // Use helper for enum display
                         DataCell(Text(client.hasPassportData()
                             ? client.passportData.toString()
                             : '-')),

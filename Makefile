@@ -11,11 +11,7 @@ proto:
 	       --dart_out=grpc:lib/generated \
 	       -Iprotos \
 	       -I/opt/homebrew/include \
-	       protos/crm.proto \
-	       /opt/homebrew/include/google/protobuf/timestamp.proto \
-	       /opt/homebrew/include/google/protobuf/struct.proto \
-	       /opt/homebrew/include/google/protobuf/empty.proto \
-	       /opt/homebrew/include/google/protobuf/wrappers.proto
+	       protos/crm.proto # Only specify the main proto file as input
 
 .PHONY: install-protoc-plugin
 install-protoc-plugin:

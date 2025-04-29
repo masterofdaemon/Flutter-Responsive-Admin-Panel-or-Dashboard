@@ -26,9 +26,11 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
   final _phoneController = TextEditingController();
   final _telegramIdController = TextEditingController();
   final _whatsappNumberController = TextEditingController();
-  final _sourceController = TextEditingController();
   final _passportDataController = TextEditingController();
   final _notesController = TextEditingController();
+
+  // Enum state variable
+  crm.ClientSource? _selectedSource;
 
   @override
   void initState() {
@@ -52,7 +54,7 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
         _phoneController.text = client.phone;
         _telegramIdController.text = client.telegramId;
         _whatsappNumberController.text = client.whatsappNumber;
-        _sourceController.text = client.source;
+        _selectedSource = client.source; // Use enum value
         _passportDataController.text =
             client.hasPassportData() ? client.passportData.toString() : '';
         _notesController.text = client.notes;
@@ -86,7 +88,8 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
         phone: _phoneController.text.trim(),
         telegramId: _telegramIdController.text.trim(),
         whatsappNumber: _whatsappNumberController.text.trim(),
-        source: _sourceController.text.trim(),
+        source: _selectedSource ??
+            crm.ClientSource.CLIENT_SOURCE_UNSPECIFIED, // Use selected enum
         passportData: _passportDataController.text.isNotEmpty
             ? pb_struct.Value.fromJson(_passportDataController.text)
             : null,
@@ -134,7 +137,6 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
     _phoneController.dispose();
     _telegramIdController.dispose();
     _whatsappNumberController.dispose();
-    _sourceController.dispose();
     _passportDataController.dispose();
     _notesController.dispose();
     // Dispose other controllers
@@ -237,22 +239,47 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
                           const InputDecoration(labelText: 'WhatsApp Number'),
                     ),
                     const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _sourceController,
+                    // Dropdown for ClientSource
+                    DropdownButtonFormField<crm.ClientSource>(
+                      value: _selectedSource,
                       decoration: const InputDecoration(labelText: 'Source'),
+                      items: crm.ClientSource.values
+                          .where((source) =>
+                              source !=
+                              crm.ClientSource
+                                  .CLIENT_SOURCE_UNSPECIFIED) // Exclude UNSPECIFIED
+                          .map((crm.ClientSource source) {
+                        return DropdownMenuItem<crm.ClientSource>(
+                          value: source,
+                          child: Text(source.name
+                              .replaceFirst('CLIENT_SOURCE_', '')
+                              .replaceAll('_', ' ')), // User-friendly name
+                        );
+                      }).toList(),
+                      onChanged: (crm.ClientSource? newValue) {
+                        setState(() {
+                          _selectedSource = newValue;
+                        });
+                      },
+                      validator: (value) => value == null ||
+                              value ==
+                                  crm.ClientSource.CLIENT_SOURCE_UNSPECIFIED
+                          ? 'Please select a source'
+                          : null,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _passportDataController,
                       decoration: const InputDecoration(
                           labelText: 'Passport Data (JSON)'),
-                      maxLines: 2,
+                      maxLines: 3,
+                      // Add JSON validation if needed
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _notesController,
                       decoration: const InputDecoration(labelText: 'Notes'),
-                      maxLines: 2,
+                      maxLines: 3,
                     ),
                     const SizedBox(height: 24),
                     Center(

@@ -37,6 +37,7 @@ dependencies:
   fixnum: ^1.1.1
   uuid: ^4.5.1
   intl: ^0.20.2
+  flutter_secure_storage: ^9.2.2 # For secure token storage
 
 dev_dependencies:
   flutter_test:

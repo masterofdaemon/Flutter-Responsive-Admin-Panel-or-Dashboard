@@ -1,166 +1,197 @@
 import 'package:flutter/material.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
-import 'package:admin/services/grpc_interaction_service.dart';
-import 'package:grpc/grpc.dart';
-import 'package:intl/intl.dart';
-import 'package:admin/generated/google/protobuf/timestamp.pb.dart' as pb;
+import 'package:admin/services/grpc_interaction_service_mobile.dart'; // Corrected import
+import 'package:admin/services/grpc_client_service_mobile.dart'; // Added for fetching clients
+import 'package:admin/services/grpc_employee_service_mobile.dart'; // Added for fetching employees
+import 'package:grpc/grpc.dart'; // Added for GrpcError
+import 'package:admin/generated/google/protobuf/timestamp.pb.dart'
+    as $2; // Correct alias for Timestamp
+import 'package:intl/intl.dart'; // Added for DateFormat
 
 class InteractionFormScreen extends StatefulWidget {
-  final String? interactionId;
-  const InteractionFormScreen({Key? key, this.interactionId}) : super(key: key);
+  final crm.Interaction? interaction; // Optional for editing
+
+  const InteractionFormScreen({Key? key, this.interaction}) : super(key: key);
+
   @override
   _InteractionFormScreenState createState() => _InteractionFormScreenState();
 }
 
 class _InteractionFormScreenState extends State<InteractionFormScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _service = getGrpcInteractionService();
-  bool _isEdit = false;
-  bool _loading = false;
+  // Ensure all controllers and state variables are defined
+  late TextEditingController _notesController;
+  late TextEditingController
+      _subjectCtrl; // Assuming this exists based on errors
+  late TextEditingController
+      _descriptionCtrl; // Assuming this exists based on errors
+  String? _selectedClientId;
+  String? _selectedEmployeeId;
+  DateTime? _selectedInteractionDate; // Renamed from _date for clarity
+  DateTime? _selectedEndTime; // Renamed from _endTime for clarity
+  crm.InteractionType _selectedInteractionType =
+      crm.InteractionType.INTERACTION_TYPE_UNSPECIFIED;
+  bool _isScheduled = false; // Assuming this exists
+  bool _isCompleted = false; // Assuming this exists
 
-  final _typeCtrl = TextEditingController();
-  final _descriptionCtrl = TextEditingController();
-  final _dateCtrl = TextEditingController();
-  final _notesCtrl = TextEditingController();
-  final _subjectCtrl = TextEditingController();
-  final _endTimeCtrl = TextEditingController();
-  DateTime? _date;
-  DateTime? _endTime;
-  bool _isScheduled = false;
-  bool _isCompleted = false;
-  final _notesFocus = FocusNode();
+  // Instantiate services directly
+  final GrpcInteractionService _interactionService = GrpcInteractionService();
+  final GrpcClientService _clientService =
+      GrpcClientService(); // Instantiate client service
+  final GrpcEmployeeService _employeeService =
+      GrpcEmployeeService(); // Instantiate employee service
 
   List<crm.Client> _clients = [];
   List<crm.Employee> _employees = [];
-  String? _selectedClientId;
-  String? _selectedEmployeeId;
-  String _clientFilter = '';
-  String _employeeFilter = '';
+  bool _isLoading = true;
+  bool _isSaving = false;
 
   @override
   void initState() {
     super.initState();
-    _isEdit = widget.interactionId != null;
-    _fetchDropdownData();
-    if (_isEdit) _loadData();
-  }
+    // Initialize controllers using widget.interaction
+    _notesController =
+        TextEditingController(text: widget.interaction?.notes ?? '');
+    _subjectCtrl = TextEditingController(
+        text: widget.interaction?.subject ?? ''); // Initialize
+    _descriptionCtrl = TextEditingController(
+        text: widget.interaction?.description ?? ''); // Initialize
+    _selectedClientId = widget.interaction?.clientId;
+    _selectedEmployeeId = widget.interaction?.employeeId;
+    _selectedInteractionType = widget.interaction?.type ??
+        crm.InteractionType.INTERACTION_TYPE_UNSPECIFIED;
+    _isScheduled = widget.interaction?.isScheduled ?? false; // Initialize
+    _isCompleted = widget.interaction?.isCompleted ?? false; // Initialize
 
-  Future<void> _fetchDropdownData() async {
-    try {
-      final clients = await _service.getAllClients();
-      final employees = await _service.getAllEmployees();
-      setState(() {
-        _clients = clients;
-        _employees = employees;
-      });
-    } catch (e) {
-      // Optionally handle error
+    // Initialize dates from Timestamps using correct field names and has... methods
+    if (widget.interaction?.hasDate() ?? false) {
+      // Use hasDate()
+      _selectedInteractionDate =
+          widget.interaction!.date.toDateTime(); // Use date field
     }
+    if (widget.interaction?.hasEndTime() ?? false) {
+      // Use hasEndTime()
+      _selectedEndTime =
+          widget.interaction!.endTime.toDateTime(); // Use endTime field
+    }
+
+    _loadInitialData();
   }
 
-  Future<void> _loadData() async {
-    setState(() => _loading = true);
+  Future<void> _loadInitialData() async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
-      final i = await _service.getInteraction(widget.interactionId!);
-      _selectedClientId = i.clientId;
-      _selectedEmployeeId = i.employeeId;
-      _typeCtrl.text = i.type;
-      _descriptionCtrl.text = i.description;
-      _subjectCtrl.text = i.subject;
-      _isScheduled = i.isScheduled;
-      _isCompleted = i.isCompleted;
-      _notesCtrl.text = i.notes;
-      if (i.hasDate()) {
-        _date =
-            DateTime.fromMillisecondsSinceEpoch(i.date.seconds.toInt() * 1000);
-        _dateCtrl.text = DateFormat('yyyy-MM-dd').format(_date!);
-      }
-      if (i.hasEndTime()) {
-        _endTime = DateTime.fromMillisecondsSinceEpoch(
-            i.endTime.seconds.toInt() * 1000);
-        _endTimeCtrl.text = DateFormat('yyyy-MM-dd HH:mm').format(_endTime!);
-      }
+      // Fetch clients and employees using their respective services
+      final clientsFuture =
+          _clientService.listClients(pageSize: 1000); // Fetch all for dropdown
+      final employeesFuture = _employeeService.listEmployees(
+          pageSize: 1000); // Fetch all for dropdown
+
+      final results = await Future.wait([clientsFuture, employeesFuture]);
+      _clients = results[0] as List<crm.Client>;
+      _employees = results[1] as List<crm.Employee>;
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Error loading: $e')));
-      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load initial data: $e')),
+      );
     } finally {
-      setState(() => _loading = false);
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
-  Future<void> _save() async {
-    if (!_formKey.currentState!.validate()) return;
-    setState(() => _loading = true);
+  Future<void> _saveInteraction() async {
+    if (!_formKey.currentState!.validate()) {
+      return; // Don't save if form is invalid
+    }
+    setState(() {
+      _isSaving = true;
+    });
 
-    final interaction = crm.Interaction(
-      interactionId: _isEdit ? widget.interactionId : null,
-      clientId: _selectedClientId ?? '',
-      employeeId: _selectedEmployeeId ?? '',
-      type: _typeCtrl.text.trim(),
-      description: _descriptionCtrl.text.trim(),
-      subject: _subjectCtrl.text.trim(),
+    // Create or update the interaction object using correct field names
+    final interactionData = crm.Interaction(
+      interactionId:
+          widget.interaction?.interactionId ?? '', // Keep ID for update
+      clientId: _selectedClientId ?? '', // Ensure non-null for proto
+      employeeId: _selectedEmployeeId ?? '', // Ensure non-null for proto
+      type: _selectedInteractionType,
+      notes: _notesController.text,
+      subject: _subjectCtrl.text,
+      description: _descriptionCtrl.text,
       isScheduled: _isScheduled,
       isCompleted: _isCompleted,
-      notes: _notesCtrl.text.trim(),
+      // Convert DateTime back to Timestamp using $2 alias and correct field names
+      date: _selectedInteractionDate != null
+          ? $2.Timestamp.fromDateTime(_selectedInteractionDate!)
+          : null, // Use date field
+      endTime: _selectedEndTime != null
+          ? $2.Timestamp.fromDateTime(_selectedEndTime!)
+          : null, // Use endTime field
     );
-    if (_date != null) {
-      interaction.date = pb.Timestamp.fromDateTime(_date!);
-    }
-    if (_endTime != null) {
-      interaction.endTime = pb.Timestamp.fromDateTime(_endTime!);
-    }
 
     try {
-      if (_isEdit) {
-        await _service.updateInteraction(widget.interactionId!, interaction);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Updated')));
+      if (widget.interaction == null) {
+        // Create new interaction
+        await _interactionService.createInteraction(interactionData);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Interaction created successfully')),
+        );
       } else {
-        await _service.createInteraction(interaction);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Created')));
+        // Update existing interaction
+        await _interactionService.updateInteraction(
+            interactionData.interactionId, interactionData);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Interaction updated successfully')),
+        );
       }
-      Navigator.pop(context, true);
+      Navigator.of(context).pop(true); // Indicate success
     } on GrpcError catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('gRPC error: ${e.message}')));
+      // Catch GrpcError
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('Failed to save interaction: ${e.message ?? e}')),
+      );
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Error: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An unexpected error occurred: $e')),
+      );
     } finally {
-      setState(() => _loading = false);
+      setState(() {
+        _isSaving = false;
+      });
     }
   }
 
-  @override
-  void dispose() {
-    // Remove unused controllers
-    //_clientIdCtrl.dispose();
-    //_employeeIdCtrl.dispose();
-    _typeCtrl.dispose();
-    _descriptionCtrl.dispose();
-    _dateCtrl.dispose();
-    _subjectCtrl.dispose();
-    _endTimeCtrl.dispose();
-    _notesCtrl.dispose();
-    _notesFocus.dispose();
-    _service.shutdown();
-    super.dispose();
+  // Helper function to select date
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedInteractionDate ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != _selectedInteractionDate) {
+      setState(() {
+        _selectedInteractionDate = picked;
+      });
+    }
   }
 
-  Future<void> _pickDate() async {
-    final now = DateTime.now();
-    final picked = await showDatePicker(
+  // Helper function to select end time
+  Future<void> _selectEndTime(BuildContext context) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
-      initialDate: _date ?? now,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
+      initialTime: TimeOfDay.fromDateTime(
+          _selectedEndTime ?? _selectedInteractionDate ?? DateTime.now()),
     );
-    if (picked != null) {
+    if (pickedTime != null) {
       setState(() {
-        _date = picked;
-        _dateCtrl.text = DateFormat('yyyy-MM-dd').format(_date!);
+        final now = _selectedInteractionDate ?? DateTime.now();
+        _selectedEndTime = DateTime(
+            now.year, now.month, now.day, pickedTime.hour, pickedTime.minute);
       });
     }
   }
@@ -169,172 +200,175 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_isEdit ? 'Edit Interaction' : 'Add Interaction'),
+        title: Text(widget.interaction == null
+            ? 'Add Interaction'
+            : 'Edit Interaction'),
         actions: [
           IconButton(
-            icon: Icon(Icons.save),
-            onPressed: _loading ? null : _save,
-          )
+            icon: const Icon(Icons.save),
+            onPressed: _isSaving ? null : _saveInteraction,
+          ),
         ],
       ),
-      body: _loading
-          ? Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              padding: EdgeInsets.all(16),
-              child: Form(
-                key: _formKey,
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // --- Client Dropdown with filter ---
-                    TextFormField(
-                      decoration: InputDecoration(labelText: 'Filter Clients'),
-                      onChanged: (v) => setState(() => _clientFilter = v),
-                    ),
+                  children: <Widget>[
+                    // Client Dropdown
                     DropdownButtonFormField<String>(
                       value: _selectedClientId,
-                      items: _clients
-                          .where((c) =>
-                              c.firstName
-                                  .toLowerCase()
-                                  .contains(_clientFilter.toLowerCase()) ||
-                              c.lastName
-                                  .toLowerCase()
-                                  .contains(_clientFilter.toLowerCase()) ||
-                              c.email
-                                  .toLowerCase()
-                                  .contains(_clientFilter.toLowerCase()))
-                          .map((c) => DropdownMenuItem(
-                                value: c.clientId,
-                                child: Text(
-                                    '${c.firstName} ${c.lastName} (${c.email})'),
-                              ))
-                          .toList(),
-                      onChanged: (val) =>
-                          setState(() => _selectedClientId = val),
-                      decoration: InputDecoration(labelText: 'Client'),
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'Required' : null,
+                      decoration: const InputDecoration(labelText: 'Client'),
+                      items: _clients.map((crm.Client client) {
+                        return DropdownMenuItem<String>(
+                          value: client.clientId,
+                          child: Text('${client.firstName} ${client.lastName}'),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedClientId = newValue;
+                        });
+                      },
+                      validator: (value) =>
+                          value == null ? 'Please select a client' : null,
                     ),
-                    SizedBox(height: 8),
-                    // --- Employee Dropdown with filter ---
-                    TextFormField(
-                      decoration:
-                          InputDecoration(labelText: 'Filter Employees'),
-                      onChanged: (v) => setState(() => _employeeFilter = v),
-                    ),
+                    const SizedBox(height: 16),
+
+                    // Employee Dropdown - Use employee.name
                     DropdownButtonFormField<String>(
                       value: _selectedEmployeeId,
-                      items: _employees
-                          .where((e) =>
-                              e.name
-                                  .toLowerCase()
-                                  .contains(_employeeFilter.toLowerCase()) ||
-                              e.email
-                                  .toLowerCase()
-                                  .contains(_employeeFilter.toLowerCase()))
-                          .map((e) => DropdownMenuItem(
-                                value: e.employeeId,
-                                child: Text('${e.name} (${e.email})'),
-                              ))
-                          .toList(),
-                      onChanged: (val) =>
-                          setState(() => _selectedEmployeeId = val),
-                      decoration: InputDecoration(labelText: 'Employee'),
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'Required' : null,
-                    ),
-                    SizedBox(height: 8),
-                    GestureDetector(
-                      onTap: _pickDate,
-                      child: AbsorbPointer(
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            labelText: 'Date',
-                            hintText: 'Select date',
-                          ),
-                          controller: _dateCtrl,
-                          validator: (v) => _date == null ? 'Required' : null,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    TextFormField(
-                      controller: _typeCtrl,
-                      decoration: InputDecoration(labelText: 'Type'),
-                      validator: (v) => v!.isEmpty ? 'Required' : null,
-                    ),
-                    SizedBox(height: 8),
-                    TextFormField(
-                      controller: _descriptionCtrl,
-                      decoration: InputDecoration(labelText: 'Description'),
-                      maxLines: 3,
-                    ),
-                    SizedBox(height: 8),
-                    TextFormField(
-                      controller: _subjectCtrl,
-                      decoration: InputDecoration(labelText: 'Subject'),
-                    ),
-                    SizedBox(height: 8),
-                    GestureDetector(
-                      onTap: () async {
-                        final now = DateTime.now();
-                        final picked = await showDatePicker(
-                          context: context,
-                          initialDate: _endTime ?? now,
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
+                      decoration: const InputDecoration(labelText: 'Employee'),
+                      items: _employees.map((crm.Employee employee) {
+                        return DropdownMenuItem<String>(
+                          value: employee.employeeId,
+                          child: Text(employee.name.isNotEmpty
+                              ? employee.name
+                              : employee
+                                  .employeeId), // Use name field, fallback to ID
                         );
-                        if (picked != null) {
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedEmployeeId = newValue;
+                        });
+                      },
+                      validator: (value) => value == null || value.isEmpty
+                          ? 'Please select an employee'
+                          : null,
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Interaction Type Dropdown
+                    DropdownButtonFormField<crm.InteractionType>(
+                      value: _selectedInteractionType,
+                      decoration:
+                          const InputDecoration(labelText: 'Interaction Type'),
+                      items: crm.InteractionType.values
+                          .where((type) =>
+                              type !=
+                              crm.InteractionType
+                                  .INTERACTION_TYPE_UNSPECIFIED) // Exclude unspecified
+                          .map((crm.InteractionType type) {
+                        return DropdownMenuItem<crm.InteractionType>(
+                          value: type,
+                          child: Text(type.name
+                              .replaceFirst('INTERACTION_TYPE_', '')
+                              .replaceAll('_', ' ')),
+                        );
+                      }).toList(),
+                      onChanged: (crm.InteractionType? newValue) {
+                        if (newValue != null) {
                           setState(() {
-                            _endTime = picked;
-                            _endTimeCtrl.text = DateFormat('yyyy-MM-dd HH:mm')
-                                .format(_endTime!);
+                            _selectedInteractionType = newValue;
                           });
                         }
                       },
-                      child: AbsorbPointer(
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            labelText: 'End Time',
-                            hintText: 'Select end time',
-                          ),
-                          controller: _endTimeCtrl,
-                        ),
-                      ),
+                      validator: (value) => value ==
+                              crm.InteractionType.INTERACTION_TYPE_UNSPECIFIED
+                          ? 'Please select a type'
+                          : null,
                     ),
-                    SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: _isScheduled,
-                          onChanged: (v) =>
-                              setState(() => _isScheduled = v ?? false),
-                        ),
-                        Text('Scheduled'),
-                        SizedBox(width: 16),
-                        Checkbox(
-                          value: _isCompleted,
-                          onChanged: (v) =>
-                              setState(() => _isCompleted = v ?? false),
-                        ),
-                        Text('Completed'),
-                      ],
+                    const SizedBox(height: 16),
+
+                    // Interaction Date Picker
+                    ListTile(
+                      title: Text(
+                          'Interaction Date: ${_selectedInteractionDate == null ? 'Not set' : DateFormat('yyyy-MM-dd').format(_selectedInteractionDate!)}'),
+                      trailing: const Icon(Icons.calendar_today),
+                      onTap: () => _selectDate(context),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 16),
+
+                    // End Time Picker
+                    ListTile(
+                      title: Text(
+                          'End Time: ${_selectedEndTime == null ? 'Not set' : DateFormat('HH:mm').format(_selectedEndTime!)}'),
+                      trailing: const Icon(Icons.access_time),
+                      onTap: () => _selectEndTime(context),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Subject Field
                     TextFormField(
-                      controller: _notesCtrl,
-                      focusNode: _notesFocus,
-                      decoration: InputDecoration(labelText: 'Notes'),
-                      maxLines: 2,
+                      controller: _subjectCtrl,
+                      decoration: const InputDecoration(labelText: 'Subject'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a subject';
+                        }
+                        return null;
+                      },
                     ),
-                    SizedBox(height: 24),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: _loading ? null : _save,
-                        child: Text(_isEdit ? 'Update' : 'Create'),
-                      ),
-                    )
+                    const SizedBox(height: 16),
+
+                    // Description Field
+                    TextFormField(
+                      controller: _descriptionCtrl,
+                      decoration:
+                          const InputDecoration(labelText: 'Description'),
+                      maxLines: 3,
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Notes Field
+                    TextFormField(
+                      controller: _notesController,
+                      decoration: const InputDecoration(labelText: 'Notes'),
+                      maxLines: 3,
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Is Scheduled Checkbox
+                    CheckboxListTile(
+                      title: const Text('Scheduled'),
+                      value: _isScheduled,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _isScheduled = value ?? false;
+                        });
+                      },
+                    ),
+
+                    // Is Completed Checkbox
+                    CheckboxListTile(
+                      title: const Text('Completed'),
+                      value: _isCompleted,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _isCompleted = value ?? false;
+                        });
+                      },
+                    ),
+
+                    if (_isSaving) ...[
+                      const SizedBox(height: 16),
+                      const Center(child: CircularProgressIndicator()),
+                    ]
                   ],
                 ),
               ),
@@ -342,3 +376,6 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
     );
   }
 }
+
+// Helper extension for capitalizing strings (optional, place in a utils file)
+// ...existing code...

@@ -1,31 +1,13 @@
 // filepath: lib/services/grpc_interaction_service_mobile.dart
 // Real gRPC implementation for Interaction service
-import 'package:grpc/grpc.dart';
+// import 'package:grpc/grpc.dart'; // Removed unused import
 import 'package:admin/generated/crm.pbgrpc.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
-import 'package:admin/services/grpc_client_service.dart';
-import 'package:admin/services/grpc_employee_service.dart';
+import 'package:admin/services/grpc_client.dart'; // Import the shared GrpcClient
 
 class GrpcInteractionService {
-  late final ClientChannel _channel;
-  late final CrmServiceClient _client;
-
-  GrpcInteractionService({
-    String host = 'localhost',
-    int grpcPort = 50051,
-    bool useTls = false,
-  }) {
-    _channel = ClientChannel(
-      host,
-      port: grpcPort,
-      options: ChannelOptions(
-        credentials: useTls
-            ? const ChannelCredentials.secure()
-            : const ChannelCredentials.insecure(),
-      ),
-    );
-    _client = CrmServiceClient(_channel);
-  }
+  // Use the shared GrpcClient instance
+  final CrmServiceClient _client = CrmServiceClient(GrpcClient().channel);
 
   Future<List<crm.Interaction>> listInteractions(
       {int pageSize = 20, String pageToken = ''}) async {
@@ -33,19 +15,25 @@ class GrpcInteractionService {
       pageSize: pageSize,
       pageToken: pageToken,
     );
-    final response = await _client.listInteractions(request);
+    // Use shared call options
+    final response = await _client.listInteractions(request,
+        options: GrpcClient().getCallOptions());
     return response.interactions;
   }
 
   Future<crm.Interaction> createInteraction(crm.Interaction interaction) async {
     final request = crm.CreateInteractionRequest(interaction: interaction);
-    final response = await _client.createInteraction(request);
+    // Use shared call options
+    final response = await _client.createInteraction(request,
+        options: GrpcClient().getCallOptions());
     return await getInteraction(response.interactionId);
   }
 
   Future<crm.Interaction> getInteraction(String interactionId) async {
     final request = crm.GetInteractionRequest(interactionId: interactionId);
-    final response = await _client.getInteraction(request);
+    // Use shared call options
+    final response = await _client.getInteraction(request,
+        options: GrpcClient().getCallOptions());
     return response.interaction;
   }
 
@@ -53,37 +41,18 @@ class GrpcInteractionService {
       String interactionId, crm.Interaction data) async {
     final request = crm.UpdateInteractionRequest(
       interactionId: interactionId,
-      interactionData: data,
+      interactionData: data, // Keep existing field name
     );
-    final response = await _client.updateInteraction(request);
+    // Use shared call options
+    final response = await _client.updateInteraction(request,
+        options: GrpcClient().getCallOptions());
     return response.interaction;
   }
 
   Future<void> deleteInteraction(String interactionId) async {
     final request = crm.DeleteInteractionRequest(interactionId: interactionId);
-    await _client.deleteInteraction(request);
-  }
-
-  /// Fetch all clients (for dropdowns, etc)
-  Future<List<crm.Client>> getAllClients() async {
-    final clientService = getGrpcClientService();
-    return await clientService.listClients();
-  }
-
-  /// Fetch all employees (for dropdowns, etc)
-  Future<List<crm.Employee>> getAllEmployees() async {
-    final employeeService = getGrpcEmployeeService();
-    return await employeeService.listEmployees();
-  }
-
-  Future<void> shutdown() async {
-    await _channel.shutdown();
+    // Use shared call options
+    await _client.deleteInteraction(request,
+        options: GrpcClient().getCallOptions());
   }
 }
-
-GrpcInteractionService getGrpcInteractionService({
-  String host = 'localhost',
-  int grpcPort = 50051,
-  bool useTls = false,
-}) =>
-    GrpcInteractionService(host: host, grpcPort: grpcPort, useTls: useTls);

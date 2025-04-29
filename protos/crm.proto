@@ -7,7 +7,83 @@ option go_package = "crm/proto"; // Reverted to simpler path
 import "google/protobuf/timestamp.proto"; // Needed for time fields
 import "google/protobuf/struct.proto";
 import "google/protobuf/empty.proto";
-import "google/protobuf/wrappers.proto"; // Useful for optional basic types if needed
+
+// --- Enums ---
+
+// Employee roles
+enum EmployeeRole {
+  EMPLOYEE_ROLE_UNSPECIFIED = 0;
+  MANAGER = 1;
+  CHIEF_MANAGER = 2;
+  DIRECTOR = 3;
+  TRANSLATOR = 4;
+  ACCOUNTANT = 5;
+}
+
+// Status for various entities
+enum Status {
+  STATUS_UNSPECIFIED = 0;
+  DRAFT = 1;
+  ACTIVE = 2;
+  COMPLETED = 3;
+  CANCELLED = 4;
+  REJECTED = 5;
+  APPROVED = 6;
+  PENDING = 7;
+}
+
+// Priority for translation orders
+enum Priority {
+  PRIORITY_UNSPECIFIED = 0;
+  NORMAL = 1;
+  URGENT = 2;
+  SEMI_URGENT = 3;
+}
+
+// Registration type for business registration
+enum RegistrationType {
+  REGISTRATION_TYPE_UNSPECIFIED = 0;
+  IP = 1;
+  OOO = 2;
+}
+
+// Payment method
+enum PaymentMethod {
+  PAYMENT_METHOD_UNSPECIFIED = 0;
+  CASH = 1;
+  CARD = 2;
+  BANK_TRANSFER = 3;
+  OTHER = 4;
+}
+
+// Interaction type
+enum InteractionType {
+  INTERACTION_TYPE_UNSPECIFIED = 0;
+  INTERACTION_TYPE_CALL = 1;
+  INTERACTION_TYPE_MEETING = 2;
+  INTERACTION_TYPE_EMAIL = 3;
+  INTERACTION_TYPE_CHAT = 4;
+  INTERACTION_TYPE_OTHER = 5;
+}
+
+// Document type for translation orders
+enum DocumentType {
+  DOCUMENT_TYPE_UNSPECIFIED = 0;
+  DOCUMENT_TYPE_PASSPORT = 1;
+  DOCUMENT_TYPE_CERTIFICATE = 2;
+  DOCUMENT_TYPE_CONTRACT = 3;
+  DOCUMENT_TYPE_OTHER = 4;
+}
+
+// Client source
+enum ClientSource {
+  CLIENT_SOURCE_UNSPECIFIED = 0;
+  CLIENT_SOURCE_REFERRAL = 1;
+  CLIENT_SOURCE_ONLINE = 2;
+  CLIENT_SOURCE_WALK_IN = 3;
+  CLIENT_SOURCE_PARTNER = 4;
+  CLIENT_SOURCE_OTHER = 5;
+}
 
 // --- Message Definitions ---
 
@@ -29,7 +105,7 @@ message Client {
   // Client's WhatsApp number (E.164 format)
   optional string whatsapp_number = 7;
   // Source of the client
-  optional string source = 8;
+  optional ClientSource source = 8;
   // Client's passport data (stored as JSON)
   optional google.protobuf.Value passport_data = 9;
   // Notes about the client
@@ -54,7 +130,7 @@ message Employee {
   string employee_id = 1;
   string user_id = 2; // Link to User
   string name = 3;
-  string role = 4; // Consider using an enum later
+  EmployeeRole role = 4; // Consider using an enum later
   string office_id = 5; // Link to Office
   optional string telegram_id = 6;
   optional string whatsapp_number = 7;
@@ -85,10 +161,13 @@ message LegalCase {
   optional google.protobuf.Timestamp contract_date = 7;
   double contract_amount = 8;
   double expected_commission = 9; // Calculated field
-  string status = 10; // Consider enum
+  Status status = 10; // Consider enum
   optional string payment_id = 11;
   // Notes about the legal case
   optional string notes = 12;
+  optional google.protobuf.Timestamp consultation_scheduled_date = 13;
+  optional string consultation_notes = 14;
+  optional google.protobuf.Timestamp contract_planned_date = 15;
 }
 
 message TranslationOrder {
@@ -97,18 +176,27 @@ message TranslationOrder {
   string manager_id = 3;
   optional string translator_id = 4;
   string office_id = 5;
-  optional string document_type = 6;
+  optional DocumentType document_type = 6;
   optional string target_language = 7;
   optional int32 page_count = 8;
   double translation_sum = 9; // Calculated
   double notarial_sum = 10;
   double total_sum = 11; // Calculated
-  optional string priority = 12; // Consider enum
-  string status = 13; // Consider enum
+  Priority priority = 12; // Consider enum
+  Status status = 13; // Consider enum
   optional string payment_id = 14;
-  optional google.protobuf.Value document_blanks = 15; // Represents JSON array
+  repeated BlankInfo blanks = 15;
   // Notes about the translation order
   optional string notes = 16;
+  bool is_urgent = 17;
+  bool is_semi_urgent = 18;
+  bool client_notified = 19;
+
+  message BlankInfo {
+    string blank_number = 1;
+    bool is_spoiled = 2;
+    string replacement_blank_number = 3;
+  }
 }
 
 message InsurancePolicy {
@@ -119,7 +207,7 @@ message InsurancePolicy {
   google.protobuf.Timestamp start_date = 5;
   google.protobuf.Timestamp expiry_date = 6;
   double amount = 7;
-  string status = 8; // Consider enum
+  Status status = 8; // Consider enum
   optional string renewal_status = 9; // Consider enum
   // Notes about the insurance policy
   optional string notes = 10;
@@ -131,10 +219,11 @@ message TrainingEnrollment {
   string manager_id = 3;
   string course_id = 4;
   optional google.protobuf.Timestamp contract_date = 5;
-  string status = 6; // Consider enum
+  Status status = 6; // Consider enum
   optional string payment_id = 7;
-  // Notes about the training enrollment
   optional string notes = 8;
+  bool paid = 9;
+  bool accountant_verified = 10;
 }
 
 message AccountOpeningRequest {
@@ -142,12 +231,12 @@ message AccountOpeningRequest {
   string client_id = 2;
   string manager_id = 3;
   string bank_id = 4;
-  string status = 5; // Consider enum
+  Status status = 5; // Consider enum
   optional google.protobuf.Timestamp application_date = 6;
   optional google.protobuf.Timestamp opened_date = 7;
   optional string payment_id = 8;
-  // Notes about the account opening request
   optional string notes = 9;
+  bool agent_commission_received = 10;
 }
 
 message BusinessRegistration {
@@ -155,13 +244,14 @@ message BusinessRegistration {
   string client_id = 2;
   string manager_id = 3;
   string bank_id = 4;
-  string registration_type = 5; // Consider enum "IP", "OOO"
-  string status = 6; // Consider enum
+  RegistrationType registration_type = 5; // Consider enum "IP", "OOO"
+  Status status = 6; // Consider enum
   optional google.protobuf.Timestamp application_date = 7;
   optional google.protobuf.Timestamp registration_date = 8;
   optional string payment_id = 9;
   // Notes about the business registration
   optional string notes = 10;
+  bool agent_commission_received = 11;
 }
 
 message LendingApplication {
@@ -176,10 +266,14 @@ message LendingApplication {
   optional google.protobuf.Timestamp funds_received_date = 9;
   optional google.protobuf.Timestamp company_contract_date = 10;
   double expected_commission = 11; // Calculated
-  string status = 12; // Consider enum
+  Status status = 12; // Consider enum
   optional string payment_id = 13;
   // Notes about the lending application
   optional string notes = 14;
+  double company_commission_percent = 15;
+  double calculated_commission_amount = 16;
+  bool commission_paid = 17;
+  bool agent_commission_received = 18;
 }
 
 message Partner {
@@ -187,10 +281,11 @@ message Partner {
   string name = 2;
   optional string city_of_residence = 3;
   optional string contact_info = 4;
-  optional string status = 5; // Consider enum
+  Status status = 5; // Consider enum
   // Notes about the partner
   optional string notes = 6;
-  // M2M relationships omitted, handled by separate tables/queries
+  repeated string service_area_cities = 7;
+  repeated string specialization_issue_type_ids = 8;
 }
 
 message LegalIssueType {
@@ -227,9 +322,9 @@ message Interaction {
   string client_id = 2;
   optional string employee_id = 3;
   google.protobuf.Timestamp date = 4;
-  string type = 5; // Consider enum
-  optional string description = 6; // Keep description for general info
-  optional string subject = 7; // Specific subject of the interaction
+  InteractionType type = 5;
+  optional string description = 6;
+  optional string subject = 7;
   optional google.protobuf.Timestamp end_time = 8; // End time if it's a scheduled event
   optional bool is_scheduled = 9; // Flag if it was scheduled
   optional bool is_completed = 10; // Flag if a scheduled interaction was completed
@@ -244,8 +339,8 @@ message Payment {
   double expected_amount = 5;
   optional double actual_amount_received = 6;
   optional google.protobuf.Timestamp payment_date = 7;
-  optional string payment_method = 8; // Consider enum
-  string status = 9; // Consider enum
+  optional PaymentMethod payment_method = 8; // Consider enum
+  Status status = 9; // Consider enum
   bool verified_by_accountant = 10;
   optional google.protobuf.Timestamp created_at_entity = 11; // Timestamp of original service
   // Notes about the payment
@@ -467,9 +562,21 @@ service CrmService {
   rpc DeletePayment(DeletePaymentRequest) returns (DeletePaymentResponse);
   rpc ListPayments(ListPaymentsRequest) returns (ListPaymentsResponse);
 
+  // Reporting
+  rpc GetFinancialReport(GetFinancialReportRequest) returns (GetFinancialReportResponse);
+
+  // --- Self Profile ---
+  rpc GetSelfProfile(GetSelfProfileRequest) returns (GetSelfProfileResponse);
 }
 
 // --- CRUD Messages for Added Entities ---
+
+// Self Profile
+message GetSelfProfileRequest {}
+message GetSelfProfileResponse {
+  User user = 1;
+  Employee employee = 2;
+}
 
 // User (Password handled separately)
 message CreateUserRequest { User user = 1; string password = 2; } // Password only for creation, handled securely server-side
@@ -650,3 +757,38 @@ message DeletePaymentRequest { string payment_id = 1; }
 message DeletePaymentResponse { google.protobuf.Empty response = 1; }
 message ListPaymentsRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
 message ListPaymentsResponse { repeated Payment payments = 1; string next_page_token = 2; }
+
+// --- Reporting ---
+
+message GetFinancialReportRequest {
+  google.protobuf.Timestamp start_date = 1;
+  google.protobuf.Timestamp end_date = 2;
+  repeated string category_filters = 3; // e.g. "PAYMENT", "INSURANCE", etc.
+}
+
+message FinancialReportItem {
+  string category = 1;
+  double expected_amount = 2;
+  double received_amount = 3;
+}
+
+message GetFinancialReportResponse {
+  repeated FinancialReportItem items = 1;
+  double total_expected = 2;
+  double total_received = 3;
+}
+
+// --- Auth Messages ---
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string token = 1;
+}
+
+// --- Authentication Service ---
+service AuthService {
+  rpc Login(LoginRequest) returns (LoginResponse);
+}

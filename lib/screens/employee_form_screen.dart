@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
 import 'package:admin/services/grpc_employee_service.dart';
 import 'package:grpc/grpc.dart';
+import 'package:admin/utils/enum_helpers.dart'; // Import enum helpers
 
 class EmployeeFormScreen extends StatefulWidget {
   final String? employeeId;
@@ -18,13 +19,15 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
 
   final _userIdCtrl = TextEditingController();
   final _nameCtrl = TextEditingController();
-  final _roleCtrl = TextEditingController();
   final _officeIdCtrl = TextEditingController();
   final _telegramCtrl = TextEditingController();
   final _whatsappCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
   final _notesCtrl = TextEditingController();
   bool _active = true;
+
+  // Enum state variable
+  crm.EmployeeRole? _selectedRole;
 
   @override
   void initState() {
@@ -39,7 +42,7 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       final e = await _service.getEmployee(widget.employeeId!);
       _userIdCtrl.text = e.userId;
       _nameCtrl.text = e.name;
-      _roleCtrl.text = e.role;
+      _selectedRole = e.role; // Use enum value
       _officeIdCtrl.text = e.officeId;
       _telegramCtrl.text = e.telegramId;
       _whatsappCtrl.text = e.whatsappNumber;
@@ -62,7 +65,8 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       employeeId: _isEdit ? widget.employeeId : null,
       userId: _userIdCtrl.text.trim(),
       name: _nameCtrl.text.trim(),
-      role: _roleCtrl.text.trim(),
+      role: _selectedRole ??
+          crm.EmployeeRole.EMPLOYEE_ROLE_UNSPECIFIED, // Use selected enum
       officeId: _officeIdCtrl.text.trim(),
       telegramId: _telegramCtrl.text.trim(),
       whatsappNumber: _whatsappCtrl.text.trim(),
@@ -96,7 +100,6 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
   void dispose() {
     _userIdCtrl.dispose();
     _nameCtrl.dispose();
-    _roleCtrl.dispose();
     _officeIdCtrl.dispose();
     _telegramCtrl.dispose();
     _whatsappCtrl.dispose();
@@ -139,10 +142,32 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
                       validator: (v) => v!.isEmpty ? 'Required' : null,
                     ),
                     SizedBox(height: 8),
-                    TextFormField(
-                      controller: _roleCtrl,
-                      decoration: InputDecoration(labelText: 'Role'),
-                      validator: (v) => v!.isEmpty ? 'Required' : null,
+                    // Dropdown for EmployeeRole
+                    DropdownButtonFormField<crm.EmployeeRole>(
+                      value: _selectedRole,
+                      decoration: const InputDecoration(labelText: 'Role'),
+                      items: crm.EmployeeRole.values
+                          .where((role) =>
+                              role !=
+                              crm.EmployeeRole
+                                  .EMPLOYEE_ROLE_UNSPECIFIED) // Exclude UNSPECIFIED
+                          .map((crm.EmployeeRole role) {
+                        return DropdownMenuItem<crm.EmployeeRole>(
+                          value: role,
+                          child: Text(getEmployeeRoleName(
+                              role)), // Use helper for display name
+                        );
+                      }).toList(),
+                      onChanged: (crm.EmployeeRole? newValue) {
+                        setState(() {
+                          _selectedRole = newValue;
+                        });
+                      },
+                      validator: (value) => value == null ||
+                              value ==
+                                  crm.EmployeeRole.EMPLOYEE_ROLE_UNSPECIFIED
+                          ? 'Please select a role'
+                          : null,
                     ),
                     SizedBox(height: 8),
                     TextFormField(

@@ -6,6 +6,8 @@ import 'package:admin/screens/interaction_list_screen.dart'; // Import the new I
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart'; // Import Provider
+import 'package:admin/services/auth_service.dart'; // Import AuthService
+import 'package:admin/generated/crm.pb.dart' show EmployeeRole;
 
 class SideMenu extends StatelessWidget {
   const SideMenu({
@@ -16,6 +18,8 @@ class SideMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     // Access the controller
     final menuAppController = Provider.of<MenuAppController>(context);
+    final auth = Provider.of<AuthService>(context);
+    final role = auth.employeeProfile?.role;
 
     return Drawer(
       child: ListView(
@@ -26,42 +30,47 @@ class SideMenu extends StatelessWidget {
           DrawerListTile(
             title: "Dashboard",
             svgSrc: "assets/icons/menu_dashboard.svg",
-            // Update press callback
             press: () {
               menuAppController.setSelectedScreen(DashboardScreen());
             },
           ),
-          // Add the new Client List Tile
-          DrawerListTile(
-            title: "Clients",
-            svgSrc:
-                "assets/icons/menu_profile.svg", // Using profile icon for now
-            press: () {
-              menuAppController.setSelectedScreen(const ClientListScreen());
-            },
-          ),
-          // Change Transaction to Employees
-          DrawerListTile(
-            title: "Employees",
-            svgSrc:
-                "assets/icons/menu_tran.svg", // you may update to a dedicated employee icon
-            press: () {
-              menuAppController.setSelectedScreen(const EmployeeListScreen());
-            },
-          ),
+          if (role == null ||
+              role == EmployeeRole.MANAGER ||
+              role == EmployeeRole.CHIEF_MANAGER ||
+              role == EmployeeRole.DIRECTOR)
+            DrawerListTile(
+              title: "Clients",
+              svgSrc: "assets/icons/menu_profile.svg",
+              press: () {
+                menuAppController.setSelectedScreen(const ClientListScreen());
+              },
+            ),
+          if (role == EmployeeRole.DIRECTOR ||
+              role == EmployeeRole.CHIEF_MANAGER)
+            DrawerListTile(
+              title: "Employees",
+              svgSrc: "assets/icons/menu_tran.svg",
+              press: () {
+                menuAppController.setSelectedScreen(const EmployeeListScreen());
+              },
+            ),
           DrawerListTile(
             title: "Task",
             svgSrc: "assets/icons/menu_task.svg",
             press: () {},
           ),
-          DrawerListTile(
-            title: "Interactions",
-            svgSrc: "assets/icons/menu_doc.svg",
-            press: () {
-              menuAppController
-                  .setSelectedScreen(const InteractionListScreen());
-            },
-          ),
+          if (role == null ||
+              role == EmployeeRole.MANAGER ||
+              role == EmployeeRole.CHIEF_MANAGER ||
+              role == EmployeeRole.DIRECTOR)
+            DrawerListTile(
+              title: "Interactions",
+              svgSrc: "assets/icons/menu_doc.svg",
+              press: () {
+                menuAppController
+                    .setSelectedScreen(const InteractionListScreen());
+              },
+            ),
           DrawerListTile(
             title: "Store",
             svgSrc: "assets/icons/menu_store.svg",
@@ -81,6 +90,14 @@ class SideMenu extends StatelessWidget {
             title: "Settings",
             svgSrc: "assets/icons/menu_setting.svg",
             press: () {},
+          ),
+          DrawerListTile(
+            title: "Logout",
+            svgSrc: "assets/icons/menu_setting.svg", // Use a suitable icon
+            press: () async {
+              // Call AuthService.logout and return to login
+              await Provider.of<AuthService>(context, listen: false).logout();
+            },
           ),
         ],
       ),

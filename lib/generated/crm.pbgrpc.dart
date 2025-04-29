@@ -361,6 +361,14 @@ class CrmServiceClient extends $grpc.Client {
       '/proto.CrmService/ListPayments',
       ($0.ListPaymentsRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.ListPaymentsResponse.fromBuffer(value));
+  static final _$getFinancialReport = $grpc.ClientMethod<$0.GetFinancialReportRequest, $0.GetFinancialReportResponse>(
+      '/proto.CrmService/GetFinancialReport',
+      ($0.GetFinancialReportRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.GetFinancialReportResponse.fromBuffer(value));
+  static final _$getSelfProfile = $grpc.ClientMethod<$0.GetSelfProfileRequest, $0.GetSelfProfileResponse>(
+      '/proto.CrmService/GetSelfProfile',
+      ($0.GetSelfProfileRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.GetSelfProfileResponse.fromBuffer(value));
 
   CrmServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -706,6 +714,14 @@ class CrmServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.ListPaymentsResponse> listPayments($0.ListPaymentsRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$listPayments, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.GetFinancialReportResponse> getFinancialReport($0.GetFinancialReportRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getFinancialReport, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.GetSelfProfileResponse> getSelfProfile($0.GetSelfProfileRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getSelfProfile, request, options: options);
   }
 }
 
@@ -1309,6 +1325,20 @@ abstract class CrmServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.ListPaymentsRequest.fromBuffer(value),
         ($0.ListPaymentsResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.GetFinancialReportRequest, $0.GetFinancialReportResponse>(
+        'GetFinancialReport',
+        getFinancialReport_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.GetFinancialReportRequest.fromBuffer(value),
+        ($0.GetFinancialReportResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.GetSelfProfileRequest, $0.GetSelfProfileResponse>(
+        'GetSelfProfile',
+        getSelfProfile_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.GetSelfProfileRequest.fromBuffer(value),
+        ($0.GetSelfProfileResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.CreateClientResponse> createClient_Pre($grpc.ServiceCall $call, $async.Future<$0.CreateClientRequest> $request) async {
@@ -1651,6 +1681,14 @@ abstract class CrmServiceBase extends $grpc.Service {
     return listPayments($call, await $request);
   }
 
+  $async.Future<$0.GetFinancialReportResponse> getFinancialReport_Pre($grpc.ServiceCall $call, $async.Future<$0.GetFinancialReportRequest> $request) async {
+    return getFinancialReport($call, await $request);
+  }
+
+  $async.Future<$0.GetSelfProfileResponse> getSelfProfile_Pre($grpc.ServiceCall $call, $async.Future<$0.GetSelfProfileRequest> $request) async {
+    return getSelfProfile($call, await $request);
+  }
+
   $async.Future<$0.CreateClientResponse> createClient($grpc.ServiceCall call, $0.CreateClientRequest request);
   $async.Future<$0.GetClientResponse> getClient($grpc.ServiceCall call, $0.GetClientRequest request);
   $async.Future<$0.UpdateClientResponse> updateClient($grpc.ServiceCall call, $0.UpdateClientRequest request);
@@ -1736,4 +1774,44 @@ abstract class CrmServiceBase extends $grpc.Service {
   $async.Future<$0.UpdatePaymentResponse> updatePayment($grpc.ServiceCall call, $0.UpdatePaymentRequest request);
   $async.Future<$0.DeletePaymentResponse> deletePayment($grpc.ServiceCall call, $0.DeletePaymentRequest request);
   $async.Future<$0.ListPaymentsResponse> listPayments($grpc.ServiceCall call, $0.ListPaymentsRequest request);
+  $async.Future<$0.GetFinancialReportResponse> getFinancialReport($grpc.ServiceCall call, $0.GetFinancialReportRequest request);
+  $async.Future<$0.GetSelfProfileResponse> getSelfProfile($grpc.ServiceCall call, $0.GetSelfProfileRequest request);
+}
+@$pb.GrpcServiceName('proto.AuthService')
+class AuthServiceClient extends $grpc.Client {
+  static final _$login = $grpc.ClientMethod<$0.LoginRequest, $0.LoginResponse>(
+      '/proto.AuthService/Login',
+      ($0.LoginRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.LoginResponse.fromBuffer(value));
+
+  AuthServiceClient($grpc.ClientChannel channel,
+      {$grpc.CallOptions? options,
+      $core.Iterable<$grpc.ClientInterceptor>? interceptors})
+      : super(channel, options: options,
+        interceptors: interceptors);
+
+  $grpc.ResponseFuture<$0.LoginResponse> login($0.LoginRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$login, request, options: options);
+  }
+}
+
+@$pb.GrpcServiceName('proto.AuthService')
+abstract class AuthServiceBase extends $grpc.Service {
+  $core.String get $name => 'proto.AuthService';
+
+  AuthServiceBase() {
+    $addMethod($grpc.ServiceMethod<$0.LoginRequest, $0.LoginResponse>(
+        'Login',
+        login_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.LoginRequest.fromBuffer(value),
+        ($0.LoginResponse value) => value.writeToBuffer()));
+  }
+
+  $async.Future<$0.LoginResponse> login_Pre($grpc.ServiceCall $call, $async.Future<$0.LoginRequest> $request) async {
+    return login($call, await $request);
+  }
+
+  $async.Future<$0.LoginResponse> login($grpc.ServiceCall call, $0.LoginRequest request);
 }

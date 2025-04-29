@@ -3,6 +3,14 @@ import 'package:admin/services/grpc_employee_service.dart';
 import 'package:admin/screens/employee_form_screen.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
 
+// Helper function to get user-friendly role name (can be reused or imported)
+String getEmployeeRoleName(crm.EmployeeRole role) {
+  if (role == crm.EmployeeRole.EMPLOYEE_ROLE_UNSPECIFIED) {
+    return 'Unspecified';
+  }
+  return role.name.replaceFirst('EMPLOYEE_ROLE_', '').replaceAll('_', ' ');
+}
+
 class EmployeeListScreen extends StatefulWidget {
   const EmployeeListScreen({Key? key}) : super(key: key);
   @override
@@ -86,7 +94,9 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
               return const Center(child: CircularProgressIndicator());
             }
             if (snap.hasError) {
-              return Center(child: Text('Error: ${snap.error}'));
+              // Use a more descriptive error message
+              return Center(
+                  child: Text('Error loading employees: ${snap.error}'));
             }
             final List<crm.Employee> list = snap.data ?? <crm.Employee>[];
             if (list.isEmpty) {
@@ -99,7 +109,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                   columns: const [
                     DataColumn(label: Text('ID')),
                     DataColumn(label: Text('Name')),
-                    DataColumn(label: Text('Role')),
+                    DataColumn(label: Text('Role')), // Updated header
                     DataColumn(label: Text('Office')),
                     DataColumn(label: Text('Telegram')),
                     DataColumn(label: Text('WhatsApp')),
@@ -112,7 +122,8 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                     return DataRow(cells: [
                       DataCell(Text(e.employeeId)),
                       DataCell(Text(e.name)),
-                      DataCell(Text(e.role)),
+                      DataCell(Text(getEmployeeRoleName(
+                          e.role))), // Use helper for enum display
                       DataCell(Text(e.officeId)),
                       DataCell(Text(e.telegramId)),
                       DataCell(Text(e.whatsappNumber)),
