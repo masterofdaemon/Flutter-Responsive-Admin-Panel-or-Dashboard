@@ -78,8 +78,25 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
         _isLoading = true;
       });
 
+      // Validate passportData JSON if provided
+      pb_struct.Value? parsedPassportData;
+      final passportText = _passportDataController.text.trim();
+      if (passportText.isNotEmpty) {
+        try {
+          parsedPassportData = pb_struct.Value.fromJson(passportText);
+        } catch (e) {
+          // Invalid JSON: show error and abort save
+          setState(() {
+            _isLoading = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Invalid JSON for passport data: $e')),
+          );
+          return;
+        }
+      }
+
       // Prepare client data from controllers
-      // Create a new Client instance instead of rebuilding
       final clientToSave = crm.Client(
         clientId: _isEditMode ? widget.clientId : null,
         firstName: _firstNameController.text.trim(),
@@ -90,9 +107,7 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
         whatsappNumber: _whatsappNumberController.text.trim(),
         source: _selectedSource ??
             crm.ClientSource.CLIENT_SOURCE_UNSPECIFIED, // Use selected enum
-        passportData: _passportDataController.text.isNotEmpty
-            ? pb_struct.Value.fromJson(_passportDataController.text)
-            : null,
+        passportData: parsedPassportData, // Use validated JSON
         notes: _notesController.text.trim(),
       );
 
@@ -140,8 +155,6 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
     _passportDataController.dispose();
     _notesController.dispose();
     // Dispose other controllers
-    _grpcService
-        .shutdown(); // Shutdown channel if service instance is unique to this screen
     super.dispose();
   }
 

@@ -17,7 +17,8 @@ class MainScreen extends StatelessWidget {
           color: Theme.of(context)
               .canvasColor
               .withAlpha(230), // 0.9 * 255 = 229.5 -> 230
-          child: ListView(
+          child: Column(
+            // Use Column instead of ListView
             children: [
               DrawerHeader(
                 child: Column(
@@ -70,7 +71,10 @@ class MainScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              SideMenu(), // Use SideMenu widget directly here
+              // SideMenu is a ListView, wrap it in Expanded so Column gives it finite height
+              Expanded(
+                child: SideMenu(),
+              ),
             ],
           ),
         ),

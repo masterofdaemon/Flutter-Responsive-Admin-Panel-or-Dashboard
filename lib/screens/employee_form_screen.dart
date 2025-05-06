@@ -1,161 +1,359 @@
-import 'package:flutter/material.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
-import 'package:admin/services/grpc_employee_service.dart';
+import 'package:admin/services/grpc_client_service.dart';
+import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
-import 'package:admin/utils/enum_helpers.dart'; // Import enum helpers
 
 class EmployeeFormScreen extends StatefulWidget {
-  final String? employeeId;
-  const EmployeeFormScreen({Key? key, this.employeeId}) : super(key: key);
+  final String? employeeId; // Null for Add mode, non-null for Edit mode
+
+  // Remove const from the constructor
+  EmployeeFormScreen({super.key, this.employeeId});
+
   @override
-  _EmployeeFormScreenState createState() => _EmployeeFormScreenState();
+  State<EmployeeFormScreen> createState() => _EmployeeFormScreenState();
 }
 
 class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _service = getGrpcEmployeeService();
-  bool _isEdit = false;
-  bool _loading = false;
+  final GrpcClientService _grpcService = GrpcClientService();
+  bool _isLoading = false;
+  bool _isEditMode = false;
 
-  final _userIdCtrl = TextEditingController();
-  final _nameCtrl = TextEditingController();
-  final _officeIdCtrl = TextEditingController();
-  final _telegramCtrl = TextEditingController();
-  final _whatsappCtrl = TextEditingController();
-  final _emailCtrl = TextEditingController();
-  final _notesCtrl = TextEditingController();
-  bool _active = true;
+  // Text Editing Controllers
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _telegramIdController = TextEditingController();
+  final _whatsappNumberController = TextEditingController();
+  final _notesController = TextEditingController();
 
-  // Enum state variable
+  // Dropdown selections
+  crm.User? _selectedUser;
   crm.EmployeeRole? _selectedRole;
+  crm.Office? _selectedOffice;
+  bool _isActive = true;
+
+  // Data for dropdowns
+  List<crm.User> _users = [];
+  List<crm.Office> _offices = [];
+  final List<crm.EmployeeRole> _roles = crm.EmployeeRole.values
+      .where((role) => role != crm.EmployeeRole.EMPLOYEE_ROLE_UNSPECIFIED)
+      .toList(); // Exclude unspecified
 
   @override
   void initState() {
     super.initState();
-    _isEdit = widget.employeeId != null;
-    if (_isEdit) _loadData();
-  }
-
-  Future<void> _loadData() async {
-    setState(() => _loading = true);
-    try {
-      final e = await _service.getEmployee(widget.employeeId!);
-      _userIdCtrl.text = e.userId;
-      _nameCtrl.text = e.name;
-      _selectedRole = e.role; // Use enum value
-      _officeIdCtrl.text = e.officeId;
-      _telegramCtrl.text = e.telegramId;
-      _whatsappCtrl.text = e.whatsappNumber;
-      _emailCtrl.text = e.email;
-      _active = e.isActive;
-      _notesCtrl.text = e.notes;
-    } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Error loading: $e')));
-      Navigator.pop(context);
-    } finally {
-      setState(() => _loading = false);
+    _isEditMode = widget.employeeId != null;
+    _loadDropdownData(); // Start loading dropdown data
+    if (_isEditMode) {
+      // Don't await here, let dropdowns load in parallel
+      _loadEmployeeData();
     }
   }
 
-  Future<void> _save() async {
-    if (!_formKey.currentState!.validate()) return;
-    setState(() => _loading = true);
-    final emp = crm.Employee(
-      employeeId: _isEdit ? widget.employeeId : null,
-      userId: _userIdCtrl.text.trim(),
-      name: _nameCtrl.text.trim(),
-      role: _selectedRole ??
-          crm.EmployeeRole.EMPLOYEE_ROLE_UNSPECIFIED, // Use selected enum
-      officeId: _officeIdCtrl.text.trim(),
-      telegramId: _telegramCtrl.text.trim(),
-      whatsappNumber: _whatsappCtrl.text.trim(),
-      email: _emailCtrl.text.trim(),
-      isActive: _active,
-      notes: _notesCtrl.text.trim(),
-    );
+  Future<void> _loadDropdownData() async {
+    // Don't set isLoading true here if _loadEmployeeData will also run
+    if (!_isEditMode) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
     try {
-      if (_isEdit) {
-        await _service.updateEmployee(widget.employeeId!, emp);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Updated')));
-      } else {
-        await _service.createEmployee(emp);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Created')));
+      final usersFuture = _grpcService.listUsers();
+      final officesFuture = _grpcService.listOffices();
+
+      final results = await Future.wait([usersFuture, officesFuture]);
+      _users = results[0] as List<crm.User>;
+      _offices = results[1] as List<crm.Office>;
+
+      // If editing, might need to re-run _loadEmployeeData if it finished before dropdowns
+      if (_isEditMode && _nameController.text.isEmpty) {
+        // Check if employee data needs to be (re)loaded after dropdowns are ready
+        // This handles race condition if getEmployee finishes before listUsers/listOffices
+        await _loadEmployeeData();
       }
-      Navigator.pop(context, true);
-    } on GrpcError catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('gRPC error: ${e.message}')));
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Error: $e')));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error loading dropdown data: $e')),
+        );
+      }
     } finally {
-      setState(() => _loading = false);
+      // Only set loading false if not editing or if employee data also loaded
+      if (mounted && (!_isEditMode || _nameController.text.isNotEmpty)) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _loadEmployeeData() async {
+    // Ensure dropdown data is loaded first if needed, or handle loading state
+    // Wait for dropdowns only if they haven't loaded yet
+    while (_users.isEmpty || _offices.isEmpty) {
+      if (!mounted) return; // Exit if widget is disposed
+      await Future.delayed(const Duration(milliseconds: 100)); // Wait briefly
+    }
+
+    setState(() {
+      _isLoading = true; // Ensure loading is true while fetching employee
+    });
+    try {
+      final employee = await _grpcService.getEmployee(widget.employeeId!);
+      if (!mounted) return; // Check again after await
+
+      // Safely find User and Office, allowing null if not found
+      crm.User? foundUser;
+      try {
+        foundUser = _users.firstWhere((u) => u.userId == employee.userId);
+      } catch (e) {
+        // User not found in the list, keep foundUser as null
+        print('Warning: User ID ${employee.userId} not found in loaded users.');
+      }
+
+      crm.Office? foundOffice;
+      try {
+        foundOffice =
+            _offices.firstWhere((o) => o.officeId == employee.officeId);
+      } catch (e) {
+        // Office not found in the list, keep foundOffice as null
+        print(
+            'Warning: Office ID ${employee.officeId} not found in loaded offices.');
+      }
+
+      setState(() {
+        _nameController.text = employee.name;
+        _emailController.text = employee.email;
+        _telegramIdController.text = employee.telegramId;
+        _whatsappNumberController.text = employee.whatsappNumber;
+        _notesController.text = employee.notes;
+        _selectedRole = employee.role;
+        _isActive = employee.isActive;
+
+        // Assign the potentially null found user/office
+        _selectedUser = foundUser;
+        _selectedOffice = foundOffice;
+
+        _isLoading = false;
+      });
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error loading employee data: $e')),
+        );
+      }
+    }
+  }
+
+  Future<void> _saveEmployee() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    _formKey.currentState!.save();
+
+    // Re-validate dropdowns just in case
+    if (_selectedUser == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select a User.')),
+      );
+      return;
+    }
+    if (_selectedRole == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select a Role.')),
+      );
+      return;
+    }
+    if (_selectedOffice == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select an Office.')),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    final employeeData = crm.Employee(
+      // employeeId is set by server on create, included for update
+      employeeId: _isEditMode ? widget.employeeId : null,
+      userId: _selectedUser!.userId,
+      name: _nameController.text.trim(),
+      role: _selectedRole!,
+      officeId: _selectedOffice!.officeId,
+      email: _emailController.text.trim(),
+      telegramId: _telegramIdController.text.trim(),
+      whatsappNumber: _whatsappNumberController.text.trim(),
+      isActive: _isActive,
+      notes: _notesController.text.trim(),
+    );
+
+    try {
+      if (_isEditMode) {
+        await _grpcService.updateEmployee(widget.employeeId!, employeeData);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Employee updated successfully')),
+        );
+      } else {
+        // CreateEmployeeRequest in proto includes user_login/password, but our service
+        // method createEmployee only takes Employee object. Assuming backend links
+        // the selected User ID correctly when creating the Employee record.
+        await _grpcService.createEmployee(employeeData);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Employee created successfully')),
+        );
+      }
+      if (mounted) {
+        Navigator.of(context).pop(true); // Pop screen and indicate success
+      }
+    } on GrpcError catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('gRPC Error saving employee: ${e.message}')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error saving employee: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
   @override
   void dispose() {
-    _userIdCtrl.dispose();
-    _nameCtrl.dispose();
-    _officeIdCtrl.dispose();
-    _telegramCtrl.dispose();
-    _whatsappCtrl.dispose();
-    _emailCtrl.dispose();
-    _notesCtrl.dispose();
-    _service.shutdown();
+    _nameController.dispose();
+    _emailController.dispose();
+    _telegramIdController.dispose();
+    _whatsappNumberController.dispose();
+    _notesController.dispose();
     super.dispose();
+  }
+
+  // Helper to display role names nicely
+  String _getRoleDisplayName(crm.EmployeeRole role) {
+    return role.name.replaceFirst('EMPLOYEE_ROLE_', '').replaceAll('_', ' ');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_isEdit ? 'Edit Employee' : 'Add Employee'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.save),
-            onPressed: _loading ? null : _save,
-          )
-        ],
+        title: Text(_isEditMode ? 'Edit Employee' : 'Add Employee'),
       ),
-      body: _loading
-          ? Center(child: CircularProgressIndicator())
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16.0),
               child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextFormField(
-                      controller: _userIdCtrl,
-                      decoration: InputDecoration(labelText: 'User ID'),
-                      validator: (v) => v!.isEmpty ? 'Required' : null,
+                  children: <Widget>[
+                    // User Dropdown
+                    DropdownButtonFormField<crm.User>(
+                      value: _selectedUser,
+                      hint: const Text('Select User'),
+                      isExpanded: true, // Allow long names
+                      items: _users.map((crm.User user) {
+                        return DropdownMenuItem<crm.User>(
+                          value: user,
+                          child:
+                              Text(user.login, overflow: TextOverflow.ellipsis),
+                        );
+                      }).toList(),
+                      onChanged: (crm.User? newValue) {
+                        setState(() {
+                          _selectedUser = newValue;
+                        });
+                      },
+                      validator: (value) =>
+                          value == null ? 'User is required' : null,
+                      decoration: const InputDecoration(
+                        labelText: 'User Account',
+                        border: OutlineInputBorder(),
+                      ),
+                      // Disable if editing (can't change linked user)
+                      disabledHint: _selectedUser != null
+                          ? Text(_selectedUser!.login)
+                          : null,
+                      onTap: _isEditMode
+                          ? () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'Cannot change user for existing employee.')),
+                              );
+                            }
+                          : null,
+                      // Read only visually if editing
+                      style: _isEditMode
+                          ? TextStyle(color: Theme.of(context).disabledColor)
+                          : null,
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 16.0),
+
+                    // Name Field
                     TextFormField(
-                      controller: _nameCtrl,
-                      decoration: InputDecoration(labelText: 'Name'),
-                      validator: (v) => v!.isEmpty ? 'Required' : null,
+                      controller: _nameController,
+                      decoration: const InputDecoration(
+                        labelText: 'Full Name',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Please enter employee name';
+                        }
+                        return null;
+                      },
                     ),
-                    SizedBox(height: 8),
-                    // Dropdown for EmployeeRole
+                    const SizedBox(height: 16.0),
+
+                    // Email Field
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Please enter an email';
+                        }
+                        // Basic email validation
+                        if (!RegExp(
+                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                            .hasMatch(value)) {
+                          return 'Please enter a valid email';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+
+                    // Role Dropdown
                     DropdownButtonFormField<crm.EmployeeRole>(
                       value: _selectedRole,
-                      decoration: const InputDecoration(labelText: 'Role'),
-                      items: crm.EmployeeRole.values
-                          .where((role) =>
-                              role !=
-                              crm.EmployeeRole
-                                  .EMPLOYEE_ROLE_UNSPECIFIED) // Exclude UNSPECIFIED
-                          .map((crm.EmployeeRole role) {
+                      hint: const Text('Select Role'),
+                      isExpanded: true,
+                      items: _roles.map((crm.EmployeeRole role) {
                         return DropdownMenuItem<crm.EmployeeRole>(
                           value: role,
-                          child: Text(getEmployeeRoleName(
-                              role)), // Use helper for display name
+                          child: Text(_getRoleDisplayName(role)),
                         );
                       }).toList(),
                       onChanged: (crm.EmployeeRole? newValue) {
@@ -163,56 +361,111 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
                           _selectedRole = newValue;
                         });
                       },
-                      validator: (value) => value == null ||
-                              value ==
-                                  crm.EmployeeRole.EMPLOYEE_ROLE_UNSPECIFIED
-                          ? 'Please select a role'
-                          : null,
-                    ),
-                    SizedBox(height: 8),
-                    TextFormField(
-                      controller: _officeIdCtrl,
-                      decoration: InputDecoration(labelText: 'Office ID'),
-                    ),
-                    SizedBox(height: 8),
-                    TextFormField(
-                      controller: _telegramCtrl,
-                      decoration: InputDecoration(labelText: 'Telegram ID'),
-                    ),
-                    SizedBox(height: 8),
-                    TextFormField(
-                      controller: _whatsappCtrl,
-                      decoration: InputDecoration(labelText: 'WhatsApp Number'),
-                    ),
-                    SizedBox(height: 8),
-                    TextFormField(
-                      controller: _emailCtrl,
-                      decoration: InputDecoration(labelText: 'Email'),
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    SizedBox(height: 8),
-                    TextFormField(
-                      controller: _notesCtrl,
-                      decoration: InputDecoration(labelText: 'Notes'),
-                      maxLines: 2,
-                    ),
-                    SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: _active,
-                          onChanged: (v) => setState(() => _active = v!),
-                        ),
-                        Text('Active')
-                      ],
-                    ),
-                    SizedBox(height: 24),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: _loading ? null : _save,
-                        child: Text(_isEdit ? 'Update' : 'Create'),
+                      validator: (value) =>
+                          value == null ? 'Role is required' : null,
+                      decoration: const InputDecoration(
+                        labelText: 'Role',
+                        border: OutlineInputBorder(),
                       ),
-                    )
+                    ),
+                    const SizedBox(height: 16.0),
+
+                    // Office Dropdown
+                    DropdownButtonFormField<crm.Office>(
+                      value: _selectedOffice,
+                      hint: const Text('Select Office'),
+                      isExpanded: true,
+                      items: _offices.map((crm.Office office) {
+                        return DropdownMenuItem<crm.Office>(
+                          value: office,
+                          child: Text(office.city,
+                              overflow: TextOverflow.ellipsis),
+                        );
+                      }).toList(),
+                      onChanged: (crm.Office? newValue) {
+                        setState(() {
+                          _selectedOffice = newValue;
+                        });
+                      },
+                      validator: (value) =>
+                          value == null ? 'Office is required' : null,
+                      decoration: const InputDecoration(
+                        labelText: 'Office',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 16.0),
+
+                    // Telegram ID Field
+                    TextFormField(
+                      controller: _telegramIdController,
+                      decoration: const InputDecoration(
+                        labelText: 'Telegram ID (Optional)',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 16.0),
+
+                    // WhatsApp Number Field
+                    TextFormField(
+                      controller: _whatsappNumberController,
+                      decoration: const InputDecoration(
+                        labelText: 'WhatsApp Number (Optional, E.164 format)',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.phone,
+                      // Add validator if E.164 format is strict
+                    ),
+                    const SizedBox(height: 16.0),
+
+                    // Is Active Switch
+                    SwitchListTile(
+                      title: const Text('Is Active'),
+                      value: _isActive,
+                      onChanged: (bool value) {
+                        setState(() {
+                          _isActive = value;
+                        });
+                      },
+                      secondary: Icon(
+                          _isActive ? Icons.check_circle : Icons.cancel,
+                          color: _isActive ? Colors.green : Colors.grey),
+                    ),
+                    const SizedBox(height: 16.0),
+
+                    // Notes Field
+                    TextFormField(
+                      controller: _notesController,
+                      decoration: const InputDecoration(
+                        labelText: 'Notes (Optional)',
+                        border: OutlineInputBorder(),
+                        alignLabelWithHint: true,
+                      ),
+                      maxLines: 3,
+                      textAlignVertical: TextAlignVertical.top,
+                    ),
+                    const SizedBox(height: 24.0),
+
+                    // Save Button
+                    Center(
+                      child: ElevatedButton.icon(
+                        icon: Icon(_isEditMode
+                            ? Icons.save_alt
+                            : Icons.add_circle_outline),
+                        label: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24.0, vertical: 12.0),
+                          child: Text(_isEditMode
+                              ? 'Update Employee'
+                              : 'Create Employee'),
+                        ),
+                        onPressed: _isLoading ? null : _saveEmployee,
+                        style: ElevatedButton.styleFrom(
+                          textStyle: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20.0), // Add some bottom padding
                   ],
                 ),
               ),

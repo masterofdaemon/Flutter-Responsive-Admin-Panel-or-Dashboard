@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
+import '../../../services/auth_service.dart'; // Import AuthService
 
 class Header extends StatelessWidget {
   const Header({
@@ -41,32 +42,60 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(left: defaultPadding),
-      padding: EdgeInsets.symmetric(
-        horizontal: defaultPadding,
-        vertical: defaultPadding / 2,
-      ),
-      decoration: BoxDecoration(
-        color: secondaryColor,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-        border: Border.all(color: Colors.white10),
-      ),
-      child: Row(
-        children: [
-          Image.asset(
-            "assets/images/profile_pic.png",
-            height: 38,
+    // Use Consumer to get AuthService data
+    return Consumer<AuthService>(
+      builder: (context, auth, _) {
+        final employee = auth.employeeProfile;
+        final user = auth.userProfile;
+        String displayName = 'User'; // Default display name
+        // String displayRole = ''; // Default role display
+
+        if (auth.isAuthenticated) {
+          if (employee != null && employee.name.isNotEmpty) {
+            displayName = employee.name;
+            // displayRole = getEmployeeRoleName(employee.role); // Uncomment if you want to show role
+          } else if (user != null) {
+            displayName = user.login;
+          }
+        } else {
+          displayName = 'Not Logged In';
+        }
+
+        return Container(
+          margin: EdgeInsets.only(left: defaultPadding),
+          padding: EdgeInsets.symmetric(
+            horizontal: defaultPadding,
+            vertical: defaultPadding / 2,
           ),
-          if (!Responsive.isMobile(context))
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-              child: Text("Angelina Jolie"),
-            ),
-          Icon(Icons.keyboard_arrow_down),
-        ],
-      ),
+          decoration: BoxDecoration(
+            color: secondaryColor,
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            border: Border.all(color: Colors.white10),
+          ),
+          child: Row(
+            children: [
+              // TODO: Consider using a dynamic avatar or initials
+              Image.asset(
+                "assets/images/profile_pic.png",
+                height: 38,
+              ),
+              if (!Responsive.isMobile(context))
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: defaultPadding / 2),
+                  child: Text(displayName), // Use dynamic name
+                ),
+              // Optional: Display role if needed
+              // if (!Responsive.isMobile(context) && displayRole.isNotEmpty)
+              //   Padding(
+              //     padding: const EdgeInsets.only(left: defaultPadding / 2),
+              //     child: Text(displayRole, style: Theme.of(context).textTheme.bodySmall),
+              //   ),
+              Icon(Icons.keyboard_arrow_down), // Keep dropdown arrow
+            ],
+          ),
+        );
+      },
     );
   }
 }

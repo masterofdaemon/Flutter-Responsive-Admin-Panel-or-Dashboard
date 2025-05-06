@@ -95,7 +95,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
 
   @override
   void dispose() {
-    _grpcService.shutdown(); // Clean up the channel when the screen is disposed
+    // _grpcService.shutdown(); // Removed: Channel is managed by shared GrpcClient
     super.dispose();
   }
 
@@ -104,6 +104,11 @@ class _ClientListScreenState extends State<ClientListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Clients'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),

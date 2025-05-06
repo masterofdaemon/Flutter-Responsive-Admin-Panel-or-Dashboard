@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:admin/services/auth_service.dart';
+import 'package:admin/screens/signup_screen.dart';
+import 'package:grpc/grpc.dart';
 // import 'package:admin/responsive.dart'; // Removed unused import
 
 class LoginScreen extends StatefulWidget {
@@ -37,16 +39,26 @@ class _LoginScreenState extends State<LoginScreen> {
     final authService = Provider.of<AuthService>(context, listen: false);
 
     try {
-      await authService.login(
+      final result = await authService.login(
         _usernameController.text.trim(),
         _passwordController.text.trim(),
       );
+      if (!result) {
+        setState(() {
+          _errorMessage =
+              authService.errorMessage ?? 'Login failed. Please try again.';
+        });
+      }
       // Navigation to the main app screen will be handled by the listener in main.dart
+    } on GrpcError catch (e) {
+      setState(() {
+        _errorMessage = e.details?.isNotEmpty == true
+            ? e.details.toString()
+            : 'Login failed: ${e.message ?? e.codeName}';
+      });
     } catch (e) {
       setState(() {
-        _errorMessage = e
-            .toString()
-            .replaceFirst('Exception: ', ''); // Show user-friendly error
+        _errorMessage = 'An unexpected error occurred: $e';
       });
     } finally {
       if (mounted) {
@@ -75,10 +87,40 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Placeholder for Logo or App Title
                   Text(
                     'CRM Login', // Replace with your App Name
-                    style: Theme.of(context).textTheme.headlineMedium,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineMedium
+                        ?.copyWith(color: Colors.yellow),
                     textAlign: TextAlign.center,
+                    selectionColor: Color.fromARGB(0, 67, 67, 218),
                   ),
                   const SizedBox(height: 48.0),
+
+                  // Signup Button
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const SignupScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text('Don\'t have an account? Sign Up'),
+                  ),
+                  const SizedBox(height: 16.0),
+
+                  // Signup Button
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const SignupScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text('Don\'t have an account? Sign Up'),
+                  ),
+                  const SizedBox(height: 16.0),
 
                   // Username Field
                   TextFormField(

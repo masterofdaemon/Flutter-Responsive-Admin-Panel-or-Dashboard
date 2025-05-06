@@ -38,11 +38,15 @@ class AuthService with ChangeNotifier {
 
   Future<void> _checkToken() async {
     _token = await _storage.read(key: 'authToken');
+    print('AuthService: Token read from storage: $_token'); // Log the token
     if (_token != null && _token!.isNotEmpty) {
       _isAuthenticated = true;
       GrpcClient().setAuthToken(_token);
+      // TODO: Consider fetching profile here if needed on startup
+      // await fetchSelfProfile();
     } else {
       _isAuthenticated = false;
+      GrpcClient().setAuthToken(null); // Ensure token is cleared if not found
     }
     notifyListeners();
   }

@@ -1,79 +1,140 @@
-import 'package:flutter/material.dart';
-import 'package:admin/services/grpc_employee_service.dart';
-import 'package:admin/screens/employee_form_screen.dart';
+import 'package:admin/constants.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
-
-// Helper function to get user-friendly role name (can be reused or imported)
-String getEmployeeRoleName(crm.EmployeeRole role) {
-  if (role == crm.EmployeeRole.EMPLOYEE_ROLE_UNSPECIFIED) {
-    return 'Unspecified';
-  }
-  return role.name.replaceFirst('EMPLOYEE_ROLE_', '').replaceAll('_', ' ');
-}
+// import 'package:admin/responsive.dart'; // Removed unused import
+import 'package:admin/screens/employee_form_screen.dart';
+import 'package:admin/services/grpc_client_service.dart';
+import 'package:flutter/material.dart';
+import 'package:grpc/grpc.dart';
 
 class EmployeeListScreen extends StatefulWidget {
-  const EmployeeListScreen({Key? key}) : super(key: key);
+  const EmployeeListScreen({super.key});
+
   @override
-  _EmployeeListScreenState createState() => _EmployeeListScreenState();
+  State<EmployeeListScreen> createState() => _EmployeeListScreenState();
 }
 
 class _EmployeeListScreenState extends State<EmployeeListScreen> {
-  final _service = getGrpcEmployeeService();
-  late Future<List<crm.Employee>> _future;
+  final GrpcClientService _grpcService = GrpcClientService();
+  List<crm.Employee> _employees = [];
+  bool _isLoading = true;
+  String? _errorMessage;
 
   @override
   void initState() {
     super.initState();
-    _load();
+    _loadEmployees();
   }
 
-  void _load() {
+  Future<void> _loadEmployees() async {
     setState(() {
-      _future = _service.listEmployees();
+      _isLoading = true;
+      _errorMessage = null;
     });
-  }
-
-  Future<void> _delete(String id, String name) async {
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Confirm Delete'),
-        content: Text('Delete employee "$name"?'),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel')),
-          TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('Delete')),
-        ],
-      ),
-    );
-    if (confirm == true) {
-      try {
-        await _service.deleteEmployee(id);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Deleted $name')));
-        _load();
-      } catch (e) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Error deleting: $e')));
+    try {
+      final employees = await _grpcService.listEmployees(
+          pageSize: 100); // Fetch more for list view
+      if (mounted) {
+        setState(() {
+          _employees = employees;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _errorMessage = 'Error loading employees: $e';
+          _isLoading = false;
+        });
       }
     }
   }
 
-  Future<void> _navForm({String? id}) async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => EmployeeFormScreen(employeeId: id)),
+  Future<void> _deleteEmployee(crm.Employee employeeToDelete) async {
+    // Optional: Show confirmation dialog
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirm Deletion'),
+        content: Text(
+            'Are you sure you want to delete employee "${employeeToDelete.name}"?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Delete'),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+          ),
+        ],
+      ),
     );
-    if (result == true) _load();
+
+    if (confirm != true) return;
+
+    setState(() {
+      _isLoading = true; // Show loading indicator during deletion
+    });
+
+    try {
+      await _grpcService.deleteEmployee(employeeToDelete.employeeId);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  'Employee "${employeeToDelete.name}" deleted successfully')),
+        );
+        _loadEmployees(); // Refresh the list
+      }
+    } on GrpcError catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error deleting employee: ${e.message}')),
+        );
+        setState(() {
+          _isLoading = false; // Stop loading on error
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error deleting employee: $e')),
+        );
+        setState(() {
+          _isLoading = false; // Stop loading on error
+        });
+      }
+    }
+    // No finally block needed here as _loadEmployees handles the final state
   }
 
-  @override
-  void dispose() {
-    _service.shutdown();
-    super.dispose();
+  void _navigateToAddEmployee() async {
+    final result = await Navigator.push(
+      context,
+      // Call constructor directly without prefix
+      MaterialPageRoute(builder: (context) => EmployeeFormScreen()),
+    );
+    if (result == true && mounted) {
+      _loadEmployees(); // Refresh list if an employee was added/updated
+    }
+  }
+
+  void _navigateToEditEmployee(String employeeId) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+          // Call constructor directly without prefix
+          builder: (context) => EmployeeFormScreen(employeeId: employeeId)),
+    );
+    if (result == true && mounted) {
+      _loadEmployees(); // Refresh list if an employee was added/updated
+    }
+  }
+
+  // Helper to display role names nicely
+  String _getRoleDisplayName(crm.EmployeeRole role) {
+    return role.name.replaceFirst('EMPLOYEE_ROLE_', '').replaceAll('_', ' ');
   }
 
   @override
@@ -81,76 +142,146 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Employees'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+        ),
         actions: [
-          IconButton(icon: const Icon(Icons.add), onPressed: () => _navForm())
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: _isLoading
+                ? null
+                : _loadEmployees, // Disable refresh while loading
+            tooltip: 'Refresh List',
+          ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: () async => _load(),
-        child: FutureBuilder<List<crm.Employee>>(
-          future: _future,
-          builder: (context, snap) {
-            if (snap.connectionState != ConnectionState.done) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (snap.hasError) {
-              // Use a more descriptive error message
-              return Center(
-                  child: Text('Error loading employees: ${snap.error}'));
-            }
-            final List<crm.Employee> list = snap.data ?? <crm.Employee>[];
-            if (list.isEmpty) {
-              return const Center(child: Text('No employees found.'));
-            }
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: SingleChildScrollView(
-                child: DataTable(
-                  columns: const [
-                    DataColumn(label: Text('ID')),
-                    DataColumn(label: Text('Name')),
-                    DataColumn(label: Text('Role')), // Updated header
-                    DataColumn(label: Text('Office')),
-                    DataColumn(label: Text('Telegram')),
-                    DataColumn(label: Text('WhatsApp')),
-                    DataColumn(label: Text('Email')),
-                    DataColumn(label: Text('Active')),
-                    DataColumn(label: Text('Notes')),
-                    DataColumn(label: Text('Actions')),
-                  ],
-                  rows: list.map((e) {
-                    return DataRow(cells: [
-                      DataCell(Text(e.employeeId)),
-                      DataCell(Text(e.name)),
-                      DataCell(Text(getEmployeeRoleName(
-                          e.role))), // Use helper for enum display
-                      DataCell(Text(e.officeId)),
-                      DataCell(Text(e.telegramId)),
-                      DataCell(Text(e.whatsappNumber)),
-                      DataCell(Text(e.email)),
-                      DataCell(Text(e.isActive ? 'Yes' : 'No')),
-                      DataCell(Text(e.notes)),
-                      DataCell(Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit),
-                            onPressed: () => _navForm(id: e.employeeId),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.delete),
-                            onPressed: () => _delete(e.employeeId, e.name),
-                          ),
-                        ],
-                      )),
-                    ]);
-                  }).toList(),
-                ),
-              ),
-            );
-          },
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Optional Header can go here
+            Expanded(
+              child: _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _errorMessage != null
+                      ? Center(
+                          child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('Error: $_errorMessage',
+                                      style:
+                                          const TextStyle(color: Colors.red)),
+                                  const SizedBox(height: 10),
+                                  ElevatedButton.icon(
+                                    icon: const Icon(Icons.refresh),
+                                    label: const Text('Retry'),
+                                    onPressed: _loadEmployees,
+                                  )
+                                ],
+                              )))
+                      : _employees.isEmpty
+                          ? Center(
+                              child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text('No employees found.'),
+                                const SizedBox(height: 10),
+                                ElevatedButton.icon(
+                                  icon: const Icon(Icons.add),
+                                  label: const Text('Add First Employee'),
+                                  onPressed: _navigateToAddEmployee,
+                                )
+                              ],
+                            ))
+                          : RefreshIndicator(
+                              onRefresh: _loadEmployees,
+                              child: SingleChildScrollView(
+                                physics:
+                                    const AlwaysScrollableScrollPhysics(), // Enable pull-to-refresh even when content fits
+                                padding: const EdgeInsets.all(defaultPadding),
+                                child: Container(
+                                  padding: const EdgeInsets.all(defaultPadding),
+                                  decoration: const BoxDecoration(
+                                    color: secondaryColor,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                  ),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    child: DataTable(
+                                      columnSpacing: defaultPadding,
+                                      // minWidth: 600, // Uncomment if needed for wider tables
+                                      columns: const [
+                                        DataColumn(label: Text('Name')),
+                                        DataColumn(label: Text('Email')),
+                                        DataColumn(label: Text('Role')),
+                                        DataColumn(label: Text('Office ID')),
+                                        DataColumn(label: Text('Active')),
+                                        DataColumn(label: Text('Actions')),
+                                      ],
+                                      rows: List.generate(
+                                        _employees.length,
+                                        (index) =>
+                                            employeeDataRow(_employees[index]),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+            ),
+          ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _navigateToAddEmployee,
+        tooltip: 'Add Employee',
+        child: const Icon(Icons.add),
+        backgroundColor: primaryColor, // Use theme color
+      ),
+    );
+  }
+
+  DataRow employeeDataRow(crm.Employee employeeInfo) {
+    return DataRow(
+      cells: [
+        DataCell(Text(employeeInfo.name)),
+        DataCell(Text(employeeInfo.email)),
+        DataCell(Text(_getRoleDisplayName(employeeInfo.role))),
+        DataCell(Text(employeeInfo
+            .officeId)), // TODO: Fetch office name if needed for display
+        DataCell(Icon(
+          employeeInfo.isActive ? Icons.check_circle : Icons.cancel,
+          color: employeeInfo.isActive ? Colors.green : Colors.grey,
+          semanticLabel: employeeInfo.isActive ? 'Active' : 'Inactive',
+        )),
+        DataCell(
+          Row(
+            mainAxisSize:
+                MainAxisSize.min, // Prevent row from expanding unnecessarily
+            children: [
+              IconButton(
+                icon: const Icon(Icons.edit, color: primaryColor),
+                onPressed: () =>
+                    _navigateToEditEmployee(employeeInfo.employeeId),
+                tooltip: 'Edit Employee',
+                splashRadius: 20, // Smaller splash for icon buttons
+              ),
+              const SizedBox(width: 4),
+              IconButton(
+                icon: const Icon(Icons.delete, color: Colors.redAccent),
+                onPressed: () => _deleteEmployee(
+                    employeeInfo), // Pass the whole employee object
+                tooltip: 'Delete Employee',
+                splashRadius: 20,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

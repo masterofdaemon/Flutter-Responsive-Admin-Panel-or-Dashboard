@@ -1,118 +1,239 @@
-import 'package:admin/controllers/menu_app_controller.dart';
-import 'package:admin/screens/client_list_screen.dart'; // Import the new screen
-import 'package:admin/screens/dashboard/dashboard_screen.dart'; // Import DashboardScreen
-import 'package:admin/screens/employee_list_screen.dart'; // Import the new Employee list screen
-import 'package:admin/screens/interaction_list_screen.dart'; // Import the new Interaction list screen
+import 'package:admin/screens/client_list_screen.dart';
+// Import EmployeeFormScreen
+import 'package:admin/screens/employee_list_screen.dart';
+import 'package:admin/screens/login_screen.dart';
+import 'package:admin/screens/main/main_screen.dart';
+import 'package:admin/screens/translation_orders/translation_order_list_screen.dart'; // Import TranslationOrderListScreen
+import 'package:admin/screens/insurance_policy_list_screen.dart';
+import 'package:admin/screens/user_form_screen.dart';
+import 'package:admin/screens/training_course_list_screen.dart';
+import 'package:admin/screens/business_registration_list_screen.dart';
+import 'package:admin/screens/lending_application_list_screen.dart';
+import 'package:admin/services/auth_service.dart';
+import 'package:admin/generated/crm.pb.dart' as crm;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart'; // Import Provider
-import 'package:admin/services/auth_service.dart'; // Import AuthService
-import 'package:admin/generated/crm.pb.dart' show EmployeeRole;
+import 'package:provider/provider.dart';
 
 class SideMenu extends StatelessWidget {
-  const SideMenu({
-    Key? key,
-  }) : super(key: key);
+  const SideMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Access the controller
-    final menuAppController = Provider.of<MenuAppController>(context);
-    final auth = Provider.of<AuthService>(context);
-    final role = auth.employeeProfile?.role;
-
-    return Drawer(
-      child: ListView(
-        children: [
-          DrawerHeader(
-            child: Image.asset("assets/images/logo.png"),
+    // Return ListView directly, not wrapped in a Drawer
+    return ListView(
+      children: [
+        DrawerHeader(
+          child: Image.asset("assets/images/logo.png"),
+        ),
+        DrawerListTile(
+          title: "Dashboard",
+          svgSrc: "assets/icons/menu_dashboard.svg",
+          press: () {
+            // Close drawer first
+            Navigator.pop(context);
+            // Check if already on MainScreen or navigate
+            // Assuming MainScreen is the root or initial screen after login
+            if (ModalRoute.of(context)?.settings.name != '/') {
+              // Use pushReplacement to avoid stacking main screens
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MainScreen()),
+              );
+            }
+          },
+        ),
+        DrawerListTile(
+          title: "Clients",
+          svgSrc: "assets/icons/menu_tran.svg",
+          press: () {
+            Navigator.pop(context); // Close drawer
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ClientListScreen()),
+            );
+          },
+        ),
+        DrawerListTile(
+          title: "Employees",
+          svgSrc: "assets/icons/menu_profile.svg",
+          press: () {
+            Navigator.pop(context); // Close drawer
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const EmployeeListScreen()),
+            );
+          },
+        ),
+        DrawerListTile(
+          title: "Translations",
+          svgSrc: "assets/icons/menu_doc.svg", // Example icon
+          press: () {
+            Navigator.pop(context); // Close drawer
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const TranslationOrderListScreen()),
+            );
+          },
+        ),
+        DrawerListTile(
+          title: "Insurance Policies",
+          svgSrc:
+              "assets/icons/menu_store.svg", // Use a relevant icon or replace
+          press: () {
+            Navigator.pop(context); // Close drawer
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const InsurancePolicyListScreen()),
+            );
+          },
+        ),
+        DrawerListTile(
+          title: "Training Courses",
+          svgSrc: "assets/icons/menu_doc.svg", // Use a relevant icon or replace
+          press: () {
+            Navigator.pop(context); // Close drawer
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const TrainingCourseListScreen()),
+            );
+          },
+        ),
+        DrawerListTile(
+          title: "Business Registrations",
+          svgSrc:
+              "assets/icons/menu_store.svg", // Use a relevant icon or replace
+          press: () {
+            Navigator.pop(context); // Close drawer
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const BusinessRegistrationListScreen()),
+            );
+          },
+        ),
+        DrawerListTile(
+          title: "Lending Applications",
+          svgSrc:
+              "assets/icons/menu_store.svg", // Use a relevant icon or replace
+          press: () {
+            Navigator.pop(context); // Close drawer
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const LendingApplicationListScreen()),
+            );
+          },
+        ),
+        // --- Admin Section ---
+        // Use Consumer to check role for admin-only items
+        Consumer<AuthService>(
+          builder: (context, auth, _) {
+            // Show admin items only if logged in and role is DIRECTOR
+            if (auth.isAuthenticated &&
+                auth.employeeProfile?.role == crm.EmployeeRole.DIRECTOR) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Divider(), // Separator for admin section
+                  const Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    child: Text("Admin Tools",
+                        style: TextStyle(
+                            color: Colors.white54,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                  DrawerListTile(
+                    title: "Create User",
+                    svgSrc: "assets/icons/menu_profile.svg", // Placeholder icon
+                    press: () {
+                      Navigator.pop(context); // Close drawer
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const UserFormScreen()),
+                      );
+                    },
+                  ),
+                  // Add "Create Employee" tile here later
+                ],
+              );
+            } else {
+              // Return an empty container if not an admin
+              return Container();
+            }
+          },
+        ),
+        const Divider(), // Separator after potential admin section
+        // --- End Admin Section ---
+        DrawerListTile(
+          title: "Task",
+          svgSrc: "assets/icons/menu_task.svg",
+          press: () {},
+        ),
+        DrawerListTile(
+          title: "Store",
+          svgSrc: "assets/icons/menu_store.svg",
+          press: () {},
+        ),
+        DrawerListTile(
+          title: "Notification",
+          svgSrc: "assets/icons/menu_notification.svg",
+          press: () {},
+        ),
+        DrawerListTile(
+          title: "Profile",
+          svgSrc: "assets/icons/menu_profile.svg",
+          press: () {},
+        ),
+        DrawerListTile(
+          title: "Settings",
+          svgSrc: "assets/icons/menu_setting.svg",
+          press: () {},
+        ),
+        // Logout Tile
+        ListTile(
+          onTap: () async {
+            Navigator.pop(context); // Close drawer
+            final authService =
+                Provider.of<AuthService>(context, listen: false);
+            await authService.logout();
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+              (Route<dynamic> route) => false,
+            );
+          },
+          horizontalTitleGap: 0.0,
+          leading: SvgPicture.asset(
+            "assets/icons/menu_setting.svg",
+            colorFilter:
+                const ColorFilter.mode(Colors.white54, BlendMode.srcIn),
+            height: 16,
           ),
-          DrawerListTile(
-            title: "Dashboard",
-            svgSrc: "assets/icons/menu_dashboard.svg",
-            press: () {
-              menuAppController.setSelectedScreen(DashboardScreen());
-            },
+          title: const Text(
+            "Logout",
+            style: TextStyle(color: Colors.white54),
           ),
-          if (role == null ||
-              role == EmployeeRole.MANAGER ||
-              role == EmployeeRole.CHIEF_MANAGER ||
-              role == EmployeeRole.DIRECTOR)
-            DrawerListTile(
-              title: "Clients",
-              svgSrc: "assets/icons/menu_profile.svg",
-              press: () {
-                menuAppController.setSelectedScreen(const ClientListScreen());
-              },
-            ),
-          if (role == EmployeeRole.DIRECTOR ||
-              role == EmployeeRole.CHIEF_MANAGER)
-            DrawerListTile(
-              title: "Employees",
-              svgSrc: "assets/icons/menu_tran.svg",
-              press: () {
-                menuAppController.setSelectedScreen(const EmployeeListScreen());
-              },
-            ),
-          DrawerListTile(
-            title: "Task",
-            svgSrc: "assets/icons/menu_task.svg",
-            press: () {},
-          ),
-          if (role == null ||
-              role == EmployeeRole.MANAGER ||
-              role == EmployeeRole.CHIEF_MANAGER ||
-              role == EmployeeRole.DIRECTOR)
-            DrawerListTile(
-              title: "Interactions",
-              svgSrc: "assets/icons/menu_doc.svg",
-              press: () {
-                menuAppController
-                    .setSelectedScreen(const InteractionListScreen());
-              },
-            ),
-          DrawerListTile(
-            title: "Store",
-            svgSrc: "assets/icons/menu_store.svg",
-            press: () {},
-          ),
-          DrawerListTile(
-            title: "Notification",
-            svgSrc: "assets/icons/menu_notification.svg",
-            press: () {},
-          ),
-          DrawerListTile(
-            title: "Profile",
-            svgSrc: "assets/icons/menu_profile.svg",
-            press: () {},
-          ),
-          DrawerListTile(
-            title: "Settings",
-            svgSrc: "assets/icons/menu_setting.svg",
-            press: () {},
-          ),
-          DrawerListTile(
-            title: "Logout",
-            svgSrc: "assets/icons/menu_setting.svg", // Use a suitable icon
-            press: () async {
-              // Call AuthService.logout and return to login
-              await Provider.of<AuthService>(context, listen: false).logout();
-            },
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
 
 class DrawerListTile extends StatelessWidget {
   const DrawerListTile({
-    Key? key,
-    // For selecting those three line once press "Command+D"
+    super.key,
+    // For selecting those three line once press
     required this.title,
     required this.svgSrc,
     required this.press,
-  }) : super(key: key);
+  });
 
   final String title, svgSrc;
   final VoidCallback press;
@@ -124,12 +245,12 @@ class DrawerListTile extends StatelessWidget {
       horizontalTitleGap: 0.0,
       leading: SvgPicture.asset(
         svgSrc,
-        colorFilter: ColorFilter.mode(Colors.white54, BlendMode.srcIn),
+        colorFilter: const ColorFilter.mode(Colors.white54, BlendMode.srcIn),
         height: 16,
       ),
       title: Text(
         title,
-        style: TextStyle(color: Colors.white54),
+        style: const TextStyle(color: Colors.white54),
       ),
     );
   }

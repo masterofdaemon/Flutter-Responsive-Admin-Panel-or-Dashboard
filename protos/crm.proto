@@ -165,37 +165,42 @@ message LegalCase {
   optional string payment_id = 11;
   // Notes about the legal case
   optional string notes = 12;
-  optional google.protobuf.Timestamp consultation_scheduled_date = 13;
-  optional string consultation_notes = 14;
-  optional google.protobuf.Timestamp contract_planned_date = 15;
+  optional google.protobuf.Timestamp consultation_scheduled_date = 13; // New
+  optional string consultation_notes = 14; // New
+  optional google.protobuf.Timestamp contract_planned_date = 15; // New
 }
 
 message TranslationOrder {
   string order_id = 1;
-  string client_id = 2;
-  string manager_id = 3;
-  optional string translator_id = 4;
-  string office_id = 5;
-  optional DocumentType document_type = 6;
-  optional string target_language = 7;
-  optional int32 page_count = 8;
-  double translation_sum = 9; // Calculated
-  double notarial_sum = 10;
-  double total_sum = 11; // Calculated
-  Priority priority = 12; // Consider enum
-  Status status = 13; // Consider enum
-  optional string payment_id = 14;
-  repeated BlankInfo blanks = 15;
+  string title = 2;
+  string client_id = 3;
+  string manager_id = 4;
+  optional string translator_id = 5;
+  string office_id = 6;
+  optional DocumentType document_type = 7;
+  optional string source_language = 8;
+  optional string target_language = 9;
+  optional int32 page_count = 10;
+  double translation_sum = 11; // Calculated
+  double notarial_sum = 12;
+  double total_sum = 13; // Calculated
+  Priority priority = 14; // Consider enum
+  Status status = 15; // Consider enum
+  optional string payment_id = 16;
+  repeated BlankInfo blanks = 17;
   // Notes about the translation order
-  optional string notes = 16;
-  bool is_urgent = 17;
-  bool is_semi_urgent = 18;
-  bool client_notified = 19;
+  optional string notes = 18;
+  bool is_urgent = 19; // New (Redundant with Priority enum, but added per plan)
+  bool is_semi_urgent = 20; // New (Redundant with Priority enum, but added per plan)
+  bool client_notified = 21; // New
+  google.protobuf.Timestamp created_at = 22; // Added field
+  optional google.protobuf.Timestamp done_at = 23; // Added optional field
 
+  // Nested message for structured blank info
   message BlankInfo {
-    string blank_number = 1;
+    string blank_number = 1; // 6-digit format
     bool is_spoiled = 2;
-    string replacement_blank_number = 3;
+    string replacement_blank_number = 3; // 6-digit format, optional
   }
 }
 
@@ -222,8 +227,8 @@ message TrainingEnrollment {
   Status status = 6; // Consider enum
   optional string payment_id = 7;
   optional string notes = 8;
-  bool paid = 9;
-  bool accountant_verified = 10;
+  bool paid = 9; // New
+  bool accountant_verified = 10; // New
 }
 
 message AccountOpeningRequest {
@@ -236,7 +241,7 @@ message AccountOpeningRequest {
   optional google.protobuf.Timestamp opened_date = 7;
   optional string payment_id = 8;
   optional string notes = 9;
-  bool agent_commission_received = 10;
+  bool agent_commission_received = 10; // New
 }
 
 message BusinessRegistration {
@@ -251,7 +256,7 @@ message BusinessRegistration {
   optional string payment_id = 9;
   // Notes about the business registration
   optional string notes = 10;
-  bool agent_commission_received = 11;
+  bool agent_commission_received = 11; // New
 }
 
 message LendingApplication {
@@ -270,10 +275,10 @@ message LendingApplication {
   optional string payment_id = 13;
   // Notes about the lending application
   optional string notes = 14;
-  double company_commission_percent = 15;
-  double calculated_commission_amount = 16;
-  bool commission_paid = 17;
-  bool agent_commission_received = 18;
+  double company_commission_percent = 15; // New
+  double calculated_commission_amount = 16; // New
+  bool commission_paid = 17; // New
+  bool agent_commission_received = 18; // New
 }
 
 message Partner {
@@ -284,8 +289,8 @@ message Partner {
   Status status = 5; // Consider enum
   // Notes about the partner
   optional string notes = 6;
-  repeated string service_area_cities = 7;
-  repeated string specialization_issue_type_ids = 8;
+  repeated string service_area_cities = 7; // New
+  repeated string specialization_issue_type_ids = 8; // New
 }
 
 message LegalIssueType {
@@ -300,7 +305,7 @@ message TrainingCourse {
   string course_id = 1;
   string name = 2;
   double price = 3;
-  double commission_percent = 4;
+  double commission_percent = 4; // Required field, must be between 0 and 100
   optional string description = 5;
   // Notes about the training course
   optional string notes = 6;
@@ -309,12 +314,13 @@ message TrainingCourse {
 message Bank {
   string bank_id = 1;
   string name = 2;
-  double account_opening_commission = 3;
-  double ip_registration_commission = 4;
-  double ooo_registration_commission = 5;
-  optional double lending_commission_percent = 6;
+  string bic = 3; // Added BIC field
+  double account_opening_commission = 4;
+  double ip_registration_commission = 5;
+  double ooo_registration_commission = 6;
+  optional double lending_commission_percent = 7;
   // Notes about the bank
-  optional string notes = 7;
+  optional string notes = 8;
 }
 
 message Interaction {

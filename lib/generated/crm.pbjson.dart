@@ -331,33 +331,39 @@ const TranslationOrder$json = {
   '1': 'TranslationOrder',
   '2': [
     {'1': 'order_id', '3': 1, '4': 1, '5': 9, '10': 'orderId'},
-    {'1': 'client_id', '3': 2, '4': 1, '5': 9, '10': 'clientId'},
-    {'1': 'manager_id', '3': 3, '4': 1, '5': 9, '10': 'managerId'},
-    {'1': 'translator_id', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'translatorId', '17': true},
-    {'1': 'office_id', '3': 5, '4': 1, '5': 9, '10': 'officeId'},
-    {'1': 'document_type', '3': 6, '4': 1, '5': 14, '6': '.proto.DocumentType', '9': 1, '10': 'documentType', '17': true},
-    {'1': 'target_language', '3': 7, '4': 1, '5': 9, '9': 2, '10': 'targetLanguage', '17': true},
-    {'1': 'page_count', '3': 8, '4': 1, '5': 5, '9': 3, '10': 'pageCount', '17': true},
-    {'1': 'translation_sum', '3': 9, '4': 1, '5': 1, '10': 'translationSum'},
-    {'1': 'notarial_sum', '3': 10, '4': 1, '5': 1, '10': 'notarialSum'},
-    {'1': 'total_sum', '3': 11, '4': 1, '5': 1, '10': 'totalSum'},
-    {'1': 'priority', '3': 12, '4': 1, '5': 14, '6': '.proto.Priority', '10': 'priority'},
-    {'1': 'status', '3': 13, '4': 1, '5': 14, '6': '.proto.Status', '10': 'status'},
-    {'1': 'payment_id', '3': 14, '4': 1, '5': 9, '9': 4, '10': 'paymentId', '17': true},
-    {'1': 'blanks', '3': 15, '4': 3, '5': 11, '6': '.proto.TranslationOrder.BlankInfo', '10': 'blanks'},
-    {'1': 'notes', '3': 16, '4': 1, '5': 9, '9': 5, '10': 'notes', '17': true},
-    {'1': 'is_urgent', '3': 17, '4': 1, '5': 8, '10': 'isUrgent'},
-    {'1': 'is_semi_urgent', '3': 18, '4': 1, '5': 8, '10': 'isSemiUrgent'},
-    {'1': 'client_notified', '3': 19, '4': 1, '5': 8, '10': 'clientNotified'},
+    {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
+    {'1': 'client_id', '3': 3, '4': 1, '5': 9, '10': 'clientId'},
+    {'1': 'manager_id', '3': 4, '4': 1, '5': 9, '10': 'managerId'},
+    {'1': 'translator_id', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'translatorId', '17': true},
+    {'1': 'office_id', '3': 6, '4': 1, '5': 9, '10': 'officeId'},
+    {'1': 'document_type', '3': 7, '4': 1, '5': 14, '6': '.proto.DocumentType', '9': 1, '10': 'documentType', '17': true},
+    {'1': 'source_language', '3': 8, '4': 1, '5': 9, '9': 2, '10': 'sourceLanguage', '17': true},
+    {'1': 'target_language', '3': 9, '4': 1, '5': 9, '9': 3, '10': 'targetLanguage', '17': true},
+    {'1': 'page_count', '3': 10, '4': 1, '5': 5, '9': 4, '10': 'pageCount', '17': true},
+    {'1': 'translation_sum', '3': 11, '4': 1, '5': 1, '10': 'translationSum'},
+    {'1': 'notarial_sum', '3': 12, '4': 1, '5': 1, '10': 'notarialSum'},
+    {'1': 'total_sum', '3': 13, '4': 1, '5': 1, '10': 'totalSum'},
+    {'1': 'priority', '3': 14, '4': 1, '5': 14, '6': '.proto.Priority', '10': 'priority'},
+    {'1': 'status', '3': 15, '4': 1, '5': 14, '6': '.proto.Status', '10': 'status'},
+    {'1': 'payment_id', '3': 16, '4': 1, '5': 9, '9': 5, '10': 'paymentId', '17': true},
+    {'1': 'blanks', '3': 17, '4': 3, '5': 11, '6': '.proto.TranslationOrder.BlankInfo', '10': 'blanks'},
+    {'1': 'notes', '3': 18, '4': 1, '5': 9, '9': 6, '10': 'notes', '17': true},
+    {'1': 'is_urgent', '3': 19, '4': 1, '5': 8, '10': 'isUrgent'},
+    {'1': 'is_semi_urgent', '3': 20, '4': 1, '5': 8, '10': 'isSemiUrgent'},
+    {'1': 'client_notified', '3': 21, '4': 1, '5': 8, '10': 'clientNotified'},
+    {'1': 'created_at', '3': 22, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
+    {'1': 'done_at', '3': 23, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 7, '10': 'doneAt', '17': true},
   ],
   '3': [TranslationOrder_BlankInfo$json],
   '8': [
     {'1': '_translator_id'},
     {'1': '_document_type'},
+    {'1': '_source_language'},
     {'1': '_target_language'},
     {'1': '_page_count'},
     {'1': '_payment_id'},
     {'1': '_notes'},
+    {'1': '_done_at'},
   ],
 };
 
@@ -373,24 +379,28 @@ const TranslationOrder_BlankInfo$json = {
 
 /// Descriptor for `TranslationOrder`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List translationOrderDescriptor = $convert.base64Decode(
-    'ChBUcmFuc2xhdGlvbk9yZGVyEhkKCG9yZGVyX2lkGAEgASgJUgdvcmRlcklkEhsKCWNsaWVudF'
-    '9pZBgCIAEoCVIIY2xpZW50SWQSHQoKbWFuYWdlcl9pZBgDIAEoCVIJbWFuYWdlcklkEigKDXRy'
-    'YW5zbGF0b3JfaWQYBCABKAlIAFIMdHJhbnNsYXRvcklkiAEBEhsKCW9mZmljZV9pZBgFIAEoCV'
-    'IIb2ZmaWNlSWQSPQoNZG9jdW1lbnRfdHlwZRgGIAEoDjITLnByb3RvLkRvY3VtZW50VHlwZUgB'
-    'Ugxkb2N1bWVudFR5cGWIAQESLAoPdGFyZ2V0X2xhbmd1YWdlGAcgASgJSAJSDnRhcmdldExhbm'
-    'd1YWdliAEBEiIKCnBhZ2VfY291bnQYCCABKAVIA1IJcGFnZUNvdW50iAEBEicKD3RyYW5zbGF0'
-    'aW9uX3N1bRgJIAEoAVIOdHJhbnNsYXRpb25TdW0SIQoMbm90YXJpYWxfc3VtGAogASgBUgtub3'
-    'RhcmlhbFN1bRIbCgl0b3RhbF9zdW0YCyABKAFSCHRvdGFsU3VtEisKCHByaW9yaXR5GAwgASgO'
-    'Mg8ucHJvdG8uUHJpb3JpdHlSCHByaW9yaXR5EiUKBnN0YXR1cxgNIAEoDjINLnByb3RvLlN0YX'
-    'R1c1IGc3RhdHVzEiIKCnBheW1lbnRfaWQYDiABKAlIBFIJcGF5bWVudElkiAEBEjkKBmJsYW5r'
-    'cxgPIAMoCzIhLnByb3RvLlRyYW5zbGF0aW9uT3JkZXIuQmxhbmtJbmZvUgZibGFua3MSGQoFbm'
-    '90ZXMYECABKAlIBVIFbm90ZXOIAQESGwoJaXNfdXJnZW50GBEgASgIUghpc1VyZ2VudBIkCg5p'
-    'c19zZW1pX3VyZ2VudBgSIAEoCFIMaXNTZW1pVXJnZW50EicKD2NsaWVudF9ub3RpZmllZBgTIA'
-    'EoCFIOY2xpZW50Tm90aWZpZWQahwEKCUJsYW5rSW5mbxIhCgxibGFua19udW1iZXIYASABKAlS'
-    'C2JsYW5rTnVtYmVyEh0KCmlzX3Nwb2lsZWQYAiABKAhSCWlzU3BvaWxlZBI4ChhyZXBsYWNlbW'
-    'VudF9ibGFua19udW1iZXIYAyABKAlSFnJlcGxhY2VtZW50QmxhbmtOdW1iZXJCEAoOX3RyYW5z'
-    'bGF0b3JfaWRCEAoOX2RvY3VtZW50X3R5cGVCEgoQX3RhcmdldF9sYW5ndWFnZUINCgtfcGFnZV'
-    '9jb3VudEINCgtfcGF5bWVudF9pZEIICgZfbm90ZXM=');
+    'ChBUcmFuc2xhdGlvbk9yZGVyEhkKCG9yZGVyX2lkGAEgASgJUgdvcmRlcklkEhQKBXRpdGxlGA'
+    'IgASgJUgV0aXRsZRIbCgljbGllbnRfaWQYAyABKAlSCGNsaWVudElkEh0KCm1hbmFnZXJfaWQY'
+    'BCABKAlSCW1hbmFnZXJJZBIoCg10cmFuc2xhdG9yX2lkGAUgASgJSABSDHRyYW5zbGF0b3JJZI'
+    'gBARIbCglvZmZpY2VfaWQYBiABKAlSCG9mZmljZUlkEj0KDWRvY3VtZW50X3R5cGUYByABKA4y'
+    'Ey5wcm90by5Eb2N1bWVudFR5cGVIAVIMZG9jdW1lbnRUeXBliAEBEiwKD3NvdXJjZV9sYW5ndW'
+    'FnZRgIIAEoCUgCUg5zb3VyY2VMYW5ndWFnZYgBARIsCg90YXJnZXRfbGFuZ3VhZ2UYCSABKAlI'
+    'A1IOdGFyZ2V0TGFuZ3VhZ2WIAQESIgoKcGFnZV9jb3VudBgKIAEoBUgEUglwYWdlQ291bnSIAQ'
+    'ESJwoPdHJhbnNsYXRpb25fc3VtGAsgASgBUg50cmFuc2xhdGlvblN1bRIhCgxub3RhcmlhbF9z'
+    'dW0YDCABKAFSC25vdGFyaWFsU3VtEhsKCXRvdGFsX3N1bRgNIAEoAVIIdG90YWxTdW0SKwoIcH'
+    'Jpb3JpdHkYDiABKA4yDy5wcm90by5Qcmlvcml0eVIIcHJpb3JpdHkSJQoGc3RhdHVzGA8gASgO'
+    'Mg0ucHJvdG8uU3RhdHVzUgZzdGF0dXMSIgoKcGF5bWVudF9pZBgQIAEoCUgFUglwYXltZW50SW'
+    'SIAQESOQoGYmxhbmtzGBEgAygLMiEucHJvdG8uVHJhbnNsYXRpb25PcmRlci5CbGFua0luZm9S'
+    'BmJsYW5rcxIZCgVub3RlcxgSIAEoCUgGUgVub3Rlc4gBARIbCglpc191cmdlbnQYEyABKAhSCG'
+    'lzVXJnZW50EiQKDmlzX3NlbWlfdXJnZW50GBQgASgIUgxpc1NlbWlVcmdlbnQSJwoPY2xpZW50'
+    'X25vdGlmaWVkGBUgASgIUg5jbGllbnROb3RpZmllZBI5CgpjcmVhdGVkX2F0GBYgASgLMhouZ2'
+    '9vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJY3JlYXRlZEF0EjgKB2RvbmVfYXQYFyABKAsyGi5n'
+    'b29nbGUucHJvdG9idWYuVGltZXN0YW1wSAdSBmRvbmVBdIgBARqHAQoJQmxhbmtJbmZvEiEKDG'
+    'JsYW5rX251bWJlchgBIAEoCVILYmxhbmtOdW1iZXISHQoKaXNfc3BvaWxlZBgCIAEoCFIJaXNT'
+    'cG9pbGVkEjgKGHJlcGxhY2VtZW50X2JsYW5rX251bWJlchgDIAEoCVIWcmVwbGFjZW1lbnRCbG'
+    'Fua051bWJlckIQCg5fdHJhbnNsYXRvcl9pZEIQCg5fZG9jdW1lbnRfdHlwZUISChBfc291cmNl'
+    'X2xhbmd1YWdlQhIKEF90YXJnZXRfbGFuZ3VhZ2VCDQoLX3BhZ2VfY291bnRCDQoLX3BheW1lbn'
+    'RfaWRCCAoGX25vdGVzQgoKCF9kb25lX2F0');
 
 @$core.Deprecated('Use insurancePolicyDescriptor instead')
 const InsurancePolicy$json = {
@@ -669,11 +679,12 @@ const Bank$json = {
   '2': [
     {'1': 'bank_id', '3': 1, '4': 1, '5': 9, '10': 'bankId'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'account_opening_commission', '3': 3, '4': 1, '5': 1, '10': 'accountOpeningCommission'},
-    {'1': 'ip_registration_commission', '3': 4, '4': 1, '5': 1, '10': 'ipRegistrationCommission'},
-    {'1': 'ooo_registration_commission', '3': 5, '4': 1, '5': 1, '10': 'oooRegistrationCommission'},
-    {'1': 'lending_commission_percent', '3': 6, '4': 1, '5': 1, '9': 0, '10': 'lendingCommissionPercent', '17': true},
-    {'1': 'notes', '3': 7, '4': 1, '5': 9, '9': 1, '10': 'notes', '17': true},
+    {'1': 'bic', '3': 3, '4': 1, '5': 9, '10': 'bic'},
+    {'1': 'account_opening_commission', '3': 4, '4': 1, '5': 1, '10': 'accountOpeningCommission'},
+    {'1': 'ip_registration_commission', '3': 5, '4': 1, '5': 1, '10': 'ipRegistrationCommission'},
+    {'1': 'ooo_registration_commission', '3': 6, '4': 1, '5': 1, '10': 'oooRegistrationCommission'},
+    {'1': 'lending_commission_percent', '3': 7, '4': 1, '5': 1, '9': 0, '10': 'lendingCommissionPercent', '17': true},
+    {'1': 'notes', '3': 8, '4': 1, '5': 9, '9': 1, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_lending_commission_percent'},
@@ -683,13 +694,14 @@ const Bank$json = {
 
 /// Descriptor for `Bank`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List bankDescriptor = $convert.base64Decode(
-    'CgRCYW5rEhcKB2JhbmtfaWQYASABKAlSBmJhbmtJZBISCgRuYW1lGAIgASgJUgRuYW1lEjwKGm'
-    'FjY291bnRfb3BlbmluZ19jb21taXNzaW9uGAMgASgBUhhhY2NvdW50T3BlbmluZ0NvbW1pc3Np'
-    'b24SPAoaaXBfcmVnaXN0cmF0aW9uX2NvbW1pc3Npb24YBCABKAFSGGlwUmVnaXN0cmF0aW9uQ2'
-    '9tbWlzc2lvbhI+Chtvb29fcmVnaXN0cmF0aW9uX2NvbW1pc3Npb24YBSABKAFSGW9vb1JlZ2lz'
-    'dHJhdGlvbkNvbW1pc3Npb24SQQoabGVuZGluZ19jb21taXNzaW9uX3BlcmNlbnQYBiABKAFIAF'
-    'IYbGVuZGluZ0NvbW1pc3Npb25QZXJjZW50iAEBEhkKBW5vdGVzGAcgASgJSAFSBW5vdGVziAEB'
-    'Qh0KG19sZW5kaW5nX2NvbW1pc3Npb25fcGVyY2VudEIICgZfbm90ZXM=');
+    'CgRCYW5rEhcKB2JhbmtfaWQYASABKAlSBmJhbmtJZBISCgRuYW1lGAIgASgJUgRuYW1lEhAKA2'
+    'JpYxgDIAEoCVIDYmljEjwKGmFjY291bnRfb3BlbmluZ19jb21taXNzaW9uGAQgASgBUhhhY2Nv'
+    'dW50T3BlbmluZ0NvbW1pc3Npb24SPAoaaXBfcmVnaXN0cmF0aW9uX2NvbW1pc3Npb24YBSABKA'
+    'FSGGlwUmVnaXN0cmF0aW9uQ29tbWlzc2lvbhI+Chtvb29fcmVnaXN0cmF0aW9uX2NvbW1pc3Np'
+    'b24YBiABKAFSGW9vb1JlZ2lzdHJhdGlvbkNvbW1pc3Npb24SQQoabGVuZGluZ19jb21taXNzaW'
+    '9uX3BlcmNlbnQYByABKAFIAFIYbGVuZGluZ0NvbW1pc3Npb25QZXJjZW50iAEBEhkKBW5vdGVz'
+    'GAggASgJSAFSBW5vdGVziAEBQh0KG19sZW5kaW5nX2NvbW1pc3Npb25fcGVyY2VudEIICgZfbm'
+    '90ZXM=');
 
 @$core.Deprecated('Use interactionDescriptor instead')
 const Interaction$json = {
