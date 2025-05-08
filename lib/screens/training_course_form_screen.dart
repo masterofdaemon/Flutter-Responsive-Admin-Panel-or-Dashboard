@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
 import 'package:admin/services/grpc_training_course_service_mobile.dart';
+import 'package:admin/screens/main/main_screen.dart';
+import 'package:admin/l10n/app_localizations.dart';
 
 class TrainingCourseFormScreen extends StatefulWidget {
   final String? courseId;
@@ -33,6 +35,7 @@ class _TrainingCourseFormScreenState extends State<TrainingCourseFormScreen> {
   }
 
   Future<void> _loadCourse() async {
+    final localizations = AppLocalizations.of(context);
     setState(() => _isLoading = true);
     try {
       final course = await _service.getTrainingCourse(widget.courseId!);
@@ -43,7 +46,9 @@ class _TrainingCourseFormScreenState extends State<TrainingCourseFormScreen> {
       _notesController.text = course.notes;
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error loading course: $e')),
+        SnackBar(
+            content: Text(localizations
+                .trainingCourseFormScreenFeedbackErrorLoading(e.toString()))),
       );
     } finally {
       setState(() => _isLoading = false);
@@ -51,6 +56,7 @@ class _TrainingCourseFormScreenState extends State<TrainingCourseFormScreen> {
   }
 
   Future<void> _saveCourse() async {
+    final localizations = AppLocalizations.of(context);
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
     try {
@@ -66,18 +72,24 @@ class _TrainingCourseFormScreenState extends State<TrainingCourseFormScreen> {
       if (_isEditMode) {
         await _service.updateTrainingCourse(widget.courseId!, course);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Course updated successfully')),
+          SnackBar(
+              content: Text(
+                  localizations.trainingCourseFormScreenFeedbackSuccessUpdate)),
         );
       } else {
         await _service.createTrainingCourse(course);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Course created successfully')),
+          SnackBar(
+              content: Text(
+                  localizations.trainingCourseFormScreenFeedbackSuccessCreate)),
         );
       }
       if (mounted) Navigator.of(context).pop(true);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error saving course: $e')),
+        SnackBar(
+            content: Text(localizations
+                .trainingCourseFormScreenFeedbackErrorSaving(e.toString()))),
       );
     } finally {
       setState(() => _isLoading = false);
@@ -96,12 +108,24 @@ class _TrainingCourseFormScreenState extends State<TrainingCourseFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(_isEditMode ? 'Edit Course' : 'Add Course'),
+        title: Text(_isEditMode
+            ? localizations.trainingCourseFormScreenTitleEdit
+            : localizations.trainingCourseFormScreenTitleAdd),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).maybePop();
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MainScreen()),
+              );
+            }
+          },
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
         ),
       ),
@@ -116,47 +140,62 @@ class _TrainingCourseFormScreenState extends State<TrainingCourseFormScreen> {
                   children: [
                     TextFormField(
                       controller: _nameController,
-                      decoration:
-                          const InputDecoration(labelText: 'Course Name'),
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'Required' : null,
+                      decoration: InputDecoration(
+                          labelText:
+                              localizations.trainingCourseFormScreenLabelName),
+                      validator: (v) => v == null || v.isEmpty
+                          ? localizations
+                              .trainingCourseFormScreenValidationRequired
+                          : null,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _priceController,
-                      decoration: const InputDecoration(labelText: 'Price'),
+                      decoration: InputDecoration(
+                          labelText:
+                              localizations.trainingCourseFormScreenLabelPrice),
                       keyboardType: TextInputType.number,
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'Required' : null,
+                      validator: (v) => v == null || v.isEmpty
+                          ? localizations
+                              .trainingCourseFormScreenValidationRequired
+                          : null,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _commissionController,
-                      decoration: const InputDecoration(
-                          labelText: 'Commission Percent'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .trainingCourseFormScreenLabelCommission),
                       keyboardType: TextInputType.number,
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'Required' : null,
+                      validator: (v) => v == null || v.isEmpty
+                          ? localizations
+                              .trainingCourseFormScreenValidationRequired
+                          : null,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _descriptionController,
-                      decoration:
-                          const InputDecoration(labelText: 'Description'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .trainingCourseFormScreenLabelDescription),
                       maxLines: 2,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _notesController,
-                      decoration: const InputDecoration(labelText: 'Notes'),
+                      decoration: InputDecoration(
+                          labelText:
+                              localizations.trainingCourseFormScreenLabelNotes),
                       maxLines: 2,
                     ),
                     const SizedBox(height: 24),
                     Center(
                       child: ElevatedButton(
                         onPressed: _isLoading ? null : _saveCourse,
-                        child: Text(
-                            _isEditMode ? 'Update Course' : 'Create Course'),
+                        child: Text(_isEditMode
+                            ? localizations.trainingCourseFormScreenButtonUpdate
+                            : localizations
+                                .trainingCourseFormScreenButtonCreate),
                       ),
                     ),
                   ],

@@ -5,6 +5,8 @@ import 'package:admin/services/grpc_client_service_mobile.dart';
 import 'package:admin/services/grpc_employee_service_mobile.dart';
 import 'package:admin/services/grpc_bank_service_mobile.dart';
 import 'package:admin/utils/timestamp_helpers.dart';
+import 'package:admin/screens/main/main_screen.dart';
+import 'package:admin/l10n/app_localizations.dart'; // Import AppLocalizations
 
 class LendingApplicationFormScreen extends StatefulWidget {
   final String? requestId;
@@ -63,6 +65,7 @@ class _LendingApplicationFormScreenState
 
   Future<void> _loadDropdownData() async {
     setState(() => _isLoading = true);
+    final localizations = AppLocalizations.of(context);
     try {
       final clients = await _clientService.listClients(pageSize: 1000);
       final managers = await _employeeService.listEmployees(pageSize: 1000);
@@ -74,7 +77,9 @@ class _LendingApplicationFormScreenState
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error loading dropdown data: $e')),
+        SnackBar(
+            content:
+                Text(localizations.errorLoadingDropdownMessage(e.toString()))),
       );
     } finally {
       setState(() => _isLoading = false);
@@ -83,6 +88,7 @@ class _LendingApplicationFormScreenState
 
   Future<void> _loadApplication() async {
     setState(() => _isLoading = true);
+    final localizations = AppLocalizations.of(context);
     try {
       final app = await _service.getLendingApplication(widget.requestId!);
       _selectedClient = _clients.isEmpty
@@ -127,7 +133,9 @@ class _LendingApplicationFormScreenState
       _agentCommissionReceived = app.agentCommissionReceived;
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error loading application: $e')),
+        SnackBar(
+            content: Text(
+                localizations.errorLoadingApplicationMessage(e.toString()))),
       );
     } finally {
       setState(() => _isLoading = false);
@@ -137,6 +145,7 @@ class _LendingApplicationFormScreenState
   Future<void> _saveApplication() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
+    final localizations = AppLocalizations.of(context);
     try {
       final app = crm.LendingApplication(
         requestId: widget.requestId ?? '',
@@ -175,12 +184,14 @@ class _LendingApplicationFormScreenState
       if (_isEditMode) {
         await _service.updateLendingApplication(widget.requestId!, app);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Application updated successfully')),
+          SnackBar(
+              content: Text(localizations.applicationUpdatedSuccessMessage)),
         );
       } else {
         await _service.createLendingApplication(app);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Application created successfully')),
+          SnackBar(
+              content: Text(localizations.applicationCreatedSuccessMessage)),
         );
       }
       if (mounted) {
@@ -188,7 +199,9 @@ class _LendingApplicationFormScreenState
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error saving application: $e')),
+        SnackBar(
+            content: Text(
+                localizations.errorSavingApplicationMessage(e.toString()))),
       );
     } finally {
       setState(() => _isLoading = false);
@@ -222,15 +235,30 @@ class _LendingApplicationFormScreenState
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).maybePop();
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MainScreen()),
+              );
+            }
+          },
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+        ),
         title: Text(_isEditMode
-            ? 'Edit Lending Application'
-            : 'Add Lending Application'),
+            ? localizations.editLendingApplicationTitle
+            : localizations.addLendingApplicationTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.save),
-            tooltip: 'Save Application',
+            tooltip: localizations.saveApplicationTooltip,
             onPressed: _isLoading ? null : _saveApplication,
           ),
         ],
@@ -247,7 +275,8 @@ class _LendingApplicationFormScreenState
                     // Client Dropdown
                     DropdownButtonFormField<crm.Client>(
                       value: _selectedClient,
-                      decoration: const InputDecoration(labelText: 'Client'),
+                      decoration: InputDecoration(
+                          labelText: localizations.clientLabelText),
                       items: _clients
                           .map((c) => DropdownMenuItem(
                                 value: c,
@@ -256,14 +285,16 @@ class _LendingApplicationFormScreenState
                               ))
                           .toList(),
                       onChanged: (val) => setState(() => _selectedClient = val),
-                      validator: (val) =>
-                          val == null ? 'Please select a client' : null,
+                      validator: (val) => val == null
+                          ? localizations.pleaseSelectClientError
+                          : null,
                     ),
                     const SizedBox(height: 16),
                     // Manager Dropdown
                     DropdownButtonFormField<crm.Employee>(
                       value: _selectedManager,
-                      decoration: const InputDecoration(labelText: 'Manager'),
+                      decoration: InputDecoration(
+                          labelText: localizations.managerLabelText),
                       items: _managers
                           .map((m) => DropdownMenuItem(
                                 value: m,
@@ -272,14 +303,16 @@ class _LendingApplicationFormScreenState
                           .toList(),
                       onChanged: (val) =>
                           setState(() => _selectedManager = val),
-                      validator: (val) =>
-                          val == null ? 'Please select a manager' : null,
+                      validator: (val) => val == null
+                          ? localizations.pleaseSelectManagerError
+                          : null,
                     ),
                     const SizedBox(height: 16),
                     // Bank Dropdown
                     DropdownButtonFormField<crm.Bank>(
                       value: _selectedBank,
-                      decoration: const InputDecoration(labelText: 'Bank'),
+                      decoration: InputDecoration(
+                          labelText: localizations.bankLabelText),
                       items: _banks
                           .map((b) => DropdownMenuItem(
                                 value: b,
@@ -287,26 +320,27 @@ class _LendingApplicationFormScreenState
                               ))
                           .toList(),
                       onChanged: (val) => setState(() => _selectedBank = val),
-                      validator: (val) =>
-                          val == null ? 'Please select a bank' : null,
+                      validator: (val) => val == null
+                          ? localizations.pleaseSelectBankError
+                          : null,
                     ),
                     const SizedBox(height: 16),
                     // Requested Amount
                     TextFormField(
                       controller: _requestedAmountController,
-                      decoration:
-                          const InputDecoration(labelText: 'Requested Amount'),
+                      decoration: InputDecoration(
+                          labelText: localizations.requestedAmountLabelText),
                       keyboardType: TextInputType.number,
                       validator: (val) => val == null || val.isEmpty
-                          ? 'Enter requested amount'
+                          ? localizations.enterRequestedAmountError
                           : null,
                     ),
                     const SizedBox(height: 16),
                     // Approved Amount
                     TextFormField(
                       controller: _approvedAmountController,
-                      decoration:
-                          const InputDecoration(labelText: 'Approved Amount'),
+                      decoration: InputDecoration(
+                          labelText: localizations.approvedAmountLabelText),
                       keyboardType: TextInputType.number,
                     ),
                     const SizedBox(height: 16),
@@ -314,13 +348,15 @@ class _LendingApplicationFormScreenState
                     Row(
                       children: [
                         Expanded(
-                          child: Text(
-                              'Application Date: ${_applicationDate != null ? formatDate(_applicationDate!) : '-'}'),
+                          child: Text(localizations.applicationDateLabelText(
+                              _applicationDate != null
+                                  ? formatDate(_applicationDate!)
+                                  : '-')),
                         ),
                         TextButton(
                           onPressed: () => _pickDate(context, _applicationDate,
                               (d) => setState(() => _applicationDate = d)),
-                          child: const Text('Pick'),
+                          child: Text(localizations.pickDateButtonText),
                         ),
                       ],
                     ),
@@ -329,13 +365,15 @@ class _LendingApplicationFormScreenState
                     Row(
                       children: [
                         Expanded(
-                          child: Text(
-                              'Approval Date: ${_approvalDate != null ? formatDate(_approvalDate!) : '-'}'),
+                          child: Text(localizations.approvalDateLabelText(
+                              _approvalDate != null
+                                  ? formatDate(_approvalDate!)
+                                  : '-')),
                         ),
                         TextButton(
                           onPressed: () => _pickDate(context, _approvalDate,
                               (d) => setState(() => _approvalDate = d)),
-                          child: const Text('Pick'),
+                          child: Text(localizations.pickDateButtonText),
                         ),
                       ],
                     ),
@@ -344,15 +382,17 @@ class _LendingApplicationFormScreenState
                     Row(
                       children: [
                         Expanded(
-                          child: Text(
-                              'Funds Received Date: ${_fundsReceivedDate != null ? formatDate(_fundsReceivedDate!) : '-'}'),
+                          child: Text(localizations.fundsReceivedDateLabelText(
+                              _fundsReceivedDate != null
+                                  ? formatDate(_fundsReceivedDate!)
+                                  : '-')),
                         ),
                         TextButton(
                           onPressed: () => _pickDate(
                               context,
                               _fundsReceivedDate,
                               (d) => setState(() => _fundsReceivedDate = d)),
-                          child: const Text('Pick'),
+                          child: Text(localizations.pickDateButtonText),
                         ),
                       ],
                     ),
@@ -362,14 +402,17 @@ class _LendingApplicationFormScreenState
                       children: [
                         Expanded(
                           child: Text(
-                              'Company Contract Date: ${_companyContractDate != null ? formatDate(_companyContractDate!) : '-'}'),
+                              localizations.companyContractDateLabelText(
+                                  _companyContractDate != null
+                                      ? formatDate(_companyContractDate!)
+                                      : '-')),
                         ),
                         TextButton(
                           onPressed: () => _pickDate(
                               context,
                               _companyContractDate,
                               (d) => setState(() => _companyContractDate = d)),
-                          child: const Text('Pick'),
+                          child: Text(localizations.pickDateButtonText),
                         ),
                       ],
                     ),
@@ -377,68 +420,76 @@ class _LendingApplicationFormScreenState
                     // Expected Commission
                     TextFormField(
                       controller: _expectedCommissionController,
-                      decoration: const InputDecoration(
-                          labelText: 'Expected Commission'),
+                      decoration: InputDecoration(
+                          labelText: localizations.expectedCommissionLabelText),
                       keyboardType: TextInputType.number,
                     ),
                     const SizedBox(height: 16),
                     // Status Dropdown
                     DropdownButtonFormField<crm.Status>(
                       value: _status,
-                      decoration: const InputDecoration(labelText: 'Status'),
+                      decoration: InputDecoration(
+                          labelText: localizations.statusLabelText),
                       items: crm.Status.values
                           .where((s) => s != crm.Status.STATUS_UNSPECIFIED)
                           .map((s) => DropdownMenuItem(
                                 value: s,
                                 child: Text(s.name
                                     .replaceFirst('STATUS_', '')
-                                    .replaceAll('_', ' ')),
+                                    .replaceAll('_',
+                                        ' ')), // Consider localizing status names if needed
                               ))
                           .toList(),
                       onChanged: (val) => setState(() => _status = val),
-                      validator: (val) =>
-                          val == null ? 'Please select a status' : null,
+                      validator: (val) => val == null
+                          ? localizations.pleaseSelectStatusError
+                          : null,
                     ),
                     const SizedBox(height: 16),
                     // Payment ID
                     TextFormField(
                       controller: _paymentIdController,
-                      decoration:
-                          const InputDecoration(labelText: 'Payment ID'),
+                      decoration: InputDecoration(
+                          labelText: localizations.paymentIdLabelText),
                     ),
                     const SizedBox(height: 16),
                     // Notes
                     TextFormField(
                       controller: _notesController,
-                      decoration: const InputDecoration(labelText: 'Notes'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .notesLabelTextShort), // Reused notesLabelText
                       maxLines: 2,
                     ),
                     const SizedBox(height: 16),
                     // Company Commission Percent
                     TextFormField(
                       controller: _companyCommissionPercentController,
-                      decoration: const InputDecoration(
-                          labelText: 'Company Commission Percent'),
+                      decoration: InputDecoration(
+                          labelText:
+                              localizations.companyCommissionPercentLabelText),
                       keyboardType: TextInputType.number,
                     ),
                     const SizedBox(height: 16),
                     // Calculated Commission Amount
                     TextFormField(
                       controller: _calculatedCommissionAmountController,
-                      decoration: const InputDecoration(
-                          labelText: 'Calculated Commission Amount'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .calculatedCommissionAmountLabelText),
                       keyboardType: TextInputType.number,
                     ),
                     const SizedBox(height: 16),
                     // Commission Paid
                     SwitchListTile(
-                      title: const Text('Commission Paid'),
+                      title: Text(localizations.commissionPaidLabelText),
                       value: _commissionPaid,
                       onChanged: (val) => setState(() => _commissionPaid = val),
                     ),
                     // Agent Commission Received
                     SwitchListTile(
-                      title: const Text('Agent Commission Received'),
+                      title:
+                          Text(localizations.agentCommissionReceivedLabelText),
                       value: _agentCommissionReceived,
                       onChanged: (val) =>
                           setState(() => _agentCommissionReceived = val),
@@ -453,8 +504,8 @@ class _LendingApplicationFormScreenState
                           padding: const EdgeInsets.symmetric(
                               horizontal: 24.0, vertical: 12.0),
                           child: Text(_isEditMode
-                              ? 'Update Application'
-                              : 'Create Application'),
+                              ? localizations.updateApplicationButtonText
+                              : localizations.createApplicationButtonText),
                         ),
                         onPressed: _isLoading ? null : _saveApplication,
                       ),

@@ -23,6 +23,11 @@ class GrpcClientService {
         request,
         options: GrpcClient().getCallOptions(),
       );
+      print('Fetched clients from backend:');
+      for (final c in response.clients) {
+        print(
+            '  id: ${c.clientId}, firstName: ${c.firstName}, lastName: ${c.lastName}, phone: ${c.phone}, email: ${c.email}, source: ${c.source}');
+      }
       return response.clients;
     } on GrpcError catch (e) {
       print('gRPC error during listClients: ${e.message}');

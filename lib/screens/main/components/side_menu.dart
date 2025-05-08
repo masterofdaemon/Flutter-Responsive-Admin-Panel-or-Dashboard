@@ -1,3 +1,4 @@
+import 'package:admin/l10n/app_localizations.dart';
 import 'package:admin/screens/client_list_screen.dart';
 // Import EmployeeFormScreen
 import 'package:admin/screens/employee_list_screen.dart';
@@ -20,6 +21,7 @@ class SideMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     // Return ListView directly, not wrapped in a Drawer
     return ListView(
       children: [
@@ -27,7 +29,7 @@ class SideMenu extends StatelessWidget {
           child: Image.asset("assets/images/logo.png"),
         ),
         DrawerListTile(
-          title: "Dashboard",
+          title: localizations.sideMenuDashboard,
           svgSrc: "assets/icons/menu_dashboard.svg",
           press: () {
             // Close drawer first
@@ -44,7 +46,7 @@ class SideMenu extends StatelessWidget {
           },
         ),
         DrawerListTile(
-          title: "Clients",
+          title: localizations.sideMenuClients,
           svgSrc: "assets/icons/menu_tran.svg",
           press: () {
             Navigator.pop(context); // Close drawer
@@ -55,7 +57,7 @@ class SideMenu extends StatelessWidget {
           },
         ),
         DrawerListTile(
-          title: "Employees",
+          title: localizations.sideMenuEmployees,
           svgSrc: "assets/icons/menu_profile.svg",
           press: () {
             Navigator.pop(context); // Close drawer
@@ -67,7 +69,7 @@ class SideMenu extends StatelessWidget {
           },
         ),
         DrawerListTile(
-          title: "Translations",
+          title: localizations.sideMenuTranslations,
           svgSrc: "assets/icons/menu_doc.svg", // Example icon
           press: () {
             Navigator.pop(context); // Close drawer
@@ -79,7 +81,7 @@ class SideMenu extends StatelessWidget {
           },
         ),
         DrawerListTile(
-          title: "Insurance Policies",
+          title: localizations.sideMenuInsurancePolicies,
           svgSrc:
               "assets/icons/menu_store.svg", // Use a relevant icon or replace
           press: () {
@@ -92,7 +94,7 @@ class SideMenu extends StatelessWidget {
           },
         ),
         DrawerListTile(
-          title: "Training Courses",
+          title: localizations.sideMenuTrainingCourses,
           svgSrc: "assets/icons/menu_doc.svg", // Use a relevant icon or replace
           press: () {
             Navigator.pop(context); // Close drawer
@@ -104,7 +106,7 @@ class SideMenu extends StatelessWidget {
           },
         ),
         DrawerListTile(
-          title: "Business Registrations",
+          title: localizations.sideMenuBusinessRegistrations,
           svgSrc:
               "assets/icons/menu_store.svg", // Use a relevant icon or replace
           press: () {
@@ -117,7 +119,7 @@ class SideMenu extends StatelessWidget {
           },
         ),
         DrawerListTile(
-          title: "Lending Applications",
+          title: localizations.sideMenuLendingApplications,
           svgSrc:
               "assets/icons/menu_store.svg", // Use a relevant icon or replace
           press: () {
@@ -140,16 +142,16 @@ class SideMenu extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Divider(), // Separator for admin section
-                  const Padding(
+                  Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    child: Text("Admin Tools",
+                    child: Text(localizations.sideMenuAdminTools,
                         style: TextStyle(
                             color: Colors.white54,
                             fontWeight: FontWeight.bold)),
                   ),
                   DrawerListTile(
-                    title: "Create User",
+                    title: localizations.sideMenuCreateUser,
                     svgSrc: "assets/icons/menu_profile.svg", // Placeholder icon
                     press: () {
                       Navigator.pop(context); // Close drawer
@@ -172,27 +174,27 @@ class SideMenu extends StatelessWidget {
         const Divider(), // Separator after potential admin section
         // --- End Admin Section ---
         DrawerListTile(
-          title: "Task",
+          title: localizations.sideMenuTask,
           svgSrc: "assets/icons/menu_task.svg",
           press: () {},
         ),
         DrawerListTile(
-          title: "Store",
+          title: localizations.sideMenuStore,
           svgSrc: "assets/icons/menu_store.svg",
           press: () {},
         ),
         DrawerListTile(
-          title: "Notification",
+          title: localizations.sideMenuNotification,
           svgSrc: "assets/icons/menu_notification.svg",
           press: () {},
         ),
         DrawerListTile(
-          title: "Profile",
+          title: localizations.sideMenuProfile,
           svgSrc: "assets/icons/menu_profile.svg",
           press: () {},
         ),
         DrawerListTile(
-          title: "Settings",
+          title: localizations.sideMenuSettings,
           svgSrc: "assets/icons/menu_setting.svg",
           press: () {},
         ),
@@ -216,8 +218,8 @@ class SideMenu extends StatelessWidget {
                 const ColorFilter.mode(Colors.white54, BlendMode.srcIn),
             height: 16,
           ),
-          title: const Text(
-            "Logout",
+          title: Text(
+            localizations.sideMenuLogout,
             style: TextStyle(color: Colors.white54),
           ),
         ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
 import 'package:admin/services/grpc_lending_application_service_mobile.dart';
 import 'lending_application_form_screen.dart';
+import 'package:admin/screens/main/main_screen.dart';
+import 'package:admin/l10n/app_localizations.dart';
 
 class LendingApplicationListScreen extends StatefulWidget {
   const LendingApplicationListScreen({super.key});
@@ -43,21 +45,25 @@ class _LendingApplicationListScreenState
   }
 
   Future<void> _deleteApplication(String requestId) async {
+    final localizations = AppLocalizations.of(context);
     try {
       final confirm = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Delete Application?'),
-          content:
-              const Text('Are you sure you want to delete this application?'),
+          title: Text(
+              localizations.lendingApplicationListScreenConfirmDeleteTitle),
+          content: Text(
+              localizations.lendingApplicationListScreenConfirmDeleteContent),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel'),
+              child:
+                  Text(localizations.lendingApplicationListScreenActionCancel),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Delete'),
+              child:
+                  Text(localizations.lendingApplicationListScreenActionDelete),
             ),
           ],
         ),
@@ -65,31 +71,46 @@ class _LendingApplicationListScreenState
       if (confirm == true) {
         await _service.deleteLendingApplication(requestId);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Application deleted successfully')),
+          SnackBar(
+              content: Text(localizations
+                  .lendingApplicationListScreenFeedbackSuccessDelete)),
         );
         _loadApplications();
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error deleting application: $e')),
+        SnackBar(
+            content: Text(
+                localizations.lendingApplicationListScreenFeedbackErrorDelete(
+                    e.toString()))),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lending Applications'),
+        title: Text(localizations.lendingApplicationListScreenTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).maybePop();
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MainScreen()),
+              );
+            }
+          },
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            tooltip: 'Add Application',
+            tooltip: localizations.lendingApplicationListScreenTooltipAdd,
             onPressed: () => _navigateToForm(),
           ),
         ],
@@ -102,10 +123,14 @@ class _LendingApplicationListScreenState
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
+              return Center(
+                  child: Text(
+                      localizations.lendingApplicationListScreenErrorLoading(
+                          snapshot.error.toString())));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(
-                  child: Text('No lending applications found.'));
+              return Center(
+                  child: Text(localizations
+                      .lendingApplicationListScreenNoApplicationsFound));
             }
             final applications = snapshot.data!;
             return ListView.builder(
@@ -116,22 +141,30 @@ class _LendingApplicationListScreenState
                   margin:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: ListTile(
-                    title: Text(
-                        app.requestId.isNotEmpty ? app.requestId : 'No ID'),
-                    subtitle: Text(
-                        'Client: ${app.clientId}\nManager: ${app.managerId}\nBank: ${app.bankId}'),
+                    title: Text(app.requestId.isNotEmpty
+                        ? app.requestId
+                        : localizations
+                            .lendingApplicationListScreenListItemNoId),
+                    subtitle: Text(localizations
+                        .lendingApplicationListScreenListItemSubtitle(
+                      app.clientId,
+                      app.managerId,
+                      app.bankId,
+                    )),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
                           icon: const Icon(Icons.edit),
-                          tooltip: 'Edit Application',
+                          tooltip: localizations
+                              .lendingApplicationListScreenTooltipEdit,
                           onPressed: () =>
                               _navigateToForm(requestId: app.requestId),
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete),
-                          tooltip: 'Delete Application',
+                          tooltip: localizations
+                              .lendingApplicationListScreenTooltipDelete,
                           onPressed: () => _deleteApplication(app.requestId),
                         ),
                       ],

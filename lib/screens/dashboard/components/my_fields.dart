@@ -1,3 +1,4 @@
+import 'package:admin/l10n/app_localizations.dart';
 import 'package:admin/models/my_files.dart';
 import 'package:admin/responsive.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class MyFiles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     final Size _size = MediaQuery.of(context).size;
     return Column(
       children: [
@@ -19,7 +21,7 @@ class MyFiles extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "My Files",
+              localizations.dashboardMyFilesTitle,
               style: Theme.of(context).textTheme.titleMedium,
             ),
             ElevatedButton.icon(
@@ -32,7 +34,7 @@ class MyFiles extends StatelessWidget {
               ),
               onPressed: () {},
               icon: Icon(Icons.add),
-              label: Text("Add New"),
+              label: Text(localizations.dashboardMyFilesAddNewButton),
             ),
           ],
         ),

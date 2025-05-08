@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
 import 'package:admin/services/grpc_training_course_service_mobile.dart';
 import 'training_course_form_screen.dart';
+import 'package:admin/screens/main/main_screen.dart';
+import 'package:admin/l10n/app_localizations.dart';
 
 class TrainingCourseListScreen extends StatefulWidget {
   const TrainingCourseListScreen({super.key});
@@ -40,20 +42,22 @@ class _TrainingCourseListScreenState extends State<TrainingCourseListScreen> {
   }
 
   Future<void> _deleteCourse(String courseId) async {
+    final localizations = AppLocalizations.of(context);
     try {
       final confirm = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Delete Course?'),
-          content: const Text('Are you sure you want to delete this course?'),
+          title: Text(localizations.trainingCourseListScreenConfirmDeleteTitle),
+          content:
+              Text(localizations.trainingCourseListScreenConfirmDeleteContent),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel'),
+              child: Text(localizations.trainingCourseListScreenActionCancel),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Delete'),
+              child: Text(localizations.trainingCourseListScreenActionDelete),
             ),
           ],
         ),
@@ -61,31 +65,45 @@ class _TrainingCourseListScreenState extends State<TrainingCourseListScreen> {
       if (confirm == true) {
         await _service.deleteTrainingCourse(courseId);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Course deleted successfully')),
+          SnackBar(
+              content: Text(
+                  localizations.trainingCourseListScreenFeedbackSuccessDelete)),
         );
         _loadCourses();
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error deleting course: $e')),
+        SnackBar(
+            content: Text(localizations
+                .trainingCourseListScreenFeedbackErrorDelete(e.toString()))),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Training Courses'),
+        title: Text(localizations.trainingCourseListScreenTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).maybePop();
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MainScreen()),
+              );
+            }
+          },
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            tooltip: 'Add Course',
+            tooltip: localizations.trainingCourseListScreenTooltipAdd,
             onPressed: () => _navigateToForm(),
           ),
         ],
@@ -98,9 +116,14 @@ class _TrainingCourseListScreenState extends State<TrainingCourseListScreen> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
+              return Center(
+                  child: Text(
+                      localizations.trainingCourseListScreenErrorLoading(
+                          snapshot.error.toString())));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text('No training courses found.'));
+              return Center(
+                  child: Text(
+                      localizations.trainingCourseListScreenNoCoursesFound));
             }
             final courses = snapshot.data!;
             return ListView.builder(
@@ -111,22 +134,28 @@ class _TrainingCourseListScreenState extends State<TrainingCourseListScreen> {
                   margin:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: ListTile(
-                    title:
-                        Text(course.name.isNotEmpty ? course.name : 'No Name'),
+                    title: Text(course.name.isNotEmpty
+                        ? course.name
+                        : localizations.trainingCourseListScreenListItemNoName),
                     subtitle: Text(
-                        'Price: ${course.price}\nCommission: ${course.commissionPercent}%'),
+                        localizations.trainingCourseListScreenListItemSubtitle(
+                      course.price.toString(),
+                      course.commissionPercent.toString(),
+                    )),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
                           icon: const Icon(Icons.edit),
-                          tooltip: 'Edit Course',
+                          tooltip:
+                              localizations.trainingCourseListScreenTooltipEdit,
                           onPressed: () =>
                               _navigateToForm(courseId: course.courseId),
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete),
-                          tooltip: 'Delete Course',
+                          tooltip: localizations
+                              .trainingCourseListScreenTooltipDelete,
                           onPressed: () => _deleteCourse(course.courseId),
                         ),
                       ],

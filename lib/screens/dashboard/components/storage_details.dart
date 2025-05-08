@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:admin/l10n/app_localizations.dart';
 
 import '../../../constants.dart';
 import 'chart.dart';
@@ -11,6 +12,7 @@ class StorageDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return Container(
       padding: EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
@@ -21,7 +23,7 @@ class StorageDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Storage Details",
+            localizations.dashboardStorageDetailsTitle,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -31,25 +33,25 @@ class StorageDetails extends StatelessWidget {
           Chart(),
           StorageInfoCard(
             svgSrc: "assets/icons/Documents.svg",
-            title: "Documents Files",
+            title: localizations.dashboardStorageDetailsDocumentsFiles,
             amountOfFiles: "1.3GB",
             numOfFiles: 1328,
           ),
           StorageInfoCard(
             svgSrc: "assets/icons/media.svg",
-            title: "Media Files",
+            title: localizations.dashboardStorageDetailsMediaFiles,
             amountOfFiles: "15.3GB",
             numOfFiles: 1328,
           ),
           StorageInfoCard(
             svgSrc: "assets/icons/folder.svg",
-            title: "Other Files",
+            title: localizations.dashboardStorageDetailsOtherFiles,
             amountOfFiles: "1.3GB",
             numOfFiles: 1328,
           ),
           StorageInfoCard(
             svgSrc: "assets/icons/unknown.svg",
-            title: "Unknown",
+            title: localizations.dashboardStorageDetailsUnknown,
             amountOfFiles: "1.3GB",
             numOfFiles: 140,
           ),

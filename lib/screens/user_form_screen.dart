@@ -1,6 +1,8 @@
+import 'package:admin/screens/main/main_screen.dart';
 import 'package:admin/services/grpc_client_service.dart';
 import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
+import 'package:admin/l10n/app_localizations.dart'; // Import AppLocalizations
 
 class UserFormScreen extends StatefulWidget {
   const UserFormScreen({super.key});
@@ -20,15 +22,16 @@ class _UserFormScreenState extends State<UserFormScreen> {
   final _confirmPasswordController = TextEditingController();
 
   Future<void> _createUser() async {
+    final localizations = AppLocalizations.of(context);
     if (!_formKey.currentState!.validate()) {
       return;
     }
     _formKey.currentState!.save();
 
-    // Basic check for password match
     if (_passwordController.text != _confirmPasswordController.text) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Passwords do not match')),
+        SnackBar(
+            content: Text(localizations.passwordsDoNotMatchError)), // Localized
       );
       return;
     }
@@ -40,24 +43,29 @@ class _UserFormScreenState extends State<UserFormScreen> {
     try {
       final userId = await _grpcService.createUser(
         _loginController.text.trim(),
-        _passwordController.text, // Send the password directly
+        _passwordController.text,
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('User created successfully with ID: $userId')),
+        SnackBar(
+            content: Text(localizations
+                .userCreatedSuccessIdMessage(userId.toString()))), // Localized
       );
-      // Optionally pop or navigate elsewhere
-      Navigator.of(context).pop(true); // Pop screen and indicate success
+      Navigator.of(context).pop(true);
     } on GrpcError catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('gRPC Error creating user: ${e.message}')),
+          SnackBar(
+              content: Text(localizations.grpcErrorCreatingUserMessage(
+                  e.message ?? 'Unknown error'))), // Localized
         );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error creating user: $e')),
+          SnackBar(
+              content: Text(localizations
+                  .errorCreatingUserMessage(e.toString()))), // Localized
         );
       }
     } finally {
@@ -79,9 +87,25 @@ class _UserFormScreenState extends State<UserFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context); // Get localizations
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create New User'),
+        title: Text(localizations.userFormScreenTitle), // Localized
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).maybePop();
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MainScreen()),
+              );
+            }
+          },
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+        ),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -92,79 +116,81 @@ class _UserFormScreenState extends State<UserFormScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    // Login (Email) Field
                     TextFormField(
                       controller: _loginController,
-                      decoration: const InputDecoration(
-                        labelText: 'Login (Email)',
+                      decoration: InputDecoration(
+                        labelText:
+                            localizations.loginEmailLabelText, // Localized
                         border: OutlineInputBorder(),
-                        hintText: 'user@example.com',
+                        hintText: localizations.loginEmailHintText, // Localized
                       ),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a login email';
+                          return localizations
+                              .pleaseEnterLoginEmailError; // Localized
                         }
-                        // Basic email validation
                         if (!RegExp(
                                 r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                             .hasMatch(value)) {
-                          return 'Please enter a valid email';
+                          return localizations
+                              .pleaseEnterValidEmailError; // Localized
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 16.0),
 
-                    // Password Field
                     TextFormField(
                       controller: _passwordController,
-                      decoration: const InputDecoration(
-                        labelText: 'Password',
+                      decoration: InputDecoration(
+                        labelText: localizations
+                            .passwordHint, // Reused from login/signup
                         border: OutlineInputBorder(),
                       ),
                       obscureText: true,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter a password';
+                          return localizations
+                              .pleaseEnterPasswordError; // Reused
                         }
                         if (value.length < 6) {
-                          // Example minimum length
-                          return 'Password must be at least 6 characters';
+                          return localizations.passwordMinLengthError; // Reused
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 16.0),
 
-                    // Confirm Password Field
                     TextFormField(
                       controller: _confirmPasswordController,
-                      decoration: const InputDecoration(
-                        labelText: 'Confirm Password',
+                      decoration: InputDecoration(
+                        labelText: localizations.confirmPasswordHint, // Reused
                         border: OutlineInputBorder(),
                       ),
                       obscureText: true,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please confirm your password';
+                          return localizations
+                              .pleaseConfirmPasswordError; // Reused
                         }
                         if (value != _passwordController.text) {
-                          return 'Passwords do not match';
+                          return localizations
+                              .passwordsDoNotMatchError; // Reused
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 24.0),
 
-                    // Create Button
                     Center(
                       child: ElevatedButton.icon(
                         icon: const Icon(Icons.person_add_alt_1),
-                        label: const Padding(
+                        label: Padding(
                           padding: EdgeInsets.symmetric(
                               horizontal: 24.0, vertical: 12.0),
-                          child: Text('Create User'),
+                          child: Text(
+                              localizations.createUserButtonText), // Localized
                         ),
                         onPressed: _isLoading ? null : _createUser,
                         style: ElevatedButton.styleFrom(

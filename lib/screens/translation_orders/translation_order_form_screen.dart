@@ -8,6 +8,7 @@ import 'package:admin/services/grpc_client_service.dart'; // Assuming this servi
 import 'package:admin/widgets/loading_indicator.dart';
 import 'package:fixnum/fixnum.dart'; // For Int64
 import 'package:admin/utils/timestamp_helpers.dart';
+import 'package:admin/l10n/app_localizations.dart';
 
 // Helper function to convert Timestamp to DateTime (handle null)
 DateTime? timestampToDateTime($timestamp.Timestamp? ts) {
@@ -115,6 +116,7 @@ class _TranslationOrderFormScreenState
   }
 
   Future<void> _loadInitialData() async {
+    final localizations = AppLocalizations.of(context);
     setState(() => _isFetchingInitialData = true);
     try {
       // Fetch dropdown data in parallel
@@ -155,7 +157,9 @@ class _TranslationOrderFormScreenState
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error loading initial data: $e')),
+          SnackBar(
+              content: Text(localizations
+                  .translationOrderFormScreenErrorLoadingData(e.toString()))),
         );
       }
     } finally {
@@ -239,6 +243,7 @@ class _TranslationOrderFormScreenState
   }
 
   Future<void> _saveOrder() async {
+    final localizations = AppLocalizations.of(context);
     if (!_formKey.currentState!.validate()) {
       return; // Don't submit if form is invalid
     }
@@ -298,19 +303,25 @@ class _TranslationOrderFormScreenState
         // Create new order
         await _orderService.createTranslationOrder(orderData);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Order created successfully')),
+          SnackBar(
+              content: Text(
+                  localizations.translationOrderFormScreenOrderCreatedSuccess)),
         );
       } else {
         // Update existing order
         await _orderService.updateTranslationOrder(widget.orderId!, orderData);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Order updated successfully')),
+          SnackBar(
+              content: Text(
+                  localizations.translationOrderFormScreenOrderUpdatedSuccess)),
         );
       }
       Navigator.pop(context, true); // Return true to indicate success
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error saving order: $e')),
+        SnackBar(
+            content: Text(localizations
+                .translationOrderFormScreenErrorSavingOrder(e.toString()))),
       );
     } finally {
       if (mounted) {
@@ -322,17 +333,23 @@ class _TranslationOrderFormScreenState
 
   // Helper to display employee names in dropdowns
   String _getEmployeeDisplayName(crm.Employee emp) {
-    return '${emp.name} (${emp.employeeId.substring(0, 6)}...)'; // Example display
+    final localizations = AppLocalizations.of(context);
+    return localizations.translationOrderFormScreenDisplayEmployee(
+        emp.name, emp.employeeId.substring(0, 6));
   }
 
   // Helper to display office names
   String _getOfficeDisplayName(crm.Office office) {
-    return '${office.city} (${office.officeId.substring(0, 6)}...)'; // Example display
+    final localizations = AppLocalizations.of(context);
+    return localizations.translationOrderFormScreenDisplayOffice(
+        office.city, office.officeId.substring(0, 6));
   }
 
   // Helper to display client names
   String _getClientDisplayName(crm.Client client) {
-    return '${client.firstName} ${client.lastName} (${client.clientId.substring(0, 6)}...)'; // Example display
+    final localizations = AppLocalizations.of(context);
+    return localizations.translationOrderFormScreenDisplayClient(
+        client.firstName, client.lastName, client.clientId.substring(0, 6));
   }
 
   // Helper for Document Type
@@ -347,22 +364,28 @@ class _TranslationOrderFormScreenState
 
   // Helper for Status (read-only display)
   String _getStatusDisplayName(crm.Status? s) {
-    if (s == null) return 'N/A';
+    final localizations = AppLocalizations.of(context);
+    if (s == null)
+      return localizations.translationOrderFormScreenStatusNotAvailable;
     return s.name.replaceFirst('STATUS_', '').replaceAll('_', ' ');
   }
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.orderId == null ? 'Create Order' : 'Edit Order'),
+        title: Text(widget.orderId == null
+            ? localizations.translationOrderFormScreenCreateTitle
+            : localizations.translationOrderFormScreenEditTitle),
         actions: [
           if (!_isLoading &&
               !_isFetchingInitialData) // Only show save when not loading
             IconButton(
               icon: const Icon(Icons.save),
               onPressed: _saveOrder,
-              tooltip: 'Save Order',
+              tooltip:
+                  localizations.translationOrderFormScreenSaveChangesTooltip,
             ),
           if (_isLoading ||
               _isFetchingInitialData) // Show spinner during any loading
@@ -388,10 +411,13 @@ class _TranslationOrderFormScreenState
                     // Title
                     TextFormField(
                       controller: _titleController,
-                      decoration: const InputDecoration(labelText: 'Title *'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .translationOrderFormScreenFieldTitleLabel),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a title';
+                          return localizations
+                              .translationOrderFormScreenFieldTitleValidation;
                         }
                         return null;
                       },
@@ -416,8 +442,9 @@ class _TranslationOrderFormScreenState
                         },
                         child: AbsorbPointer(
                           child: TextFormField(
-                            decoration: const InputDecoration(
-                              labelText: 'Done At (Completion Date)',
+                            decoration: InputDecoration(
+                              labelText: localizations
+                                  .translationOrderFormScreenFieldDoneAtLabel,
                               suffixIcon: Icon(Icons.calendar_today),
                             ),
                             controller: TextEditingController(
@@ -434,7 +461,8 @@ class _TranslationOrderFormScreenState
                     ],
                     DropdownButtonFormField<crm.Client>(
                       value: _selectedClient, // Use the selected Client object
-                      hint: const Text('Select Client'),
+                      hint: Text(localizations
+                          .translationOrderFormScreenFieldClientHint),
                       items: _clients.map((crm.Client client) {
                         return DropdownMenuItem<crm.Client>(
                           value: client,
@@ -448,15 +476,20 @@ class _TranslationOrderFormScreenState
                               ''; // Update hidden controller if needed
                         });
                       },
-                      validator: (value) =>
-                          value == null ? 'Please select a client' : null,
-                      decoration: const InputDecoration(labelText: 'Client *'),
+                      validator: (value) => value == null
+                          ? localizations
+                              .translationOrderFormScreenFieldClientValidation
+                          : null,
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .translationOrderFormScreenFieldClientLabel),
                     ),
                     const SizedBox(height: 16),
 
                     DropdownButtonFormField<crm.Employee>(
                       value: _selectedManager,
-                      hint: const Text('Select Manager'),
+                      hint: Text(localizations
+                          .translationOrderFormScreenFieldManagerHint),
                       items: _managers.map((crm.Employee manager) {
                         return DropdownMenuItem<crm.Employee>(
                           value: manager,
@@ -468,15 +501,20 @@ class _TranslationOrderFormScreenState
                           _selectedManager = newValue;
                         });
                       },
-                      validator: (value) =>
-                          value == null ? 'Please select a manager' : null,
-                      decoration: const InputDecoration(labelText: 'Manager *'),
+                      validator: (value) => value == null
+                          ? localizations
+                              .translationOrderFormScreenFieldManagerValidation
+                          : null,
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .translationOrderFormScreenFieldManagerLabel),
                     ),
                     const SizedBox(height: 16),
 
                     DropdownButtonFormField<crm.Office>(
                       value: _selectedOffice,
-                      hint: const Text('Select Office'),
+                      hint: Text(localizations
+                          .translationOrderFormScreenFieldOfficeHint),
                       items: _offices.map((crm.Office office) {
                         return DropdownMenuItem<crm.Office>(
                           value: office,
@@ -488,30 +526,37 @@ class _TranslationOrderFormScreenState
                           _selectedOffice = newValue;
                         });
                       },
-                      validator: (value) =>
-                          value == null ? 'Please select an office' : null,
-                      decoration: const InputDecoration(labelText: 'Office *'),
+                      validator: (value) => value == null
+                          ? localizations
+                              .translationOrderFormScreenFieldOfficeValidation
+                          : null,
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .translationOrderFormScreenFieldOfficeLabel),
                     ),
                     const SizedBox(height: 16),
 
                     // --- Language & Document ---
                     TextFormField(
                       controller: _sourceLangController,
-                      decoration:
-                          const InputDecoration(labelText: 'Source Language'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .translationOrderFormScreenFieldSourceLanguageLabel),
                       // No validator needed for optional field unless specific format required
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _targetLangController,
-                      decoration:
-                          const InputDecoration(labelText: 'Target Language'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .translationOrderFormScreenFieldTargetLanguageLabel),
                       // No validator needed for optional field
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<crm.DocumentType>(
                       value: _selectedDocumentType,
-                      hint: const Text('Select Document Type'),
+                      hint: Text(localizations
+                          .translationOrderFormScreenFieldDocumentTypeHint),
                       items: _documentTypes.map((crm.DocumentType dt) {
                         return DropdownMenuItem<crm.DocumentType>(
                           value: dt,
@@ -524,14 +569,16 @@ class _TranslationOrderFormScreenState
                         });
                       },
                       // validator: (value) => value == null ? 'Please select document type' : null, // Optional field
-                      decoration:
-                          const InputDecoration(labelText: 'Document Type'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .translationOrderFormScreenFieldDocumentTypeLabel),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _pageCountController,
-                      decoration:
-                          const InputDecoration(labelText: 'Page Count'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .translationOrderFormScreenFieldPageCountLabel),
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.digitsOnly
@@ -548,8 +595,9 @@ class _TranslationOrderFormScreenState
                     // --- Financial & Priority ---
                     TextFormField(
                       controller: _notarialSumController,
-                      decoration:
-                          const InputDecoration(labelText: 'Notarial Sum *'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .translationOrderFormScreenFieldNotarialSumLabel),
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: <TextInputFormatter>[
@@ -558,10 +606,12 @@ class _TranslationOrderFormScreenState
                       ],
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter notarial sum';
+                          return localizations
+                              .translationOrderFormScreenFieldNotarialSumValidationRequired;
                         }
                         if (double.tryParse(value) == null) {
-                          return 'Please enter a valid number';
+                          return localizations
+                              .translationOrderFormScreenFieldNotarialSumValidationNumber;
                         }
                         return null;
                       },
@@ -569,7 +619,8 @@ class _TranslationOrderFormScreenState
                     const SizedBox(height: 16),
                     DropdownButtonFormField<crm.Priority>(
                       value: _selectedPriority,
-                      hint: const Text('Select Priority'),
+                      hint: Text(localizations
+                          .translationOrderFormScreenFieldPriorityHint),
                       items: _priorities.map((crm.Priority p) {
                         return DropdownMenuItem<crm.Priority>(
                           value: p,
@@ -581,16 +632,20 @@ class _TranslationOrderFormScreenState
                           _selectedPriority = newValue;
                         });
                       },
-                      validator: (value) =>
-                          value == null ? 'Please select priority' : null,
-                      decoration:
-                          const InputDecoration(labelText: 'Priority *'),
+                      validator: (value) => value == null
+                          ? localizations
+                              .translationOrderFormScreenFieldPriorityValidation
+                          : null,
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .translationOrderFormScreenFieldPriorityLabel),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _paymentIdController,
-                      decoration:
-                          const InputDecoration(labelText: 'Payment ID'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .translationOrderFormScreenFieldPaymentIdLabel),
                       // Optional field
                     ),
                     const SizedBox(height: 16),
@@ -598,7 +653,8 @@ class _TranslationOrderFormScreenState
                     // --- Translator & Status (Read-Only) ---
                     DropdownButtonFormField<crm.Employee>(
                       value: _selectedTranslator,
-                      hint: const Text('Select Translator (Optional)'),
+                      hint: Text(localizations
+                          .translationOrderFormScreenFieldTranslatorHint),
                       items: _translators.map((crm.Employee translator) {
                         return DropdownMenuItem<crm.Employee>(
                           value: translator,
@@ -611,16 +667,18 @@ class _TranslationOrderFormScreenState
                         });
                       },
                       // validator: (value) => value == null ? 'Please select a translator' : null, // Optional
-                      decoration:
-                          const InputDecoration(labelText: 'Translator'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .translationOrderFormScreenFieldTranslatorLabel),
                     ),
                     const SizedBox(height: 16),
 
                     // Display Status (Read-Only) if editing
                     if (widget.orderId != null) ...[
                       InputDecorator(
-                        decoration: const InputDecoration(
-                          labelText: 'Status (Read-Only)',
+                        decoration: InputDecoration(
+                          labelText: localizations
+                              .translationOrderFormScreenFieldStatusLabel,
                           border: InputBorder
                               .none, // Remove border to look like text
                           contentPadding: EdgeInsets.zero, // Adjust padding
@@ -638,14 +696,17 @@ class _TranslationOrderFormScreenState
                     // --- Notes & Flags ---
                     TextFormField(
                       controller: _notesController,
-                      decoration: const InputDecoration(labelText: 'Notes'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .translationOrderFormScreenFieldNotesLabel),
                       maxLines: 3,
                       // Optional field
                     ),
                     const SizedBox(height: 16),
 
                     SwitchListTile(
-                      title: const Text('Urgent'),
+                      title: Text(
+                          localizations.translationOrderFormScreenSwitchUrgent),
                       value: _isUrgent,
                       onChanged: (bool value) {
                         setState(() {
@@ -656,7 +717,8 @@ class _TranslationOrderFormScreenState
                       },
                     ),
                     SwitchListTile(
-                      title: const Text('Semi-Urgent'),
+                      title: Text(localizations
+                          .translationOrderFormScreenSwitchSemiUrgent),
                       value: _isSemiUrgent,
                       onChanged: (bool value) {
                         setState(() {
@@ -667,7 +729,8 @@ class _TranslationOrderFormScreenState
                       },
                     ),
                     SwitchListTile(
-                      title: const Text('Client Notified'),
+                      title: Text(localizations
+                          .translationOrderFormScreenSwitchClientNotified),
                       value: _clientNotified,
                       onChanged: (bool value) {
                         setState(() {
@@ -684,24 +747,30 @@ class _TranslationOrderFormScreenState
                       Center(
                         child: ElevatedButton.icon(
                           icon: const Icon(Icons.delete),
-                          label: const Text('Delete Order'),
+                          label: Text(localizations
+                              .translationOrderFormScreenDeleteButton),
                           onPressed: () async {
+                            final localizations =
+                                AppLocalizations.of(context); // Add this line
                             try {
                               final confirm = await showDialog<bool>(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                  title: const Text('Delete Order?'),
-                                  content: const Text(
-                                      'Are you sure you want to delete this order?'),
+                                  title: Text(localizations
+                                      .translationOrderFormScreenDeleteDialogTitle),
+                                  content: Text(localizations
+                                      .translationOrderFormScreenDeleteDialogContent),
                                   actions: [
                                     TextButton(
                                         onPressed: () =>
                                             Navigator.pop(context, false),
-                                        child: const Text('Cancel')),
+                                        child: Text(localizations
+                                            .translationOrderFormScreenDeleteDialogCancelButton)),
                                     TextButton(
                                         onPressed: () =>
                                             Navigator.pop(context, true),
-                                        child: const Text('Delete')),
+                                        child: Text(localizations
+                                            .translationOrderFormScreenDeleteDialogDeleteButton)),
                                   ],
                                 ),
                               );
@@ -710,16 +779,18 @@ class _TranslationOrderFormScreenState
                                 await _orderService
                                     .deleteTranslationOrder(widget.orderId!);
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content:
-                                          Text('Order deleted successfully')),
+                                  SnackBar(
+                                      content: Text(localizations
+                                          .translationOrderFormScreenOrderDeletedSuccess)),
                                 );
                                 Navigator.pop(context, true); // Indicate change
                               }
                             } catch (e) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                    content: Text('Error deleting order: $e')),
+                                    content: Text(localizations
+                                        .translationOrderFormScreenErrorDeletingOrder(
+                                            e.toString()))),
                               );
                               if (mounted) {
                                 // Check mounted before setState

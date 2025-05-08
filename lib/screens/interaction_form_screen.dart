@@ -7,6 +7,8 @@ import 'package:grpc/grpc.dart'; // Added for GrpcError
 import 'package:admin/generated/google/protobuf/timestamp.pb.dart'
     as $2; // Correct alias for Timestamp
 import 'package:intl/intl.dart'; // Added for DateFormat
+import 'package:admin/screens/main/main_screen.dart'; // Added
+import 'package:admin/l10n/app_localizations.dart'; // Import AppLocalizations
 
 class InteractionFormScreen extends StatefulWidget {
   final crm.Interaction? interaction; // Optional for editing
@@ -82,6 +84,7 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
     setState(() {
       _isLoading = true;
     });
+    final localizations = AppLocalizations.of(context); // Add this
     try {
       // Fetch clients and employees using their respective services
       final clientsFuture =
@@ -94,7 +97,10 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
       _employees = results[1] as List<crm.Employee>;
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load initial data: $e')),
+        SnackBar(
+            content: Text(
+                localizations.interactionFormScreenFeedbackErrorLoading(
+                    e.toString()))), // Use localized string
       );
     } finally {
       setState(() {
@@ -110,6 +116,7 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
     setState(() {
       _isSaving = true;
     });
+    final localizations = AppLocalizations.of(context); // Add this
 
     // Create or update the interaction object using correct field names
     final interactionData = crm.Interaction(
@@ -137,14 +144,18 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
         // Create new interaction
         await _interactionService.createInteraction(interactionData);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Interaction created successfully')),
+          SnackBar(
+              content: Text(localizations
+                  .interactionFormScreenFeedbackSuccessCreate)), // Use localized string
         );
       } else {
         // Update existing interaction
         await _interactionService.updateInteraction(
             interactionData.interactionId, interactionData);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Interaction updated successfully')),
+          SnackBar(
+              content: Text(localizations
+                  .interactionFormScreenFeedbackSuccessUpdate)), // Use localized string
         );
       }
       Navigator.of(context).pop(true); // Indicate success
@@ -152,11 +163,16 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
       // Catch GrpcError
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text('Failed to save interaction: ${e.message ?? e}')),
+            content: Text(
+                localizations.interactionFormScreenFeedbackErrorSaving(
+                    e.message ?? e.toString()))), // Use localized string
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An unexpected error occurred: $e')),
+        SnackBar(
+            content: Text(
+                localizations.interactionFormScreenFeedbackErrorUnexpected(
+                    e.toString()))), // Use localized string
       );
     } finally {
       setState(() {
@@ -198,11 +214,28 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context); // Add this
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.interaction == null
-            ? 'Add Interaction'
-            : 'Edit Interaction'),
+            ? localizations.interactionFormScreenTitleAdd
+            : localizations
+                .interactionFormScreenTitleEdit), // Use localized string
+        leading: IconButton(
+          // Added leading IconButton
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).maybePop();
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MainScreen()),
+              );
+            }
+          },
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.save),
@@ -222,7 +255,9 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
                     // Client Dropdown
                     DropdownButtonFormField<String>(
                       value: _selectedClientId,
-                      decoration: const InputDecoration(labelText: 'Client'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .interactionFormScreenLabelClient), // Use localized string
                       items: _clients.map((crm.Client client) {
                         return DropdownMenuItem<String>(
                           value: client.clientId,
@@ -234,15 +269,19 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
                           _selectedClientId = newValue;
                         });
                       },
-                      validator: (value) =>
-                          value == null ? 'Please select a client' : null,
+                      validator: (value) => value == null
+                          ? localizations
+                              .interactionFormScreenValidationSelectClient
+                          : null, // Use localized string
                     ),
                     const SizedBox(height: 16),
 
                     // Employee Dropdown - Use employee.name
                     DropdownButtonFormField<String>(
                       value: _selectedEmployeeId,
-                      decoration: const InputDecoration(labelText: 'Employee'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .interactionFormScreenLabelEmployee), // Use localized string
                       items: _employees.map((crm.Employee employee) {
                         return DropdownMenuItem<String>(
                           value: employee.employeeId,
@@ -258,7 +297,8 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
                         });
                       },
                       validator: (value) => value == null || value.isEmpty
-                          ? 'Please select an employee'
+                          ? localizations
+                              .interactionFormScreenValidationSelectEmployee // Use localized string
                           : null,
                     ),
                     const SizedBox(height: 16),
@@ -266,8 +306,9 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
                     // Interaction Type Dropdown
                     DropdownButtonFormField<crm.InteractionType>(
                       value: _selectedInteractionType,
-                      decoration:
-                          const InputDecoration(labelText: 'Interaction Type'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .interactionFormScreenLabelInteractionType), // Use localized string
                       items: crm.InteractionType.values
                           .where((type) =>
                               type !=
@@ -290,15 +331,22 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
                       },
                       validator: (value) => value ==
                               crm.InteractionType.INTERACTION_TYPE_UNSPECIFIED
-                          ? 'Please select a type'
+                          ? localizations
+                              .interactionFormScreenValidationSelectType // Use localized string
                           : null,
                     ),
                     const SizedBox(height: 16),
 
                     // Interaction Date Picker
                     ListTile(
-                      title: Text(
-                          'Interaction Date: ${_selectedInteractionDate == null ? 'Not set' : DateFormat('yyyy-MM-dd').format(_selectedInteractionDate!)}'),
+                      title: Text(localizations
+                          .interactionFormScreenLabelInteractionDate(
+                              // Use localized string
+                              _selectedInteractionDate == null
+                                  ? localizations
+                                      .interactionFormScreenLabelDateNotSet // Use localized string
+                                  : DateFormat('yyyy-MM-dd')
+                                      .format(_selectedInteractionDate!))),
                       trailing: const Icon(Icons.calendar_today),
                       onTap: () => _selectDate(context),
                     ),
@@ -306,8 +354,12 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
 
                     // End Time Picker
                     ListTile(
-                      title: Text(
-                          'End Time: ${_selectedEndTime == null ? 'Not set' : DateFormat('HH:mm').format(_selectedEndTime!)}'),
+                      title: Text(localizations.interactionFormScreenLabelEndTime(
+                          // Use localized string
+                          _selectedEndTime == null
+                              ? localizations
+                                  .interactionFormScreenLabelDateNotSet // Use localized string
+                              : DateFormat('HH:mm').format(_selectedEndTime!))),
                       trailing: const Icon(Icons.access_time),
                       onTap: () => _selectEndTime(context),
                     ),
@@ -316,10 +368,13 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
                     // Subject Field
                     TextFormField(
                       controller: _subjectCtrl,
-                      decoration: const InputDecoration(labelText: 'Subject'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .interactionFormScreenLabelSubject), // Use localized string
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter a subject';
+                          return localizations
+                              .interactionFormScreenValidationEnterSubject; // Use localized string
                         }
                         return null;
                       },
@@ -329,8 +384,9 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
                     // Description Field
                     TextFormField(
                       controller: _descriptionCtrl,
-                      decoration:
-                          const InputDecoration(labelText: 'Description'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .interactionFormScreenLabelDescription), // Use localized string
                       maxLines: 3,
                     ),
                     const SizedBox(height: 16),
@@ -338,14 +394,17 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
                     // Notes Field
                     TextFormField(
                       controller: _notesController,
-                      decoration: const InputDecoration(labelText: 'Notes'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .interactionFormScreenLabelNotes), // Use localized string
                       maxLines: 3,
                     ),
                     const SizedBox(height: 16),
 
                     // Is Scheduled Checkbox
                     CheckboxListTile(
-                      title: const Text('Scheduled'),
+                      title: Text(localizations
+                          .interactionFormScreenCheckboxScheduled), // Use localized string
                       value: _isScheduled,
                       onChanged: (bool? value) {
                         setState(() {
@@ -356,7 +415,8 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
 
                     // Is Completed Checkbox
                     CheckboxListTile(
-                      title: const Text('Completed'),
+                      title: Text(localizations
+                          .interactionFormScreenCheckboxCompleted), // Use localized string
                       value: _isCompleted,
                       onChanged: (bool? value) {
                         setState(() {

@@ -1,10 +1,12 @@
 import 'package:admin/constants.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
-// import 'package:admin/responsive.dart'; // Removed unused import
 import 'package:admin/screens/employee_form_screen.dart';
 import 'package:admin/services/grpc_client_service.dart';
 import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 import 'package:grpc/grpc.dart';
+import 'package:admin/screens/main/main_screen.dart';
+import 'package:admin/l10n/app_localizations.dart';
 
 class EmployeeListScreen extends StatefulWidget {
   const EmployeeListScreen({super.key});
@@ -31,8 +33,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
       _errorMessage = null;
     });
     try {
-      final employees = await _grpcService.listEmployees(
-          pageSize: 100); // Fetch more for list view
+      final employees = await _grpcService.listEmployees(pageSize: 100);
       if (mounted) {
         setState(() {
           _employees = employees;
@@ -41,8 +42,10 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
       }
     } catch (e) {
       if (mounted) {
+        final localizations = AppLocalizations.of(context);
         setState(() {
-          _errorMessage = 'Error loading employees: $e';
+          _errorMessage =
+              localizations.employeeListScreenErrorLoading(e.toString());
           _isLoading = false;
         });
       }
@@ -51,20 +54,23 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
 
   Future<void> _deleteEmployee(crm.Employee employeeToDelete) async {
     // Optional: Show confirmation dialog
+    final localizations = AppLocalizations.of(context);
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Confirm Deletion'),
-        content: Text(
-            'Are you sure you want to delete employee "${employeeToDelete.name}"?'),
+        title: Text(localizations.employeeListScreenConfirmDeleteTitle),
+        content: Text(localizations
+            .employeeListScreenConfirmDeleteContent(employeeToDelete.name)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel'),
+            child:
+                Text(localizations.employeeListScreenConfirmDeleteActionCancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Delete'),
+            child:
+                Text(localizations.employeeListScreenConfirmDeleteActionDelete),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
           ),
         ],
@@ -83,14 +89,17 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text(
-                  'Employee "${employeeToDelete.name}" deleted successfully')),
+                  localizations.employeeListScreenFeedbackSuccessDelete(
+                      employeeToDelete.name))),
         );
         _loadEmployees(); // Refresh the list
       }
     } on GrpcError catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error deleting employee: ${e.message}')),
+          SnackBar(
+              content: Text(localizations.employeeListScreenFeedbackErrorDelete(
+                  e.message ?? e.toString()))),
         );
         setState(() {
           _isLoading = false; // Stop loading on error
@@ -99,7 +108,9 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error deleting employee: $e')),
+          SnackBar(
+              content: Text(localizations
+                  .employeeListScreenFeedbackErrorDelete(e.toString()))),
         );
         setState(() {
           _isLoading = false; // Stop loading on error
@@ -137,110 +148,212 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
     return role.name.replaceFirst('EMPLOYEE_ROLE_', '').replaceAll('_', ' ');
   }
 
+  PlutoGridStateManager? _plutoGridStateManager;
+
+  List<PlutoColumn> _getPlutoColumns() {
+    final localizations = AppLocalizations.of(context);
+    return [
+      PlutoColumn(
+        title: localizations.employeeListScreenColumnName,
+        field: 'name',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 180,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.employeeListScreenColumnEmail,
+        field: 'email',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 220,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.employeeListScreenColumnRole,
+        field: 'role',
+        type: PlutoColumnType.text(),
+        enableEditingMode: true,
+        width: 140,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.employeeListScreenColumnOfficeId,
+        field: 'officeId',
+        type: PlutoColumnType.text(),
+        enableEditingMode: true,
+        width: 120,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.employeeListScreenColumnActive,
+        field: 'active',
+        type: PlutoColumnType.text(),
+        enableEditingMode: true,
+        width: 80,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.employeeListScreenColumnActions,
+        field: 'actions',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 120,
+        readOnly: true,
+        textAlign: PlutoColumnTextAlign.center,
+        renderer: (rendererContext) {
+          final String employeeId =
+              rendererContext.row.cells['id']?.value ?? '';
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.edit, color: primaryColor),
+                onPressed: () => _navigateToEditEmployee(employeeId),
+                tooltip: localizations.employeeListScreenTooltipEdit,
+                splashRadius: 20,
+              ),
+              const SizedBox(width: 4),
+              IconButton(
+                icon: const Icon(Icons.delete, color: Colors.redAccent),
+                onPressed: () => _deleteEmployee(
+                  _employees.firstWhere((e) => e.employeeId == employeeId,
+                      orElse: () => crm.Employee()),
+                ),
+                tooltip: localizations.employeeListScreenTooltipDelete,
+                splashRadius: 20,
+              ),
+            ],
+          );
+        },
+      ),
+    ];
+  }
+
+  void _updatePlutoGridRows() {
+    if (_plutoGridStateManager == null) return;
+    final rows = _employees.map((employee) {
+      return PlutoRow(
+        cells: {
+          'id': PlutoCell(value: employee.employeeId),
+          'name': PlutoCell(value: employee.name),
+          'email': PlutoCell(value: employee.email),
+          'role': PlutoCell(value: _getRoleDisplayName(employee.role)),
+          'officeId': PlutoCell(value: employee.officeId),
+          'active': PlutoCell(value: employee.isActive ? 'Yes' : 'No'),
+          'actions': PlutoCell(value: employee.employeeId),
+        },
+      );
+    }).toList();
+    _plutoGridStateManager!.removeAllRows();
+    _plutoGridStateManager!.appendRows(rows);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Employees'),
+        title: Text(localizations.employeeListScreenTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).maybePop();
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MainScreen()),
+              );
+            }
+          },
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: _isLoading
-                ? null
-                : _loadEmployees, // Disable refresh while loading
-            tooltip: 'Refresh List',
+            onPressed: _isLoading ? null : _loadEmployees,
+            tooltip: localizations.employeeListScreenTooltipRefresh,
           ),
         ],
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            // Optional Header can go here
-            Expanded(
-              child: _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : _errorMessage != null
-                      ? Center(
-                          child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('Error: $_errorMessage',
-                                      style:
-                                          const TextStyle(color: Colors.red)),
-                                  const SizedBox(height: 10),
-                                  ElevatedButton.icon(
-                                    icon: const Icon(Icons.refresh),
-                                    label: const Text('Retry'),
-                                    onPressed: _loadEmployees,
-                                  )
-                                ],
-                              )))
-                      : _employees.isEmpty
-                          ? Center(
-                              child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Text('No employees found.'),
-                                const SizedBox(height: 10),
-                                ElevatedButton.icon(
-                                  icon: const Icon(Icons.add),
-                                  label: const Text('Add First Employee'),
-                                  onPressed: _navigateToAddEmployee,
-                                )
-                              ],
-                            ))
-                          : RefreshIndicator(
-                              onRefresh: _loadEmployees,
-                              child: SingleChildScrollView(
-                                physics:
-                                    const AlwaysScrollableScrollPhysics(), // Enable pull-to-refresh even when content fits
-                                padding: const EdgeInsets.all(defaultPadding),
-                                child: Container(
-                                  padding: const EdgeInsets.all(defaultPadding),
-                                  decoration: const BoxDecoration(
-                                    color: secondaryColor,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                  ),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    child: DataTable(
-                                      columnSpacing: defaultPadding,
-                                      // minWidth: 600, // Uncomment if needed for wider tables
-                                      columns: const [
-                                        DataColumn(label: Text('Name')),
-                                        DataColumn(label: Text('Email')),
-                                        DataColumn(label: Text('Role')),
-                                        DataColumn(label: Text('Office ID')),
-                                        DataColumn(label: Text('Active')),
-                                        DataColumn(label: Text('Actions')),
-                                      ],
-                                      rows: List.generate(
-                                        _employees.length,
-                                        (index) =>
-                                            employeeDataRow(_employees[index]),
-                                      ),
-                                    ),
-                                  ),
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _errorMessage != null
+                ? Center(
+                    child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(_errorMessage!,
+                                style: const TextStyle(color: Colors.red)),
+                            const SizedBox(height: 10),
+                            ElevatedButton.icon(
+                              icon: const Icon(Icons.refresh),
+                              label: Text(
+                                  localizations.employeeListScreenButtonRetry),
+                              onPressed: _loadEmployees,
+                            )
+                          ],
+                        )))
+                : _employees.isEmpty
+                    ? Center(
+                        child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                              localizations.employeeListScreenNoEmployeesFound),
+                          const SizedBox(height: 10),
+                          ElevatedButton.icon(
+                            icon: const Icon(Icons.add),
+                            label: Text(
+                                localizations.employeeListScreenButtonAddFirst),
+                            onPressed: _navigateToAddEmployee,
+                          )
+                        ],
+                      ))
+                    : RefreshIndicator(
+                        onRefresh: _loadEmployees,
+                        child: Padding(
+                          padding: const EdgeInsets.all(defaultPadding),
+                          child: PlutoGrid(
+                            columns: _getPlutoColumns(),
+                            rows: [],
+                            onLoaded: (PlutoGridOnLoadedEvent event) {
+                              _plutoGridStateManager = event.stateManager;
+                              _updatePlutoGridRows();
+                            },
+                            configuration: PlutoGridConfiguration(
+                              style: PlutoGridStyleConfig(
+                                gridBorderColor: Colors.grey,
+                                rowHeight: 45,
+                                columnHeight: 45,
+                                borderColor: Colors.transparent,
+                                gridBackgroundColor: secondaryColor,
+                                columnTextStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
+                              columnSize: const PlutoGridColumnSizeConfig(
+                                autoSizeMode: PlutoAutoSizeMode.scale,
+                              ),
+                              scrollbar: const PlutoGridScrollbarConfig(
+                                isAlwaysShown: true,
+                                draggableScrollbar: true,
+                              ),
                             ),
-            ),
-          ],
-        ),
+                          ),
+                        ),
+                      ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToAddEmployee,
-        tooltip: 'Add Employee',
+        tooltip: localizations.employeeListScreenTooltipAdd,
         child: const Icon(Icons.add),
-        backgroundColor: primaryColor, // Use theme color
+        backgroundColor: primaryColor,
       ),
     );
   }
@@ -248,7 +361,6 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
   DataRow employeeDataRow(crm.Employee employeeInfo) {
     return DataRow(
       cells: [
-        DataCell(Text(employeeInfo.name)),
         DataCell(Text(employeeInfo.email)),
         DataCell(Text(_getRoleDisplayName(employeeInfo.role))),
         DataCell(Text(employeeInfo

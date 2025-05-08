@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
 import 'package:admin/services/grpc_insurance_policy_service_mobile.dart';
 import 'insurance_policy_form_screen.dart';
+import 'package:admin/screens/main/main_screen.dart'; // Added
+import 'package:admin/l10n/app_localizations.dart';
 
 class InsurancePolicyListScreen extends StatefulWidget {
   const InsurancePolicyListScreen({super.key});
@@ -40,20 +42,24 @@ class _InsurancePolicyListScreenState extends State<InsurancePolicyListScreen> {
   }
 
   Future<void> _deletePolicy(String policyId) async {
+    final localizations = AppLocalizations.of(context);
     try {
       final confirm = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Delete Policy?'),
-          content: const Text('Are you sure you want to delete this policy?'),
+          title: Text(localizations.insurancePolicyListScreenDeleteDialogTitle),
+          content:
+              Text(localizations.insurancePolicyListScreenDeleteDialogContent),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel'),
+              child: Text(localizations
+                  .insurancePolicyListScreenDeleteDialogCancelButton),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Delete'),
+              child: Text(localizations
+                  .insurancePolicyListScreenDeleteDialogDeleteButton),
             ),
           ],
         ),
@@ -61,31 +67,47 @@ class _InsurancePolicyListScreenState extends State<InsurancePolicyListScreen> {
       if (confirm == true) {
         await _service.deleteInsurancePolicy(policyId);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Policy deleted successfully')),
+          SnackBar(
+              content: Text(
+                  localizations.insurancePolicyListScreenPolicyDeletedSuccess)),
         );
         _loadPolicies();
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error deleting policy: $e')),
+        SnackBar(
+            content: Text(localizations
+                .insurancePolicyListScreenErrorDeletingPolicy(e.toString()))),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Insurance Policies'),
+        title: Text(localizations.insurancePolicyListScreenTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          // onPressed: () => Navigator.of(context).maybePop(), // Original
+          onPressed: () {
+            // Changed
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).maybePop();
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MainScreen()),
+              );
+            }
+          },
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            tooltip: 'Add Policy',
+            tooltip: localizations.insurancePolicyListScreenAddPolicyTooltip,
             onPressed: () => _navigateToForm(),
           ),
         ],
@@ -98,9 +120,14 @@ class _InsurancePolicyListScreenState extends State<InsurancePolicyListScreen> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
+              return Center(
+                  child: Text(
+                      localizations.insurancePolicyListScreenErrorLoading(
+                          snapshot.error.toString())));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text('No insurance policies found.'));
+              return Center(
+                  child: Text(
+                      localizations.insurancePolicyListScreenNoPoliciesFound));
             }
             final policies = snapshot.data!;
             return ListView.builder(
@@ -113,21 +140,27 @@ class _InsurancePolicyListScreenState extends State<InsurancePolicyListScreen> {
                   child: ListTile(
                     title: Text(policy.policyNumber.isNotEmpty
                         ? policy.policyNumber
-                        : 'No Policy Number'),
+                        : localizations
+                            .insurancePolicyListScreenNoPolicyNumber),
                     subtitle: Text(
-                        'Client: ${policy.clientId}\nManager: ${policy.managerId}\nAmount: ${policy.amount}'),
+                        localizations.insurancePolicyListScreenListItemSubtitle(
+                            policy.clientId,
+                            policy.managerId,
+                            policy.amount.toString())),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
                           icon: const Icon(Icons.edit),
-                          tooltip: 'Edit Policy',
+                          tooltip: localizations
+                              .insurancePolicyListScreenEditPolicyTooltip,
                           onPressed: () =>
                               _navigateToForm(policyId: policy.policyId),
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete),
-                          tooltip: 'Delete Policy',
+                          tooltip: localizations
+                              .insurancePolicyListScreenDeletePolicyTooltip,
                           onPressed: () => _deletePolicy(policy.policyId),
                         ),
                       ],

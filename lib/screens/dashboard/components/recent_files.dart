@@ -1,3 +1,4 @@
+import 'package:admin/l10n/app_localizations.dart';
 import 'package:admin/models/recent_file.dart';
 
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class RecentFiles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return Container(
       padding: EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
@@ -22,7 +24,7 @@ class RecentFiles extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Recent Files",
+            localizations.dashboardRecentFilesTitle,
             style: Theme.of(context).textTheme.titleMedium,
           ),
           SizedBox(
@@ -32,13 +34,13 @@ class RecentFiles extends StatelessWidget {
               // minWidth: 600,
               columns: [
                 DataColumn(
-                  label: Text("File Name"),
+                  label: Text(localizations.dashboardRecentFilesColumnFileName),
                 ),
                 DataColumn(
-                  label: Text("Date"),
+                  label: Text(localizations.dashboardRecentFilesColumnDate),
                 ),
                 DataColumn(
-                  label: Text("Size"),
+                  label: Text(localizations.dashboardRecentFilesColumnSize),
                 ),
               ],
               rows: List.generate(

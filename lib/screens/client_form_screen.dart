@@ -3,6 +3,8 @@ import 'package:admin/generated/google/protobuf/struct.pb.dart' as pb_struct;
 import 'package:admin/services/grpc_client_service.dart';
 import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
+import 'package:admin/screens/main/main_screen.dart'; // Added
+import 'package:admin/l10n/app_localizations.dart'; // Added
 
 class ClientFormScreen extends StatefulWidget {
   final String? clientId; // Null for Add mode, non-null for Edit mode
@@ -38,10 +40,15 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
     _isEditMode = widget.clientId != null;
     if (_isEditMode) {
       _loadClientData();
+    } else {
+      // For new clients, explicitly set _selectedSource to null or a valid default
+      // if CLIENT_SOURCE_UNSPECIFIED is not a valid user choice.
+      _selectedSource = null;
     }
   }
 
   Future<void> _loadClientData() async {
+    final localizations = AppLocalizations.of(context);
     setState(() {
       _isLoading = true;
     });
@@ -54,9 +61,13 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
         _phoneController.text = client.phone;
         _telegramIdController.text = client.telegramId;
         _whatsappNumberController.text = client.whatsappNumber;
-        _selectedSource = client.source; // Use enum value
-        _passportDataController.text =
-            client.hasPassportData() ? client.passportData.toString() : '';
+        _selectedSource =
+            client.source == crm.ClientSource.CLIENT_SOURCE_UNSPECIFIED
+                ? null
+                : client.source;
+        _passportDataController.text = client.hasPassportData()
+            ? client.passportData.writeToJson()
+            : ''; // Changed here
         _notesController.text = client.notes;
         _isLoading = false;
       });
@@ -65,13 +76,18 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
         _isLoading = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error loading client data: $e')),
+        SnackBar(
+            content: Text(localizations
+                .clientFormScreenFeedbackErrorLoading(e.toString()))),
       );
     }
   }
 
   Future<void> _saveClient() async {
+    final localizations = AppLocalizations.of(context);
+    print('_saveClient method called'); // Logging: Method call
     if (_formKey.currentState!.validate()) {
+      print('Form validation successful'); // Logging: Form validation result
       _formKey.currentState!.save(); // Trigger onSaved callbacks
 
       setState(() {
@@ -81,16 +97,24 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
       // Validate passportData JSON if provided
       pb_struct.Value? parsedPassportData;
       final passportText = _passportDataController.text.trim();
+      print(
+          'Raw passport data text: $passportText'); // Logging: Raw passport data
       if (passportText.isNotEmpty) {
         try {
           parsedPassportData = pb_struct.Value.fromJson(passportText);
+          print(
+              'Parsed passport data: $parsedPassportData'); // Logging: Parsed passport data
         } catch (e) {
           // Invalid JSON: show error and abort save
+          print(
+              'Error parsing passport data: $e'); // Logging: Passport parsing error
           setState(() {
             _isLoading = false;
           });
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Invalid JSON for passport data: $e')),
+            SnackBar(
+                content: Text(localizations
+                    .clientFormScreenFeedbackErrorInvalidJson(e.toString()))),
           );
           return;
         }
@@ -110,29 +134,45 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
         passportData: parsedPassportData, // Use validated JSON
         notes: _notesController.text.trim(),
       );
+      print(
+          'Client to save: $clientToSave'); // Logging: Client object being prepared
 
       try {
         if (_isEditMode) {
-          // Update existing client
+          print('Edit mode: Updating client'); // Logging: Edit mode
+          print('Calling gRPC updateClient service'); // Logging: gRPC call
           await _grpcService.updateClient(widget.clientId!, clientToSave);
+          print('gRPC updateClient call successful'); // Logging: gRPC success
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Client updated successfully')),
+            SnackBar(
+                content:
+                    Text(localizations.clientFormScreenFeedbackSuccessUpdate)),
           );
         } else {
-          // Create new client
+          print('Create mode: Creating new client'); // Logging: Create mode
+          print('Calling gRPC createClient service'); // Logging: gRPC call
           await _grpcService.createClient(clientToSave);
+          print('gRPC createClient call successful'); // Logging: gRPC success
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Client created successfully')),
+            SnackBar(
+                content:
+                    Text(localizations.clientFormScreenFeedbackSuccessCreate)),
           );
         }
         Navigator.of(context).pop(true); // Pop screen and indicate success
       } on GrpcError catch (e) {
+        print('gRPC Error saving client: ${e.message}'); // Logging: gRPC error
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('gRPC Error saving client: ${e.message}')),
+          SnackBar(
+              content: Text(localizations.clientFormScreenFeedbackErrorGrpc(
+                  e.message ?? 'Unknown error'))),
         );
       } catch (e) {
+        print('Error saving client: $e'); // Logging: General error
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error saving client: $e')),
+          SnackBar(
+              content: Text(localizations
+                  .clientFormScreenFeedbackErrorGeneric(e.toString()))),
         );
       } finally {
         if (mounted) {
@@ -141,6 +181,8 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
           });
         }
       }
+    } else {
+      print('Form validation failed'); // Logging: Form validation result
     }
   }
 
@@ -160,13 +202,31 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(_isEditMode ? 'Edit Client' : 'Add Client'),
+        title: Text(_isEditMode
+            ? localizations.clientFormScreenTitleEdit
+            : localizations.clientFormScreenTitleAdd),
+        leading: IconButton(
+          // Added leading IconButton
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).maybePop();
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MainScreen()),
+              );
+            }
+          },
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.save),
-            tooltip: 'Save Client',
+            tooltip: localizations.clientFormScreenSaveTooltip,
             onPressed: _isLoading ? null : _saveClient,
           ),
         ],
@@ -182,14 +242,17 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
                   children: <Widget>[
                     TextFormField(
                       controller: _firstNameController,
-                      decoration:
-                          const InputDecoration(labelText: 'First Name'),
+                      decoration: InputDecoration(
+                          labelText:
+                              localizations.clientFormScreenLabelFirstName),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a first name';
+                          return localizations
+                              .clientFormScreenValidationFirstNameRequired;
                         }
                         if (value.trim().length < 2) {
-                          return 'First name must be at least 2 characters';
+                          return localizations
+                              .clientFormScreenValidationFirstNameMinLength;
                         }
                         return null;
                       },
@@ -197,13 +260,17 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _lastNameController,
-                      decoration: const InputDecoration(labelText: 'Last Name'),
+                      decoration: InputDecoration(
+                          labelText:
+                              localizations.clientFormScreenLabelLastName),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a last name';
+                          return localizations
+                              .clientFormScreenValidationLastNameRequired;
                         }
                         if (value.trim().length < 2) {
-                          return 'Last name must be at least 2 characters';
+                          return localizations
+                              .clientFormScreenValidationLastNameMinLength;
                         }
                         return null;
                       },
@@ -211,17 +278,20 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _emailController,
-                      decoration: const InputDecoration(labelText: 'Email'),
+                      decoration: InputDecoration(
+                          labelText: localizations.clientFormScreenLabelEmail),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter an email address';
+                          return localizations
+                              .clientFormScreenValidationEmailRequired;
                         }
                         // Basic email validation regex
                         final emailRegex =
                             RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
                         if (!emailRegex.hasMatch(value.trim())) {
-                          return 'Please enter a valid email address';
+                          return localizations
+                              .clientFormScreenValidationEmailInvalid;
                         }
                         return null;
                       },
@@ -229,11 +299,13 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _phoneController,
-                      decoration: const InputDecoration(labelText: 'Phone'),
+                      decoration: InputDecoration(
+                          labelText: localizations.clientFormScreenLabelPhone),
                       keyboardType: TextInputType.phone,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Please enter a phone number';
+                          return localizations
+                              .clientFormScreenValidationPhoneRequired;
                         }
                         // Add more specific phone validation if needed (e.g., E.164 format)
                         return null;
@@ -242,25 +314,29 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _telegramIdController,
-                      decoration:
-                          const InputDecoration(labelText: 'Telegram ID'),
+                      decoration: InputDecoration(
+                          labelText:
+                              localizations.clientFormScreenLabelTelegramId),
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _whatsappNumberController,
-                      decoration:
-                          const InputDecoration(labelText: 'WhatsApp Number'),
+                      decoration: InputDecoration(
+                          labelText: localizations
+                              .clientFormScreenLabelWhatsappNumber),
                     ),
                     const SizedBox(height: 16),
                     // Dropdown for ClientSource
                     DropdownButtonFormField<crm.ClientSource>(
-                      value: _selectedSource,
-                      decoration: const InputDecoration(labelText: 'Source'),
+                      value:
+                          _selectedSource, // This will now be null if the original was UNSPECIFIED
+                      decoration: InputDecoration(
+                          labelText: localizations.clientFormScreenLabelSource),
+                      hint: Text(localizations.clientFormScreenHintSource),
                       items: crm.ClientSource.values
                           .where((source) =>
                               source !=
-                              crm.ClientSource
-                                  .CLIENT_SOURCE_UNSPECIFIED) // Exclude UNSPECIFIED
+                              crm.ClientSource.CLIENT_SOURCE_UNSPECIFIED)
                           .map((crm.ClientSource source) {
                         return DropdownMenuItem<crm.ClientSource>(
                           value: source,
@@ -274,32 +350,35 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
                           _selectedSource = newValue;
                         });
                       },
-                      validator: (value) => value == null ||
-                              value ==
-                                  crm.ClientSource.CLIENT_SOURCE_UNSPECIFIED
-                          ? 'Please select a source'
+                      validator: (value) => value ==
+                              null // Simplified validator: null means no valid selection
+                          ? localizations
+                              .clientFormScreenValidationSourceRequired
                           : null,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _passportDataController,
-                      decoration: const InputDecoration(
-                          labelText: 'Passport Data (JSON)'),
+                      decoration: InputDecoration(
+                          labelText:
+                              localizations.clientFormScreenLabelPassportData),
                       maxLines: 3,
                       // Add JSON validation if needed
                     ),
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _notesController,
-                      decoration: const InputDecoration(labelText: 'Notes'),
+                      decoration: InputDecoration(
+                          labelText: localizations.clientFormScreenLabelNotes),
                       maxLines: 3,
                     ),
                     const SizedBox(height: 24),
                     Center(
                       child: ElevatedButton(
                         onPressed: _isLoading ? null : _saveClient,
-                        child: Text(
-                            _isEditMode ? 'Update Client' : 'Create Client'),
+                        child: Text(_isEditMode
+                            ? localizations.clientFormScreenButtonUpdate
+                            : localizations.clientFormScreenButtonCreate),
                       ),
                     ),
                   ],

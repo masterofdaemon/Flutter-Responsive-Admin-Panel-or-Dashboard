@@ -1,0 +1,754 @@
+{
+  "employeeListScreenTitle": "Employees",
+  "employeeListScreenErrorLoading": "Error loading employees: {error}",
+  "@employeeListScreenErrorLoading": {"placeholders": {"error": {"type": "String"}}},
+  "employeeListScreenConfirmDeleteTitle": "Confirm Deletion",
+  "employeeListScreenConfirmDeleteContent": "Are you sure you want to delete employee \"{name}\"?",
+  "@employeeListScreenConfirmDeleteContent": {"placeholders": {"name": {"type": "String"}}},
+  "employeeListScreenConfirmDeleteActionCancel": "Cancel",
+  "employeeListScreenConfirmDeleteActionDelete": "Delete",
+  "employeeListScreenFeedbackSuccessDelete": "Employee \"{name}\" deleted successfully",
+  "@employeeListScreenFeedbackSuccessDelete": {"placeholders": {"name": {"type": "String"}}},
+  "employeeListScreenFeedbackErrorDelete": "Error deleting employee: {error}",
+  "@employeeListScreenFeedbackErrorDelete": {"placeholders": {"error": {"type": "String"}}},
+  "employeeListScreenColumnName": "Name",
+  "employeeListScreenColumnEmail": "Email",
+  "employeeListScreenColumnRole": "Role",
+  "employeeListScreenColumnOfficeId": "Office ID",
+  "employeeListScreenColumnActive": "Active",
+  "employeeListScreenColumnActions": "Actions",
+  "employeeListScreenTooltipEdit": "Edit Employee",
+  "employeeListScreenTooltipDelete": "Delete Employee",
+  "employeeListScreenTooltipRefresh": "Refresh List",
+  "employeeListScreenTooltipAdd": "Add Employee",
+  "employeeListScreenButtonRetry": "Retry",
+  "employeeListScreenNoEmployeesFound": "No employees found.",
+  "employeeListScreenButtonAddFirst": "Add First Employee",
+  "@@locale": "en",
+  "loginScreenTitle": "Login",
+  "usernameHint": "Username",
+  "passwordHint": "Password",
+  "loginButtonText": "Login",
+  "appTitle": "Flutter Admin Panel",
+  "signupScreenTitle": "Sign Up",
+  "signupButtonText": "Sign Up",
+  "createCrmAccountTitle": "Create CRM Account",
+  "loginLabelText": "Login",
+  "notesLabelText": "Notes (Optional)",
+  "confirmPasswordHint": "Confirm Password",
+  "pleaseEnterLoginNameError": "Please enter a login name",
+  "loginMinLengthError": "Login must be at least 3 characters",
+  "pleaseEnterPasswordError": "Please enter a password",
+  "passwordMinLengthError": "Password must be at least 6 characters",
+  "pleaseConfirmPasswordError": "Please confirm your password",
+  "passwordsDoNotMatchError": "Passwords do not match",
+  "alreadyHaveAccountButtonText": "Already have an account? Log In",
+  "userCreatedSuccessMessage": "User {userId} created successfully! Please log in.",
+  "userFormScreenTitle": "Create New User",
+  "loginEmailLabelText": "Login (Email)",
+  "loginEmailHintText": "user@example.com",
+  "pleaseEnterLoginEmailError": "Please enter a login email",
+  "pleaseEnterValidEmailError": "Please enter a valid email",
+  "createUserButtonText": "Create User",
+  "userCreatedSuccessIdMessage": "User created successfully with ID: {userId}",
+  "grpcErrorCreatingUserMessage": "gRPC Error creating user: {errorMessage}",
+  "errorCreatingUserMessage": "Error creating user: {errorMessage}",
+  "editLendingApplicationTitle": "Edit Lending Application",
+  "addLendingApplicationTitle": "Add Lending Application",
+  "saveApplicationTooltip": "Save Application",
+  "clientLabelText": "Client",
+  "pleaseSelectClientError": "Please select a client",
+  "managerLabelText": "Manager",
+  "pleaseSelectManagerError": "Please select a manager",
+  "bankLabelText": "Bank",
+  "pleaseSelectBankError": "Please select a bank",
+  "requestedAmountLabelText": "Requested Amount",
+  "enterRequestedAmountError": "Enter requested amount",
+  "approvedAmountLabelText": "Approved Amount",
+  "applicationDateLabelText": "Application Date: {date}",
+  "pickDateButtonText": "Pick",
+  "approvalDateLabelText": "Approval Date: {date}",
+  "fundsReceivedDateLabelText": "Funds Received Date: {date}",
+  "companyContractDateLabelText": "Company Contract Date: {date}",
+  "expectedCommissionLabelText": "Expected Commission",
+  "statusLabelText": "Status",
+  "pleaseSelectStatusError": "Please select a status",
+  "paymentIdLabelText": "Payment ID",
+  "notesLabelTextShort": "Notes",
+  "companyCommissionPercentLabelText": "Company Commission Percent",
+  "calculatedCommissionAmountLabelText": "Calculated Commission Amount",
+  "commissionPaidLabelText": "Commission Paid",
+  "agentCommissionReceivedLabelText": "Agent Commission Received",
+  "updateApplicationButtonText": "Update Application",
+  "createApplicationButtonText": "Create Application",
+  "errorLoadingDropdownMessage": "Error loading dropdown data: {errorMessage}",
+  "errorLoadingApplicationMessage": "Error loading application: {errorMessage}",
+  "applicationUpdatedSuccessMessage": "Application updated successfully",
+  "applicationCreatedSuccessMessage": "Application created successfully",
+  "errorSavingApplicationMessage": "Error saving application: {errorMessage}",
+  "lendingApplicationFormScreenFeedbackErrorCreating": "Error creating lending application: {error}",
+  "lendingApplicationFormScreenFeedbackErrorUpdating": "Error updating lending application: {error}",
+  "clientFormScreenTitleEdit": "Edit Client",
+  "clientFormScreenTitleAdd": "Add Client",
+  "clientFormScreenSaveTooltip": "Save Client",
+  "clientFormScreenLabelFirstName": "First Name",
+  "clientFormScreenLabelLastName": "Last Name",
+  "clientFormScreenLabelEmail": "Email",
+  "clientFormScreenLabelPhone": "Phone",
+  "clientFormScreenLabelTelegramId": "Telegram ID",
+  "clientFormScreenLabelWhatsappNumber": "WhatsApp Number",
+  "clientFormScreenLabelSource": "Source",
+  "clientFormScreenHintSource": "Select Source",
+  "clientFormScreenLabelPassportData": "Passport Data (JSON)",
+  "clientFormScreenLabelNotes": "Notes",
+  "clientFormScreenValidationFirstNameRequired": "Please enter a first name",
+  "clientFormScreenValidationFirstNameMinLength": "First name must be at least 2 characters",
+  "clientFormScreenValidationLastNameRequired": "Please enter a last name",
+  "clientFormScreenValidationLastNameMinLength": "Last name must be at least 2 characters",
+  "clientFormScreenValidationEmailRequired": "Please enter an email address",
+  "clientFormScreenValidationEmailInvalid": "Please enter a valid email address",
+  "clientFormScreenValidationPhoneRequired": "Please enter a phone number",
+  "clientFormScreenValidationSourceRequired": "Please select a source",
+  "clientFormScreenButtonUpdate": "Update Client",
+  "clientFormScreenButtonCreate": "Create Client",
+  "clientFormScreenFeedbackErrorLoading": "Error loading client data: {error}",
+  "@clientFormScreenFeedbackErrorLoading": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "clientFormScreenFeedbackErrorInvalidJson": "Invalid JSON for passport data: {error}",
+  "@clientFormScreenFeedbackErrorInvalidJson": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "clientFormScreenFeedbackSuccessUpdate": "Client updated successfully",
+  "clientFormScreenFeedbackSuccessCreate": "Client created successfully",
+  "clientFormScreenFeedbackErrorGrpc": "gRPC Error saving client: {errorMessage}",
+  "@clientFormScreenFeedbackErrorGrpc": {
+      "placeholders": {
+          "errorMessage": {
+              "type": "String"
+          }
+      }
+  },
+  "clientFormScreenFeedbackErrorGeneric": "Error saving client: {error}",
+  "@clientFormScreenFeedbackErrorGeneric": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "clientListScreenTitle": "Clients",
+  "clientListScreenTooltipAdd": "Add Client",
+  "clientListScreenTooltipEdit": "Edit Client",
+  "clientListScreenTooltipDelete": "Delete Client",
+  "clientListScreenConfirmDeleteTitle": "Confirm Delete",
+  "clientListScreenConfirmDeleteContent": "Are you sure you want to delete client {clientName}?",
+  "@clientListScreenConfirmDeleteContent": {
+      "placeholders": {
+          "clientName": {
+              "type": "String"
+          }
+      }
+  },
+  "clientListScreenConfirmDeleteActionCancel": "Cancel",
+  "clientListScreenConfirmDeleteActionDelete": "Delete",
+  "clientListScreenFeedbackSuccessDelete": "Client {clientName} deleted successfully",
+  "@clientListScreenFeedbackSuccessDelete": {
+      "placeholders": {
+          "clientName": {
+              "type": "String"
+          }
+      }
+  },
+  "clientListScreenFeedbackErrorDelete": "Error deleting client {clientId}: {error}",
+  "@clientListScreenFeedbackErrorDelete": {
+      "placeholders": {
+          "clientId": {
+              "type": "String"
+          },
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "clientListScreenErrorLoading": "Error loading clients: {error}",
+  "@clientListScreenErrorLoading": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "clientListScreenButtonRetry": "Retry",
+  "clientListScreenNoClientsFound": "No clients found. Tap + to add a new client or pull down to refresh.",
+  "clientListScreenColumnId": "ID",
+  "clientListScreenColumnFirstName": "First Name",
+  "clientListScreenColumnLastName": "Last Name",
+  "clientListScreenColumnPhone": "Phone",
+  "clientListScreenColumnEmail": "Email",
+  "clientListScreenColumnTelegramId": "Telegram ID",
+  "clientListScreenColumnWhatsapp": "WhatsApp",
+  "clientListScreenColumnSource": "Source",
+  "clientListScreenColumnPassportData": "Passport Data",
+  "clientListScreenColumnNotes": "Notes",
+  "clientListScreenColumnActions": "Actions",
+  "clientListScreenDefaultClientName": "this client",
+  "clientListScreenSourceUnspecified": "Unspecified",
+
+  "lendingApplicationListScreenTitle": "Lending Applications",
+  "lendingApplicationListScreenTooltipAdd": "Add Application",
+  "lendingApplicationListScreenTooltipEdit": "Edit Application",
+  "lendingApplicationListScreenTooltipDelete": "Delete Application",
+  "lendingApplicationListScreenConfirmDeleteTitle": "Delete Application?",
+  "lendingApplicationListScreenConfirmDeleteContent": "Are you sure you want to delete this application?",
+  "lendingApplicationListScreenActionCancel": "Cancel",
+  "lendingApplicationListScreenActionDelete": "Delete",
+  "lendingApplicationListScreenFeedbackSuccessDelete": "Application deleted successfully",
+  "lendingApplicationListScreenFeedbackErrorDelete": "Error deleting application: {error}",
+  "@lendingApplicationListScreenFeedbackErrorDelete": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "lendingApplicationListScreenErrorLoading": "Error: {error}",
+  "@lendingApplicationListScreenErrorLoading": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "lendingApplicationListScreenNoApplicationsFound": "No lending applications found.",
+  "lendingApplicationListScreenListItemNoId": "No ID",
+  "lendingApplicationListScreenListItemSubtitle": "Client: {clientId}\nManager: {managerId}\nBank: {bankId}",
+  "@lendingApplicationListScreenListItemSubtitle": {
+      "placeholders": {
+          "clientId": {
+              "type": "String"
+          },
+          "managerId": {
+              "type": "String"
+          },
+          "bankId": {
+              "type": "String"
+          }
+      }
+  },
+
+  "trainingCourseFormScreenTitleEdit": "Edit Course",
+  "trainingCourseFormScreenTitleAdd": "Add Course",
+  "trainingCourseFormScreenLabelName": "Course Name",
+  "trainingCourseFormScreenLabelPrice": "Price",
+  "trainingCourseFormScreenLabelCommission": "Commission Percent",
+  "trainingCourseFormScreenLabelDescription": "Description",
+  "trainingCourseFormScreenLabelNotes": "Notes",
+  "trainingCourseFormScreenValidationRequired": "Required",
+  "trainingCourseFormScreenButtonUpdate": "Update Course",
+  "trainingCourseFormScreenButtonCreate": "Create Course",
+  "trainingCourseFormScreenFeedbackErrorLoading": "Error loading course: {error}",
+  "@trainingCourseFormScreenFeedbackErrorLoading": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "trainingCourseFormScreenFeedbackSuccessUpdate": "Course updated successfully",
+  "trainingCourseFormScreenFeedbackSuccessCreate": "Course created successfully",
+  "trainingCourseFormScreenFeedbackErrorSaving": "Error saving course: {error}",
+
+  "trainingCourseListScreenTitle": "Training Courses",
+  "trainingCourseListScreenTooltipAdd": "Add Course",
+  "trainingCourseListScreenTooltipEdit": "Edit Course",
+  "trainingCourseListScreenTooltipDelete": "Delete Course",
+  "trainingCourseListScreenConfirmDeleteTitle": "Delete Course?",
+  "trainingCourseListScreenConfirmDeleteContent": "Are you sure you want to delete this course?",
+  "trainingCourseListScreenActionCancel": "Cancel",
+  "trainingCourseListScreenActionDelete": "Delete",
+  "trainingCourseListScreenFeedbackSuccessDelete": "Course deleted successfully",
+  "trainingCourseListScreenFeedbackErrorDelete": "Error deleting course: {error}",
+  "@trainingCourseListScreenFeedbackErrorDelete": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "trainingCourseListScreenErrorLoading": "Error: {error}",
+  "@trainingCourseListScreenErrorLoading": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "trainingCourseListScreenNoCoursesFound": "No training courses found.",
+  "trainingCourseListScreenListItemNoName": "No Name",
+  "trainingCourseListScreenListItemSubtitle": "Price: {price}\nCommission: {commission}%",
+  "@trainingCourseListScreenListItemSubtitle": {
+      "placeholders": {
+          "price": {
+              "type": "String"
+          },
+          "commission": {
+              "type": "String"
+          }
+      }
+  },
+
+  "mainScreenNotLoggedIn": "Not logged in",
+  "mainScreenRoleLabel": "Role: {roleName}",
+  "@mainScreenRoleLabel": {
+      "placeholders": {
+          "roleName": {
+              "type": "String"
+          }
+      }
+  },
+  "mainScreenUserLoginDefault": "User",
+
+  "sideMenuDashboard": "Dashboard",
+  "sideMenuClients": "Clients",
+  "sideMenuEmployees": "Employees",
+  "sideMenuTranslations": "Translations",
+  "sideMenuInsurancePolicies": "Insurance Policies",
+  "sideMenuTrainingCourses": "Training Courses",
+  "sideMenuBusinessRegistrations": "Business Registrations",
+  "sideMenuLendingApplications": "Lending Applications",
+  "sideMenuAdminTools": "Admin Tools",
+  "sideMenuCreateUser": "Create User",
+  "sideMenuTask": "Task",
+  "sideMenuStore": "Store",
+  "sideMenuNotification": "Notification",
+  "sideMenuProfile": "Profile",
+  "sideMenuSettings": "Settings",
+  "sideMenuLogout": "Logout",
+
+  "dashboardHeaderTitle": "Dashboard",
+  "dashboardHeaderProfileCardUserDefault": "User",
+  "dashboardHeaderProfileCardNotLoggedIn": "Not Logged In",
+  "dashboardHeaderSearchHint": "Search",
+
+  "dashboardMyFilesTitle": "My Files",
+  "dashboardMyFilesAddNewButton": "Add New",
+
+  "dashboardRecentFilesTitle": "Recent Files",
+  "dashboardRecentFilesColumnFileName": "File Name",
+  "dashboardRecentFilesColumnDate": "Date",
+  "dashboardRecentFilesColumnSize": "Size",
+
+  "dashboardStorageDetailsTitle": "Storage Details",
+  "dashboardStorageDetailsDocumentsFiles": "Documents Files",
+  "dashboardStorageDetailsMediaFiles": "Media Files",
+  "dashboardStorageDetailsOtherFiles": "Other Files",
+  "dashboardStorageDetailsUnknown": "Unknown",
+
+  "translationOrderListScreenTitle": "Translation Orders",
+  "translationOrderListScreenDeleteOrderDialogTitle": "Delete Order?",
+  "translationOrderListScreenDeleteOrderDialogContent": "Are you sure you want to delete this order?",
+  "translationOrderListScreenDeleteOrderDialogCancelButton": "Cancel",
+  "translationOrderListScreenDeleteOrderDialogDeleteButton": "Delete",
+  "translationOrderListScreenOrderDeletedSuccess": "Order deleted successfully",
+  "translationOrderListScreenErrorDeletingOrder": "Error deleting order: {error}",
+  "@translationOrderListScreenErrorDeletingOrder": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderListScreenErrorLoading": "Error: {error}",
+  "@translationOrderListScreenErrorLoading": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderListScreenNoOrdersFound": "No translation orders found.",
+  "translationOrderListScreenUntitledOrder": "Untitled Order",
+  "translationOrderListScreenOrderIdLabel": "Order ID: {orderId}",
+  "@translationOrderListScreenOrderIdLabel": {
+      "placeholders": {
+          "orderId": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderListScreenOrderTitleLabel": "Title: {title}",
+  "@translationOrderListScreenOrderTitleLabel": {
+      "placeholders": {
+          "title": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderListScreenOrderStatusLabel": "Status: {status}",
+  "@translationOrderListScreenOrderStatusLabel": {
+      "placeholders": {
+          "status": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderListScreenOrderCreatedLabel": "Created: {date}",
+  "@translationOrderListScreenOrderCreatedLabel": {
+      "placeholders": {
+          "date": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderListScreenOrderDoneLabel": "Done: {date}",
+  "@translationOrderListScreenOrderDoneLabel": {
+      "placeholders": {
+          "date": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderListScreenCreateNewOrderTooltip": "Create New Order",
+
+  "translationOrderFormScreenCreateTitle": "Create Order",
+  "translationOrderFormScreenEditTitle": "Edit Order",
+  "translationOrderFormScreenSaveChangesTooltip": "Save Order",
+  "translationOrderFormScreenErrorLoadingData": "Error loading initial data: {error}",
+  "@translationOrderFormScreenErrorLoadingData": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderFormScreenErrorSavingOrder": "Error saving order: {error}",
+  "@translationOrderFormScreenErrorSavingOrder": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderFormScreenOrderCreatedSuccess": "Order created successfully",
+  "translationOrderFormScreenOrderUpdatedSuccess": "Order updated successfully",
+  "translationOrderFormScreenOrderDeletedSuccess": "Order deleted successfully",
+  "translationOrderFormScreenErrorDeletingOrder": "Error deleting order: {error}",
+  "@translationOrderFormScreenErrorDeletingOrder": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderFormScreenFieldTitleLabel": "Title *",
+  "translationOrderFormScreenFieldTitleValidation": "Please enter a title",
+  "translationOrderFormScreenFieldDoneAtLabel": "Done At (Completion Date)",
+  "translationOrderFormScreenFieldClientLabel": "Client *",
+  "translationOrderFormScreenFieldClientHint": "Select Client",
+  "translationOrderFormScreenFieldClientValidation": "Please select a client",
+  "translationOrderFormScreenFieldManagerLabel": "Manager *",
+  "translationOrderFormScreenFieldManagerHint": "Select Manager",
+  "translationOrderFormScreenFieldManagerValidation": "Please select a manager",
+  "translationOrderFormScreenFieldOfficeLabel": "Office *",
+  "translationOrderFormScreenFieldOfficeHint": "Select Office",
+  "translationOrderFormScreenFieldOfficeValidation": "Please select an office",
+  "translationOrderFormScreenFieldSourceLanguageLabel": "Source Language",
+  "translationOrderFormScreenFieldTargetLanguageLabel": "Target Language",
+  "translationOrderFormScreenFieldDocumentTypeLabel": "Document Type",
+  "translationOrderFormScreenFieldDocumentTypeHint": "Select Document Type",
+  "translationOrderFormScreenFieldPageCountLabel": "Page Count",
+  "translationOrderFormScreenFieldNotarialSumLabel": "Notarial Sum *",
+  "translationOrderFormScreenFieldNotarialSumValidationRequired": "Please enter notarial sum",
+  "translationOrderFormScreenFieldNotarialSumValidationNumber": "Please enter a valid number",
+  "translationOrderFormScreenFieldPriorityLabel": "Priority *",
+  "translationOrderFormScreenFieldPriorityHint": "Select Priority",
+  "translationOrderFormScreenFieldPriorityValidation": "Please select priority",
+  "translationOrderFormScreenFieldPaymentIdLabel": "Payment ID",
+  "translationOrderFormScreenFieldTranslatorLabel": "Translator",
+  "translationOrderFormScreenFieldTranslatorHint": "Select Translator (Optional)",
+  "translationOrderFormScreenFieldStatusLabel": "Status (Read-Only)",
+  "translationOrderFormScreenFieldNotesLabel": "Notes",
+  "translationOrderFormScreenSwitchUrgent": "Urgent",
+  "translationOrderFormScreenSwitchSemiUrgent": "Semi-Urgent",
+  "translationOrderFormScreenSwitchClientNotified": "Client Notified",
+  "translationOrderFormScreenDeleteButton": "Delete Order",
+  "translationOrderFormScreenDeleteDialogTitle": "Delete Order?",
+  "translationOrderFormScreenDeleteDialogContent": "Are you sure you want to delete this order?",
+  "translationOrderFormScreenDeleteDialogCancelButton": "Cancel",
+  "translationOrderFormScreenDeleteDialogDeleteButton": "Delete",
+  "translationOrderFormScreenDisplayEmployee": "{name} ({id}...)",
+  "@translationOrderFormScreenDisplayEmployee": {
+      "placeholders": {
+          "name": {"type": "String"},
+          "id": {"type": "String"}
+      }
+  },
+  "translationOrderFormScreenDisplayOffice": "{city} ({id}...)",
+  "@translationOrderFormScreenDisplayOffice": {
+      "placeholders": {
+          "city": {"type": "String"},
+          "id": {"type": "String"}
+      }
+  },
+  "translationOrderFormScreenDisplayClient": "{firstName} {lastName} ({id}...)",
+  "@translationOrderFormScreenDisplayClient": {
+      "placeholders": {
+          "firstName": {"type": "String"},
+          "lastName": {"type": "String"},
+          "id": {"type": "String"}
+      }
+  },
+  "translationOrderFormScreenStatusNotAvailable": "N/A",
+
+  "insurancePolicyListScreenTitle": "Insurance Policies",
+  "insurancePolicyListScreenAddPolicyTooltip": "Add Policy",
+  "insurancePolicyListScreenDeleteDialogTitle": "Delete Policy?",
+  "insurancePolicyListScreenDeleteDialogContent": "Are you sure you want to delete this policy?",
+  "insurancePolicyListScreenDeleteDialogCancelButton": "Cancel",
+  "insurancePolicyListScreenDeleteDialogDeleteButton": "Delete",
+  "insurancePolicyListScreenPolicyDeletedSuccess": "Policy deleted successfully",
+  "insurancePolicyListScreenErrorDeletingPolicy": "Error deleting policy: {error}",
+  "@insurancePolicyListScreenErrorDeletingPolicy": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "insurancePolicyListScreenErrorLoading": "Error: {error}",
+  "@insurancePolicyListScreenErrorLoading": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "insurancePolicyListScreenNoPoliciesFound": "No insurance policies found.",
+  "insurancePolicyListScreenNoPolicyNumber": "No Policy Number",
+  "insurancePolicyListScreenListItemSubtitle": "Client: {clientId}\nManager: {managerId}\nAmount: {amount}",
+  "@insurancePolicyListScreenListItemSubtitle": {
+      "placeholders": {
+          "clientId": {"type": "String"},
+          "managerId": {"type": "String"},
+          "amount": {"type": "String"}
+      }
+  },
+  "insurancePolicyListScreenEditPolicyTooltip": "Edit Policy",
+  "insurancePolicyListScreenDeletePolicyTooltip": "Delete Policy",
+
+  "insurancePolicyId": "ID",
+  "insurancePolicyClient": "Client",
+  "insurancePolicyPolicyNumber": "Policy Number",
+  "insurancePolicyType": "Type",
+  "insurancePolicyStartDate": "Start Date",
+  "insurancePolicyEndDate": "End Date",
+  "insurancePolicyPremium": "Premium",
+  "insurancePolicyStatus": "Status",
+  "insurancePolicyCoverageDetails": "Coverage Details",
+  "confirmDeleteInsurancePolicyTitle": "Confirm Delete",
+  "confirmDeleteInsurancePolicyMessage": "Are you sure you want to delete this insurance policy?",
+  "insurancePolicyDeletedSuccess": "Insurance policy deleted successfully",
+  "errorDeletingInsurancePolicy": "Error deleting insurance policy: {error}",
+  "noInsurancePoliciesFound": "No insurance policies found",
+  "interactionListUnspecifiedType": "Unspecified",
+  "interactionListConfirmDeleteTitle": "Confirm Delete",
+  "interactionListConfirmDeleteMessage": "Delete this interaction?",
+  "interactionListCancelButton": "Cancel",
+  "interactionListDeleteButton": "Delete",
+  "interactionListDeletedSuccess": "Deleted",
+  "interactionListErrorDeleting": "Error deleting: {error}",
+  "interactionListTitle": "All Interactions",
+  "interactionListErrorLoading": "Error loading interactions: {error}",
+  "interactionListNoInteractionsFound": "No interactions found.",
+  "interactionListIdHeader": "ID",
+  "interactionListClientHeader": "Client",
+  "interactionListEmployeeHeader": "Employee",
+  "interactionListDateHeader": "Date",
+  "interactionListTypeHeader": "Type",
+  "interactionListDescriptionHeader": "Description",
+  "interactionListSubjectHeader": "Subject",
+  "interactionListEndTimeHeader": "End Time",
+  "interactionListScheduledHeader": "Scheduled",
+  "interactionListCompletedHeader": "Completed",
+  "interactionListNotesHeader": "Notes",
+  "interactionListActionsHeader": "Actions",
+  "interactionListYes": "Yes",
+  "interactionListNo": "No",
+  "interactionListEditInteractionTooltip": "Edit Interaction",
+  "interactionListDeleteInteractionTooltip": "Delete Interaction",
+  "interactionListDetailsDialogTitle": "Interaction Details",
+  "interactionListCloseButton": "Close",
+  "insurancePolicyFormEditPolicyTitle": "Edit Policy",
+  "insurancePolicyFormAddPolicyTitle": "Add Policy",
+  "insurancePolicyFormErrorLoadingPolicy": "Error loading policy: {error}",
+  "insurancePolicyFormPolicyUpdatedSuccess": "Policy updated successfully",
+  "insurancePolicyFormPolicyCreatedSuccess": "Policy created successfully",
+  "insurancePolicyFormErrorSavingPolicy": "Error saving policy: {error}",
+  "insurancePolicyFormPolicyNumberLabel": "Policy Number",
+  "insurancePolicyFormClientIdLabel": "Client ID",
+  "insurancePolicyFormManagerIdLabel": "Manager ID",
+  "insurancePolicyFormAmountLabel": "Amount",
+  "insurancePolicyFormStartDateLabel": "Start Date",
+  "insurancePolicyFormStartDatePickerPrefix": "Start: {date}",
+  "insurancePolicyFormExpiryDateLabel": "Expiry Date",
+  "insurancePolicyFormExpiryDatePickerPrefix": "Expiry: {date}",
+  "insurancePolicyFormPickDateButton": "Pick",
+  "insurancePolicyFormStatusLabel": "Status",
+  "insurancePolicyFormRenewalStatusLabel": "Renewal Status",
+  "insurancePolicyFormNotesLabel": "Notes",
+  "insurancePolicyFormUpdatePolicyButton": "Update Policy",
+  "insurancePolicyFormCreatePolicyButton": "Create Policy",
+  "insurancePolicyFormRequiredField": "Required",
+  "insurancePolicyFormScreenTitleEdit": "Edit Policy",
+  "insurancePolicyFormScreenTitleAdd": "Add Policy",
+  "insurancePolicyFormScreenFeedbackErrorLoading": "Error loading policy: {error}",
+  "@insurancePolicyFormScreenFeedbackErrorLoading": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "insurancePolicyFormScreenFeedbackSuccessUpdate": "Policy updated successfully",
+  "insurancePolicyFormScreenFeedbackSuccessCreate": "Policy created successfully",
+  "insurancePolicyFormScreenFeedbackErrorSaving": "Error saving policy: {error}",
+  "@insurancePolicyFormScreenFeedbackErrorSaving": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "insurancePolicyFormScreenValidationRequired": "Required",
+  "insurancePolicyFormScreenLabelPolicyNumber": "Policy Number",
+  "insurancePolicyFormScreenLabelClientId": "Client ID",
+  "insurancePolicyFormScreenLabelManagerId": "Manager ID",
+  "insurancePolicyFormScreenLabelAmount": "Amount",
+  "insurancePolicyFormScreenLabelStartDateWithValue": "Start Date: {date}",
+  "@insurancePolicyFormScreenLabelStartDateWithValue": {
+      "placeholders": {
+          "date": {
+              "type": "String"
+          }
+      }
+  },
+  "insurancePolicyFormScreenLabelStartDate": "Start Date",
+  "insurancePolicyFormScreenLabelExpiryDateWithValue": "Expiry Date: {date}",
+  "@insurancePolicyFormScreenLabelExpiryDateWithValue": {
+      "placeholders": {
+          "date": {
+              "type": "String"
+          }
+      }
+  },
+  "insurancePolicyFormScreenLabelExpiryDate": "Expiry Date",
+  "insurancePolicyFormScreenPickDateButton": "Pick",
+  "insurancePolicyFormScreenLabelStatus": "Status",
+  "insurancePolicyFormScreenLabelRenewalStatus": "Renewal Status",
+  "insurancePolicyFormScreenLabelNotes": "Notes",
+  "insurancePolicyFormScreenButtonUpdate": "Update Policy",
+  "insurancePolicyFormScreenButtonCreate": "Create Policy",
+
+  "signupScreenErrorSignupFailed": "Signup failed: {errorMessage}",
+  "@signupScreenErrorSignupFailed": {
+    "placeholders": {
+      "errorMessage": {
+        "type": "String"
+      }
+    }
+  },
+  "signupScreenErrorUnexpected": "An unexpected error occurred: {error}",
+  "@signupScreenErrorUnexpected": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loginScreenSignUpPromptText": "Don't have an account? Sign Up",
+  "loginScreenUsernameValidationEmpty": "Please enter your username",
+  "loginScreenPasswordValidationEmpty": "Please enter your password",
+  "loginScreenErrorLoginFailed": "Login failed. Please try again.",
+  "loginScreenErrorLoginFailedWithDetails": "Login failed: {details}",
+  "@loginScreenErrorLoginFailedWithDetails": {
+    "placeholders": {
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "loginScreenErrorUnexpected": "An unexpected error occurred: {error}",
+  "@loginScreenErrorUnexpected": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "interactionFormScreenTitleAdd": "Add Interaction",
+  "interactionFormScreenTitleEdit": "Edit Interaction",
+  "interactionFormScreenLabelClient": "Client",
+  "interactionFormScreenLabelEmployee": "Employee",
+  "interactionFormScreenLabelInteractionType": "Interaction Type",
+  "interactionFormScreenValidationSelectClient": "Please select a client",
+  "interactionFormScreenValidationSelectEmployee": "Please select an employee",
+  "interactionFormScreenValidationSelectType": "Please select a type",
+  "interactionFormScreenLabelInteractionDate": "Interaction Date: {date}",
+  "@interactionFormScreenLabelInteractionDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "interactionFormScreenLabelDateNotSet": "Not set",
+  "interactionFormScreenLabelEndTime": "End Time: {time}",
+  "@interactionFormScreenLabelEndTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "interactionFormScreenLabelSubject": "Subject",
+  "interactionFormScreenValidationEnterSubject": "Please enter a subject",
+  "interactionFormScreenLabelDescription": "Description",
+  "interactionFormScreenLabelNotes": "Notes",
+  "interactionFormScreenCheckboxScheduled": "Scheduled",
+  "interactionFormScreenCheckboxCompleted": "Completed",
+  "interactionFormScreenFeedbackErrorLoading": "Failed to load initial data: {error}",
+  "@interactionFormScreenFeedbackErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "interactionFormScreenFeedbackSuccessCreate": "Interaction created successfully",
+  "interactionFormScreenFeedbackSuccessUpdate": "Interaction updated successfully",
+  "interactionFormScreenFeedbackErrorSaving": "Failed to save interaction: {error}",
+  "@interactionFormScreenFeedbackErrorSaving": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "interactionFormScreenFeedbackErrorUnexpected": "An unexpected error occurred: {error}",
+  "@interactionFormScreenFeedbackErrorUnexpected": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
+}

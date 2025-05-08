@@ -1,4 +1,5 @@
 import 'package:admin/controllers/menu_app_controller.dart';
+import 'package:admin/l10n/app_localizations.dart';
 import 'package:admin/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -14,6 +15,7 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return Row(
       children: [
         if (!Responsive.isDesktop(context))
@@ -23,7 +25,7 @@ class Header extends StatelessWidget {
           ),
         if (!Responsive.isMobile(context))
           Text(
-            "Dashboard",
+            localizations.dashboardHeaderTitle,
             style: Theme.of(context).textTheme.titleLarge,
           ),
         if (!Responsive.isMobile(context))
@@ -42,12 +44,14 @@ class ProfileCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     // Use Consumer to get AuthService data
     return Consumer<AuthService>(
       builder: (context, auth, _) {
         final employee = auth.employeeProfile;
         final user = auth.userProfile;
-        String displayName = 'User'; // Default display name
+        String displayName = localizations
+            .dashboardHeaderProfileCardUserDefault; // Default display name
         // String displayRole = ''; // Default role display
 
         if (auth.isAuthenticated) {
@@ -58,7 +62,7 @@ class ProfileCard extends StatelessWidget {
             displayName = user.login;
           }
         } else {
-          displayName = 'Not Logged In';
+          displayName = localizations.dashboardHeaderProfileCardNotLoggedIn;
         }
 
         return Container(
@@ -107,25 +111,29 @@ class SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      decoration: InputDecoration(
-        hintText: "Search",
-        fillColor: secondaryColor,
-        filled: true,
-        border: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
-        suffixIcon: InkWell(
-          onTap: () {},
-          child: Container(
-            padding: EdgeInsets.all(defaultPadding * 0.75),
-            margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-            decoration: BoxDecoration(
-              color: primaryColor,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
+    final localizations = AppLocalizations.of(context);
+    return Material(
+      // Added Material widget
+      child: TextField(
+        decoration: InputDecoration(
+          hintText: localizations.dashboardHeaderSearchHint,
+          fillColor: secondaryColor,
+          filled: true,
+          border: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+          ),
+          suffixIcon: InkWell(
+            onTap: () {},
+            child: Container(
+              padding: EdgeInsets.all(defaultPadding * 0.75),
+              margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+              decoration: BoxDecoration(
+                color: primaryColor,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              child: SvgPicture.asset("assets/icons/Search.svg"),
             ),
-            child: SvgPicture.asset("assets/icons/Search.svg"),
           ),
         ),
       ),

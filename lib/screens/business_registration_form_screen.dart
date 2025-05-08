@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
 import 'package:admin/services/grpc_business_registration_service_mobile.dart';
 import 'package:admin/utils/timestamp_helpers.dart';
+import 'package:admin/screens/main/main_screen.dart';
 
 class BusinessRegistrationFormScreen extends StatefulWidget {
   final String? requestId;
@@ -147,7 +148,16 @@ class _BusinessRegistrationFormScreenState
         title: Text(_isEditMode ? 'Edit Registration' : 'Add Registration'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).maybePop();
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MainScreen()),
+              );
+            }
+          },
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
         ),
       ),

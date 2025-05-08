@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:admin/services/auth_service.dart';
 import 'package:admin/screens/signup_screen.dart';
+import 'package:admin/screens/main/main_screen.dart';
 import 'package:grpc/grpc.dart';
-// import 'package:admin/responsive.dart'; // Removed unused import
+import 'package:admin/l10n/app_localizations.dart'; // Import AppLocalizations
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -37,6 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     final authService = Provider.of<AuthService>(context, listen: false);
+    final localizations = AppLocalizations.of(context); // Add this line
 
     try {
       final result = await authService.login(
@@ -45,20 +47,19 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       if (!result) {
         setState(() {
-          _errorMessage =
-              authService.errorMessage ?? 'Login failed. Please try again.';
+          _errorMessage = authService.errorMessage ??
+              localizations.loginScreenErrorLoginFailed;
         });
       }
       // Navigation to the main app screen will be handled by the listener in main.dart
     } on GrpcError catch (e) {
       setState(() {
-        _errorMessage = e.details?.isNotEmpty == true
-            ? e.details.toString()
-            : 'Login failed: ${e.message ?? e.codeName}';
+        _errorMessage = localizations.loginScreenErrorLoginFailedWithDetails(
+            e.message ?? e.codeName.toString());
       });
     } catch (e) {
       setState(() {
-        _errorMessage = 'An unexpected error occurred: $e';
+        _errorMessage = localizations.loginScreenErrorUnexpected(e.toString());
       });
     } finally {
       if (mounted) {
@@ -71,7 +72,27 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Get the AppLocalizations instance
+    final localizations = AppLocalizations.of(context); // Removed ! operator
+
     return Scaffold(
+      appBar: AppBar(
+        title: Text(localizations.loginScreenTitle), // Localized title
+        // leading: IconButton(
+        //   icon: const Icon(Icons.arrow_back),
+        //   onPressed: () {
+        //     if (Navigator.of(context).canPop()) {
+        //       Navigator.of(context).maybePop();
+        //     } else {
+        //       Navigator.pushReplacement(
+        //         context,
+        //         MaterialPageRoute(builder: (context) => MainScreen()),
+        //       );
+        //     }
+        //   },
+        //   tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+        // ),
+      ),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(32.0),
@@ -86,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: <Widget>[
                   // Placeholder for Logo or App Title
                   Text(
-                    'CRM Login', // Replace with your App Name
+                    localizations.loginScreenTitle, // Localized text
                     style: Theme.of(context)
                         .textTheme
                         .headlineMedium
@@ -105,34 +126,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       );
                     },
-                    child: const Text('Don\'t have an account? Sign Up'),
-                  ),
-                  const SizedBox(height: 16.0),
-
-                  // Signup Button
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const SignupScreen(),
-                        ),
-                      );
-                    },
-                    child: const Text('Don\'t have an account? Sign Up'),
+                    child: Text(localizations.loginScreenSignUpPromptText),
                   ),
                   const SizedBox(height: 16.0),
 
                   // Username Field
                   TextFormField(
                     controller: _usernameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Username',
+                    decoration: InputDecoration(
+                      labelText: localizations.usernameHint, // Localized hint
                       prefixIcon: Icon(Icons.person_outline),
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Please enter your username';
+                        return localizations.loginScreenUsernameValidationEmpty;
                       }
                       return null;
                     },
@@ -143,15 +151,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Password Field
                   TextFormField(
                     controller: _passwordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
+                    decoration: InputDecoration(
+                      labelText: localizations.passwordHint, // Localized hint
                       prefixIcon: Icon(Icons.lock_outline),
                       border: OutlineInputBorder(),
                     ),
                     obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
+                        return localizations.loginScreenPasswordValidationEmpty;
                       }
                       return null;
                     },
@@ -184,7 +192,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           onPressed: _login,
-                          child: const Text('Login'),
+                          child: Text(localizations
+                              .loginButtonText), // Localized button text
                         ),
                 ],
               ),

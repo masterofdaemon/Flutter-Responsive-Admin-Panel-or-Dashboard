@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
 import 'package:admin/services/grpc_business_registration_service_mobile.dart';
 import 'business_registration_form_screen.dart';
+import 'package:admin/screens/main/main_screen.dart'; // Added
 
 class BusinessRegistrationListScreen extends StatefulWidget {
   const BusinessRegistrationListScreen({super.key});
@@ -83,7 +84,18 @@ class _BusinessRegistrationListScreenState
         title: const Text('Business Registrations'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).maybePop();
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        MainScreen()), // Changed to MainScreen
+              );
+            }
+          },
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
         ),
         actions: [

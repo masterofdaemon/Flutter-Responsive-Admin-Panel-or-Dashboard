@@ -4,6 +4,7 @@ import 'package:admin/services/grpc_translation_order_service_mobile.dart'; // A
 import 'package:admin/screens/translation_orders/translation_order_form_screen.dart';
 import 'package:admin/widgets/loading_indicator.dart'; // Assuming you have a loading widget
 import 'package:admin/utils/timestamp_helpers.dart';
+import 'package:admin/l10n/app_localizations.dart';
 
 class TranslationOrderListScreen extends StatefulWidget {
   const TranslationOrderListScreen({super.key});
@@ -44,21 +45,26 @@ class _TranslationOrderListScreenState
   }
 
   Future<void> _deleteOrder(String orderId) async {
+    final localizations = AppLocalizations.of(context);
     try {
       // Optional: Show confirmation dialog
       final confirm = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Delete Order?'),
-          content: const Text('Are you sure you want to delete this order?'),
+          title: Text(
+              localizations.translationOrderListScreenDeleteOrderDialogTitle),
+          content: Text(
+              localizations.translationOrderListScreenDeleteOrderDialogContent),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel'),
+              child: Text(localizations
+                  .translationOrderListScreenDeleteOrderDialogCancelButton),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Delete'),
+              child: Text(localizations
+                  .translationOrderListScreenDeleteOrderDialogDeleteButton),
             ),
           ],
         ),
@@ -67,28 +73,36 @@ class _TranslationOrderListScreenState
       if (confirm == true) {
         await _service.deleteTranslationOrder(orderId);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Order deleted successfully')),
+          SnackBar(
+              content: Text(
+                  localizations.translationOrderListScreenOrderDeletedSuccess)),
         );
         _loadOrders(); // Refresh the list
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error deleting order: $e')),
+        SnackBar(
+            content: Text(localizations
+                .translationOrderListScreenErrorDeletingOrder(e.toString()))),
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Translation Orders'),
-        // Add the leading back button if navigation is possible
+        title: Text(localizations.translationOrderListScreenTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () =>
+              Navigator.of(context).maybePop(), // Changed to maybePop
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
         ),
+        actions: [
+          // Add any action buttons here if needed
+        ],
       ),
       body: RefreshIndicator(
         onRefresh: () async => _loadOrders(),
@@ -98,9 +112,14 @@ class _TranslationOrderListScreenState
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const LoadingIndicator(); // Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
+              return Center(
+                  child: Text(
+                      localizations.translationOrderListScreenErrorLoading(
+                          snapshot.error.toString())));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text('No translation orders found.'));
+              return Center(
+                  child: Text(
+                      localizations.translationOrderListScreenNoOrdersFound));
             }
 
             final orders = snapshot.data!;
@@ -114,21 +133,34 @@ class _TranslationOrderListScreenState
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: ListTile(
                     title: Text(
-                      order.title.isNotEmpty ? order.title : 'Untitled Order',
+                      order.title.isNotEmpty
+                          ? order.title
+                          : localizations
+                              .translationOrderListScreenUntitledOrder,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 4),
-                        Text('Order ID: ${order.orderId}'),
-                        Text(
-                            'Title: ${order.title.isNotEmpty ? order.title : '-'}'),
-                        Text('Status: ${order.status.toString()}'),
-                        Text(
-                            'Created:  ${formatTimestamp(order.hasCreatedAt() ? order.createdAt : null)}'),
-                        Text(
-                            'Done:     ${formatTimestamp(order.hasDoneAt() ? order.doneAt : null)}'),
+                        Text(localizations
+                            .translationOrderListScreenOrderIdLabel(
+                                order.orderId)),
+                        Text(localizations
+                            .translationOrderListScreenOrderTitleLabel(
+                                order.title.isNotEmpty ? order.title : '-')),
+                        Text(localizations
+                            .translationOrderListScreenOrderStatusLabel(
+                                order.status.toString())),
+                        Text(localizations
+                            .translationOrderListScreenOrderCreatedLabel(
+                                formatTimestamp(order.hasCreatedAt()
+                                    ? order.createdAt
+                                    : null))),
+                        Text(localizations
+                            .translationOrderListScreenOrderDoneLabel(
+                                formatTimestamp(
+                                    order.hasDoneAt() ? order.doneAt : null))),
                       ],
                     ),
                     trailing: IconButton(
@@ -146,7 +178,7 @@ class _TranslationOrderListScreenState
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _navigateToForm(),
-        tooltip: 'Create New Order',
+        tooltip: localizations.translationOrderListScreenCreateNewOrderTooltip,
         child: const Icon(Icons.add),
       ),
     );

@@ -3,6 +3,8 @@ import 'package:admin/generated/crm.pb.dart' as crm;
 import 'package:admin/services/grpc_user_service_mobile.dart';
 import 'package:grpc/grpc.dart';
 import 'login_screen.dart';
+import 'package:admin/screens/main/main_screen.dart';
+import 'package:admin/l10n/app_localizations.dart'; // Import AppLocalizations
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -57,23 +59,26 @@ class _SignupScreenState extends State<SignupScreen> {
       password: password,
     );
 
+    final localizations = AppLocalizations.of(context); // Get localizations
+
     try {
       final response = await _userService.createUser(request);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text(
-                'User ${response.userId} created successfully! Please log in.')),
+            content: Text(localizations
+                .userCreatedSuccessMessage(response.userId.toString()))),
       );
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const LoginScreen()),
       );
     } on GrpcError catch (e) {
       setState(() {
-        _errorMessage = 'Signup failed: ${e.message ?? e}';
+        _errorMessage = localizations
+            .signupScreenErrorSignupFailed(e.message ?? e.toString());
       });
     } catch (e) {
       setState(() {
-        _errorMessage = 'An unexpected error occurred: $e';
+        _errorMessage = localizations.signupScreenErrorUnexpected(e.toString());
       });
     } finally {
       if (mounted) {
@@ -86,9 +91,29 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context); // Get localizations
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sign Up'),
+        title: Text(localizations.signupScreenTitle),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context)
+                  .maybePop(); // Default behavior for signup is to pop to Login
+            } else {
+              // If signup is somehow the first screen, navigate to MainScreen (as per universal rule)
+              // Though, ideally, it might go to LoginScreen if canPop is false.
+              // For now, adhering to the universal rule.
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MainScreen()),
+              );
+            }
+          },
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+        ),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -102,24 +127,24 @@ class _SignupScreenState extends State<SignupScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
-                    'Create CRM Account',
+                    localizations.createCrmAccountTitle,
                     style: Theme.of(context).textTheme.headlineMedium,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 32),
                   TextFormField(
                     controller: _loginController,
-                    decoration: const InputDecoration(
-                      labelText: 'Login',
+                    decoration: InputDecoration(
+                      labelText: localizations.loginLabelText,
                       prefixIcon: Icon(Icons.person_outline),
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Please enter a login name';
+                        return localizations.pleaseEnterLoginNameError;
                       }
                       if (value.trim().length < 3) {
-                        return 'Login must be at least 3 characters';
+                        return localizations.loginMinLengthError;
                       }
                       return null;
                     },
@@ -129,7 +154,8 @@ class _SignupScreenState extends State<SignupScreen> {
                     controller: _passwordController,
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
-                      labelText: 'Password',
+                      labelText:
+                          localizations.passwordHint, // Reused from login
                       prefixIcon: const Icon(Icons.lock_outline),
                       border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
@@ -145,10 +171,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter a password';
+                        return localizations.pleaseEnterPasswordError;
                       }
                       if (value.length < 6) {
-                        return 'Password must be at least 6 characters';
+                        return localizations.passwordMinLengthError;
                       }
                       return null;
                     },
@@ -158,7 +184,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     controller: _confirmPasswordController,
                     obscureText: _obscureConfirmPassword,
                     decoration: InputDecoration(
-                      labelText: 'Confirm Password',
+                      labelText: localizations.confirmPasswordHint,
                       prefixIcon: const Icon(Icons.lock_outline),
                       border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
@@ -174,10 +200,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please confirm your password';
+                        return localizations.pleaseConfirmPasswordError;
                       }
                       if (value != _passwordController.text) {
-                        return 'Passwords do not match';
+                        return localizations.passwordsDoNotMatchError;
                       }
                       return null;
                     },
@@ -185,8 +211,8 @@ class _SignupScreenState extends State<SignupScreen> {
                   const SizedBox(height: 16),
                   TextFormField(
                     controller: _notesController,
-                    decoration: const InputDecoration(
-                      labelText: 'Notes (Optional)',
+                    decoration: InputDecoration(
+                      labelText: localizations.notesLabelText,
                       prefixIcon: Icon(Icons.note_outlined),
                       border: OutlineInputBorder(),
                     ),
@@ -213,7 +239,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             ),
                           ),
                           onPressed: _signup,
-                          child: const Text('Sign Up'),
+                          child: Text(localizations.signupButtonText),
                         ),
                   const SizedBox(height: 16),
                   TextButton(
@@ -223,7 +249,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             builder: (context) => const LoginScreen()),
                       );
                     },
-                    child: const Text('Already have an account? Log In'),
+                    child: Text(localizations.alreadyHaveAccountButtonText),
                   ),
                 ],
               ),

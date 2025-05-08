@@ -1,0 +1,736 @@
+{
+  "employeeListScreenTitle": "Сотрудники",
+  "employeeListScreenErrorLoading": "Ошибка загрузки сотрудников: {error}",
+  "@employeeListScreenErrorLoading": {"placeholders": {"error": {"type": "String"}}},
+  "employeeListScreenConfirmDeleteTitle": "Подтвердите удаление",
+  "employeeListScreenConfirmDeleteContent": "Вы уверены, что хотите удалить сотрудника \"{name}\"?",
+  "@employeeListScreenConfirmDeleteContent": {"placeholders": {"name": {"type": "String"}}},
+  "employeeListScreenConfirmDeleteActionCancel": "Отмена",
+  "employeeListScreenConfirmDeleteActionDelete": "Удалить",
+  "employeeListScreenFeedbackSuccessDelete": "Сотрудник \"{name}\" успешно удалён",
+  "@employeeListScreenFeedbackSuccessDelete": {"placeholders": {"name": {"type": "String"}}},
+  "employeeListScreenFeedbackErrorDelete": "Ошибка удаления сотрудника: {error}",
+  "@employeeListScreenFeedbackErrorDelete": {"placeholders": {"error": {"type": "String"}}},
+  "employeeListScreenColumnName": "Имя",
+  "employeeListScreenColumnEmail": "Email",
+  "employeeListScreenColumnRole": "Роль",
+  "employeeListScreenColumnOfficeId": "ID офиса",
+  "employeeListScreenColumnActive": "Активен",
+  "employeeListScreenColumnActions": "Действия",
+  "employeeListScreenTooltipEdit": "Редактировать сотрудника",
+  "employeeListScreenTooltipDelete": "Удалить сотрудника",
+  "employeeListScreenTooltipRefresh": "Обновить список",
+  "employeeListScreenTooltipAdd": "Добавить сотрудника",
+  "employeeListScreenButtonRetry": "Повторить",
+  "employeeListScreenNoEmployeesFound": "Сотрудники не найдены.",
+  "employeeListScreenButtonAddFirst": "Добавить первого сотрудника",
+  "@@locale": "ru",
+  "loginScreenTitle": "Вход",
+  "usernameHint": "Имя пользователя",
+  "passwordHint": "Пароль",
+  "loginButtonText": "Войти",
+  "appTitle": "Flutter Панель Администратора",
+  "signupScreenTitle": "Регистрация",
+  "signupButtonText": "Зарегистрироваться",
+  "createCrmAccountTitle": "Создать аккаунт CRM",
+  "loginLabelText": "Логин",
+  "notesLabelText": "Примечания (необязательно)",
+  "confirmPasswordHint": "Подтвердите пароль",
+  "pleaseEnterLoginNameError": "Пожалуйста, введите имя для входа",
+  "loginMinLengthError": "Логин должен содержать не менее 3 символов",
+  "pleaseEnterPasswordError": "Пожалуйста, введите пароль",
+  "passwordMinLengthError": "Пароль должен содержать не менее 6 символов",
+  "pleaseConfirmPasswordError": "Пожалуйста, подтвердите ваш пароль",
+  "passwordsDoNotMatchError": "Пароли не совпадают",
+  "alreadyHaveAccountButtonText": "Уже есть аккаунт? Войти",
+  "userCreatedSuccessMessage": "Пользователь {userId} успешно создан! Пожалуйста, войдите.",
+  "userFormScreenTitle": "Создать нового пользователя",
+  "loginEmailLabelText": "Логин (Email)",
+  "loginEmailHintText": "user@example.com",
+  "pleaseEnterLoginEmailError": "Пожалуйста, введите email для входа",
+  "pleaseEnterValidEmailError": "Пожалуйста, введите действующий email",
+  "createUserButtonText": "Создать пользователя",
+  "userCreatedSuccessIdMessage": "Пользователь успешно создан с ID: {userId}",
+  "grpcErrorCreatingUserMessage": "Ошибка gRPC при создании пользователя: {errorMessage}",
+  "errorCreatingUserMessage": "Ошибка при создании пользователя: {errorMessage}",
+  "editLendingApplicationTitle": "Редактировать заявку на кредит",
+  "addLendingApplicationTitle": "Добавить заявку на кредит",
+  "saveApplicationTooltip": "Сохранить заявку",
+  "clientLabelText": "Клиент",
+  "pleaseSelectClientError": "Пожалуйста, выберите клиента",
+  "managerLabelText": "Менеджер",
+  "pleaseSelectManagerError": "Пожалуйста, выберите менеджера",
+  "bankLabelText": "Банк",
+  "pleaseSelectBankError": "Пожалуйста, выберите банк",
+  "requestedAmountLabelText": "Запрашиваемая сумма",
+  "enterRequestedAmountError": "Введите запрашиваемую сумму",
+  "approvedAmountLabelText": "Одобренная сумма",
+  "applicationDateLabelText": "Дата заявки: {date}",
+  "pickDateButtonText": "Выбрать",
+  "approvalDateLabelText": "Дата одобрения: {date}",
+  "fundsReceivedDateLabelText": "Дата получения средств: {date}",
+  "companyContractDateLabelText": "Дата договора с компанией: {date}",
+  "expectedCommissionLabelText": "Ожидаемая комиссия",
+  "statusLabelText": "Статус",
+  "pleaseSelectStatusError": "Пожалуйста, выберите статус",
+  "paymentIdLabelText": "ID платежа",
+  "notesLabelTextShort": "Примечания",
+  "companyCommissionPercentLabelText": "Процент комиссии компании",
+  "calculatedCommissionAmountLabelText": "Рассчитанная сумма комиссии",
+  "commissionPaidLabelText": "Комиссия выплачена",
+  "agentCommissionReceivedLabelText": "Комиссия агента получена",
+  "updateApplicationButtonText": "Обновить заявку",
+  "createApplicationButtonText": "Создать заявку",
+  "errorLoadingDropdownMessage": "Ошибка загрузки выпадающих списков: {errorMessage}",
+  "errorLoadingApplicationMessage": "Ошибка загрузки заявки: {errorMessage}",
+  "applicationUpdatedSuccessMessage": "Заявка успешно обновлена",
+  "applicationCreatedSuccessMessage": "Заявка успешно создана",
+  "errorSavingApplicationMessage": "Ошибка сохранения заявки: {errorMessage}",
+  "lendingApplicationFormScreenFeedbackErrorCreating": "Ошибка при создании заявки на кредит: {error}",
+  "lendingApplicationFormScreenFeedbackErrorUpdating": "Ошибка при обновлении заявки на кредит: {error}",
+
+  "clientFormScreenTitleEdit": "Редактировать клиента",
+  "clientFormScreenTitleAdd": "Добавить клиента",
+  "clientFormScreenSaveTooltip": "Сохранить клиента",
+  "clientFormScreenLabelFirstName": "Имя",
+  "clientFormScreenLabelLastName": "Фамилия",
+  "clientFormScreenLabelEmail": "Электронная почта",
+  "clientFormScreenLabelPhone": "Телефон",
+  "clientFormScreenLabelTelegramId": "Telegram ID",
+  "clientFormScreenLabelWhatsappNumber": "Номер WhatsApp",
+  "clientFormScreenLabelSource": "Источник",
+  "clientFormScreenHintSource": "Выберите источник",
+  "clientFormScreenLabelPassportData": "Паспортные данные (JSON)",
+  "clientFormScreenLabelNotes": "Примечания",
+  "clientFormScreenValidationFirstNameRequired": "Пожалуйста, введите имя",
+  "clientFormScreenValidationFirstNameMinLength": "Имя должно содержать не менее 2 символов",
+  "clientFormScreenValidationLastNameRequired": "Пожалуйста, введите фамилию",
+  "clientFormScreenValidationLastNameMinLength": "Фамилия должна содержать не менее 2 символов",
+  "clientFormScreenValidationEmailRequired": "Пожалуйста, введите адрес электронной почты",
+  "clientFormScreenValidationEmailInvalid": "Пожалуйста, введите действительный адрес электронной почты",
+  "clientFormScreenValidationPhoneRequired": "Пожалуйста, введите номер телефона",
+  "clientFormScreenValidationSourceRequired": "Пожалуйста, выберите источник",
+  "clientFormScreenButtonUpdate": "Обновить клиента",
+  "clientFormScreenButtonCreate": "Создать клиента",
+  "clientFormScreenFeedbackErrorLoading": "Ошибка загрузки данных клиента: {error}",
+  "@clientFormScreenFeedbackErrorLoading": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "clientFormScreenFeedbackErrorInvalidJson": "Неверный JSON для паспортных данных: {error}",
+  "@clientFormScreenFeedbackErrorInvalidJson": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "clientFormScreenFeedbackSuccessUpdate": "Клиент успешно обновлен",
+  "clientFormScreenFeedbackSuccessCreate": "Клиент успешно создан",
+  "clientFormScreenFeedbackErrorGrpc": "Ошибка gRPC при сохранении клиента: {errorMessage}",
+  "@clientFormScreenFeedbackErrorGrpc": {
+      "placeholders": {
+          "errorMessage": {
+              "type": "String"
+          }
+      }
+  },
+  "clientFormScreenFeedbackErrorGeneric": "Ошибка при сохранении клиента: {error}",
+
+  "clientListScreenTitle": "Клиенты",
+  "clientListScreenTooltipAdd": "Добавить клиента",
+  "clientListScreenTooltipEdit": "Редактировать клиента",
+  "clientListScreenTooltipDelete": "Удалить клиента",
+  "clientListScreenConfirmDeleteTitle": "Подтвердить удаление",
+  "clientListScreenConfirmDeleteContent": "Вы уверены, что хотите удалить клиента {clientName}?",
+  "@clientListScreenConfirmDeleteContent": {
+      "placeholders": {
+          "clientName": {
+              "type": "String"
+          }
+      }
+  },
+  "clientListScreenConfirmDeleteActionCancel": "Отмена",
+  "clientListScreenConfirmDeleteActionDelete": "Удалить",
+  "clientListScreenFeedbackSuccessDelete": "Клиент {clientName} успешно удален",
+  "@clientListScreenFeedbackSuccessDelete": {
+      "placeholders": {
+          "clientName": {
+              "type": "String"
+          }
+      }
+  },
+  "clientListScreenFeedbackErrorDelete": "Ошибка удаления клиента {clientId}: {error}",
+  "@clientListScreenFeedbackErrorDelete": {
+      "placeholders": {
+          "clientId": {
+              "type": "String"
+          },
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "clientListScreenErrorLoading": "Ошибка загрузки клиентов: {error}",
+  "@clientListScreenErrorLoading": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "clientListScreenButtonRetry": "Повторить",
+  "clientListScreenNoClientsFound": "Клиенты не найдены. Нажмите +, чтобы добавить нового клиента, или потяните вниз для обновления.",
+  "clientListScreenColumnId": "ID",
+  "clientListScreenColumnFirstName": "Имя",
+  "clientListScreenColumnLastName": "Фамилия",
+  "clientListScreenColumnPhone": "Телефон",
+  "clientListScreenColumnEmail": "Электронная почта",
+  "clientListScreenColumnTelegramId": "Telegram ID",
+  "clientListScreenColumnWhatsapp": "WhatsApp",
+  "clientListScreenColumnSource": "Источник",
+  "clientListScreenColumnPassportData": "Паспортные данные",
+  "clientListScreenColumnNotes": "Примечания",
+  "clientListScreenColumnActions": "Действия",
+  "clientListScreenDefaultClientName": "этот клиент",
+  "clientListScreenSourceUnspecified": "Не указан",
+
+  "lendingApplicationListScreenTitle": "Заявки на кредит",
+  "lendingApplicationListScreenTooltipAdd": "Добавить заявку",
+  "lendingApplicationListScreenTooltipEdit": "Редактировать заявку",
+  "lendingApplicationListScreenTooltipDelete": "Удалить заявку",
+  "lendingApplicationListScreenConfirmDeleteTitle": "Удалить заявку?",
+  "lendingApplicationListScreenConfirmDeleteContent": "Вы уверены, что хотите удалить эту заявку?",
+  "lendingApplicationListScreenActionCancel": "Отмена",
+  "lendingApplicationListScreenActionDelete": "Удалить",
+  "lendingApplicationListScreenFeedbackSuccessDelete": "Заявка успешно удалена",
+  "lendingApplicationListScreenFeedbackErrorDelete": "Ошибка удаления заявки: {error}",
+  "@lendingApplicationListScreenFeedbackErrorDelete": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "lendingApplicationListScreenErrorLoading": "Ошибка: {error}",
+  "@lendingApplicationListScreenErrorLoading": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "lendingApplicationListScreenNoApplicationsFound": "Заявок на кредит не найдено.",
+  "lendingApplicationListScreenListItemNoId": "Нет ID",
+  "lendingApplicationListScreenListItemSubtitle": "Клиент: {clientId}\nМенеджер: {managerId}\nБанк: {bankId}",
+
+  "trainingCourseFormScreenTitleEdit": "Редактировать курс",
+  "trainingCourseFormScreenTitleAdd": "Добавить курс",
+  "trainingCourseFormScreenLabelName": "Название курса",
+  "trainingCourseFormScreenLabelPrice": "Цена",
+  "trainingCourseFormScreenLabelCommission": "Процент комиссии",
+  "trainingCourseFormScreenLabelDescription": "Описание",
+  "trainingCourseFormScreenLabelNotes": "Примечания",
+  "trainingCourseFormScreenValidationRequired": "Обязательно",
+  "trainingCourseFormScreenButtonUpdate": "Обновить курс",
+  "trainingCourseFormScreenButtonCreate": "Создать курс",
+  "trainingCourseFormScreenFeedbackErrorLoading": "Ошибка загрузки курса: {error}",
+  "@trainingCourseFormScreenFeedbackErrorLoading": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "trainingCourseFormScreenFeedbackSuccessUpdate": "Курс успешно обновлен",
+  "trainingCourseFormScreenFeedbackSuccessCreate": "Курс успешно создан",
+  "trainingCourseFormScreenFeedbackErrorSaving": "Ошибка сохранения курса: {error}",
+
+  "trainingCourseListScreenTitle": "Учебные курсы",
+  "trainingCourseListScreenTooltipAdd": "Добавить курс",
+  "trainingCourseListScreenTooltipEdit": "Редактировать курс",
+  "trainingCourseListScreenTooltipDelete": "Удалить курс",
+  "trainingCourseListScreenConfirmDeleteTitle": "Удалить курс?",
+  "trainingCourseListScreenConfirmDeleteContent": "Вы уверены, что хотите удалить этот курс?",
+  "trainingCourseListScreenActionCancel": "Отмена",
+  "trainingCourseListScreenActionDelete": "Удалить",
+  "trainingCourseListScreenFeedbackSuccessDelete": "Курс успешно удален",
+  "trainingCourseListScreenFeedbackErrorDelete": "Ошибка удаления курса: {error}",
+  "@trainingCourseListScreenFeedbackErrorDelete": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "trainingCourseListScreenErrorLoading": "Ошибка: {error}",
+  "@trainingCourseListScreenErrorLoading": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "trainingCourseListScreenNoCoursesFound": "Учебные курсы не найдены.",
+  "trainingCourseListScreenListItemNoName": "Без названия",
+  "trainingCourseListScreenListItemSubtitle": "Цена: {price}\nКомиссия: {commission}%",
+  "@trainingCourseListScreenListItemSubtitle": {
+      "placeholders": {
+          "price": {
+              "type": "String"
+          },
+          "commission": {
+              "type": "String"
+          }
+      }
+  },
+
+  "mainScreenNotLoggedIn": "Не авторизован",
+  "mainScreenRoleLabel": "Роль: {roleName}",
+  "@mainScreenRoleLabel": {
+      "placeholders": {
+          "roleName": {
+              "type": "String"
+          }
+      }
+  },
+  "mainScreenUserLoginDefault": "Пользователь",
+
+  "sideMenuDashboard": "Панель управления",
+  "sideMenuClients": "Клиенты",
+  "sideMenuEmployees": "Сотрудники",
+  "sideMenuTranslations": "Переводы",
+  "sideMenuInsurancePolicies": "Страховые полисы",
+  "sideMenuTrainingCourses": "Учебные курсы",
+  "sideMenuBusinessRegistrations": "Регистрация бизнеса",
+  "sideMenuLendingApplications": "Заявки на кредит",
+  "sideMenuAdminTools": "Инструменты администратора",
+  "sideMenuCreateUser": "Создать пользователя",
+  "sideMenuTask": "Задача",
+  "sideMenuStore": "Магазин",
+  "sideMenuNotification": "Уведомление",
+  "sideMenuProfile": "Профиль",
+  "sideMenuSettings": "Настройки",
+  "sideMenuLogout": "Выйти",
+
+  "dashboardHeaderTitle": "Панель управления",
+  "dashboardHeaderProfileCardUserDefault": "Пользователь",
+  "dashboardHeaderProfileCardNotLoggedIn": "Не авторизован",
+  "dashboardHeaderSearchHint": "Поиск",
+
+  "dashboardMyFilesTitle": "Мои файлы",
+  "dashboardMyFilesAddNewButton": "Добавить новый",
+
+  "dashboardRecentFilesTitle": "Недавние файлы",
+  "dashboardRecentFilesColumnFileName": "Имя файла",
+  "dashboardRecentFilesColumnDate": "Дата",
+  "dashboardRecentFilesColumnSize": "Размер",
+
+  "dashboardStorageDetailsTitle": "Сведения о хранилище",
+  "dashboardStorageDetailsDocumentsFiles": "Файлы документов",
+  "dashboardStorageDetailsMediaFiles": "Медиафайлы",
+  "dashboardStorageDetailsOtherFiles": "Другие файлы",
+  "dashboardStorageDetailsUnknown": "Неизвестно",
+
+  "translationOrderListScreenTitle": "Заказы на перевод",
+  "translationOrderListScreenDeleteOrderDialogTitle": "Удалить заказ?",
+  "translationOrderListScreenDeleteOrderDialogContent": "Вы уверены, что хотите удалить этот заказ?",
+  "translationOrderListScreenDeleteOrderDialogCancelButton": "Отмена",
+  "translationOrderListScreenDeleteOrderDialogDeleteButton": "Удалить",
+  "translationOrderListScreenOrderDeletedSuccess": "Заказ успешно удален",
+  "translationOrderListScreenErrorDeletingOrder": "Ошибка удаления заказа: {error}",
+  "@translationOrderListScreenErrorDeletingOrder": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderListScreenErrorLoading": "Ошибка: {error}",
+  "@translationOrderListScreenErrorLoading": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderListScreenNoOrdersFound": "Заказы на перевод не найдены.",
+  "translationOrderListScreenUntitledOrder": "Заказ без названия",
+  "translationOrderListScreenOrderIdLabel": "ID заказа: {orderId}",
+  "@translationOrderListScreenOrderIdLabel": {
+      "placeholders": {
+          "orderId": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderListScreenOrderTitleLabel": "Название: {title}",
+  "@translationOrderListScreenOrderTitleLabel": {
+      "placeholders": {
+          "title": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderListScreenOrderStatusLabel": "Статус: {status}",
+  "@translationOrderListScreenOrderStatusLabel": {
+      "placeholders": {
+          "status": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderListScreenOrderCreatedLabel": "Создан: {date}",
+  "@translationOrderListScreenOrderCreatedLabel": {
+      "placeholders": {
+          "date": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderListScreenOrderDoneLabel": "Выполнен: {date}",
+  "@translationOrderListScreenOrderDoneLabel": {
+      "placeholders": {
+          "date": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderListScreenCreateNewOrderTooltip": "Создать новый заказ",
+
+  "translationOrderFormScreenCreateTitle": "Создать заказ",
+  "translationOrderFormScreenEditTitle": "Редактировать заказ",
+  "translationOrderFormScreenSaveChangesTooltip": "Сохранить заказ",
+  "translationOrderFormScreenErrorLoadingData": "Ошибка загрузки начальных данных: {error}",
+  "@translationOrderFormScreenErrorLoadingData": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderFormScreenErrorSavingOrder": "Ошибка сохранения заказа: {error}",
+  "@translationOrderFormScreenErrorSavingOrder": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderFormScreenOrderCreatedSuccess": "Заказ успешно создан",
+  "translationOrderFormScreenOrderUpdatedSuccess": "Заказ успешно обновлен",
+  "translationOrderFormScreenOrderDeletedSuccess": "Заказ успешно удален",
+  "translationOrderFormScreenErrorDeletingOrder": "Ошибка удаления заказа: {error}",
+  "@translationOrderFormScreenErrorDeletingOrder": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "translationOrderFormScreenFieldTitleLabel": "Название *",
+  "translationOrderFormScreenFieldTitleValidation": "Пожалуйста, введите название",
+  "translationOrderFormScreenFieldDoneAtLabel": "Выполнен (Дата завершения)",
+  "translationOrderFormScreenFieldClientLabel": "Клиент *",
+  "translationOrderFormScreenFieldClientHint": "Выберите клиента",
+  "translationOrderFormScreenFieldClientValidation": "Пожалуйста, выберите клиента",
+  "translationOrderFormScreenFieldManagerLabel": "Менеджер *",
+  "translationOrderFormScreenFieldManagerHint": "Выберите менеджера",
+  "translationOrderFormScreenFieldManagerValidation": "Пожалуйста, выберите менеджера",
+  "translationOrderFormScreenFieldOfficeLabel": "Офис *",
+  "translationOrderFormScreenFieldOfficeHint": "Выберите офис",
+  "translationOrderFormScreenFieldOfficeValidation": "Пожалуйста, выберите офис",
+  "translationOrderFormScreenFieldSourceLanguageLabel": "Исходный язык",
+  "translationOrderFormScreenFieldTargetLanguageLabel": "Целевой язык",
+  "translationOrderFormScreenFieldDocumentTypeLabel": "Тип документа",
+  "translationOrderFormScreenFieldDocumentTypeHint": "Выберите тип документа",
+  "translationOrderFormScreenFieldPageCountLabel": "Количество страниц",
+  "translationOrderFormScreenFieldNotarialSumLabel": "Нотариальная сумма *",
+  "translationOrderFormScreenFieldNotarialSumValidationRequired": "Пожалуйста, введите нотариальную сумму",
+  "translationOrderFormScreenFieldNotarialSumValidationNumber": "Пожалуйста, введите действительное число",
+  "translationOrderFormScreenFieldPriorityLabel": "Приоритет *",
+  "translationOrderFormScreenFieldPriorityHint": "Выберите приоритет",
+  "translationOrderFormScreenFieldPriorityValidation": "Пожалуйста, выберите приоритет",
+  "translationOrderFormScreenFieldPaymentIdLabel": "ID платежа",
+  "translationOrderFormScreenFieldTranslatorLabel": "Переводчик",
+  "translationOrderFormScreenFieldTranslatorHint": "Выберите переводчика (Необязательно)",
+  "translationOrderFormScreenFieldStatusLabel": "Статус (Только чтение)",
+  "translationOrderFormScreenFieldNotesLabel": "Примечания",
+  "translationOrderFormScreenSwitchUrgent": "Срочный",
+  "translationOrderFormScreenSwitchSemiUrgent": "Полу-срочный",
+  "translationOrderFormScreenSwitchClientNotified": "Клиент уведомлен",
+  "translationOrderFormScreenDeleteButton": "Удалить заказ",
+  "translationOrderFormScreenDeleteDialogTitle": "Удалить заказ?",
+  "translationOrderFormScreenDeleteDialogContent": "Вы уверены, что хотите удалить этот заказ?",
+  "translationOrderFormScreenDeleteDialogCancelButton": "Отмена",
+  "translationOrderFormScreenDeleteDialogDeleteButton": "Удалить",
+  "translationOrderFormScreenDisplayEmployee": "{name} ({id}...)",
+  "@translationOrderFormScreenDisplayEmployee": {
+      "placeholders": {
+          "name": {"type": "String"},
+          "id": {"type": "String"}
+      }
+  },
+  "translationOrderFormScreenDisplayOffice": "{city} ({id}...)",
+  "@translationOrderFormScreenDisplayOffice": {
+      "placeholders": {
+          "city": {"type": "String"},
+          "id": {"type": "String"}
+      }
+  },
+  "translationOrderFormScreenDisplayClient": "{firstName} {lastName} ({id}...)",
+  "@translationOrderFormScreenDisplayClient": {
+      "placeholders": {
+          "firstName": {"type": "String"},
+          "lastName": {"type": "String"},
+          "id": {"type": "String"}
+      }
+  },
+  "translationOrderFormScreenStatusNotAvailable": "Н/Д",
+
+  "insurancePolicyListScreenTitle": "Страховые полисы",
+  "insurancePolicyListScreenAddPolicyTooltip": "Добавить полис",
+  "insurancePolicyListScreenDeleteDialogTitle": "Удалить полис?",
+  "insurancePolicyListScreenDeleteDialogContent": "Вы уверены, что хотите удалить этот полис?",
+  "insurancePolicyListScreenDeleteDialogCancelButton": "Отмена",
+  "insurancePolicyListScreenDeleteDialogDeleteButton": "Удалить",
+  "insurancePolicyListScreenPolicyDeletedSuccess": "Полис успешно удален",
+  "insurancePolicyListScreenErrorDeletingPolicy": "Ошибка удаления полиса: {error}",
+  "@insurancePolicyListScreenErrorDeletingPolicy": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "insurancePolicyListScreenErrorLoading": "Ошибка: {error}",
+  "@insurancePolicyListScreenErrorLoading": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "insurancePolicyListScreenNoPoliciesFound": "Страховые полисы не найдены.",
+  "insurancePolicyListScreenNoPolicyNumber": "Нет номера полиса",
+  "insurancePolicyListScreenListItemSubtitle": "Клиент: {clientId}\nМенеджер: {managerId}\nСумма: {amount}",
+  "@insurancePolicyListScreenListItemSubtitle": {
+      "placeholders": {
+          "clientId": {"type": "String"},
+          "managerId": {"type": "String"},
+          "amount": {"type": "String"}
+      }
+  },
+  "insurancePolicyListScreenEditPolicyTooltip": "Редактировать полис",
+  "insurancePolicyListScreenDeletePolicyTooltip": "Удалить полис",
+
+  "insurancePolicyId": "ID",
+  "insurancePolicyClient": "Клиент",
+  "insurancePolicyPolicyNumber": "Номер полиса",
+  "insurancePolicyType": "Тип",
+  "insurancePolicyStartDate": "Дата начала",
+  "insurancePolicyEndDate": "Дата окончания",
+  "insurancePolicyPremium": "Премия",
+  "insurancePolicyStatus": "Статус",
+  "insurancePolicyCoverageDetails": "Детали покрытия",
+  "confirmDeleteInsurancePolicyTitle": "Подтвердить удаление",
+  "confirmDeleteInsurancePolicyMessage": "Вы уверены, что хотите удалить этот страховой полис?",
+  "insurancePolicyDeletedSuccess": "Страховой полис успешно удален",
+  "errorDeletingInsurancePolicy": "Ошибка удаления страхового полиса: {error}",
+  "noInsurancePoliciesFound": "Страховые полисы не найдены",
+  "interactionListUnspecifiedType": "Не указан",
+  "interactionListConfirmDeleteTitle": "Подтвердить удаление",
+  "interactionListConfirmDeleteMessage": "Удалить это взаимодействие?",
+  "interactionListCancelButton": "Отмена",
+  "interactionListDeleteButton": "Удалить",
+  "interactionListDeletedSuccess": "Удалено",
+  "interactionListErrorDeleting": "Ошибка удаления: {error}",
+  "interactionListTitle": "Все взаимодействия",
+  "interactionListErrorLoading": "Ошибка загрузки взаимодействий: {error}",
+  "interactionListNoInteractionsFound": "Взаимодействия не найдены.",
+  "interactionListIdHeader": "ID",
+  "interactionListClientHeader": "Клиент",
+  "interactionListEmployeeHeader": "Сотрудник",
+  "interactionListDateHeader": "Дата",
+  "interactionListTypeHeader": "Тип",
+  "interactionListDescriptionHeader": "Описание",
+  "interactionListSubjectHeader": "Тема",
+  "interactionListEndTimeHeader": "Время окончания",
+  "interactionListScheduledHeader": "Запланировано",
+  "interactionListCompletedHeader": "Завершено",
+  "interactionListNotesHeader": "Заметки",
+  "interactionListActionsHeader": "Действия",
+  "interactionListYes": "Да",
+  "interactionListNo": "Нет",
+  "interactionListEditInteractionTooltip": "Редактировать взаимодействие",
+  "interactionListDeleteInteractionTooltip": "Удалить взаимодействие",
+  "interactionListDetailsDialogTitle": "Детали взаимодействия",
+  "interactionListCloseButton": "Закрыть",
+  "insurancePolicyFormEditPolicyTitle": "Редактировать полис",
+  "insurancePolicyFormAddPolicyTitle": "Добавить полис",
+  "insurancePolicyFormErrorLoadingPolicy": "Ошибка загрузки полиса: {error}",
+  "insurancePolicyFormPolicyUpdatedSuccess": "Полис успешно обновлен",
+  "insurancePolicyFormPolicyCreatedSuccess": "Полис успешно создан",
+  "insurancePolicyFormErrorSavingPolicy": "Ошибка сохранения полиса: {error}",
+  "insurancePolicyFormPolicyNumberLabel": "Номер полиса",
+  "insurancePolicyFormClientIdLabel": "ID клиента",
+  "insurancePolicyFormManagerIdLabel": "ID менеджера",
+  "insurancePolicyFormAmountLabel": "Сумма",
+  "insurancePolicyFormStartDateLabel": "Дата начала",
+  "insurancePolicyFormStartDatePickerPrefix": "Начало: {date}",
+  "insurancePolicyFormExpiryDateLabel": "Дата окончания",
+  "insurancePolicyFormExpiryDatePickerPrefix": "Окончание: {date}",
+  "insurancePolicyFormPickDateButton": "Выбрать",
+  "insurancePolicyFormStatusLabel": "Статус",
+  "insurancePolicyFormRenewalStatusLabel": "Статус продления",
+  "insurancePolicyFormNotesLabel": "Заметки",
+  "insurancePolicyFormUpdatePolicyButton": "Обновить полис",
+  "insurancePolicyFormCreatePolicyButton": "Создать полис",
+  "insurancePolicyFormRequiredField": "Обязательное поле",
+  "insurancePolicyFormScreenTitleEdit": "Редактировать полис",
+  "insurancePolicyFormScreenTitleAdd": "Добавить полис",
+  "insurancePolicyFormScreenFeedbackErrorLoading": "Ошибка загрузки полиса: {error}",
+  "@insurancePolicyFormScreenFeedbackErrorLoading": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "insurancePolicyFormScreenFeedbackSuccessUpdate": "Полис успешно обновлен",
+  "insurancePolicyFormScreenFeedbackSuccessCreate": "Полис успешно создан",
+  "insurancePolicyFormScreenFeedbackErrorSaving": "Ошибка сохранения полиса: {error}",
+  "@insurancePolicyFormScreenFeedbackErrorSaving": {
+      "placeholders": {
+          "error": {
+              "type": "String"
+          }
+      }
+  },
+  "insurancePolicyFormScreenValidationRequired": "Обязательно",
+  "insurancePolicyFormScreenLabelPolicyNumber": "Номер полиса",
+  "insurancePolicyFormScreenLabelClientId": "ID клиента",
+  "insurancePolicyFormScreenLabelManagerId": "ID менеджера",
+  "insurancePolicyFormScreenLabelAmount": "Сумма",
+  "insurancePolicyFormScreenLabelStartDateWithValue": "Дата начала: {date}",
+  "@insurancePolicyFormScreenLabelStartDateWithValue": {
+      "placeholders": {
+          "date": {
+              "type": "String"
+          }
+      }
+  },
+  "insurancePolicyFormScreenLabelStartDate": "Дата начала",
+  "insurancePolicyFormScreenLabelExpiryDateWithValue": "Дата окончания: {date}",
+  "@insurancePolicyFormScreenLabelExpiryDateWithValue": {
+      "placeholders": {
+          "date": {
+              "type": "String"
+          }
+      }
+  },
+  "insurancePolicyFormScreenLabelExpiryDate": "Дата окончания",
+  "insurancePolicyFormScreenPickDateButton": "Выбрать",
+  "insurancePolicyFormScreenLabelStatus": "Статус",
+  "insurancePolicyFormScreenLabelRenewalStatus": "Статус продления",
+  "insurancePolicyFormScreenLabelNotes": "Примечания",
+  "insurancePolicyFormScreenButtonUpdate": "Обновить полис",
+  "insurancePolicyFormScreenButtonCreate": "Создать полис",
+
+  "signupScreenErrorSignupFailed": "Ошибка регистрации: {errorMessage}",
+  "@signupScreenErrorSignupFailed": {
+    "placeholders": {
+      "errorMessage": {
+        "type": "String"
+      }
+    }
+  },
+  "signupScreenErrorUnexpected": "Произошла непредвиденная ошибка: {error}",
+  "@signupScreenErrorUnexpected": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "loginScreenSignUpPromptText": "Нет аккаунта? Зарегистрироваться",
+  "loginScreenUsernameValidationEmpty": "Пожалуйста, введите имя пользователя",
+  "loginScreenPasswordValidationEmpty": "Пожалуйста, введите ваш пароль",
+  "loginScreenErrorLoginFailed": "Ошибка входа. Пожалуйста, попробуйте еще раз.",
+  "loginScreenErrorLoginFailedWithDetails": "Ошибка входа: {details}",
+  "@loginScreenErrorLoginFailedWithDetails": {
+    "placeholders": {
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "loginScreenErrorUnexpected": "Произошла непредвиденная ошибка: {error}",
+  "@loginScreenErrorUnexpected": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "interactionFormScreenTitleAdd": "Добавить взаимодействие",
+  "interactionFormScreenTitleEdit": "Редактировать взаимодействие",
+  "interactionFormScreenLabelClient": "Клиент",
+  "interactionFormScreenLabelEmployee": "Сотрудник",
+  "interactionFormScreenLabelInteractionType": "Тип взаимодействия",
+  "interactionFormScreenValidationSelectClient": "Пожалуйста, выберите клиента",
+  "interactionFormScreenValidationSelectEmployee": "Пожалуйста, выберите сотрудника",
+  "interactionFormScreenValidationSelectType": "Пожалуйста, выберите тип",
+  "interactionFormScreenLabelInteractionDate": "Дата взаимодействия: {date}",
+  "@interactionFormScreenLabelInteractionDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "interactionFormScreenLabelDateNotSet": "Не установлено",
+  "interactionFormScreenLabelEndTime": "Время окончания: {time}",
+  "@interactionFormScreenLabelEndTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "interactionFormScreenLabelSubject": "Тема",
+  "interactionFormScreenValidationEnterSubject": "Пожалуйста, введите тему",
+  "interactionFormScreenLabelDescription": "Описание",
+  "interactionFormScreenLabelNotes": "Примечания",
+  "interactionFormScreenCheckboxScheduled": "Запланировано",
+  "interactionFormScreenCheckboxCompleted": "Завершено",
+  "interactionFormScreenFeedbackErrorLoading": "Не удалось загрузить начальные данные: {error}",
+  "@interactionFormScreenFeedbackErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "interactionFormScreenFeedbackSuccessCreate": "Взаимодействие успешно создано",
+  "interactionFormScreenFeedbackSuccessUpdate": "Взаимодействие успешно обновлено",
+  "interactionFormScreenFeedbackErrorSaving": "Не удалось сохранить взаимодействие: {error}",
+  "@interactionFormScreenFeedbackErrorSaving": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "interactionFormScreenFeedbackErrorUnexpected": "Произошла непредвиденная ошибка: {error}",
+  "@interactionFormScreenFeedbackErrorUnexpected": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
+}

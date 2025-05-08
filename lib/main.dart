@@ -6,6 +6,8 @@ import 'package:admin/services/auth_service.dart'; // Import AuthService
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart'; // Import this
+import 'l10n/app_localizations.dart'; // Import your generated localizations
 // Import the extensions to make them available across the app
 
 void main() {
@@ -29,14 +31,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      locale: const Locale("ru"),
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Admin Panel',
+      // title:
+      //     'Flutter Admin Panel', // This title can also be localized if needed
+      onGenerateTitle: (BuildContext context) =>
+          AppLocalizations.of(context).appTitle, // Changed from ! to .
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: bgColor,
         textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme)
             .apply(bodyColor: Colors.white),
         canvasColor: secondaryColor,
       ),
+      localizationsDelegates: [
+        AppLocalizations.delegate, // Add this line
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales, // Use this
       // Use Consumer to react to AuthService changes
       home: Consumer<AuthService>(
         builder: (context, authService, child) {

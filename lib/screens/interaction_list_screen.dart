@@ -5,6 +5,8 @@ import 'package:admin/screens/interaction_form_screen.dart';
 import 'package:intl/intl.dart'; // Added for DateFormat
 import 'package:grpc/grpc.dart'
     hide ConnectionState; // Added hide for ConnectionState
+import 'package:admin/screens/main/main_screen.dart'; // Added
+import 'package:admin/l10n/app_localizations.dart'; // Added
 
 // Helper function to format date from crm.Interaction
 String formatInteractionDate(crm.Interaction interaction) {
@@ -23,9 +25,10 @@ String formatInteractionEndTime(crm.Interaction interaction) {
 }
 
 // Helper function to get user-friendly interaction type name (can be reused or imported)
-String getInteractionTypeName(crm.InteractionType type) {
+String getInteractionTypeName(
+    crm.InteractionType type, AppLocalizations localizations) {
   if (type == crm.InteractionType.INTERACTION_TYPE_UNSPECIFIED) {
-    return 'Unspecified';
+    return localizations.interactionListUnspecifiedType;
   }
   return type.name.replaceFirst('INTERACTION_TYPE_', '').replaceAll('_', ' ');
 }
@@ -81,34 +84,37 @@ class _InteractionListScreenState extends State<InteractionListScreen> {
   }
 
   Future<void> _delete(String id) async {
+    final localizations = AppLocalizations.of(context);
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Confirm Delete'),
-        content: const Text('Delete this interaction?'),
+        title: Text(localizations.interactionListConfirmDeleteTitle),
+        content: Text(localizations.interactionListConfirmDeleteMessage),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel')),
+              child: Text(localizations.interactionListCancelButton)),
           TextButton(
               style: TextButton.styleFrom(foregroundColor: Colors.red),
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Delete')),
+              child: Text(localizations.interactionListDeleteButton)),
         ],
       ),
     );
     if (confirm == true) {
       try {
         await _interactionService.deleteInteraction(id);
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Deleted')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(localizations.interactionListDeletedSuccess)));
         _load(); // Refresh list after delete
       } on GrpcError catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error deleting: ${e.message ?? e}')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(localizations
+                .interactionListErrorDeleting(e.message ?? e.toString()))));
       } catch (e) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Error deleting: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                localizations.interactionListErrorDeleting(e.toString()))));
       }
     }
   }
@@ -135,9 +141,26 @@ class _InteractionListScreenState extends State<InteractionListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Interactions'),
+        title: Text(localizations.interactionListTitle), // Simplified title
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          // onPressed: () => Navigator.of(context).maybePop(), // Original
+          onPressed: () {
+            // Changed
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).maybePop();
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MainScreen()),
+              );
+            }
+          },
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
+        ),
         actions: [
           IconButton(icon: const Icon(Icons.add), onPressed: () => _navForm())
         ],
@@ -157,29 +180,52 @@ class _InteractionListScreenState extends State<InteractionListScreen> {
             }
             if (snap.hasError) {
               return Center(
-                  child: Text('Error loading interactions: ${snap.error}'));
+                  child: Text(localizations
+                      .interactionListErrorLoading(snap.error.toString())));
             }
             final List<crm.Interaction> list = snap.data ?? <crm.Interaction>[];
             if (list.isEmpty) {
-              return const Center(child: Text('No interactions found.'));
+              return Center(
+                  child:
+                      Text(localizations.interactionListNoInteractionsFound));
             }
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SingleChildScrollView(
                 child: DataTable(
-                  columns: const [
-                    DataColumn(label: Text('ID')),
-                    DataColumn(label: Text('Client')),
-                    DataColumn(label: Text('Employee')),
-                    DataColumn(label: Text('Date')),
-                    DataColumn(label: Text('Type')), // Updated header
-                    DataColumn(label: Text('Description')),
-                    DataColumn(label: Text('Subject')),
-                    DataColumn(label: Text('End Time')),
-                    DataColumn(label: Text('Scheduled')),
-                    DataColumn(label: Text('Completed')),
-                    DataColumn(label: Text('Notes')),
-                    DataColumn(label: Text('Actions')),
+                  columns: [
+                    DataColumn(
+                        label: Text(localizations.interactionListIdHeader)),
+                    DataColumn(
+                        label: Text(localizations.interactionListClientHeader)),
+                    DataColumn(
+                        label:
+                            Text(localizations.interactionListEmployeeHeader)),
+                    DataColumn(
+                        label: Text(localizations.interactionListDateHeader)),
+                    DataColumn(
+                        label: Text(localizations
+                            .interactionListTypeHeader)), // Updated header
+                    DataColumn(
+                        label: Text(
+                            localizations.interactionListDescriptionHeader)),
+                    DataColumn(
+                        label:
+                            Text(localizations.interactionListSubjectHeader)),
+                    DataColumn(
+                        label:
+                            Text(localizations.interactionListEndTimeHeader)),
+                    DataColumn(
+                        label:
+                            Text(localizations.interactionListScheduledHeader)),
+                    DataColumn(
+                        label:
+                            Text(localizations.interactionListCompletedHeader)),
+                    DataColumn(
+                        label: Text(localizations.interactionListNotesHeader)),
+                    DataColumn(
+                        label:
+                            Text(localizations.interactionListActionsHeader)),
                   ],
                   rows: list.map((i) {
                     final clientName = _clientNames[i.clientId] ??
@@ -192,29 +238,35 @@ class _InteractionListScreenState extends State<InteractionListScreen> {
                         DataCell(Text(clientName)),
                         DataCell(Text(employeeName)),
                         DataCell(Text(formatInteractionDate(i))),
-                        DataCell(Text(getInteractionTypeName(
-                            i.type))), // Use helper for enum display
+                        DataCell(Text(getInteractionTypeName(i.type,
+                            localizations))), // Use helper for enum display
                         DataCell(Text(
                             i.description.isNotEmpty ? i.description : '-')),
                         DataCell(Text(i.subject.isNotEmpty ? i.subject : '-')),
                         DataCell(Text(formatInteractionEndTime(
                             i))), // Use helper for end time
-                        DataCell(Text(i.isScheduled ? 'Yes' : 'No')),
-                        DataCell(Text(i.isCompleted ? 'Yes' : 'No')),
+                        DataCell(Text(i.isScheduled
+                            ? localizations.interactionListYes
+                            : localizations.interactionListNo)),
+                        DataCell(Text(i.isCompleted
+                            ? localizations.interactionListYes
+                            : localizations.interactionListNo)),
                         DataCell(Text(i.notes.isNotEmpty ? i.notes : '-')),
                         DataCell(Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
                               icon: const Icon(Icons.edit),
-                              tooltip: 'Edit Interaction',
+                              tooltip: localizations
+                                  .interactionListEditInteractionTooltip,
                               onPressed: () => _navForm(
                                   interaction: i), // Pass interaction object
                             ),
                             IconButton(
                               icon: const Icon(Icons.delete,
                                   color: Colors.red), // Added color
-                              tooltip: 'Delete Interaction',
+                              tooltip: localizations
+                                  .interactionListDeleteInteractionTooltip,
                               onPressed: () => _delete(i.interactionId),
                             ),
                           ],
@@ -226,35 +278,35 @@ class _InteractionListScreenState extends State<InteractionListScreen> {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: Text('Interaction Details'),
+                            title: Text(localizations.interactionListDetailsDialogTitle),
                             content: SingleChildScrollView( // Make content scrollable
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('ID: ${i.interactionId}'),
-                                  Text('Client: $clientName'),
-                                  Text('Employee: $employeeName'),
-                                  Text('Date: ${formatInteractionDate(i)}'),
-                                  Text('Type: ${getInteractionTypeName(i.type)}'),
+                                  Text('${localizations.interactionListIdHeader}: ${i.interactionId}'),
+                                  Text('${localizations.interactionListClientHeader}: $clientName'),
+                                  Text('${localizations.interactionListEmployeeHeader}: $employeeName'),
+                                  Text('${localizations.interactionListDateHeader}: ${formatInteractionDate(i)}'),
+                                  Text('${localizations.interactionListTypeHeader}: ${getInteractionTypeName(i.type, localizations)}'),
                                   Text(
-                                      'Description: ${i.description.isNotEmpty ? i.description : '-'}'),
+                                      '${localizations.interactionListDescriptionHeader}: ${i.description.isNotEmpty ? i.description : '-'}'),
                                   Text(
-                                      'Subject: ${i.subject.isNotEmpty ? i.subject : '-'}'),
+                                      '${localizations.interactionListSubjectHeader}: ${i.subject.isNotEmpty ? i.subject : '-'}'),
                                   Text(
-                                      'End Time: ${formatInteractionEndTime(i)}'),
+                                      '${localizations.interactionListEndTimeHeader}: ${formatInteractionEndTime(i)}'),
                                   Text(
-                                      'Scheduled: ${i.isScheduled ? 'Yes' : 'No'}'),
+                                      '${localizations.interactionListScheduledHeader}: ${i.isScheduled ? localizations.interactionListYes : localizations.interactionListNo}'),
                                   Text(
-                                      'Completed: ${i.isCompleted ? 'Yes' : 'No'}'),
-                                  Text('Notes: ${i.notes.isNotEmpty ? i.notes : '-'}'),
+                                      '${localizations.interactionListCompletedHeader}: ${i.isCompleted ? localizations.interactionListYes : localizations.interactionListNo}'),
+                                  Text('${localizations.interactionListNotesHeader}: ${i.notes.isNotEmpty ? i.notes : '-'}'),
                                 ],
                               ),
                             ),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),
-                                child: Text('Close'),
+                                child: Text(localizations.interactionListCloseButton),
                               )
                             ],
                           ),
