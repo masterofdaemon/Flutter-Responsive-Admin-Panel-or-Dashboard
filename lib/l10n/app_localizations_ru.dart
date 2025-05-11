@@ -415,6 +415,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get clientListScreenTooltipDelete => 'Удалить клиента';
 
   @override
+  String get translationOrderListScreenColumnActions => 'Действия';
+
+  @override
+  String get translationOrderListScreenTooltipEdit => 'Редактировать заказ';
+
+  @override
+  String get translationOrderListScreenTooltipDelete => 'Удалить заказ';
+
+  @override
   String get clientListScreenConfirmDeleteTitle => 'Подтвердить удаление';
 
   @override

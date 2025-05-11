@@ -53,6 +53,8 @@ class MyApp extends StatelessWidget {
       // Use Consumer to react to AuthService changes
       home: Consumer<AuthService>(
         builder: (context, authService, child) {
+          print(
+              '[MainApp Consumer] Building. IsAuthenticated: ${authService.isAuthenticated}'); // Added log
           // Show LoginScreen if not authenticated, otherwise show MainScreen
           return authService.isAuthenticated
               ? MainScreen()

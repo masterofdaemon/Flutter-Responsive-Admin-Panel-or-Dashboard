@@ -7,9 +7,7 @@ class GrpcClientService {
   // Shared channel with authentication
   final CrmServiceClient _client = CrmServiceClient(GrpcClient().channel);
 
-  GrpcClientService() {
-    print('GrpcClientService: connected via shared GrpcClient channel');
-  }
+  GrpcClientService();
 
   // --- Client Methods ---
   Future<List<crm.Client>> listClients(
@@ -17,23 +15,15 @@ class GrpcClientService {
     final request =
         crm.ListClientsRequest(pageSize: pageSize, pageToken: pageToken);
     try {
-      print('Requesting clients, pageSize: $pageSize, pageToken: $pageToken');
       // Include authorization header via GrpcClient
       final response = await _client.listClients(
         request,
         options: GrpcClient().getCallOptions(),
       );
-      print('Fetched clients from backend:');
-      for (final c in response.clients) {
-        print(
-            '  id: ${c.clientId}, firstName: ${c.firstName}, lastName: ${c.lastName}, phone: ${c.phone}, email: ${c.email}, source: ${c.source}');
-      }
       return response.clients;
-    } on GrpcError catch (e) {
-      print('gRPC error during listClients: ${e.message}');
+    } on GrpcError {
       return [];
-    } catch (e) {
-      print('Error during listClients: $e');
+    } catch (_) {
       return [];
     }
   }
@@ -41,7 +31,6 @@ class GrpcClientService {
   Future<crm.Client> createClient(crm.Client client) async {
     final request = crm.CreateClientRequest(client: client);
     try {
-      print('Creating client: ${client.firstName} ${client.lastName}');
       final response = await _client.createClient(
         request,
         options: GrpcClient().getCallOptions(), // Add auth options
@@ -49,7 +38,6 @@ class GrpcClientService {
       // Fetch the created client to return the full object
       return await getClient(response.clientId);
     } catch (e) {
-      print('Error during createClient: $e');
       rethrow;
     }
   }
@@ -57,14 +45,12 @@ class GrpcClientService {
   Future<crm.Client> getClient(String clientId) async {
     final request = crm.GetClientRequest(clientId: clientId);
     try {
-      print('Fetching client ID: $clientId');
       final response = await _client.getClient(
         request,
         options: GrpcClient().getCallOptions(), // Add auth options
       );
       return response.client;
     } catch (e) {
-      print('Error during getClient: $e');
       rethrow;
     }
   }
@@ -74,14 +60,12 @@ class GrpcClientService {
     final request =
         crm.UpdateClientRequest(clientId: clientId, clientData: clientData);
     try {
-      print('Updating client ID: $clientId');
       final response = await _client.updateClient(
         request,
         options: GrpcClient().getCallOptions(), // Add auth options
       );
       return response.client;
     } catch (e) {
-      print('Error during updateClient: $e');
       rethrow;
     }
   }
@@ -89,13 +73,11 @@ class GrpcClientService {
   Future<void> deleteClient(String clientId) async {
     final request = crm.DeleteClientRequest(clientId: clientId);
     try {
-      print('Deleting client ID: $clientId');
       await _client.deleteClient(
         request,
         options: GrpcClient().getCallOptions(), // Add auth options
       );
     } catch (e) {
-      print('Error during deleteClient: $e');
       rethrow;
     }
   }
@@ -106,7 +88,7 @@ class GrpcClientService {
     final request =
         crm.ListEmployeesRequest(pageSize: pageSize, pageToken: pageToken);
     try {
-      print('Requesting employees, pageSize: $pageSize, pageToken: $pageToken');
+      // print('Requesting employees, pageSize: $pageSize, pageToken: $pageToken');
       final response = await _client.listEmployees(
         request,
         options: GrpcClient().getCallOptions(),
@@ -211,7 +193,7 @@ class GrpcClientService {
     final request =
         crm.ListUsersRequest(pageSize: pageSize, pageToken: pageToken);
     try {
-      print('Requesting users, pageSize: $pageSize, pageToken: $pageToken');
+      // print('Requesting users, pageSize: $pageSize, pageToken: $pageToken');
       final response = await _client.listUsers(
         request,
         options: GrpcClient().getCallOptions(),

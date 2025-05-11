@@ -94,10 +94,21 @@ class _TranslationOrderFormScreenState
       .toList();
   // --- End Controllers & State Variables ---
 
+  bool _didLoadInitialData = false;
+
   @override
   void initState() {
     super.initState();
-    _loadInitialData();
+    // Do not call _loadInitialData here!
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_didLoadInitialData) {
+      _didLoadInitialData = true;
+      _loadInitialData();
+    }
   }
 
   @override
@@ -460,13 +471,15 @@ class _TranslationOrderFormScreenState
                       const SizedBox(height: 16),
                     ],
                     DropdownButtonFormField<crm.Client>(
+                      isExpanded: true,
                       value: _selectedClient, // Use the selected Client object
                       hint: Text(localizations
                           .translationOrderFormScreenFieldClientHint),
                       items: _clients.map((crm.Client client) {
                         return DropdownMenuItem<crm.Client>(
                           value: client,
-                          child: Text(_getClientDisplayName(client)),
+                          child: Text(_getClientDisplayName(client),
+                              overflow: TextOverflow.ellipsis),
                         );
                       }).toList(),
                       onChanged: (crm.Client? newValue) {

@@ -415,6 +415,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientListScreenTooltipDelete => 'Delete Client';
 
   @override
+  String get translationOrderListScreenColumnActions => 'Actions';
+
+  @override
+  String get translationOrderListScreenTooltipEdit => 'Edit Order';
+
+  @override
+  String get translationOrderListScreenTooltipDelete => 'Delete Order';
+
+  @override
   String get clientListScreenConfirmDeleteTitle => 'Confirm Delete';
 
   @override

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:admin/services/auth_service.dart';
 import 'package:admin/screens/signup_screen.dart';
-import 'package:admin/screens/main/main_screen.dart';
 import 'package:grpc/grpc.dart';
 import 'package:admin/l10n/app_localizations.dart'; // Import AppLocalizations
 

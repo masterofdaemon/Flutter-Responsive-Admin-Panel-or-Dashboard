@@ -40,11 +40,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
   void _loadClients() {
     setState(() {
       _clientsFuture = _grpcService.listClients().then((clients) {
-        print('ClientListScreen: clients received:');
-        for (final c in clients) {
-          print(
-              '  id: ${c.clientId}, firstName: ${c.firstName}, lastName: ${c.lastName}, phone: ${c.phone}, email: ${c.email}, source: ${c.source}');
-        }
+        // Removed debug print loop; variable 'c' was unused
         _clients = clients; // Update local list
         if (_plutoGridStateManager != null) {
           _updatePlutoGridRows();

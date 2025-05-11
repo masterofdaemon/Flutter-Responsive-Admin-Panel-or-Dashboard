@@ -42,8 +42,7 @@ class AuthService with ChangeNotifier {
     if (_token != null && _token!.isNotEmpty) {
       _isAuthenticated = true;
       GrpcClient().setAuthToken(_token);
-      // TODO: Consider fetching profile here if needed on startup
-      // await fetchSelfProfile();
+      await fetchSelfProfile(); // Fetch profile information if token exists
     } else {
       _isAuthenticated = false;
       GrpcClient().setAuthToken(null); // Ensure token is cleared if not found
@@ -54,12 +53,27 @@ class AuthService with ChangeNotifier {
   Future<void> fetchSelfProfile() async {
     try {
       final crmClient = pbgrpc.CrmServiceClient(GrpcClient().channel);
+      // Log the token that getCallOptions is expected to use
+      final currentToken =
+          GrpcClient().getCallOptions().metadata['authorization'];
+      print(
+          'AuthService: Attempting to fetch self profile. Token from getCallOptions: $currentToken');
+
       final response = await crmClient.getSelfProfile(
         pb.GetSelfProfileRequest(),
-        options: GrpcClient().getCallOptions(),
+        options: GrpcClient()
+            .getCallOptions(), // This will call the modified getCallOptions
       );
       _userProfile = response.hasUser() ? response.user : null;
       _employeeProfile = response.hasEmployee() ? response.employee : null;
+
+      if (_userProfile != null || _employeeProfile != null) {
+        print(
+            'AuthService: Self profile fetched successfully. User: ${_userProfile != null}, Employee: ${_employeeProfile != null}');
+      } else {
+        print(
+            'AuthService: Self profile fetch call completed, but no user or employee data was found in the response.');
+      }
       notifyListeners();
     } catch (e) {
       print('Failed to fetch self profile: $e');
@@ -87,7 +101,10 @@ class AuthService with ChangeNotifier {
         _isAuthenticated = true;
         _errorMessage = null;
         GrpcClient().setAuthToken(_token);
+
         await fetchSelfProfile();
+        print(
+            'AuthService: After fetchSelfProfile in login. IsAuthenticated: $_isAuthenticated, UserProfile: ${_userProfile != null}, EmployeeProfile: ${_employeeProfile != null}');
         return true;
       } else {
         _errorMessage = "Login successful, but no token received.";

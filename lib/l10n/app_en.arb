@@ -149,6 +149,21 @@
   "clientListScreenTooltipAdd": "Add Client",
   "clientListScreenTooltipEdit": "Edit Client",
   "clientListScreenTooltipDelete": "Delete Client",
+  "@clientListScreenTooltipDelete": {
+    "description": "Tooltip for the delete client icon button"
+  },
+  "translationOrderListScreenColumnActions": "Actions",
+  "@translationOrderListScreenColumnActions": {
+    "description": "Actions column title in the translation order list screen"
+  },
+  "translationOrderListScreenTooltipEdit": "Edit Order",
+  "@translationOrderListScreenTooltipEdit": {
+    "description": "Tooltip for the edit translation order icon button"
+  },
+  "translationOrderListScreenTooltipDelete": "Delete Order",
+  "@translationOrderListScreenTooltipDelete": {
+    "description": "Tooltip for the delete translation order icon button"
+  },
   "clientListScreenConfirmDeleteTitle": "Confirm Delete",
   "clientListScreenConfirmDeleteContent": "Are you sure you want to delete client {clientName}?",
   "@clientListScreenConfirmDeleteContent": {

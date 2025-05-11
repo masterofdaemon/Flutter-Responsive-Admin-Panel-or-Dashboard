@@ -794,11 +794,29 @@ abstract class AppLocalizations {
   /// **'Edit Client'**
   String get clientListScreenTooltipEdit;
 
-  /// No description provided for @clientListScreenTooltipDelete.
+  /// Tooltip for the delete client icon button
   ///
   /// In en, this message translates to:
   /// **'Delete Client'**
   String get clientListScreenTooltipDelete;
+
+  /// Actions column title in the translation order list screen
+  ///
+  /// In en, this message translates to:
+  /// **'Actions'**
+  String get translationOrderListScreenColumnActions;
+
+  /// Tooltip for the edit translation order icon button
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Order'**
+  String get translationOrderListScreenTooltipEdit;
+
+  /// Tooltip for the delete translation order icon button
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Order'**
+  String get translationOrderListScreenTooltipDelete;
 
   /// No description provided for @clientListScreenConfirmDeleteTitle.
   ///

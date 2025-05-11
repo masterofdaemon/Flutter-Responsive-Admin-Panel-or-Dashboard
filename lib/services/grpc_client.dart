@@ -48,8 +48,14 @@ class GrpcClient {
   // Method to get call options with the auth token (if using metadata)
   CallOptions getCallOptions() {
     final headers = <String, String>{};
+    print(
+        'GrpcClient: getCallOptions called. Current token: $_token'); // Added log
     if (_token != null && _token!.isNotEmpty) {
       headers['authorization'] = 'Bearer $_token';
+      print(
+          'GrpcClient: Authorization header set with token: Bearer $_token'); // Added log
+    } else {
+      print('GrpcClient: No token available or token is empty.'); // Added log
     }
     return CallOptions(metadata: headers);
   }

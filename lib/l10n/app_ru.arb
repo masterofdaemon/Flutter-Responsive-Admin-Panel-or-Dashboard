@@ -335,6 +335,19 @@
   "dashboardStorageDetailsOtherFiles": "Другие файлы",
   "dashboardStorageDetailsUnknown": "Неизвестно",
 
+  "translationOrderListScreenColumnActions": "Действия",
+  "@translationOrderListScreenColumnActions": {
+    "description": "Заголовок столбца 'Действия' на экране списка заказов на перевод"
+  },
+  "translationOrderListScreenTooltipEdit": "Редактировать заказ",
+  "@translationOrderListScreenTooltipEdit": {
+    "description": "Подсказка для кнопки-иконки редактирования заказа на перевод"
+  },
+  "translationOrderListScreenTooltipDelete": "Удалить заказ",
+  "@translationOrderListScreenTooltipDelete": {
+    "description": "Подсказка для кнопки-иконки удаления заказа на перевод"
+  },
+
   "translationOrderListScreenTitle": "Заказы на перевод",
   "translationOrderListScreenDeleteOrderDialogTitle": "Удалить заказ?",
   "translationOrderListScreenDeleteOrderDialogContent": "Вы уверены, что хотите удалить этот заказ?",

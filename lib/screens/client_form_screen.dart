@@ -85,9 +85,7 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
 
   Future<void> _saveClient() async {
     final localizations = AppLocalizations.of(context);
-    print('_saveClient method called'); // Logging: Method call
     if (_formKey.currentState!.validate()) {
-      print('Form validation successful'); // Logging: Form validation result
       _formKey.currentState!.save(); // Trigger onSaved callbacks
 
       setState(() {
@@ -97,17 +95,11 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
       // Validate passportData JSON if provided
       pb_struct.Value? parsedPassportData;
       final passportText = _passportDataController.text.trim();
-      print(
-          'Raw passport data text: $passportText'); // Logging: Raw passport data
       if (passportText.isNotEmpty) {
         try {
           parsedPassportData = pb_struct.Value.fromJson(passportText);
-          print(
-              'Parsed passport data: $parsedPassportData'); // Logging: Parsed passport data
         } catch (e) {
           // Invalid JSON: show error and abort save
-          print(
-              'Error parsing passport data: $e'); // Logging: Passport parsing error
           setState(() {
             _isLoading = false;
           });
@@ -134,25 +126,17 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
         passportData: parsedPassportData, // Use validated JSON
         notes: _notesController.text.trim(),
       );
-      print(
-          'Client to save: $clientToSave'); // Logging: Client object being prepared
 
       try {
         if (_isEditMode) {
-          print('Edit mode: Updating client'); // Logging: Edit mode
-          print('Calling gRPC updateClient service'); // Logging: gRPC call
           await _grpcService.updateClient(widget.clientId!, clientToSave);
-          print('gRPC updateClient call successful'); // Logging: gRPC success
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 content:
                     Text(localizations.clientFormScreenFeedbackSuccessUpdate)),
           );
         } else {
-          print('Create mode: Creating new client'); // Logging: Create mode
-          print('Calling gRPC createClient service'); // Logging: gRPC call
           await _grpcService.createClient(clientToSave);
-          print('gRPC createClient call successful'); // Logging: gRPC success
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 content:
@@ -161,14 +145,12 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
         }
         Navigator.of(context).pop(true); // Pop screen and indicate success
       } on GrpcError catch (e) {
-        print('gRPC Error saving client: ${e.message}'); // Logging: gRPC error
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text(localizations.clientFormScreenFeedbackErrorGrpc(
                   e.message ?? 'Unknown error'))),
         );
       } catch (e) {
-        print('Error saving client: $e'); // Logging: General error
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text(localizations
@@ -181,9 +163,7 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
           });
         }
       }
-    } else {
-      print('Form validation failed'); // Logging: Form validation result
-    }
+    } else {}
   }
 
   @override
