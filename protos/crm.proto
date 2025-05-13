@@ -36,8 +36,8 @@ enum Status {
 enum Priority {
   PRIORITY_UNSPECIFIED = 0;
   NORMAL = 1;
-  URGENT = 2;
-  SEMI_URGENT = 3;
+  URGENT = 2; // +100% to translation cost
+  SEMI_URGENT = 3; // +50% to translation cost
 }
 
 // Registration type for business registration
@@ -66,14 +66,9 @@ enum InteractionType {
   INTERACTION_TYPE_OTHER = 5;
 }
 
-// Document type for translation orders
-enum DocumentType {
-  DOCUMENT_TYPE_UNSPECIFIED = 0;
-  DOCUMENT_TYPE_PASSPORT = 1;
-  DOCUMENT_TYPE_CERTIFICATE = 2;
-  DOCUMENT_TYPE_CONTRACT = 3;
-  DOCUMENT_TYPE_OTHER = 4;
-}
+// Document type for translation orders - REMOVED Enum. Field will be string.
+// The application should manage an extensive list of document types,
+// possibly in a separate table or configuration, to support dropdowns with search.
 
 // Client source
 enum ClientSource {
@@ -83,6 +78,49 @@ enum ClientSource {
   CLIENT_SOURCE_WALK_IN = 3;
   CLIENT_SOURCE_PARTNER = 4;
   CLIENT_SOURCE_OTHER = 5;
+}
+
+// Translation Progress Status
+enum TranslationProgressStatus {
+  TRANSLATION_PROGRESS_STATUS_UNSPECIFIED = 0;
+  PENDING_ASSIGNMENT = 1; 
+  IN_PROGRESS = 2;        // "In Progress"
+  TRANSLATED = 3;         // "Translated" (set by translator)
+  CHECKED_BY_MANAGER = 4; // "Checked" (set by manager after review)
+  CLIENT_NOTIFIED = 5;    // After manager checks and system notifies client
+  DELIVERED = 6;          // If physical collection/delivery is tracked
+}
+
+// Policy Renewal Status
+enum PolicyRenewalStatus {
+  POLICY_RENEWAL_STATUS_UNSPECIFIED = 0;
+  PENDING_RENEWAL = 1; // Default state, or approaching expiry
+  RENEWED = 2;         // Policy has been renewed
+  NOT_RENEWED = 3;     // Policy was not renewed (e.g., client declined, or past expiry)
+  // Consider adding more specific statuses if needed, e.g., AWAITING_CLIENT_CONFIRMATION
+}
+
+// Service Category for Reporting
+enum ServiceCategory {
+  SERVICE_CATEGORY_UNSPECIFIED = 0;
+  LEGAL_SERVICES = 1;
+  TRANSLATIONS = 2;
+  INSURANCE = 3;
+  PROFESSIONAL_DEVELOPMENT = 4;
+  ACCOUNT_OPENING = 5;
+  BUSINESS_REGISTRATION = 6;
+  LENDING = 7;
+  ALL_SERVICES = 8; // Option to select all services
+}
+
+// Payment Status for Report Items
+enum ReportPaymentStatus {
+  REPORT_PAYMENT_STATUS_UNSPECIFIED = 0;
+  PAID = 1;
+  PARTIALLY_PAID = 2;
+  UNPAID = 3;
+  OVERDUE = 4;
+  NOT_APPLICABLE = 5; // For items where payment isn't tracked this way
 }
 
 // --- Message Definitions ---
@@ -101,7 +139,7 @@ message Client {
   // Client's email address (valid email format)
   optional string email = 5;
   // Client's Telegram ID
-  optional string telegram_id = 6;
+  optional int64 telegram_id = 6; // Changed type to int64
   // Client's WhatsApp number (E.164 format)
   optional string whatsapp_number = 7;
   // Source of the client
@@ -110,7 +148,9 @@ message Client {
   optional google.protobuf.Value passport_data = 9;
   // Notes about the client
   optional string notes = 10;
-  // Relationships omitted for brevity in proto messages, handled by IDs
+  // Linking client to manager and office as per TS
+  optional string manager_id = 11; // ID of the employee (manager)
+  optional string office_id = 12;  // ID of the office
 }
 
 // User represents a system user with authentication credentials.
@@ -130,9 +170,9 @@ message Employee {
   string employee_id = 1;
   string user_id = 2; // Link to User
   string name = 3;
-  EmployeeRole role = 4; // Consider using an enum later
+  EmployeeRole role = 4;
   string office_id = 5; // Link to Office
-  optional string telegram_id = 6;
+  optional int64 telegram_id = 6;
   optional string whatsapp_number = 7;
   string email = 8;
   bool is_active = 9;
@@ -154,10 +194,10 @@ message Office {
 message LegalCase {
   string case_id = 1;
   string client_id = 2;
-  string manager_id = 3;
+  string manager_id = 3; // Employee ID of the manager handling the case
   string issue_type_id = 4;
   optional string partner_id = 5;
-  optional google.protobuf.Timestamp consultation_date = 6;
+  optional google.protobuf.Timestamp consultation_date = 6; // Actual date of consultation
   optional google.protobuf.Timestamp contract_date = 7;
   double contract_amount = 8;
   double expected_commission = 9; // Calculated field
@@ -177,24 +217,35 @@ message TranslationOrder {
   string manager_id = 4;
   optional string translator_id = 5;
   string office_id = 6;
-  optional DocumentType document_type = 7;
+  // Document type is now a string to support an extensive list managed by the application.
+  optional string document_type_key = 7; // e.g., "passport_rf", "birth_certificate_usa"
   optional string source_language = 8;
   optional string target_language = 9;
   optional int32 page_count = 10;
-  double translation_sum = 11; // Calculated
-  double notarial_sum = 12;
-  double total_sum = 13; // Calculated
-  Priority priority = 14; // Consider enum
-  Status status = 15; // Consider enum
+  double translation_sum = 11; // Base translation cost before urgency/certification
+  double notarial_sum = 12;    // Manual entry for notarial/legal certification
+  double total_sum = 13;       // Calculated: (translation_sum * urgency_multiplier) + notarial_sum
+  Priority priority = 14;
+  TranslationProgressStatus translation_progress = 15; // Specific status for translation workflow
   optional string payment_id = 16;
   repeated BlankInfo blanks = 17;
   // Notes about the translation order
   optional string notes = 18;
-  bool is_urgent = 19; // New (Redundant with Priority enum, but added per plan)
-  bool is_semi_urgent = 20; // New (Redundant with Priority enum, but added per plan)
-  bool client_notified = 21; // New
-  google.protobuf.Timestamp created_at = 22; // Added field
-  optional google.protobuf.Timestamp done_at = 23; // Added optional field
+  // bool is_urgent = 19; // REMOVED - Redundant with Priority enum
+  // bool is_semi_urgent = 20; // REMOVED - Redundant with Priority enum
+  // client_notified field was here, now covered by TranslationProgressStatus.CLIENT_NOTIFIED
+  google.protobuf.Timestamp created_at = 22;
+  optional google.protobuf.Timestamp done_at = 23;
+
+  // For handling multiple distinct document types in a single order, consider:
+  // repeated DocumentItem document_items = 24;
+  // message DocumentItem {
+  //   string document_type_key = 1;
+  //   int32 page_count = 2;
+  //   double item_translation_sum = 3;
+  //   // other item-specific fields
+  // }
+  // If using DocumentItem, fields like document_type_key, page_count, translation_sum above might be deprecated or represent a primary item.
 
   // Nested message for structured blank info
   message BlankInfo {
@@ -207,78 +258,83 @@ message TranslationOrder {
 message InsurancePolicy {
   string policy_id = 1;
   string client_id = 2;
-  string manager_id = 3;
+  string manager_id = 3; // Employee ID of the manager
   string policy_number = 4;
-  google.protobuf.Timestamp start_date = 5;
-  google.protobuf.Timestamp expiry_date = 6;
-  double amount = 7;
-  Status status = 8; // Consider enum
-  optional string renewal_status = 9; // Consider enum
+  optional string insurance_company_name = 5; // New: Name of the insurance provider
+  optional string insurance_line = 6;         // New: e.g., "Auto Insurance", "Property Insurance"
+  optional string insurance_product = 7;      // New: e.g., "OSAGO", "KASKO", "Home Basic"
+  google.protobuf.Timestamp start_date = 8;
+  google.protobuf.Timestamp expiry_date = 9;
+  double amount = 10; // Premium amount
+  Status status = 11; // Overall status of the policy itself (e.g., ACTIVE, EXPIRED, CANCELLED)
+  PolicyRenewalStatus renewal_status = 12; // Tracks the renewal process
   // Notes about the insurance policy
-  optional string notes = 10;
+  optional string notes = 13;
 }
 
 message TrainingEnrollment {
   string enrollment_id = 1;
   string client_id = 2;
-  string manager_id = 3;
+  string manager_id = 3; // Employee ID of the manager
   string course_id = 4;
   optional google.protobuf.Timestamp contract_date = 5;
   Status status = 6; // Consider enum
   optional string payment_id = 7;
   optional string notes = 8;
-  bool paid = 9; // New
-  bool accountant_verified = 10; // New
+  bool paid = 9; // Client has paid
+  bool accountant_verified = 10; // Accountant verified payment from partner
+  double price_at_enrollment = 11;    // New: Price of the course at the time of enrollment
+  bool is_contract_signed = 12;       // New: Explicit flag for contract signing
+  double agency_commission_amount = 13; // New: Calculated agency commission for this enrollment
 }
 
 message AccountOpeningRequest {
   string request_id = 1;
   string client_id = 2;
-  string manager_id = 3;
+  string manager_id = 3; // Employee ID of the manager
   string bank_id = 4;
   Status status = 5; // Consider enum
   optional google.protobuf.Timestamp application_date = 6;
   optional google.protobuf.Timestamp opened_date = 7;
   optional string payment_id = 8;
   optional string notes = 9;
-  bool agent_commission_received = 10; // New
+  bool agent_commission_received = 10; // Accountant marks "Funds Received"
+  double agency_commission_amount_at_request = 11; // Store the commission amount applicable at time of request
 }
 
 message BusinessRegistration {
   string request_id = 1;
   string client_id = 2;
-  string manager_id = 3;
+  string manager_id = 3; 
   string bank_id = 4;
-  RegistrationType registration_type = 5; // Consider enum "IP", "OOO"
-  Status status = 6; // Consider enum
+  RegistrationType registration_type = 5; 
+  Status status = 6; 
   optional google.protobuf.Timestamp application_date = 7;
   optional google.protobuf.Timestamp registration_date = 8;
   optional string payment_id = 9;
-  // Notes about the business registration
   optional string notes = 10;
-  bool agent_commission_received = 11; // New
+  bool agent_commission_received = 11; // Accountant marks "Funds Received"
+  double agency_commission_amount_at_request = 12; // New: Store the commission amount applicable at time of request
 }
 
 message LendingApplication {
   string request_id = 1;
   string client_id = 2;
-  string manager_id = 3;
+  string manager_id = 3; 
   string bank_id = 4;
   double requested_amount = 5;
   optional double approved_amount = 6;
   optional google.protobuf.Timestamp application_date = 7;
   optional google.protobuf.Timestamp approval_date = 8;
-  optional google.protobuf.Timestamp funds_received_date = 9;
-  optional google.protobuf.Timestamp company_contract_date = 10;
-  double expected_commission = 11; // Calculated
-  Status status = 12; // Consider enum
-  optional string payment_id = 13;
-  // Notes about the lending application
-  optional string notes = 14;
-  double company_commission_percent = 15; // New
-  double calculated_commission_amount = 16; // New
-  bool commission_paid = 17; // New
-  bool agent_commission_received = 18; // New
+  optional google.protobuf.Timestamp funds_received_date = 9;    // Client receives loan
+  optional google.protobuf.Timestamp company_contract_date = 10; // Service agreement date with client
+  Status status = 11;
+  optional string payment_id = 12; // Refers to the payment of company's commission by the client
+  optional string notes = 13;
+  double company_commission_percent = 14;    // e.g., 7% of loan amount, configurable by Supervisor
+  double calculated_commission_amount = 15; // approved_amount * company_commission_percent / 100
+  bool commission_paid = 16;                 // Client has paid the company's commission
+  RegistrationType entity_type = 17;         // New: Sole Proprietorship (IP) or LLC (OOO)
 }
 
 message Partner {
@@ -309,48 +365,95 @@ message TrainingCourse {
   optional string description = 5;
   // Notes about the training course
   optional string notes = 6;
+  optional string parent_course_id = 7; // New: For sub-courses, links to parent TrainingCourse ID
 }
 
+// Message for storing translation price list items.
+// Service methods would be needed to manage (CRUD) these price lists.
+message TranslationPriceListItem {
+  string item_id = 1; // Unique ID for the price list item
+  string office_id = 2; // Link to Office, for city/office specific pricing
+  string document_type_key = 3; // Key matching document types used in TranslationOrder
+  double price_per_page = 4;    // Price per page for this document type in this office
+  // optional double fixed_price = 5; // Alternative to price_per_page
+  string currency_code = 6;     // e.g., "RUB", "USD"
+  google.protobuf.Timestamp effective_date = 7; // When this price becomes active
+  optional google.protobuf.Timestamp expiry_date = 8;  // When this price is no longer active
+}
+
+// Bank message
 message Bank {
   string bank_id = 1;
   string name = 2;
-  string bic = 3; // Added BIC field
-  double account_opening_commission = 4;
-  double ip_registration_commission = 5;
-  double ooo_registration_commission = 6;
-  optional double lending_commission_percent = 7;
-  // Notes about the bank
-  optional string notes = 8;
+  optional string address = 3;
+  optional string contact_person = 4;
+  optional double account_opening_commission = 5; // Fixed commission amount for opening an account via this bank
+  optional string notes = 6;
 }
 
+// Interaction message
 message Interaction {
   string interaction_id = 1;
   string client_id = 2;
-  optional string employee_id = 3;
-  google.protobuf.Timestamp date = 4;
-  InteractionType type = 5;
-  optional string description = 6;
-  optional string subject = 7;
-  optional google.protobuf.Timestamp end_time = 8; // End time if it's a scheduled event
-  optional bool is_scheduled = 9; // Flag if it was scheduled
-  optional bool is_completed = 10; // Flag if a scheduled interaction was completed
-  optional string notes = 11; // Additional notes
+  string manager_id = 3;
+  InteractionType type = 4;
+  google.protobuf.Timestamp interaction_date = 5;
+  string summary = 6; // Min 10 chars, max 1000 chars
+  optional string notes = 7;
 }
 
+// Payment message
 message Payment {
   string payment_id = 1;
-  string related_entity_id = 2;
-  string related_entity_type = 3; // Discriminator: "LegalCase", "TranslationOrder", etc.
-  string client_id = 4; // Denormalized
-  double expected_amount = 5;
-  optional double actual_amount_received = 6;
-  optional google.protobuf.Timestamp payment_date = 7;
-  optional PaymentMethod payment_method = 8; // Consider enum
-  Status status = 9; // Consider enum
-  bool verified_by_accountant = 10;
-  optional google.protobuf.Timestamp created_at_entity = 11; // Timestamp of original service
-  // Notes about the payment
-  optional string notes = 12;
+  string client_id = 2;
+  string related_entity_id = 3; // e.g., CaseID, OrderID, RequestID
+  ServiceCategory service_category = 4; // To categorize the payment
+  double amount = 5;
+  string currency_code = 6; // e.g., "RUB", "USD"
+  PaymentMethod payment_method = 7;
+  google.protobuf.Timestamp payment_date = 8;
+  optional string transaction_reference = 9; // e.g., bank transaction ID
+  Status status = 10; // e.g., PENDING, COMPLETED, FAILED
+  optional string notes = 11;
+}
+
+// --- Reporting Messages ---
+
+message FinancialReportItem {
+  string item_id = 1;                 // e.g., LegalCase ID, TranslationOrder ID
+  ServiceCategory service_category = 2;
+  string item_description = 3;        // e.g., "Legal Consultation - John Doe", "Passport Translation - Jane Smith"
+  string client_id = 4;
+  string client_name = 5;             // Denormalized for easier display
+  string manager_id = 6;
+  string manager_name = 7;            // Denormalized for easier display
+  google.protobuf.Timestamp item_date = 8; // Relevant date (e.g., contract date, order creation date)
+  optional google.protobuf.Timestamp due_date = 9;
+  double planned_amount = 10;
+  optional double actual_amount_received = 11;
+  optional google.protobuf.Timestamp payment_date = 12;
+  ReportPaymentStatus payment_status = 13;
+  string currency_code = 14;          // e.g., "RUB", "USD"
+  optional string notes = 15;           // Any specific notes for this item
+}
+
+message GetFinancialReportRequest {
+  google.protobuf.Timestamp start_date = 1;
+  google.protobuf.Timestamp end_date = 2;
+  repeated ServiceCategory service_categories = 3; // Filter by specific categories; if empty, assume all
+  optional string manager_id_filter = 4;         // Filter by a specific manager
+  optional string client_id_filter = 5;          // Filter by a specific client
+  int32 page_size = 6;
+  string page_token = 7;
+}
+
+message GetFinancialReportResponse {
+  double total_planned_amount = 1;
+  double total_actual_amount_received = 2;
+  int32 total_items = 3;
+  repeated FinancialReportItem report_items = 4;
+  string next_page_token = 5;
+  string currency_code = 6; // Overall currency for the totals
 }
 
 
@@ -359,6 +462,7 @@ message Payment {
 // Client CRUD
 message CreateClientRequest {
   Client client = 1; // ID will likely be ignored/generated by server
+  optional int64 telegram_id = 2; // Added
 }
 message CreateClientResponse {
   string client_id = 1; // Return the generated ID
@@ -374,6 +478,7 @@ message GetClientResponse {
 message UpdateClientRequest {
   string client_id = 1; // ID to identify the client
   Client client_data = 2; // Fields to update (server should handle partial updates)
+  optional int64 telegram_id = 3; // Added
 }
 // Update often returns Empty or the updated resource
 message UpdateClientResponse {
@@ -405,6 +510,7 @@ message CreateEmployeeRequest {
   // Might need User info too if creating User simultaneously
   string user_login = 2;
   string user_password = 3; // Handle password securely!
+  optional int64 telegram_id = 4; // Added
 }
 message CreateEmployeeResponse {
   string employee_id = 1;
@@ -423,6 +529,7 @@ message UpdateEmployeeRequest {
   string employee_id = 1;
   Employee employee_data = 2; // Fields to update
   // Optionally allow updating related User info
+  optional int64 telegram_id = 3; // Added
 }
 message UpdateEmployeeResponse {
   Employee employee = 1;
@@ -565,10 +672,8 @@ service CrmService {
   rpc CreatePayment(CreatePaymentRequest) returns (CreatePaymentResponse);
   rpc GetPayment(GetPaymentRequest) returns (GetPaymentResponse);
   rpc UpdatePayment(UpdatePaymentRequest) returns (UpdatePaymentResponse);
-  rpc DeletePayment(DeletePaymentRequest) returns (DeletePaymentResponse);
-  rpc ListPayments(ListPaymentsRequest) returns (ListPaymentsResponse);
 
-  // Reporting
+  // Reporting Methods
   rpc GetFinancialReport(GetFinancialReportRequest) returns (GetFinancialReportResponse);
 
   // --- Self Profile ---
@@ -763,26 +868,6 @@ message DeletePaymentRequest { string payment_id = 1; }
 message DeletePaymentResponse { google.protobuf.Empty response = 1; }
 message ListPaymentsRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
 message ListPaymentsResponse { repeated Payment payments = 1; string next_page_token = 2; }
-
-// --- Reporting ---
-
-message GetFinancialReportRequest {
-  google.protobuf.Timestamp start_date = 1;
-  google.protobuf.Timestamp end_date = 2;
-  repeated string category_filters = 3; // e.g. "PAYMENT", "INSURANCE", etc.
-}
-
-message FinancialReportItem {
-  string category = 1;
-  double expected_amount = 2;
-  double received_amount = 3;
-}
-
-message GetFinancialReportResponse {
-  repeated FinancialReportItem items = 1;
-  double total_expected = 2;
-  double total_received = 3;
-}
 
 // --- Auth Messages ---
 message LoginRequest {

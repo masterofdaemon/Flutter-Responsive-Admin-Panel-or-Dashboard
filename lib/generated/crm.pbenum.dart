@@ -149,28 +149,6 @@ class InteractionType extends $pb.ProtobufEnum {
   const InteractionType._(super.v, super.n);
 }
 
-/// Document type for translation orders
-class DocumentType extends $pb.ProtobufEnum {
-  static const DocumentType DOCUMENT_TYPE_UNSPECIFIED = DocumentType._(0, _omitEnumNames ? '' : 'DOCUMENT_TYPE_UNSPECIFIED');
-  static const DocumentType DOCUMENT_TYPE_PASSPORT = DocumentType._(1, _omitEnumNames ? '' : 'DOCUMENT_TYPE_PASSPORT');
-  static const DocumentType DOCUMENT_TYPE_CERTIFICATE = DocumentType._(2, _omitEnumNames ? '' : 'DOCUMENT_TYPE_CERTIFICATE');
-  static const DocumentType DOCUMENT_TYPE_CONTRACT = DocumentType._(3, _omitEnumNames ? '' : 'DOCUMENT_TYPE_CONTRACT');
-  static const DocumentType DOCUMENT_TYPE_OTHER = DocumentType._(4, _omitEnumNames ? '' : 'DOCUMENT_TYPE_OTHER');
-
-  static const $core.List<DocumentType> values = <DocumentType> [
-    DOCUMENT_TYPE_UNSPECIFIED,
-    DOCUMENT_TYPE_PASSPORT,
-    DOCUMENT_TYPE_CERTIFICATE,
-    DOCUMENT_TYPE_CONTRACT,
-    DOCUMENT_TYPE_OTHER,
-  ];
-
-  static final $core.Map<$core.int, DocumentType> _byValue = $pb.ProtobufEnum.initByValue(values);
-  static DocumentType? valueOf($core.int value) => _byValue[value];
-
-  const DocumentType._(super.v, super.n);
-}
-
 /// Client source
 class ClientSource extends $pb.ProtobufEnum {
   static const ClientSource CLIENT_SOURCE_UNSPECIFIED = ClientSource._(0, _omitEnumNames ? '' : 'CLIENT_SOURCE_UNSPECIFIED');
@@ -193,6 +171,106 @@ class ClientSource extends $pb.ProtobufEnum {
   static ClientSource? valueOf($core.int value) => _byValue[value];
 
   const ClientSource._(super.v, super.n);
+}
+
+/// Translation Progress Status
+class TranslationProgressStatus extends $pb.ProtobufEnum {
+  static const TranslationProgressStatus TRANSLATION_PROGRESS_STATUS_UNSPECIFIED = TranslationProgressStatus._(0, _omitEnumNames ? '' : 'TRANSLATION_PROGRESS_STATUS_UNSPECIFIED');
+  static const TranslationProgressStatus PENDING_ASSIGNMENT = TranslationProgressStatus._(1, _omitEnumNames ? '' : 'PENDING_ASSIGNMENT');
+  static const TranslationProgressStatus IN_PROGRESS = TranslationProgressStatus._(2, _omitEnumNames ? '' : 'IN_PROGRESS');
+  static const TranslationProgressStatus TRANSLATED = TranslationProgressStatus._(3, _omitEnumNames ? '' : 'TRANSLATED');
+  static const TranslationProgressStatus CHECKED_BY_MANAGER = TranslationProgressStatus._(4, _omitEnumNames ? '' : 'CHECKED_BY_MANAGER');
+  static const TranslationProgressStatus CLIENT_NOTIFIED = TranslationProgressStatus._(5, _omitEnumNames ? '' : 'CLIENT_NOTIFIED');
+  static const TranslationProgressStatus DELIVERED = TranslationProgressStatus._(6, _omitEnumNames ? '' : 'DELIVERED');
+
+  static const $core.List<TranslationProgressStatus> values = <TranslationProgressStatus> [
+    TRANSLATION_PROGRESS_STATUS_UNSPECIFIED,
+    PENDING_ASSIGNMENT,
+    IN_PROGRESS,
+    TRANSLATED,
+    CHECKED_BY_MANAGER,
+    CLIENT_NOTIFIED,
+    DELIVERED,
+  ];
+
+  static final $core.Map<$core.int, TranslationProgressStatus> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static TranslationProgressStatus? valueOf($core.int value) => _byValue[value];
+
+  const TranslationProgressStatus._(super.v, super.n);
+}
+
+/// Policy Renewal Status
+class PolicyRenewalStatus extends $pb.ProtobufEnum {
+  static const PolicyRenewalStatus POLICY_RENEWAL_STATUS_UNSPECIFIED = PolicyRenewalStatus._(0, _omitEnumNames ? '' : 'POLICY_RENEWAL_STATUS_UNSPECIFIED');
+  static const PolicyRenewalStatus PENDING_RENEWAL = PolicyRenewalStatus._(1, _omitEnumNames ? '' : 'PENDING_RENEWAL');
+  static const PolicyRenewalStatus RENEWED = PolicyRenewalStatus._(2, _omitEnumNames ? '' : 'RENEWED');
+  static const PolicyRenewalStatus NOT_RENEWED = PolicyRenewalStatus._(3, _omitEnumNames ? '' : 'NOT_RENEWED');
+
+  static const $core.List<PolicyRenewalStatus> values = <PolicyRenewalStatus> [
+    POLICY_RENEWAL_STATUS_UNSPECIFIED,
+    PENDING_RENEWAL,
+    RENEWED,
+    NOT_RENEWED,
+  ];
+
+  static final $core.Map<$core.int, PolicyRenewalStatus> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static PolicyRenewalStatus? valueOf($core.int value) => _byValue[value];
+
+  const PolicyRenewalStatus._(super.v, super.n);
+}
+
+/// Service Category for Reporting
+class ServiceCategory extends $pb.ProtobufEnum {
+  static const ServiceCategory SERVICE_CATEGORY_UNSPECIFIED = ServiceCategory._(0, _omitEnumNames ? '' : 'SERVICE_CATEGORY_UNSPECIFIED');
+  static const ServiceCategory LEGAL_SERVICES = ServiceCategory._(1, _omitEnumNames ? '' : 'LEGAL_SERVICES');
+  static const ServiceCategory TRANSLATIONS = ServiceCategory._(2, _omitEnumNames ? '' : 'TRANSLATIONS');
+  static const ServiceCategory INSURANCE = ServiceCategory._(3, _omitEnumNames ? '' : 'INSURANCE');
+  static const ServiceCategory PROFESSIONAL_DEVELOPMENT = ServiceCategory._(4, _omitEnumNames ? '' : 'PROFESSIONAL_DEVELOPMENT');
+  static const ServiceCategory ACCOUNT_OPENING = ServiceCategory._(5, _omitEnumNames ? '' : 'ACCOUNT_OPENING');
+  static const ServiceCategory BUSINESS_REGISTRATION = ServiceCategory._(6, _omitEnumNames ? '' : 'BUSINESS_REGISTRATION');
+  static const ServiceCategory LENDING = ServiceCategory._(7, _omitEnumNames ? '' : 'LENDING');
+  static const ServiceCategory ALL_SERVICES = ServiceCategory._(8, _omitEnumNames ? '' : 'ALL_SERVICES');
+
+  static const $core.List<ServiceCategory> values = <ServiceCategory> [
+    SERVICE_CATEGORY_UNSPECIFIED,
+    LEGAL_SERVICES,
+    TRANSLATIONS,
+    INSURANCE,
+    PROFESSIONAL_DEVELOPMENT,
+    ACCOUNT_OPENING,
+    BUSINESS_REGISTRATION,
+    LENDING,
+    ALL_SERVICES,
+  ];
+
+  static final $core.Map<$core.int, ServiceCategory> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static ServiceCategory? valueOf($core.int value) => _byValue[value];
+
+  const ServiceCategory._(super.v, super.n);
+}
+
+/// Payment Status for Report Items
+class ReportPaymentStatus extends $pb.ProtobufEnum {
+  static const ReportPaymentStatus REPORT_PAYMENT_STATUS_UNSPECIFIED = ReportPaymentStatus._(0, _omitEnumNames ? '' : 'REPORT_PAYMENT_STATUS_UNSPECIFIED');
+  static const ReportPaymentStatus PAID = ReportPaymentStatus._(1, _omitEnumNames ? '' : 'PAID');
+  static const ReportPaymentStatus PARTIALLY_PAID = ReportPaymentStatus._(2, _omitEnumNames ? '' : 'PARTIALLY_PAID');
+  static const ReportPaymentStatus UNPAID = ReportPaymentStatus._(3, _omitEnumNames ? '' : 'UNPAID');
+  static const ReportPaymentStatus OVERDUE = ReportPaymentStatus._(4, _omitEnumNames ? '' : 'OVERDUE');
+  static const ReportPaymentStatus NOT_APPLICABLE = ReportPaymentStatus._(5, _omitEnumNames ? '' : 'NOT_APPLICABLE');
+
+  static const $core.List<ReportPaymentStatus> values = <ReportPaymentStatus> [
+    REPORT_PAYMENT_STATUS_UNSPECIFIED,
+    PAID,
+    PARTIALLY_PAID,
+    UNPAID,
+    OVERDUE,
+    NOT_APPLICABLE,
+  ];
+
+  static final $core.Map<$core.int, ReportPaymentStatus> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static ReportPaymentStatus? valueOf($core.int value) => _byValue[value];
+
+  const ReportPaymentStatus._(super.v, super.n);
 }
 
 

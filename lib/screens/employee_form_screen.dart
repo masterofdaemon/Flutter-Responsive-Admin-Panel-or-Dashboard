@@ -2,6 +2,7 @@ import 'package:admin/generated/crm.pb.dart' as crm;
 import 'package:admin/services/grpc_client_service.dart';
 import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
+import 'package:fixnum/fixnum.dart';
 
 class EmployeeFormScreen extends StatefulWidget {
   final String? employeeId; // Null for Add mode, non-null for Edit mode
@@ -124,7 +125,7 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       setState(() {
         _nameController.text = employee.name;
         _emailController.text = employee.email;
-        _telegramIdController.text = employee.telegramId;
+        _telegramIdController.text = employee.telegramId.toString();
         _whatsappNumberController.text = employee.whatsappNumber;
         _notesController.text = employee.notes;
         _selectedRole = employee.role;
@@ -186,7 +187,9 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       role: _selectedRole!,
       officeId: _selectedOffice!.officeId,
       email: _emailController.text.trim(),
-      telegramId: _telegramIdController.text.trim(),
+      telegramId: _telegramIdController.text.trim().isNotEmpty
+          ? Int64.parseInt(_telegramIdController.text.trim())
+          : Int64(0),
       whatsappNumber: _whatsappNumberController.text.trim(),
       isActive: _isActive,
       notes: _notesController.text.trim(),

@@ -1504,6 +1504,36 @@ abstract class AppLocalizations {
   /// **'Create New Order'**
   String get translationOrderListScreenCreateNewOrderTooltip;
 
+  /// No description provided for @translationOrderListScreenCustomerNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer Name'**
+  String get translationOrderListScreenCustomerNameLabel;
+
+  /// No description provided for @translationOrderFormScreenSectionTitleOrderDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Details'**
+  String get translationOrderFormScreenSectionTitleOrderDetails;
+
+  /// No description provided for @translationOrderFormScreenSectionTitleDocumentDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Document Details'**
+  String get translationOrderFormScreenSectionTitleDocumentDetails;
+
+  /// No description provided for @translationOrderFormScreenSectionTitleFinancialDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Financial Details'**
+  String get translationOrderFormScreenSectionTitleFinancialDetails;
+
+  /// No description provided for @translationOrderFormScreenSectionTitleAdditionalInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional Information'**
+  String get translationOrderFormScreenSectionTitleAdditionalInformation;
+
   /// No description provided for @translationOrderFormScreenCreateTitle.
   ///
   /// In en, this message translates to:
@@ -1974,6 +2004,24 @@ abstract class AppLocalizations {
   /// **'Unspecified'**
   String get interactionListUnspecifiedType;
 
+  /// Interaction type: Call
+  ///
+  /// In en, this message translates to:
+  /// **'Call'**
+  String get interactionTypeCall;
+
+  /// Interaction type: Email
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get interactionTypeEmail;
+
+  /// Interaction type: Meeting
+  ///
+  /// In en, this message translates to:
+  /// **'Meeting'**
+  String get interactionTypeMeeting;
+
   /// No description provided for @interactionListConfirmDeleteTitle.
   ///
   /// In en, this message translates to:
@@ -2027,6 +2075,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No interactions found.'**
   String get interactionListNoInteractionsFound;
+
+  /// Header for Manager column in interaction list
+  ///
+  /// In en, this message translates to:
+  /// **'Manager'**
+  String get interactionListManagerHeader;
+
+  /// Header for Summary column in interaction list
+  ///
+  /// In en, this message translates to:
+  /// **'Summary'**
+  String get interactionListSummaryHeader;
 
   /// No description provided for @interactionListIdHeader.
   ///

@@ -825,6 +825,25 @@ class AppLocalizationsRu extends AppLocalizations {
       'Создать новый заказ';
 
   @override
+  String get translationOrderListScreenCustomerNameLabel => 'Имя Клиента';
+
+  @override
+  String get translationOrderFormScreenSectionTitleOrderDetails =>
+      'Детали заказа';
+
+  @override
+  String get translationOrderFormScreenSectionTitleDocumentDetails =>
+      'Детали документа';
+
+  @override
+  String get translationOrderFormScreenSectionTitleFinancialDetails =>
+      'Финансовые детали';
+
+  @override
+  String get translationOrderFormScreenSectionTitleAdditionalInformation =>
+      'Дополнительная информация';
+
+  @override
   String get translationOrderFormScreenCreateTitle => 'Создать заказ';
 
   @override
@@ -1108,6 +1127,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get interactionListUnspecifiedType => 'Не указан';
 
   @override
+  String get interactionTypeCall => 'Тип взаимодействия: Звонок';
+
+  @override
+  String get interactionTypeEmail => 'Тип взаимодействия: Электронная почта';
+
+  @override
+  String get interactionTypeMeeting => 'Тип взаимодействия: Встреча';
+
+  @override
   String get interactionListConfirmDeleteTitle => 'Подтвердить удаление';
 
   @override
@@ -1138,6 +1166,14 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get interactionListNoInteractionsFound => 'Взаимодействия не найдены.';
+
+  @override
+  String get interactionListManagerHeader =>
+      'Заголовок менеджера списка взаимодействий';
+
+  @override
+  String get interactionListSummaryHeader =>
+      'Заголовок сводки списка взаимодействий';
 
   @override
   String get interactionListIdHeader => 'ID';

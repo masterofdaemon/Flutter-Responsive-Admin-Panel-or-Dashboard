@@ -1,5 +1,10 @@
 {
   "employeeListScreenTitle": "Сотрудники",
+  "interactionTypeCall": "Тип взаимодействия: Звонок",
+    "interactionTypeEmail": "Тип взаимодействия: Электронная почта",
+    "interactionTypeMeeting": "Тип взаимодействия: Встреча",
+    "interactionListManagerHeader": "Заголовок менеджера списка взаимодействий",
+    "interactionListSummaryHeader": "Заголовок сводки списка взаимодействий",
   "employeeListScreenErrorLoading": "Ошибка загрузки сотрудников: {error}",
   "@employeeListScreenErrorLoading": {"placeholders": {"error": {"type": "String"}}},
   "employeeListScreenConfirmDeleteTitle": "Подтвердите удаление",
@@ -347,7 +352,10 @@
   "@translationOrderListScreenTooltipDelete": {
     "description": "Подсказка для кнопки-иконки удаления заказа на перевод"
   },
-
+"translationOrderFormScreenSectionTitleOrderDetails": "Детали заказа",
+"translationOrderFormScreenSectionTitleDocumentDetails": "Детали документа",
+"translationOrderFormScreenSectionTitleFinancialDetails": "Финансовые детали",
+"translationOrderFormScreenSectionTitleAdditionalInformation": "Дополнительная информация",
   "translationOrderListScreenTitle": "Заказы на перевод",
   "translationOrderListScreenDeleteOrderDialogTitle": "Удалить заказ?",
   "translationOrderListScreenDeleteOrderDialogContent": "Вы уверены, что хотите удалить этот заказ?",
@@ -413,7 +421,7 @@
       }
   },
   "translationOrderListScreenCreateNewOrderTooltip": "Создать новый заказ",
-
+  "translationOrderListScreenCustomerNameLabel": "Имя Клиента",
   "translationOrderFormScreenCreateTitle": "Создать заказ",
   "translationOrderFormScreenEditTitle": "Редактировать заказ",
   "translationOrderFormScreenSaveChangesTooltip": "Сохранить заказ",
@@ -502,7 +510,7 @@
           "id": {"type": "String"}
       }
   },
-  "translationOrderFormScreenStatusNotAvailable": "Н/Д",
+    "translationOrderFormScreenStatusNotAvailable": "Н/Д",
 
   "insurancePolicyListScreenTitle": "Страховые полисы",
   "insurancePolicyListScreenAddPolicyTooltip": "Добавить полис",
@@ -745,5 +753,10 @@
         "type": "String"
       }
     }
-  }
+  },
+  "translationOrderFormScreenDocumentTypeOther": "Другое (укажите)",
+  "translationOrderFormScreenDocumentTypeDialogTitle": "Выберите тип документа",
+  "translationOrderFormScreenDocumentTypeDialogSearchHint": "Поиск типа документа",
+  "translationOrderFormScreenDocumentTypeDialogNotFound": "Типы документов не найдены.",
+  "translationOrderFormScreenDocumentTypeDialogCustomEntry": "Другое..."
 }

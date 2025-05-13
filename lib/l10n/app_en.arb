@@ -433,7 +433,11 @@
       }
   },
   "translationOrderListScreenCreateNewOrderTooltip": "Create New Order",
-
+  "translationOrderListScreenCustomerNameLabel": "Customer Name",
+  "translationOrderFormScreenSectionTitleOrderDetails": "Order Details",
+  "translationOrderFormScreenSectionTitleDocumentDetails": "Document Details",
+  "translationOrderFormScreenSectionTitleFinancialDetails": "Financial Details",
+  "translationOrderFormScreenSectionTitleAdditionalInformation": "Additional Information",
   "translationOrderFormScreenCreateTitle": "Create Order",
   "translationOrderFormScreenEditTitle": "Edit Order",
   "translationOrderFormScreenSaveChangesTooltip": "Save Order",
@@ -575,6 +579,18 @@
   "errorDeletingInsurancePolicy": "Error deleting insurance policy: {error}",
   "noInsurancePoliciesFound": "No insurance policies found",
   "interactionListUnspecifiedType": "Unspecified",
+  "interactionTypeCall": "Call",
+  "@interactionTypeCall": {
+    "description": "Interaction type: Call"
+  },
+  "interactionTypeEmail": "Email",
+  "@interactionTypeEmail": {
+    "description": "Interaction type: Email"
+  },
+  "interactionTypeMeeting": "Meeting",
+  "@interactionTypeMeeting": {
+    "description": "Interaction type: Meeting"
+  },
   "interactionListConfirmDeleteTitle": "Confirm Delete",
   "interactionListConfirmDeleteMessage": "Delete this interaction?",
   "interactionListCancelButton": "Cancel",
@@ -584,6 +600,14 @@
   "interactionListTitle": "All Interactions",
   "interactionListErrorLoading": "Error loading interactions: {error}",
   "interactionListNoInteractionsFound": "No interactions found.",
+  "interactionListManagerHeader": "Manager",
+  "@interactionListManagerHeader": {
+    "description": "Header for Manager column in interaction list"
+  },
+  "interactionListSummaryHeader": "Summary",
+  "@interactionListSummaryHeader": {
+    "description": "Header for Summary column in interaction list"
+  },
   "interactionListIdHeader": "ID",
   "interactionListClientHeader": "Client",
   "interactionListEmployeeHeader": "Employee",

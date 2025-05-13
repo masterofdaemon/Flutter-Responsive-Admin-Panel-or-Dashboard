@@ -3,6 +3,7 @@ import 'package:admin/generated/google/protobuf/struct.pb.dart' as pb_struct;
 import 'package:admin/services/grpc_client_service.dart';
 import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
+import 'package:fixnum/fixnum.dart';
 import 'package:admin/screens/main/main_screen.dart'; // Added
 import 'package:admin/l10n/app_localizations.dart'; // Added
 
@@ -34,16 +35,28 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
   // Enum state variable
   crm.ClientSource? _selectedSource;
 
+  bool _didLoadInitialData = false; // Add this flag
+
   @override
   void initState() {
     super.initState();
     _isEditMode = widget.clientId != null;
-    if (_isEditMode) {
-      _loadClientData();
-    } else {
+    // DO NOT call _loadClientData here
+    if (!_isEditMode) {
       // For new clients, explicitly set _selectedSource to null or a valid default
       // if CLIENT_SOURCE_UNSPECIFIED is not a valid user choice.
       _selectedSource = null;
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_didLoadInitialData) {
+      _didLoadInitialData = true;
+      if (_isEditMode) {
+        _loadClientData();
+      }
     }
   }
 
@@ -59,7 +72,7 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
         _lastNameController.text = client.lastName;
         _emailController.text = client.email;
         _phoneController.text = client.phone;
-        _telegramIdController.text = client.telegramId;
+        _telegramIdController.text = client.telegramId.toString();
         _whatsappNumberController.text = client.whatsappNumber;
         _selectedSource =
             client.source == crm.ClientSource.CLIENT_SOURCE_UNSPECIFIED
@@ -119,7 +132,9 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
         lastName: _lastNameController.text.trim(),
         email: _emailController.text.trim(),
         phone: _phoneController.text.trim(),
-        telegramId: _telegramIdController.text.trim(),
+        telegramId: _telegramIdController.text.trim().isNotEmpty
+            ? Int64.parseInt(_telegramIdController.text.trim())
+            : Int64(0),
         whatsappNumber: _whatsappNumberController.text.trim(),
         source: _selectedSource ??
             crm.ClientSource.CLIENT_SOURCE_UNSPECIFIED, // Use selected enum

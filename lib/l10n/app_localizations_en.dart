@@ -825,6 +825,25 @@ class AppLocalizationsEn extends AppLocalizations {
       'Create New Order';
 
   @override
+  String get translationOrderListScreenCustomerNameLabel => 'Customer Name';
+
+  @override
+  String get translationOrderFormScreenSectionTitleOrderDetails =>
+      'Order Details';
+
+  @override
+  String get translationOrderFormScreenSectionTitleDocumentDetails =>
+      'Document Details';
+
+  @override
+  String get translationOrderFormScreenSectionTitleFinancialDetails =>
+      'Financial Details';
+
+  @override
+  String get translationOrderFormScreenSectionTitleAdditionalInformation =>
+      'Additional Information';
+
+  @override
   String get translationOrderFormScreenCreateTitle => 'Create Order';
 
   @override
@@ -1105,6 +1124,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get interactionListUnspecifiedType => 'Unspecified';
 
   @override
+  String get interactionTypeCall => 'Call';
+
+  @override
+  String get interactionTypeEmail => 'Email';
+
+  @override
+  String get interactionTypeMeeting => 'Meeting';
+
+  @override
   String get interactionListConfirmDeleteTitle => 'Confirm Delete';
 
   @override
@@ -1134,6 +1162,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get interactionListNoInteractionsFound => 'No interactions found.';
+
+  @override
+  String get interactionListManagerHeader => 'Manager';
+
+  @override
+  String get interactionListSummaryHeader => 'Summary';
 
   @override
   String get interactionListIdHeader => 'ID';

@@ -353,14 +353,6 @@ class CrmServiceClient extends $grpc.Client {
       '/proto.CrmService/UpdatePayment',
       ($0.UpdatePaymentRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.UpdatePaymentResponse.fromBuffer(value));
-  static final _$deletePayment = $grpc.ClientMethod<$0.DeletePaymentRequest, $0.DeletePaymentResponse>(
-      '/proto.CrmService/DeletePayment',
-      ($0.DeletePaymentRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.DeletePaymentResponse.fromBuffer(value));
-  static final _$listPayments = $grpc.ClientMethod<$0.ListPaymentsRequest, $0.ListPaymentsResponse>(
-      '/proto.CrmService/ListPayments',
-      ($0.ListPaymentsRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $0.ListPaymentsResponse.fromBuffer(value));
   static final _$getFinancialReport = $grpc.ClientMethod<$0.GetFinancialReportRequest, $0.GetFinancialReportResponse>(
       '/proto.CrmService/GetFinancialReport',
       ($0.GetFinancialReportRequest value) => value.writeToBuffer(),
@@ -706,14 +698,6 @@ class CrmServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.UpdatePaymentResponse> updatePayment($0.UpdatePaymentRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$updatePayment, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.DeletePaymentResponse> deletePayment($0.DeletePaymentRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$deletePayment, request, options: options);
-  }
-
-  $grpc.ResponseFuture<$0.ListPaymentsResponse> listPayments($0.ListPaymentsRequest request, {$grpc.CallOptions? options}) {
-    return $createUnaryCall(_$listPayments, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.GetFinancialReportResponse> getFinancialReport($0.GetFinancialReportRequest request, {$grpc.CallOptions? options}) {
@@ -1311,20 +1295,6 @@ abstract class CrmServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.UpdatePaymentRequest.fromBuffer(value),
         ($0.UpdatePaymentResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.DeletePaymentRequest, $0.DeletePaymentResponse>(
-        'DeletePayment',
-        deletePayment_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.DeletePaymentRequest.fromBuffer(value),
-        ($0.DeletePaymentResponse value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.ListPaymentsRequest, $0.ListPaymentsResponse>(
-        'ListPayments',
-        listPayments_Pre,
-        false,
-        false,
-        ($core.List<$core.int> value) => $0.ListPaymentsRequest.fromBuffer(value),
-        ($0.ListPaymentsResponse value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.GetFinancialReportRequest, $0.GetFinancialReportResponse>(
         'GetFinancialReport',
         getFinancialReport_Pre,
@@ -1673,14 +1643,6 @@ abstract class CrmServiceBase extends $grpc.Service {
     return updatePayment($call, await $request);
   }
 
-  $async.Future<$0.DeletePaymentResponse> deletePayment_Pre($grpc.ServiceCall $call, $async.Future<$0.DeletePaymentRequest> $request) async {
-    return deletePayment($call, await $request);
-  }
-
-  $async.Future<$0.ListPaymentsResponse> listPayments_Pre($grpc.ServiceCall $call, $async.Future<$0.ListPaymentsRequest> $request) async {
-    return listPayments($call, await $request);
-  }
-
   $async.Future<$0.GetFinancialReportResponse> getFinancialReport_Pre($grpc.ServiceCall $call, $async.Future<$0.GetFinancialReportRequest> $request) async {
     return getFinancialReport($call, await $request);
   }
@@ -1772,8 +1734,6 @@ abstract class CrmServiceBase extends $grpc.Service {
   $async.Future<$0.CreatePaymentResponse> createPayment($grpc.ServiceCall call, $0.CreatePaymentRequest request);
   $async.Future<$0.GetPaymentResponse> getPayment($grpc.ServiceCall call, $0.GetPaymentRequest request);
   $async.Future<$0.UpdatePaymentResponse> updatePayment($grpc.ServiceCall call, $0.UpdatePaymentRequest request);
-  $async.Future<$0.DeletePaymentResponse> deletePayment($grpc.ServiceCall call, $0.DeletePaymentRequest request);
-  $async.Future<$0.ListPaymentsResponse> listPayments($grpc.ServiceCall call, $0.ListPaymentsRequest request);
   $async.Future<$0.GetFinancialReportResponse> getFinancialReport($grpc.ServiceCall call, $0.GetFinancialReportRequest request);
   $async.Future<$0.GetSelfProfileResponse> getSelfProfile($grpc.ServiceCall call, $0.GetSelfProfileRequest request);
 }

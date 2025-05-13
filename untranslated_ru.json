@@ -1,0 +1,9 @@
+{
+  "ru": [
+    "interactionTypeCall",
+    "interactionTypeEmail",
+    "interactionTypeMeeting",
+    "interactionListManagerHeader",
+    "interactionListSummaryHeader"
+  ]
+}

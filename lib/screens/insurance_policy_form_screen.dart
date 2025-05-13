@@ -25,12 +25,12 @@ class _InsurancePolicyFormScreenState extends State<InsurancePolicyFormScreen> {
   final _clientIdController = TextEditingController();
   final _managerIdController = TextEditingController();
   final _amountController = TextEditingController();
-  final _renewalStatusController = TextEditingController();
   final _notesController = TextEditingController();
 
   DateTime? _startDate;
   DateTime? _expiryDate;
   crm.Status? _status;
+  crm.PolicyRenewalStatus? _renewalStatus;
 
   @override
   void initState() {
@@ -57,7 +57,7 @@ class _InsurancePolicyFormScreenState extends State<InsurancePolicyFormScreen> {
       _clientIdController.text = policy.clientId;
       _managerIdController.text = policy.managerId;
       _amountController.text = policy.amount.toString();
-      _renewalStatusController.text = policy.renewalStatus;
+      _renewalStatus = policy.renewalStatus;
       _notesController.text = policy.notes;
       _startDate = policy.hasStartDate() ? policy.startDate.toDateTime() : null;
       _expiryDate =
@@ -89,7 +89,8 @@ class _InsurancePolicyFormScreenState extends State<InsurancePolicyFormScreen> {
         clientId: _clientIdController.text.trim(),
         managerId: _managerIdController.text.trim(),
         amount: double.tryParse(_amountController.text.trim()) ?? 0.0,
-        renewalStatus: _renewalStatusController.text.trim(),
+        renewalStatus: _renewalStatus ??
+            crm.PolicyRenewalStatus.POLICY_RENEWAL_STATUS_UNSPECIFIED,
         notes: _notesController.text.trim(),
         status: _status ?? crm.Status.STATUS_UNSPECIFIED,
         startDate: _startDate != null ? dateTimeToTimestamp(_startDate!) : null,
@@ -134,7 +135,6 @@ class _InsurancePolicyFormScreenState extends State<InsurancePolicyFormScreen> {
     _clientIdController.dispose();
     _managerIdController.dispose();
     _amountController.dispose();
-    _renewalStatusController.dispose();
     _notesController.dispose();
     super.dispose();
   }
@@ -299,11 +299,28 @@ class _InsurancePolicyFormScreenState extends State<InsurancePolicyFormScreen> {
                           : null,
                     ),
                     const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _renewalStatusController,
+                    DropdownButtonFormField<crm.PolicyRenewalStatus>(
+                      value: _renewalStatus,
+                      items: crm.PolicyRenewalStatus.values
+                          .where((s) =>
+                              s !=
+                              crm.PolicyRenewalStatus
+                                  .POLICY_RENEWAL_STATUS_UNSPECIFIED)
+                          .map((s) => DropdownMenuItem(
+                                value: s,
+                                child: Text(s.name
+                                    .replaceFirst('POLICY_RENEWAL_STATUS_', '')
+                                    .replaceAll('_', ' ')),
+                              ))
+                          .toList(),
+                      onChanged: (s) => setState(() => _renewalStatus = s),
                       decoration: InputDecoration(
                           labelText: localizations
                               .insurancePolicyFormScreenLabelRenewalStatus),
+                      validator: (v) => v == null
+                          ? localizations
+                              .insurancePolicyFormScreenValidationRequired
+                          : null,
                     ),
                     const SizedBox(height: 16),
                     TextFormField(

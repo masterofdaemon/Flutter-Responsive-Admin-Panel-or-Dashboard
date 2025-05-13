@@ -1,3 +1,4 @@
+import 'package:admin/screens/main/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
 import 'package:admin/services/grpc_translation_order_service_mobile.dart';
@@ -6,6 +7,7 @@ import 'package:admin/widgets/loading_indicator.dart';
 import 'package:admin/utils/timestamp_helpers.dart';
 import 'package:admin/l10n/app_localizations.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:admin/services/grpc_client_service.dart'; // Added import
 
 class TranslationOrderListScreen extends StatefulWidget {
   const TranslationOrderListScreen({super.key});
@@ -18,36 +20,134 @@ class TranslationOrderListScreen extends StatefulWidget {
 class _TranslationOrderListScreenState
     extends State<TranslationOrderListScreen> {
   final GrpcTranslationOrderService _service = GrpcTranslationOrderService();
+  final GrpcClientService _clientService =
+      GrpcClientService(); // Added client service
   late Future<List<crm.TranslationOrder>> _ordersFuture;
   List<crm.TranslationOrder> _orders = [];
+  Map<String, crm.Client> _clientsMap = {}; // Added map to store clients
   PlutoGridStateManager? _plutoGridStateManager;
 
   @override
   void initState() {
     super.initState();
-    _loadOrders();
+    _ordersFuture = _loadInitialData();
   }
 
-  void _loadOrders() {
-    setState(() {
-      _ordersFuture = _service.listTranslationOrders().then((orders) {
+  Future<List<crm.TranslationOrder>> _loadInitialData() async {
+    try {
+      // Fetch orders and clients in parallel
+      final ordersFuture = _service.listTranslationOrders();
+      // Assuming GrpcClientService has a listClients method
+      final clientsFuture = _clientService.listClients(pageSize: 500);
+
+      final results = await Future.wait([ordersFuture, clientsFuture]);
+
+      final orders = results[0] as List<crm.TranslationOrder>;
+      final clients = results[1] as List<crm.Client>;
+
+      if (mounted) {
         _orders = orders;
+        _clientsMap = {for (var client in clients) client.clientId: client};
         if (_plutoGridStateManager != null) {
           _updatePlutoGridRows();
         }
-        return orders;
+      }
+      return orders;
+    } catch (error) {
+      if (mounted) {
+        print('Error loading initial data: $error');
+        _orders = [];
+        _clientsMap = {};
+        if (_plutoGridStateManager != null) {
+          _updatePlutoGridRows(); // Update with empty or error state
+        }
+      }
+      throw error; // Rethrow for FutureBuilder
+    }
+  }
+
+  Future<void> _loadOrders() async {
+    if (!mounted) return;
+
+    // Create a future that completes with the orders list or throws an error
+    final newCombinedFuture = () async {
+      try {
+        // Fetch orders and clients in parallel
+        final ordersFuture = _service.listTranslationOrders();
+        final clientsFuture = _clientService.listClients(pageSize: 500);
+
+        final results = await Future.wait([ordersFuture, clientsFuture]);
+
+        final orders = results[0] as List<crm.TranslationOrder>;
+        final clients = results[1] as List<crm.Client>;
+
+        if (mounted) {
+          _orders = orders;
+          _clientsMap = {for (var client in clients) client.clientId: client};
+          if (_plutoGridStateManager != null) {
+            _updatePlutoGridRows();
+          }
+        }
+        return orders; // Return the fetched orders
+      } catch (error) {
+        if (mounted) {
+          print('Error loading data in _loadOrders: $error');
+          _orders = [];
+          _clientsMap = {};
+          if (_plutoGridStateManager != null) {
+            _updatePlutoGridRows();
+          }
+        }
+        throw error; // Rethrow to be caught by the awaiter or FutureBuilder
+      }
+    }();
+
+    if (mounted) {
+      setState(() {
+        // Assign the new future to _ordersFuture so FutureBuilder can react
+        _ordersFuture = newCombinedFuture;
       });
-    });
+    }
+
+    try {
+      await _ordersFuture; // Await for RefreshIndicator or other callers
+    } catch (e) {
+      // Error is handled by FutureBuilder via _ordersFuture.
+      // This catch is to prevent unhandled exceptions from `await _ordersFuture` if not handled by FutureBuilder.
+      print("Error awaited in _loadOrders: $e");
+    }
+  }
+
+  String _getClientFullName(String clientId) {
+    final client = _clientsMap[clientId];
+    if (client != null) {
+      List<String> nameParts = [];
+      if (client.hasFirstName() && client.firstName.isNotEmpty) {
+        nameParts.add(client.firstName);
+      }
+      if (client.hasLastName() && client.lastName.isNotEmpty) {
+        nameParts.add(client.lastName);
+      }
+      if (nameParts.isNotEmpty) {
+        return nameParts.join(' ');
+      }
+    }
+    return 'N/A'; // Default if no client or name parts found
   }
 
   void _updatePlutoGridRows() {
     if (_plutoGridStateManager == null) return;
-    // final localizations = AppLocalizations.of(context);
     final rows = _orders.map((order) {
+      String customerNameValue = _getClientFullName(order.clientId);
+
       return PlutoRow(cells: {
         'orderId': PlutoCell(value: order.orderId),
         'title': PlutoCell(value: order.title),
-        'status': PlutoCell(value: order.status.name),
+        'customerName': PlutoCell(value: customerNameValue), // New Cell
+        'status': PlutoCell(
+            value: order.hasTranslationProgress()
+                ? order.translationProgress.name
+                : 'N/A'),
         'createdAt': PlutoCell(
             value:
                 formatTimestamp(order.hasCreatedAt() ? order.createdAt : null)),
@@ -68,7 +168,11 @@ class _TranslationOrderListScreenState
       ),
     );
     if (result == true && mounted) {
-      _loadOrders();
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _loadOrders();
+        }
+      });
     }
   }
 
@@ -98,18 +202,27 @@ class _TranslationOrderListScreenState
     if (confirm == true) {
       try {
         await _service.deleteTranslationOrder(orderId);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(
-                  localizations.translationOrderListScreenOrderDeletedSuccess)),
-        );
-        _loadOrders();
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text(localizations
+                    .translationOrderListScreenOrderDeletedSuccess)),
+          );
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              _loadOrders();
+            }
+          });
+        }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(localizations
-                  .translationOrderListScreenErrorDeletingOrder(e.toString()))),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+                content: Text(
+                    localizations.translationOrderListScreenErrorDeletingOrder(
+                        e.toString()))),
+          );
+        }
       }
     }
   }
@@ -122,7 +235,20 @@ class _TranslationOrderListScreenState
         title: Text(localizations.translationOrderListScreenTitle),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).maybePop(),
+          onPressed: () {
+            // Removed print statements
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            } else {
+              // go to main page
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainScreen(),
+                ),
+              );
+            }
+          },
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
         ),
       ),
@@ -205,6 +331,15 @@ class _TranslationOrderListScreenState
         readOnly: true,
       ),
       PlutoColumn(
+        // New Column for Customer Name
+        title: localizations.translationOrderListScreenCustomerNameLabel,
+        field: 'customerName',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 180, // Adjust width as needed
+        readOnly: true,
+      ),
+      PlutoColumn(
         title: localizations.translationOrderListScreenOrderStatusLabel(''),
         field: 'status',
         type: PlutoColumnType.text(),
@@ -233,7 +368,7 @@ class _TranslationOrderListScreenState
         field: 'actions',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
-        width: 120,
+        width: 100, // Reduced width
         readOnly: true,
         textAlign: PlutoColumnTextAlign.center,
         renderer: (rendererContext) {
@@ -245,11 +380,27 @@ class _TranslationOrderListScreenState
             children: [
               IconButton(
                 icon: const Icon(Icons.edit),
+                iconSize: 20.0, // Smaller icon
+                padding: const EdgeInsets.all(4.0), // Reduced padding
+                constraints: const BoxConstraints(
+                    minWidth: 30,
+                    minHeight: 30,
+                    maxWidth: 30,
+                    maxHeight: 30), // Explicit constraints
+                splashRadius: 18.0, // Adjusted splash radius
                 tooltip: localizations.translationOrderListScreenTooltipEdit,
                 onPressed: () => _navigateAndRefresh(orderId: orderId),
               ),
               IconButton(
                 icon: const Icon(Icons.delete),
+                iconSize: 20.0, // Smaller icon
+                padding: const EdgeInsets.all(4.0), // Reduced padding
+                constraints: const BoxConstraints(
+                    minWidth: 30,
+                    minHeight: 30,
+                    maxWidth: 30,
+                    maxHeight: 30), // Explicit constraints
+                splashRadius: 18.0, // Adjusted splash radius
                 tooltip: localizations.translationOrderListScreenTooltipDelete,
                 onPressed: () => _deleteOrder(orderId),
               ),

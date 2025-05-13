@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
-import 'package:admin/services/grpc_interaction_service_mobile.dart'; // Corrected import
-import 'package:admin/services/grpc_client_service_mobile.dart'; // Added for fetching clients
-import 'package:admin/services/grpc_employee_service_mobile.dart'; // Added for fetching employees
-import 'package:grpc/grpc.dart'; // Added for GrpcError
+import 'package:admin/services/grpc_interaction_service_mobile.dart';
+import 'package:admin/services/grpc_client_service_mobile.dart';
+import 'package:admin/services/grpc_employee_service_mobile.dart';
+import 'package:grpc/grpc.dart';
 import 'package:admin/generated/google/protobuf/timestamp.pb.dart'
-    as $2; // Correct alias for Timestamp
-import 'package:intl/intl.dart'; // Added for DateFormat
-import 'package:admin/screens/main/main_screen.dart'; // Added
-import 'package:admin/l10n/app_localizations.dart'; // Import AppLocalizations
+    as $2;
+import 'package:intl/intl.dart';
+import 'package:admin/screens/main/main_screen.dart';
+import 'package:admin/l10n/app_localizations.dart';
 
 class InteractionFormScreen extends StatefulWidget {
-  final crm.Interaction? interaction; // Optional for editing
+  final crm.Interaction? interaction;
 
   const InteractionFormScreen({Key? key, this.interaction}) : super(key: key);
 
@@ -21,86 +21,66 @@ class InteractionFormScreen extends StatefulWidget {
 
 class _InteractionFormScreenState extends State<InteractionFormScreen> {
   final _formKey = GlobalKey<FormState>();
-  // Ensure all controllers and state variables are defined
+  late TextEditingController _summaryController;
   late TextEditingController _notesController;
-  late TextEditingController
-      _subjectCtrl; // Assuming this exists based on errors
-  late TextEditingController
-      _descriptionCtrl; // Assuming this exists based on errors
   String? _selectedClientId;
-  String? _selectedEmployeeId;
-  DateTime? _selectedInteractionDate; // Renamed from _date for clarity
-  DateTime? _selectedEndTime; // Renamed from _endTime for clarity
+  String? _selectedManagerId;
+  DateTime? _selectedInteractionDate;
   crm.InteractionType _selectedInteractionType =
       crm.InteractionType.INTERACTION_TYPE_UNSPECIFIED;
-  bool _isScheduled = false; // Assuming this exists
-  bool _isCompleted = false; // Assuming this exists
 
-  // Instantiate services directly
   final GrpcInteractionService _interactionService = GrpcInteractionService();
-  final GrpcClientService _clientService =
-      GrpcClientService(); // Instantiate client service
-  final GrpcEmployeeService _employeeService =
-      GrpcEmployeeService(); // Instantiate employee service
+  final GrpcClientService _clientService = GrpcClientService();
+  final GrpcEmployeeService _employeeService = GrpcEmployeeService();
 
   List<crm.Client> _clients = [];
-  List<crm.Employee> _employees = [];
+  List<crm.Employee> _employees = []; // Will be used for managers
   bool _isLoading = true;
   bool _isSaving = false;
 
   @override
   void initState() {
     super.initState();
-    // Initialize controllers using widget.interaction
+    _summaryController =
+        TextEditingController(text: widget.interaction?.summary ?? '');
     _notesController =
         TextEditingController(text: widget.interaction?.notes ?? '');
-    _subjectCtrl = TextEditingController(
-        text: widget.interaction?.subject ?? ''); // Initialize
-    _descriptionCtrl = TextEditingController(
-        text: widget.interaction?.description ?? ''); // Initialize
     _selectedClientId = widget.interaction?.clientId;
-    _selectedEmployeeId = widget.interaction?.employeeId;
+    _selectedManagerId = widget.interaction?.managerId;
     _selectedInteractionType = widget.interaction?.type ??
         crm.InteractionType.INTERACTION_TYPE_UNSPECIFIED;
-    _isScheduled = widget.interaction?.isScheduled ?? false; // Initialize
-    _isCompleted = widget.interaction?.isCompleted ?? false; // Initialize
 
-    // Initialize dates from Timestamps using correct field names and has... methods
-    if (widget.interaction?.hasDate() ?? false) {
-      // Use hasDate()
+    if (widget.interaction?.hasInteractionDate() ?? false) {
       _selectedInteractionDate =
-          widget.interaction!.date.toDateTime(); // Use date field
-    }
-    if (widget.interaction?.hasEndTime() ?? false) {
-      // Use hasEndTime()
-      _selectedEndTime =
-          widget.interaction!.endTime.toDateTime(); // Use endTime field
+          widget.interaction!.interactionDate.toDateTime();
     }
 
     _loadInitialData();
+  }
+
+  @override
+  void dispose() {
+    _summaryController.dispose();
+    _notesController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadInitialData() async {
     setState(() {
       _isLoading = true;
     });
-    final localizations = AppLocalizations.of(context); // Add this
+    // final localizations = AppLocalizations.of(context); // Get localizations if needed for error messages
     try {
-      // Fetch clients and employees using their respective services
-      final clientsFuture =
-          _clientService.listClients(pageSize: 1000); // Fetch all for dropdown
-      final employeesFuture = _employeeService.listEmployees(
-          pageSize: 1000); // Fetch all for dropdown
+      final clientsFuture = _clientService.listClients(pageSize: 1000);
+      final managersFuture = _employeeService.listEmployees(pageSize: 1000); // Assuming employees are managers
 
-      final results = await Future.wait([clientsFuture, employeesFuture]);
+      final results = await Future.wait([clientsFuture, managersFuture]);
       _clients = results[0] as List<crm.Client>;
       _employees = results[1] as List<crm.Employee>;
     } catch (e) {
+      // Consider using localizations for error message
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(
-                localizations.interactionFormScreenFeedbackErrorLoading(
-                    e.toString()))), // Use localized string
+        SnackBar(content: Text('Error loading data: ${e.toString()}')),
       );
     } finally {
       setState(() {
@@ -111,68 +91,56 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
 
   Future<void> _saveInteraction() async {
     if (!_formKey.currentState!.validate()) {
-      return; // Don't save if form is invalid
+      return;
     }
     setState(() {
       _isSaving = true;
     });
-    final localizations = AppLocalizations.of(context); // Add this
+    final localizations = AppLocalizations.of(context);
 
-    // Create or update the interaction object using correct field names
     final interactionData = crm.Interaction(
-      interactionId:
-          widget.interaction?.interactionId ?? '', // Keep ID for update
-      clientId: _selectedClientId ?? '', // Ensure non-null for proto
-      employeeId: _selectedEmployeeId ?? '', // Ensure non-null for proto
+      interactionId: widget.interaction?.interactionId ?? '',
+      clientId: _selectedClientId ?? '',
+      managerId: _selectedManagerId ?? '',
       type: _selectedInteractionType,
+      summary: _summaryController.text,
       notes: _notesController.text,
-      subject: _subjectCtrl.text,
-      description: _descriptionCtrl.text,
-      isScheduled: _isScheduled,
-      isCompleted: _isCompleted,
-      // Convert DateTime back to Timestamp using $2 alias and correct field names
-      date: _selectedInteractionDate != null
+      interactionDate: _selectedInteractionDate != null
           ? $2.Timestamp.fromDateTime(_selectedInteractionDate!)
-          : null, // Use date field
-      endTime: _selectedEndTime != null
-          ? $2.Timestamp.fromDateTime(_selectedEndTime!)
-          : null, // Use endTime field
+          : null,
     );
 
     try {
       if (widget.interaction == null) {
-        // Create new interaction
         await _interactionService.createInteraction(interactionData);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text(localizations
-                  .interactionFormScreenFeedbackSuccessCreate)), // Use localized string
+                  .interactionFormScreenFeedbackSuccessCreate)),
         );
       } else {
-        // Update existing interaction
         await _interactionService.updateInteraction(
             interactionData.interactionId, interactionData);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text(localizations
-                  .interactionFormScreenFeedbackSuccessUpdate)), // Use localized string
+                  .interactionFormScreenFeedbackSuccessUpdate)),
         );
       }
-      Navigator.of(context).pop(true); // Indicate success
+      Navigator.of(context).pop(true);
     } on GrpcError catch (e) {
-      // Catch GrpcError
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content: Text(
                 localizations.interactionFormScreenFeedbackErrorSaving(
-                    e.message ?? e.toString()))), // Use localized string
+                    e.message ?? e.toString()))),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content: Text(
                 localizations.interactionFormScreenFeedbackErrorUnexpected(
-                    e.toString()))), // Use localized string
+                    e.toString()))),
       );
     } finally {
       setState(() {
@@ -181,7 +149,6 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
     }
   }
 
-  // Helper function to select date
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -196,33 +163,15 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
     }
   }
 
-  // Helper function to select end time
-  Future<void> _selectEndTime(BuildContext context) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(
-          _selectedEndTime ?? _selectedInteractionDate ?? DateTime.now()),
-    );
-    if (pickedTime != null) {
-      setState(() {
-        final now = _selectedInteractionDate ?? DateTime.now();
-        _selectedEndTime = DateTime(
-            now.year, now.month, now.day, pickedTime.hour, pickedTime.minute);
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context); // Add this
+    final localizations = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.interaction == null
             ? localizations.interactionFormScreenTitleAdd
-            : localizations
-                .interactionFormScreenTitleEdit), // Use localized string
+            : localizations.interactionFormScreenTitleEdit),
         leading: IconButton(
-          // Added leading IconButton
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             if (Navigator.of(context).canPop()) {
@@ -252,12 +201,11 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    // Client Dropdown
                     DropdownButtonFormField<String>(
                       value: _selectedClientId,
                       decoration: InputDecoration(
                           labelText: localizations
-                              .interactionFormScreenLabelClient), // Use localized string
+                              .interactionFormScreenLabelClient),
                       items: _clients.map((crm.Client client) {
                         return DropdownMenuItem<String>(
                           value: client.clientId,
@@ -272,48 +220,41 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
                       validator: (value) => value == null
                           ? localizations
                               .interactionFormScreenValidationSelectClient
-                          : null, // Use localized string
+                          : null,
                     ),
                     const SizedBox(height: 16),
-
-                    // Employee Dropdown - Use employee.name
                     DropdownButtonFormField<String>(
-                      value: _selectedEmployeeId,
+                      value: _selectedManagerId,
                       decoration: InputDecoration(
-                          labelText: localizations
-                              .interactionFormScreenLabelEmployee), // Use localized string
+                          labelText: localizations.interactionFormScreenLabelEmployee), // Reusing Employee label
                       items: _employees.map((crm.Employee employee) {
                         return DropdownMenuItem<String>(
                           value: employee.employeeId,
                           child: Text(employee.name.isNotEmpty
                               ? employee.name
-                              : employee
-                                  .employeeId), // Use name field, fallback to ID
+                              : employee.employeeId),
                         );
                       }).toList(),
                       onChanged: (String? newValue) {
                         setState(() {
-                          _selectedEmployeeId = newValue;
+                          _selectedManagerId = newValue;
                         });
                       },
                       validator: (value) => value == null || value.isEmpty
-                          ? localizations
-                              .interactionFormScreenValidationSelectEmployee // Use localized string
+                          ? localizations.interactionFormScreenValidationSelectEmployee // Reusing Employee validation
                           : null,
                     ),
                     const SizedBox(height: 16),
-
-                    // Interaction Type Dropdown
                     DropdownButtonFormField<crm.InteractionType>(
                       value: _selectedInteractionType,
                       decoration: InputDecoration(
                           labelText: localizations
-                              .interactionFormScreenLabelInteractionType), // Use localized string
+                              .interactionFormScreenLabelInteractionType),
                       items: crm.InteractionType.values
                           .where((type) =>
                               type !=
                               crm.InteractionType
-                                  .INTERACTION_TYPE_UNSPECIFIED) // Exclude unspecified
+                                  .INTERACTION_TYPE_UNSPECIFIED)
                           .map((crm.InteractionType type) {
                         return DropdownMenuItem<crm.InteractionType>(
                           value: type,
@@ -332,99 +273,41 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
                       validator: (value) => value ==
                               crm.InteractionType.INTERACTION_TYPE_UNSPECIFIED
                           ? localizations
-                              .interactionFormScreenValidationSelectType // Use localized string
+                              .interactionFormScreenValidationSelectType
                           : null,
                     ),
                     const SizedBox(height: 16),
-
-                    // Interaction Date Picker
                     ListTile(
                       title: Text(localizations
                           .interactionFormScreenLabelInteractionDate(
-                              // Use localized string
                               _selectedInteractionDate == null
                                   ? localizations
-                                      .interactionFormScreenLabelDateNotSet // Use localized string
+                                      .interactionFormScreenLabelDateNotSet
                                   : DateFormat('yyyy-MM-dd')
                                       .format(_selectedInteractionDate!))),
                       trailing: const Icon(Icons.calendar_today),
                       onTap: () => _selectDate(context),
                     ),
                     const SizedBox(height: 16),
-
-                    // End Time Picker
-                    ListTile(
-                      title: Text(localizations.interactionFormScreenLabelEndTime(
-                          // Use localized string
-                          _selectedEndTime == null
-                              ? localizations
-                                  .interactionFormScreenLabelDateNotSet // Use localized string
-                              : DateFormat('HH:mm').format(_selectedEndTime!))),
-                      trailing: const Icon(Icons.access_time),
-                      onTap: () => _selectEndTime(context),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Subject Field
                     TextFormField(
-                      controller: _subjectCtrl,
-                      decoration: InputDecoration(
-                          labelText: localizations
-                              .interactionFormScreenLabelSubject), // Use localized string
+                      controller: _summaryController,
+                      decoration: const InputDecoration(
+                          labelText: 'Summary'), // Placeholder label
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return localizations
-                              .interactionFormScreenValidationEnterSubject; // Use localized string
+                          return 'Please enter a summary'; // Placeholder validation
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 16),
-
-                    // Description Field
-                    TextFormField(
-                      controller: _descriptionCtrl,
-                      decoration: InputDecoration(
-                          labelText: localizations
-                              .interactionFormScreenLabelDescription), // Use localized string
-                      maxLines: 3,
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Notes Field
                     TextFormField(
                       controller: _notesController,
                       decoration: InputDecoration(
-                          labelText: localizations
-                              .interactionFormScreenLabelNotes), // Use localized string
+                          labelText: localizations.interactionFormScreenLabelNotes),
                       maxLines: 3,
                     ),
                     const SizedBox(height: 16),
-
-                    // Is Scheduled Checkbox
-                    CheckboxListTile(
-                      title: Text(localizations
-                          .interactionFormScreenCheckboxScheduled), // Use localized string
-                      value: _isScheduled,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          _isScheduled = value ?? false;
-                        });
-                      },
-                    ),
-
-                    // Is Completed Checkbox
-                    CheckboxListTile(
-                      title: Text(localizations
-                          .interactionFormScreenCheckboxCompleted), // Use localized string
-                      value: _isCompleted,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          _isCompleted = value ?? false;
-                        });
-                      },
-                    ),
-
                     if (_isSaving) ...[
                       const SizedBox(height: 16),
                       const Center(child: CircularProgressIndicator()),
@@ -436,6 +319,3 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
     );
   }
 }
-
-// Helper extension for capitalizing strings (optional, place in a utils file)
-// ...existing code...

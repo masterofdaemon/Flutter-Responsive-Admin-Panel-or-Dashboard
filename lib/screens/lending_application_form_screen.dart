@@ -33,7 +33,6 @@ class _LendingApplicationFormScreenState
   final _approvedAmountController = TextEditingController();
   final _paymentIdController = TextEditingController();
   final _notesController = TextEditingController();
-  final _expectedCommissionController = TextEditingController();
   final _companyCommissionPercentController = TextEditingController();
   final _calculatedCommissionAmountController = TextEditingController();
 
@@ -46,7 +45,6 @@ class _LendingApplicationFormScreenState
   DateTime? _fundsReceivedDate;
   DateTime? _companyContractDate;
   bool _commissionPaid = false;
-  bool _agentCommissionReceived = false;
 
   List<crm.Client> _clients = [];
   List<crm.Employee> _managers = [];
@@ -113,7 +111,6 @@ class _LendingApplicationFormScreenState
       _approvedAmountController.text = app.approvedAmount.toString();
       _paymentIdController.text = app.paymentId;
       _notesController.text = app.notes;
-      _expectedCommissionController.text = app.expectedCommission.toString();
       _companyCommissionPercentController.text =
           app.companyCommissionPercent.toString();
       _calculatedCommissionAmountController.text =
@@ -130,7 +127,6 @@ class _LendingApplicationFormScreenState
           ? app.companyContractDate.toDateTime()
           : null;
       _commissionPaid = app.commissionPaid;
-      _agentCommissionReceived = app.agentCommissionReceived;
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -167,8 +163,6 @@ class _LendingApplicationFormScreenState
         companyContractDate: _companyContractDate != null
             ? dateTimeToTimestamp(_companyContractDate!)
             : null,
-        expectedCommission:
-            double.tryParse(_expectedCommissionController.text.trim()) ?? 0.0,
         status: _status ?? crm.Status.STATUS_UNSPECIFIED,
         paymentId: _paymentIdController.text.trim(),
         notes: _notesController.text.trim(),
@@ -179,7 +173,6 @@ class _LendingApplicationFormScreenState
                 _calculatedCommissionAmountController.text.trim()) ??
             0.0,
         commissionPaid: _commissionPaid,
-        agentCommissionReceived: _agentCommissionReceived,
       );
       if (_isEditMode) {
         await _service.updateLendingApplication(widget.requestId!, app);
@@ -214,7 +207,6 @@ class _LendingApplicationFormScreenState
     _approvedAmountController.dispose();
     _paymentIdController.dispose();
     _notesController.dispose();
-    _expectedCommissionController.dispose();
     _companyCommissionPercentController.dispose();
     _calculatedCommissionAmountController.dispose();
     super.dispose();
@@ -417,14 +409,6 @@ class _LendingApplicationFormScreenState
                       ],
                     ),
                     const SizedBox(height: 16),
-                    // Expected Commission
-                    TextFormField(
-                      controller: _expectedCommissionController,
-                      decoration: InputDecoration(
-                          labelText: localizations.expectedCommissionLabelText),
-                      keyboardType: TextInputType.number,
-                    ),
-                    const SizedBox(height: 16),
                     // Status Dropdown
                     DropdownButtonFormField<crm.Status>(
                       value: _status,
@@ -457,9 +441,8 @@ class _LendingApplicationFormScreenState
                     TextFormField(
                       controller: _notesController,
                       decoration: InputDecoration(
-                          labelText: localizations
-                              .notesLabelTextShort), // Reused notesLabelText
-                      maxLines: 2,
+                          labelText: localizations.notesLabelTextShort),
+                      maxLines: 3,
                     ),
                     const SizedBox(height: 16),
                     // Company Commission Percent
@@ -478,42 +461,23 @@ class _LendingApplicationFormScreenState
                           labelText: localizations
                               .calculatedCommissionAmountLabelText),
                       keyboardType: TextInputType.number,
+                      readOnly: true,
                     ),
                     const SizedBox(height: 16),
-                    // Commission Paid
+                    // Commission Paid Switch
                     SwitchListTile(
                       title: Text(localizations.commissionPaidLabelText),
                       value: _commissionPaid,
                       onChanged: (val) => setState(() => _commissionPaid = val),
-                    ),
-                    // Agent Commission Received
-                    SwitchListTile(
-                      title:
-                          Text(localizations.agentCommissionReceivedLabelText),
-                      value: _agentCommissionReceived,
-                      onChanged: (val) =>
-                          setState(() => _agentCommissionReceived = val),
-                    ),
-                    const SizedBox(height: 24),
-                    Center(
-                      child: ElevatedButton.icon(
-                        icon: Icon(_isEditMode
-                            ? Icons.save
-                            : Icons.add_circle_outline),
-                        label: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24.0, vertical: 12.0),
-                          child: Text(_isEditMode
-                              ? localizations.updateApplicationButtonText
-                              : localizations.createApplicationButtonText),
-                        ),
-                        onPressed: _isLoading ? null : _saveApplication,
-                      ),
                     ),
                   ],
                 ),
               ),
             ),
     );
+  }
+
+  String formatDate(DateTime date) {
+    return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
   }
 }
