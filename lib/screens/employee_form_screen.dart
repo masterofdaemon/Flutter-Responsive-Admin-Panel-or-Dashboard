@@ -259,217 +259,228 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              padding: const EdgeInsets.all(16.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // User Dropdown
-                    DropdownButtonFormField<crm.User>(
-                      value: _selectedUser,
-                      hint: const Text('Select User'),
-                      isExpanded: true, // Allow long names
-                      items: _users.map((crm.User user) {
-                        return DropdownMenuItem<crm.User>(
-                          value: user,
-                          child:
-                              Text(user.login, overflow: TextOverflow.ellipsis),
-                        );
-                      }).toList(),
-                      onChanged: (crm.User? newValue) {
-                        setState(() {
-                          _selectedUser = newValue;
-                        });
-                      },
-                      validator: (value) =>
-                          value == null ? 'User is required' : null,
-                      decoration: const InputDecoration(
-                        labelText: 'User Account',
-                        border: OutlineInputBorder(),
-                      ),
-                      // Disable if editing (can't change linked user)
-                      disabledHint: _selectedUser != null
-                          ? Text(_selectedUser!.login)
-                          : null,
-                      onTap: _isEditMode
-                          ? () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Cannot change user for existing employee.')),
-                              );
+          : Center(
+              // Added Center widget
+              child: ConstrainedBox(
+                // Added ConstrainedBox widget
+                constraints:
+                    const BoxConstraints(maxWidth: 800), // Set max width
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        // User Dropdown
+                        DropdownButtonFormField<crm.User>(
+                          value: _selectedUser,
+                          hint: const Text('Select User'),
+                          isExpanded: true, // Allow long names
+                          items: _users.map((crm.User user) {
+                            return DropdownMenuItem<crm.User>(
+                              value: user,
+                              child: Text(user.login,
+                                  overflow: TextOverflow.ellipsis),
+                            );
+                          }).toList(),
+                          onChanged: (crm.User? newValue) {
+                            setState(() {
+                              _selectedUser = newValue;
+                            });
+                          },
+                          validator: (value) =>
+                              value == null ? 'User is required' : null,
+                          decoration: const InputDecoration(
+                            labelText: 'User Account',
+                            border: OutlineInputBorder(),
+                          ),
+                          // Disable if editing (can't change linked user)
+                          disabledHint: _selectedUser != null
+                              ? Text(_selectedUser!.login)
+                              : null,
+                          onTap: _isEditMode
+                              ? () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'Cannot change user for existing employee.')),
+                                  );
+                                }
+                              : null,
+                          // Read only visually if editing
+                          style: _isEditMode
+                              ? TextStyle(
+                                  color: Theme.of(context).disabledColor)
+                              : null,
+                        ),
+                        const SizedBox(height: 16.0),
+
+                        // Name Field
+                        TextFormField(
+                          controller: _nameController,
+                          decoration: const InputDecoration(
+                            labelText: 'Full Name',
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Please enter employee name';
                             }
-                          : null,
-                      // Read only visually if editing
-                      style: _isEditMode
-                          ? TextStyle(color: Theme.of(context).disabledColor)
-                          : null,
-                    ),
-                    const SizedBox(height: 16.0),
-
-                    // Name Field
-                    TextFormField(
-                      controller: _nameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Full Name',
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter employee name';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16.0),
-
-                    // Email Field
-                    TextFormField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(
-                        labelText: 'Email',
-                        border: OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Please enter an email';
-                        }
-                        // Basic email validation
-                        if (!RegExp(
-                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                            .hasMatch(value)) {
-                          return 'Please enter a valid email';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16.0),
-
-                    // Role Dropdown
-                    DropdownButtonFormField<crm.EmployeeRole>(
-                      value: _selectedRole,
-                      hint: const Text('Select Role'),
-                      isExpanded: true,
-                      items: _roles.map((crm.EmployeeRole role) {
-                        return DropdownMenuItem<crm.EmployeeRole>(
-                          value: role,
-                          child: Text(_getRoleDisplayName(role)),
-                        );
-                      }).toList(),
-                      onChanged: (crm.EmployeeRole? newValue) {
-                        setState(() {
-                          _selectedRole = newValue;
-                        });
-                      },
-                      validator: (value) =>
-                          value == null ? 'Role is required' : null,
-                      decoration: const InputDecoration(
-                        labelText: 'Role',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    const SizedBox(height: 16.0),
-
-                    // Office Dropdown
-                    DropdownButtonFormField<crm.Office>(
-                      value: _selectedOffice,
-                      hint: const Text('Select Office'),
-                      isExpanded: true,
-                      items: _offices.map((crm.Office office) {
-                        return DropdownMenuItem<crm.Office>(
-                          value: office,
-                          child: Text(office.city,
-                              overflow: TextOverflow.ellipsis),
-                        );
-                      }).toList(),
-                      onChanged: (crm.Office? newValue) {
-                        setState(() {
-                          _selectedOffice = newValue;
-                        });
-                      },
-                      validator: (value) =>
-                          value == null ? 'Office is required' : null,
-                      decoration: const InputDecoration(
-                        labelText: 'Office',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    const SizedBox(height: 16.0),
-
-                    // Telegram ID Field
-                    TextFormField(
-                      controller: _telegramIdController,
-                      decoration: const InputDecoration(
-                        labelText: 'Telegram ID (Optional)',
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    const SizedBox(height: 16.0),
-
-                    // WhatsApp Number Field
-                    TextFormField(
-                      controller: _whatsappNumberController,
-                      decoration: const InputDecoration(
-                        labelText: 'WhatsApp Number (Optional, E.164 format)',
-                        border: OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.phone,
-                      // Add validator if E.164 format is strict
-                    ),
-                    const SizedBox(height: 16.0),
-
-                    // Is Active Switch
-                    SwitchListTile(
-                      title: const Text('Is Active'),
-                      value: _isActive,
-                      onChanged: (bool value) {
-                        setState(() {
-                          _isActive = value;
-                        });
-                      },
-                      secondary: Icon(
-                          _isActive ? Icons.check_circle : Icons.cancel,
-                          color: _isActive ? Colors.green : Colors.grey),
-                    ),
-                    const SizedBox(height: 16.0),
-
-                    // Notes Field
-                    TextFormField(
-                      controller: _notesController,
-                      decoration: const InputDecoration(
-                        labelText: 'Notes (Optional)',
-                        border: OutlineInputBorder(),
-                        alignLabelWithHint: true,
-                      ),
-                      maxLines: 3,
-                      textAlignVertical: TextAlignVertical.top,
-                    ),
-                    const SizedBox(height: 24.0),
-
-                    // Save Button
-                    Center(
-                      child: ElevatedButton.icon(
-                        icon: Icon(_isEditMode
-                            ? Icons.save_alt
-                            : Icons.add_circle_outline),
-                        label: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24.0, vertical: 12.0),
-                          child: Text(_isEditMode
-                              ? 'Update Employee'
-                              : 'Create Employee'),
+                            return null;
+                          },
                         ),
-                        onPressed: _isLoading ? null : _saveEmployee,
-                        style: ElevatedButton.styleFrom(
-                          textStyle: Theme.of(context).textTheme.titleMedium,
+                        const SizedBox(height: 16.0),
+
+                        // Email Field
+                        TextFormField(
+                          controller: _emailController,
+                          decoration: const InputDecoration(
+                            labelText: 'Email',
+                            border: OutlineInputBorder(),
+                          ),
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Please enter an email';
+                            }
+                            // Basic email validation
+                            if (!RegExp(
+                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                .hasMatch(value)) {
+                              return 'Please enter a valid email';
+                            }
+                            return null;
+                          },
                         ),
-                      ),
+                        const SizedBox(height: 16.0),
+
+                        // Role Dropdown
+                        DropdownButtonFormField<crm.EmployeeRole>(
+                          value: _selectedRole,
+                          hint: const Text('Select Role'),
+                          isExpanded: true,
+                          items: _roles.map((crm.EmployeeRole role) {
+                            return DropdownMenuItem<crm.EmployeeRole>(
+                              value: role,
+                              child: Text(_getRoleDisplayName(role)),
+                            );
+                          }).toList(),
+                          onChanged: (crm.EmployeeRole? newValue) {
+                            setState(() {
+                              _selectedRole = newValue;
+                            });
+                          },
+                          validator: (value) =>
+                              value == null ? 'Role is required' : null,
+                          decoration: const InputDecoration(
+                            labelText: 'Role',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 16.0),
+
+                        // Office Dropdown
+                        DropdownButtonFormField<crm.Office>(
+                          value: _selectedOffice,
+                          hint: const Text('Select Office'),
+                          isExpanded: true,
+                          items: _offices.map((crm.Office office) {
+                            return DropdownMenuItem<crm.Office>(
+                              value: office,
+                              child: Text(office.city,
+                                  overflow: TextOverflow.ellipsis),
+                            );
+                          }).toList(),
+                          onChanged: (crm.Office? newValue) {
+                            setState(() {
+                              _selectedOffice = newValue;
+                            });
+                          },
+                          validator: (value) =>
+                              value == null ? 'Office is required' : null,
+                          decoration: const InputDecoration(
+                            labelText: 'Office',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 16.0),
+
+                        // Telegram ID Field
+                        TextFormField(
+                          controller: _telegramIdController,
+                          decoration: const InputDecoration(
+                            labelText: 'Telegram ID (Optional)',
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                        const SizedBox(height: 16.0),
+
+                        // WhatsApp Number Field
+                        TextFormField(
+                          controller: _whatsappNumberController,
+                          decoration: const InputDecoration(
+                            labelText:
+                                'WhatsApp Number (Optional, E.164 format)',
+                            border: OutlineInputBorder(),
+                          ),
+                          keyboardType: TextInputType.phone,
+                          // Add validator if E.164 format is strict
+                        ),
+                        const SizedBox(height: 16.0),
+
+                        // Is Active Switch
+                        SwitchListTile(
+                          title: const Text('Is Active'),
+                          value: _isActive,
+                          onChanged: (bool value) {
+                            setState(() {
+                              _isActive = value;
+                            });
+                          },
+                          secondary: Icon(
+                              _isActive ? Icons.check_circle : Icons.cancel,
+                              color: _isActive ? Colors.green : Colors.grey),
+                        ),
+                        const SizedBox(height: 16.0),
+
+                        // Notes Field
+                        TextFormField(
+                          controller: _notesController,
+                          decoration: const InputDecoration(
+                            labelText: 'Notes (Optional)',
+                            border: OutlineInputBorder(),
+                            alignLabelWithHint: true,
+                          ),
+                          maxLines: 3,
+                          textAlignVertical: TextAlignVertical.top,
+                        ),
+                        const SizedBox(height: 24.0),
+
+                        // Save Button
+                        Center(
+                          child: ElevatedButton.icon(
+                            icon: Icon(_isEditMode
+                                ? Icons.save_alt
+                                : Icons.add_circle_outline),
+                            label: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 24.0, vertical: 12.0),
+                              child: Text(_isEditMode
+                                  ? 'Update Employee'
+                                  : 'Create Employee'),
+                            ),
+                            onPressed: _isLoading ? null : _saveEmployee,
+                            style: ElevatedButton.styleFrom(
+                              textStyle:
+                                  Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20.0), // Add some bottom padding
+                      ],
                     ),
-                    const SizedBox(height: 20.0), // Add some bottom padding
-                  ],
+                  ),
                 ),
               ),
             ),
