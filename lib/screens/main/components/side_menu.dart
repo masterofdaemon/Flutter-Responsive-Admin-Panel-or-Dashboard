@@ -15,7 +15,6 @@ import 'package:admin/generated/crm.pb.dart' as crm;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:admin/controllers/menu_app_controller.dart'; // Added import
 
 class SideMenu extends StatelessWidget {
   const SideMenu({super.key});

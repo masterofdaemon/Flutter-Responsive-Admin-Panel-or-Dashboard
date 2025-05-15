@@ -4,6 +4,7 @@ import 'package:admin/services/auth_service.dart';
 import 'package:admin/screens/signup_screen.dart';
 import 'package:grpc/grpc.dart';
 import 'package:admin/l10n/app_localizations.dart'; // Import AppLocalizations
+import 'package:admin/screens/main/main_screen.dart'; // Import MainScreen
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -44,13 +45,20 @@ class _LoginScreenState extends State<LoginScreen> {
         _usernameController.text.trim(),
         _passwordController.text.trim(),
       );
-      if (!result) {
+      
+      if (result) {
+        // Successful login - navigate to MainScreen
+        if (mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => MainScreen()),
+          );
+        }
+      } else {
         setState(() {
           _errorMessage = authService.errorMessage ??
               localizations.loginScreenErrorLoginFailed;
         });
       }
-      // Navigation to the main app screen will be handled by the listener in main.dart
     } on GrpcError catch (e) {
       setState(() {
         _errorMessage = localizations.loginScreenErrorLoginFailedWithDetails(
