@@ -90,9 +90,7 @@ class AuthService with ChangeNotifier {
 
     try {
       final client = _authClient;
-      // Use the prefixed class name for the request message
       final request = pb.LoginRequest(email: email, password: password);
-      // The response type pb.LoginResponse is inferred
       final response = await client.login(request);
 
       if (response.token.isNotEmpty) {
@@ -101,23 +99,72 @@ class AuthService with ChangeNotifier {
         _isAuthenticated = true;
         _errorMessage = null;
         GrpcClient().setAuthToken(_token);
-
-        await fetchSelfProfile();
+        _employeeProfile = null; // Clear employee profile on user login
+        await fetchSelfProfile(); // This should primarily fetch user profile
         print(
-            'AuthService: After fetchSelfProfile in login. IsAuthenticated: $_isAuthenticated, UserProfile: ${_userProfile != null}, EmployeeProfile: ${_employeeProfile != null}');
+            'AuthService: User login successful. IsAuthenticated: $_isAuthenticated, UserProfile: ${_userProfile != null}');
         return true;
       } else {
-        _errorMessage = "Login successful, but no token received.";
+        _errorMessage = "User login successful, but no token received.";
         _isAuthenticated = false;
         return false;
       }
     } catch (e) {
-      print('Login failed: $e');
+      print('User login failed: $e');
       if (e is GrpcError) {
         _errorMessage =
-            "Login failed: ${e.message ?? 'Unknown gRPC error'} (${e.codeName})";
+            "User login failed: ${e.message ?? 'Unknown gRPC error'} (${e.codeName})";
       } else {
-        _errorMessage = "Login failed: An unexpected error occurred.";
+        _errorMessage = "User login failed: An unexpected error occurred.";
+      }
+      _isAuthenticated = false;
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> loginEmployee(String login, String password) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final client = _authClient;
+      final request = pb.LoginEmployeeRequest(login: login, password: password);
+      final response = await client.loginEmployee(request);
+
+      if (response.token.isNotEmpty) {
+        _token = response.token;
+        await _storage.write(key: 'authToken', value: _token);
+        _isAuthenticated = true;
+        _errorMessage = null;
+        GrpcClient().setAuthToken(_token);
+        _userProfile = null; // Clear user profile on employee login
+        // The response from loginEmployee already contains the employee profile
+        if (response.hasEmployee()) {
+          _employeeProfile = response.employee;
+        } else {
+          // If backend doesn't return employee on login, fetch it separately
+          // This might require a getEmployeeProfile method or similar
+          await fetchSelfProfile(); // Fallback, though ideally response has employee
+        }
+        print(
+            'AuthService: Employee login successful. IsAuthenticated: $_isAuthenticated, EmployeeProfile: ${_employeeProfile != null}');
+        return true;
+      } else {
+        _errorMessage = "Employee login successful, but no token received.";
+        _isAuthenticated = false;
+        return false;
+      }
+    } catch (e) {
+      print('Employee login failed: $e');
+      if (e is GrpcError) {
+        _errorMessage =
+            "Employee login failed: ${e.message ?? 'Unknown gRPC error'} (${e.codeName})";
+      } else {
+        _errorMessage = "Employee login failed: An unexpected error occurred.";
       }
       _isAuthenticated = false;
       return false;

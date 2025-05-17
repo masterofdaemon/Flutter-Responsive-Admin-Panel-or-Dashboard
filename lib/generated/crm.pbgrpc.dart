@@ -1743,6 +1743,10 @@ class AuthServiceClient extends $grpc.Client {
       '/proto.AuthService/Login',
       ($0.LoginRequest value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.LoginResponse.fromBuffer(value));
+  static final _$loginEmployee = $grpc.ClientMethod<$0.LoginEmployeeRequest, $0.LoginEmployeeResponse>(
+      '/proto.AuthService/LoginEmployee',
+      ($0.LoginEmployeeRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.LoginEmployeeResponse.fromBuffer(value));
 
   AuthServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -1752,6 +1756,10 @@ class AuthServiceClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.LoginResponse> login($0.LoginRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$login, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.LoginEmployeeResponse> loginEmployee($0.LoginEmployeeRequest request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$loginEmployee, request, options: options);
   }
 }
 
@@ -1767,11 +1775,23 @@ abstract class AuthServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.LoginRequest.fromBuffer(value),
         ($0.LoginResponse value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.LoginEmployeeRequest, $0.LoginEmployeeResponse>(
+        'LoginEmployee',
+        loginEmployee_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.LoginEmployeeRequest.fromBuffer(value),
+        ($0.LoginEmployeeResponse value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.LoginResponse> login_Pre($grpc.ServiceCall $call, $async.Future<$0.LoginRequest> $request) async {
     return login($call, await $request);
   }
 
+  $async.Future<$0.LoginEmployeeResponse> loginEmployee_Pre($grpc.ServiceCall $call, $async.Future<$0.LoginEmployeeRequest> $request) async {
+    return loginEmployee($call, await $request);
+  }
+
   $async.Future<$0.LoginResponse> login($grpc.ServiceCall call, $0.LoginRequest request);
+  $async.Future<$0.LoginEmployeeResponse> loginEmployee($grpc.ServiceCall call, $0.LoginEmployeeRequest request);
 }

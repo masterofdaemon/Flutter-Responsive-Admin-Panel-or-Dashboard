@@ -271,10 +271,12 @@ const User$json = {
     {'1': 'login', '3': 2, '4': 1, '5': 9, '10': 'login'},
     {'1': 'last_login', '3': 3, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 0, '10': 'lastLogin', '17': true},
     {'1': 'notes', '3': 4, '4': 1, '5': 9, '9': 1, '10': 'notes', '17': true},
+    {'1': 'email', '3': 5, '4': 1, '5': 9, '9': 2, '10': 'email', '17': true},
   ],
   '8': [
     {'1': '_last_login'},
     {'1': '_notes'},
+    {'1': '_email'},
   ],
 };
 
@@ -282,8 +284,8 @@ const User$json = {
 final $typed_data.Uint8List userDescriptor = $convert.base64Decode(
     'CgRVc2VyEhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBIUCgVsb2dpbhgCIAEoCVIFbG9naW4SPg'
     'oKbGFzdF9sb2dpbhgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBIAFIJbGFzdExv'
-    'Z2luiAEBEhkKBW5vdGVzGAQgASgJSAFSBW5vdGVziAEBQg0KC19sYXN0X2xvZ2luQggKBl9ub3'
-    'Rlcw==');
+    'Z2luiAEBEhkKBW5vdGVzGAQgASgJSAFSBW5vdGVziAEBEhkKBWVtYWlsGAUgASgJSAJSBWVtYW'
+    'lsiAEBQg0KC19sYXN0X2xvZ2luQggKBl9ub3Rlc0IICgZfZW1haWw=');
 
 @$core.Deprecated('Use employeeDescriptor instead')
 const Employee$json = {
@@ -291,14 +293,15 @@ const Employee$json = {
   '2': [
     {'1': 'employee_id', '3': 1, '4': 1, '5': 9, '10': 'employeeId'},
     {'1': 'user_id', '3': 2, '4': 1, '5': 9, '10': 'userId'},
-    {'1': 'name', '3': 3, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'role', '3': 4, '4': 1, '5': 14, '6': '.proto.EmployeeRole', '10': 'role'},
-    {'1': 'office_id', '3': 5, '4': 1, '5': 9, '10': 'officeId'},
-    {'1': 'telegram_id', '3': 6, '4': 1, '5': 3, '9': 0, '10': 'telegramId', '17': true},
-    {'1': 'whatsapp_number', '3': 7, '4': 1, '5': 9, '9': 1, '10': 'whatsappNumber', '17': true},
-    {'1': 'email', '3': 8, '4': 1, '5': 9, '10': 'email'},
-    {'1': 'is_active', '3': 9, '4': 1, '5': 8, '10': 'isActive'},
-    {'1': 'notes', '3': 10, '4': 1, '5': 9, '9': 2, '10': 'notes', '17': true},
+    {'1': 'login', '3': 3, '4': 1, '5': 9, '10': 'login'},
+    {'1': 'name', '3': 4, '4': 1, '5': 9, '10': 'name'},
+    {'1': 'role', '3': 5, '4': 1, '5': 14, '6': '.proto.EmployeeRole', '10': 'role'},
+    {'1': 'office_id', '3': 6, '4': 1, '5': 9, '10': 'officeId'},
+    {'1': 'telegram_id', '3': 7, '4': 1, '5': 3, '9': 0, '10': 'telegramId', '17': true},
+    {'1': 'whatsapp_number', '3': 8, '4': 1, '5': 9, '9': 1, '10': 'whatsappNumber', '17': true},
+    {'1': 'email', '3': 9, '4': 1, '5': 9, '10': 'email'},
+    {'1': 'is_active', '3': 10, '4': 1, '5': 8, '10': 'isActive'},
+    {'1': 'notes', '3': 11, '4': 1, '5': 9, '9': 2, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_telegram_id'},
@@ -310,12 +313,13 @@ const Employee$json = {
 /// Descriptor for `Employee`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List employeeDescriptor = $convert.base64Decode(
     'CghFbXBsb3llZRIfCgtlbXBsb3llZV9pZBgBIAEoCVIKZW1wbG95ZWVJZBIXCgd1c2VyX2lkGA'
-    'IgASgJUgZ1c2VySWQSEgoEbmFtZRgDIAEoCVIEbmFtZRInCgRyb2xlGAQgASgOMhMucHJvdG8u'
-    'RW1wbG95ZWVSb2xlUgRyb2xlEhsKCW9mZmljZV9pZBgFIAEoCVIIb2ZmaWNlSWQSJAoLdGVsZW'
-    'dyYW1faWQYBiABKANIAFIKdGVsZWdyYW1JZIgBARIsCg93aGF0c2FwcF9udW1iZXIYByABKAlI'
-    'AVIOd2hhdHNhcHBOdW1iZXKIAQESFAoFZW1haWwYCCABKAlSBWVtYWlsEhsKCWlzX2FjdGl2ZR'
-    'gJIAEoCFIIaXNBY3RpdmUSGQoFbm90ZXMYCiABKAlIAlIFbm90ZXOIAQFCDgoMX3RlbGVncmFt'
-    'X2lkQhIKEF93aGF0c2FwcF9udW1iZXJCCAoGX25vdGVz');
+    'IgASgJUgZ1c2VySWQSFAoFbG9naW4YAyABKAlSBWxvZ2luEhIKBG5hbWUYBCABKAlSBG5hbWUS'
+    'JwoEcm9sZRgFIAEoDjITLnByb3RvLkVtcGxveWVlUm9sZVIEcm9sZRIbCglvZmZpY2VfaWQYBi'
+    'ABKAlSCG9mZmljZUlkEiQKC3RlbGVncmFtX2lkGAcgASgDSABSCnRlbGVncmFtSWSIAQESLAoP'
+    'd2hhdHNhcHBfbnVtYmVyGAggASgJSAFSDndoYXRzYXBwTnVtYmVyiAEBEhQKBWVtYWlsGAkgAS'
+    'gJUgVlbWFpbBIbCglpc19hY3RpdmUYCiABKAhSCGlzQWN0aXZlEhkKBW5vdGVzGAsgASgJSAJS'
+    'BW5vdGVziAEBQg4KDF90ZWxlZ3JhbV9pZEISChBfd2hhdHNhcHBfbnVtYmVyQggKBl9ub3Rlcw'
+    '==');
 
 @$core.Deprecated('Use officeDescriptor instead')
 const Office$json = {
@@ -1177,9 +1181,11 @@ const UpdateEmployeeRequest$json = {
     {'1': 'employee_id', '3': 1, '4': 1, '5': 9, '10': 'employeeId'},
     {'1': 'employee_data', '3': 2, '4': 1, '5': 11, '6': '.proto.Employee', '10': 'employeeData'},
     {'1': 'telegram_id', '3': 3, '4': 1, '5': 3, '9': 0, '10': 'telegramId', '17': true},
+    {'1': 'password', '3': 4, '4': 1, '5': 9, '9': 1, '10': 'password', '17': true},
   ],
   '8': [
     {'1': '_telegram_id'},
+    {'1': '_password'},
   ],
 };
 
@@ -1187,7 +1193,8 @@ const UpdateEmployeeRequest$json = {
 final $typed_data.Uint8List updateEmployeeRequestDescriptor = $convert.base64Decode(
     'ChVVcGRhdGVFbXBsb3llZVJlcXVlc3QSHwoLZW1wbG95ZWVfaWQYASABKAlSCmVtcGxveWVlSW'
     'QSNAoNZW1wbG95ZWVfZGF0YRgCIAEoCzIPLnByb3RvLkVtcGxveWVlUgxlbXBsb3llZURhdGES'
-    'JAoLdGVsZWdyYW1faWQYAyABKANIAFIKdGVsZWdyYW1JZIgBAUIOCgxfdGVsZWdyYW1faWQ=');
+    'JAoLdGVsZWdyYW1faWQYAyABKANIAFIKdGVsZWdyYW1JZIgBARIfCghwYXNzd29yZBgEIAEoCU'
+    'gBUghwYXNzd29yZIgBAUIOCgxfdGVsZWdyYW1faWRCCwoJX3Bhc3N3b3Jk');
 
 @$core.Deprecated('Use updateEmployeeResponseDescriptor instead')
 const UpdateEmployeeResponse$json = {
@@ -3302,4 +3309,32 @@ const LoginResponse$json = {
 /// Descriptor for `LoginResponse`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List loginResponseDescriptor = $convert.base64Decode(
     'Cg1Mb2dpblJlc3BvbnNlEhQKBXRva2VuGAEgASgJUgV0b2tlbg==');
+
+@$core.Deprecated('Use loginEmployeeRequestDescriptor instead')
+const LoginEmployeeRequest$json = {
+  '1': 'LoginEmployeeRequest',
+  '2': [
+    {'1': 'login', '3': 1, '4': 1, '5': 9, '10': 'login'},
+    {'1': 'password', '3': 2, '4': 1, '5': 9, '10': 'password'},
+  ],
+};
+
+/// Descriptor for `LoginEmployeeRequest`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List loginEmployeeRequestDescriptor = $convert.base64Decode(
+    'ChRMb2dpbkVtcGxveWVlUmVxdWVzdBIUCgVsb2dpbhgBIAEoCVIFbG9naW4SGgoIcGFzc3dvcm'
+    'QYAiABKAlSCHBhc3N3b3Jk');
+
+@$core.Deprecated('Use loginEmployeeResponseDescriptor instead')
+const LoginEmployeeResponse$json = {
+  '1': 'LoginEmployeeResponse',
+  '2': [
+    {'1': 'token', '3': 1, '4': 1, '5': 9, '10': 'token'},
+    {'1': 'employee', '3': 2, '4': 1, '5': 11, '6': '.proto.Employee', '10': 'employee'},
+  ],
+};
+
+/// Descriptor for `LoginEmployeeResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List loginEmployeeResponseDescriptor = $convert.base64Decode(
+    'ChVMb2dpbkVtcGxveWVlUmVzcG9uc2USFAoFdG9rZW4YASABKAlSBXRva2VuEisKCGVtcGxveW'
+    'VlGAIgASgLMg8ucHJvdG8uRW1wbG95ZWVSCGVtcGxveWVl');
 

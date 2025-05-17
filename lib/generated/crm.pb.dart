@@ -250,6 +250,7 @@ class User extends $pb.GeneratedMessage {
     $core.String? login,
     $2.Timestamp? lastLogin,
     $core.String? notes,
+    $core.String? email,
   }) {
     final $result = create();
     if (userId != null) {
@@ -264,6 +265,9 @@ class User extends $pb.GeneratedMessage {
     if (notes != null) {
       $result.notes = notes;
     }
+    if (email != null) {
+      $result.email = email;
+    }
     return $result;
   }
   User._() : super();
@@ -275,6 +279,7 @@ class User extends $pb.GeneratedMessage {
     ..aOS(2, _omitFieldNames ? '' : 'login')
     ..aOM<$2.Timestamp>(3, _omitFieldNames ? '' : 'lastLogin', subBuilder: $2.Timestamp.create)
     ..aOS(4, _omitFieldNames ? '' : 'notes')
+    ..aOS(5, _omitFieldNames ? '' : 'email')
     ..hasRequiredFields = false
   ;
 
@@ -340,12 +345,22 @@ class User extends $pb.GeneratedMessage {
   $core.bool hasNotes() => $_has(3);
   @$pb.TagNumber(4)
   void clearNotes() => $_clearField(4);
+
+  @$pb.TagNumber(5)
+  $core.String get email => $_getSZ(4);
+  @$pb.TagNumber(5)
+  set email($core.String v) { $_setString(4, v); }
+  @$pb.TagNumber(5)
+  $core.bool hasEmail() => $_has(4);
+  @$pb.TagNumber(5)
+  void clearEmail() => $_clearField(5);
 }
 
 class Employee extends $pb.GeneratedMessage {
   factory Employee({
     $core.String? employeeId,
     $core.String? userId,
+    $core.String? login,
     $core.String? name,
     EmployeeRole? role,
     $core.String? officeId,
@@ -361,6 +376,9 @@ class Employee extends $pb.GeneratedMessage {
     }
     if (userId != null) {
       $result.userId = userId;
+    }
+    if (login != null) {
+      $result.login = login;
     }
     if (name != null) {
       $result.name = name;
@@ -395,14 +413,15 @@ class Employee extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Employee', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'employeeId')
     ..aOS(2, _omitFieldNames ? '' : 'userId')
-    ..aOS(3, _omitFieldNames ? '' : 'name')
-    ..e<EmployeeRole>(4, _omitFieldNames ? '' : 'role', $pb.PbFieldType.OE, defaultOrMaker: EmployeeRole.EMPLOYEE_ROLE_UNSPECIFIED, valueOf: EmployeeRole.valueOf, enumValues: EmployeeRole.values)
-    ..aOS(5, _omitFieldNames ? '' : 'officeId')
-    ..aInt64(6, _omitFieldNames ? '' : 'telegramId')
-    ..aOS(7, _omitFieldNames ? '' : 'whatsappNumber')
-    ..aOS(8, _omitFieldNames ? '' : 'email')
-    ..aOB(9, _omitFieldNames ? '' : 'isActive')
-    ..aOS(10, _omitFieldNames ? '' : 'notes')
+    ..aOS(3, _omitFieldNames ? '' : 'login')
+    ..aOS(4, _omitFieldNames ? '' : 'name')
+    ..e<EmployeeRole>(5, _omitFieldNames ? '' : 'role', $pb.PbFieldType.OE, defaultOrMaker: EmployeeRole.EMPLOYEE_ROLE_UNSPECIFIED, valueOf: EmployeeRole.valueOf, enumValues: EmployeeRole.values)
+    ..aOS(6, _omitFieldNames ? '' : 'officeId')
+    ..aInt64(7, _omitFieldNames ? '' : 'telegramId')
+    ..aOS(8, _omitFieldNames ? '' : 'whatsappNumber')
+    ..aOS(9, _omitFieldNames ? '' : 'email')
+    ..aOB(10, _omitFieldNames ? '' : 'isActive')
+    ..aOS(11, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -446,77 +465,86 @@ class Employee extends $pb.GeneratedMessage {
   void clearUserId() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get name => $_getSZ(2);
+  $core.String get login => $_getSZ(2);
   @$pb.TagNumber(3)
-  set name($core.String v) { $_setString(2, v); }
+  set login($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasName() => $_has(2);
+  $core.bool hasLogin() => $_has(2);
   @$pb.TagNumber(3)
-  void clearName() => $_clearField(3);
+  void clearLogin() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  EmployeeRole get role => $_getN(3);
+  $core.String get name => $_getSZ(3);
   @$pb.TagNumber(4)
-  set role(EmployeeRole v) { $_setField(4, v); }
+  set name($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasRole() => $_has(3);
+  $core.bool hasName() => $_has(3);
   @$pb.TagNumber(4)
-  void clearRole() => $_clearField(4);
+  void clearName() => $_clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get officeId => $_getSZ(4);
+  EmployeeRole get role => $_getN(4);
   @$pb.TagNumber(5)
-  set officeId($core.String v) { $_setString(4, v); }
+  set role(EmployeeRole v) { $_setField(5, v); }
   @$pb.TagNumber(5)
-  $core.bool hasOfficeId() => $_has(4);
+  $core.bool hasRole() => $_has(4);
   @$pb.TagNumber(5)
-  void clearOfficeId() => $_clearField(5);
+  void clearRole() => $_clearField(5);
 
   @$pb.TagNumber(6)
-  $fixnum.Int64 get telegramId => $_getI64(5);
+  $core.String get officeId => $_getSZ(5);
   @$pb.TagNumber(6)
-  set telegramId($fixnum.Int64 v) { $_setInt64(5, v); }
+  set officeId($core.String v) { $_setString(5, v); }
   @$pb.TagNumber(6)
-  $core.bool hasTelegramId() => $_has(5);
+  $core.bool hasOfficeId() => $_has(5);
   @$pb.TagNumber(6)
-  void clearTelegramId() => $_clearField(6);
+  void clearOfficeId() => $_clearField(6);
 
   @$pb.TagNumber(7)
-  $core.String get whatsappNumber => $_getSZ(6);
+  $fixnum.Int64 get telegramId => $_getI64(6);
   @$pb.TagNumber(7)
-  set whatsappNumber($core.String v) { $_setString(6, v); }
+  set telegramId($fixnum.Int64 v) { $_setInt64(6, v); }
   @$pb.TagNumber(7)
-  $core.bool hasWhatsappNumber() => $_has(6);
+  $core.bool hasTelegramId() => $_has(6);
   @$pb.TagNumber(7)
-  void clearWhatsappNumber() => $_clearField(7);
+  void clearTelegramId() => $_clearField(7);
 
   @$pb.TagNumber(8)
-  $core.String get email => $_getSZ(7);
+  $core.String get whatsappNumber => $_getSZ(7);
   @$pb.TagNumber(8)
-  set email($core.String v) { $_setString(7, v); }
+  set whatsappNumber($core.String v) { $_setString(7, v); }
   @$pb.TagNumber(8)
-  $core.bool hasEmail() => $_has(7);
+  $core.bool hasWhatsappNumber() => $_has(7);
   @$pb.TagNumber(8)
-  void clearEmail() => $_clearField(8);
+  void clearWhatsappNumber() => $_clearField(8);
 
   @$pb.TagNumber(9)
-  $core.bool get isActive => $_getBF(8);
+  $core.String get email => $_getSZ(8);
   @$pb.TagNumber(9)
-  set isActive($core.bool v) { $_setBool(8, v); }
+  set email($core.String v) { $_setString(8, v); }
   @$pb.TagNumber(9)
-  $core.bool hasIsActive() => $_has(8);
+  $core.bool hasEmail() => $_has(8);
   @$pb.TagNumber(9)
-  void clearIsActive() => $_clearField(9);
+  void clearEmail() => $_clearField(9);
+
+  @$pb.TagNumber(10)
+  $core.bool get isActive => $_getBF(9);
+  @$pb.TagNumber(10)
+  set isActive($core.bool v) { $_setBool(9, v); }
+  @$pb.TagNumber(10)
+  $core.bool hasIsActive() => $_has(9);
+  @$pb.TagNumber(10)
+  void clearIsActive() => $_clearField(10);
 
   /// Notes about the employee
-  @$pb.TagNumber(10)
-  $core.String get notes => $_getSZ(9);
-  @$pb.TagNumber(10)
-  set notes($core.String v) { $_setString(9, v); }
-  @$pb.TagNumber(10)
-  $core.bool hasNotes() => $_has(9);
-  @$pb.TagNumber(10)
-  void clearNotes() => $_clearField(10);
+  @$pb.TagNumber(11)
+  $core.String get notes => $_getSZ(10);
+  @$pb.TagNumber(11)
+  set notes($core.String v) { $_setString(10, v); }
+  @$pb.TagNumber(11)
+  $core.bool hasNotes() => $_has(10);
+  @$pb.TagNumber(11)
+  void clearNotes() => $_clearField(11);
 }
 
 class Office extends $pb.GeneratedMessage {
@@ -4706,6 +4734,7 @@ class UpdateEmployeeRequest extends $pb.GeneratedMessage {
     $core.String? employeeId,
     Employee? employeeData,
     $fixnum.Int64? telegramId,
+    $core.String? password,
   }) {
     final $result = create();
     if (employeeId != null) {
@@ -4717,6 +4746,9 @@ class UpdateEmployeeRequest extends $pb.GeneratedMessage {
     if (telegramId != null) {
       $result.telegramId = telegramId;
     }
+    if (password != null) {
+      $result.password = password;
+    }
     return $result;
   }
   UpdateEmployeeRequest._() : super();
@@ -4727,6 +4759,7 @@ class UpdateEmployeeRequest extends $pb.GeneratedMessage {
     ..aOS(1, _omitFieldNames ? '' : 'employeeId')
     ..aOM<Employee>(2, _omitFieldNames ? '' : 'employeeData', subBuilder: Employee.create)
     ..aInt64(3, _omitFieldNames ? '' : 'telegramId')
+    ..aOS(4, _omitFieldNames ? '' : 'password')
     ..hasRequiredFields = false
   ;
 
@@ -4780,6 +4813,15 @@ class UpdateEmployeeRequest extends $pb.GeneratedMessage {
   $core.bool hasTelegramId() => $_has(2);
   @$pb.TagNumber(3)
   void clearTelegramId() => $_clearField(3);
+
+  @$pb.TagNumber(4)
+  $core.String get password => $_getSZ(3);
+  @$pb.TagNumber(4)
+  set password($core.String v) { $_setString(3, v); }
+  @$pb.TagNumber(4)
+  $core.bool hasPassword() => $_has(3);
+  @$pb.TagNumber(4)
+  void clearPassword() => $_clearField(4);
 }
 
 class UpdateEmployeeResponse extends $pb.GeneratedMessage {
@@ -13491,6 +13533,136 @@ class LoginResponse extends $pb.GeneratedMessage {
   $core.bool hasToken() => $_has(0);
   @$pb.TagNumber(1)
   void clearToken() => $_clearField(1);
+}
+
+class LoginEmployeeRequest extends $pb.GeneratedMessage {
+  factory LoginEmployeeRequest({
+    $core.String? login,
+    $core.String? password,
+  }) {
+    final $result = create();
+    if (login != null) {
+      $result.login = login;
+    }
+    if (password != null) {
+      $result.password = password;
+    }
+    return $result;
+  }
+  LoginEmployeeRequest._() : super();
+  factory LoginEmployeeRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory LoginEmployeeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LoginEmployeeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'login')
+    ..aOS(2, _omitFieldNames ? '' : 'password')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  LoginEmployeeRequest clone() => LoginEmployeeRequest()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  LoginEmployeeRequest copyWith(void Function(LoginEmployeeRequest) updates) => super.copyWith((message) => updates(message as LoginEmployeeRequest)) as LoginEmployeeRequest;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static LoginEmployeeRequest create() => LoginEmployeeRequest._();
+  LoginEmployeeRequest createEmptyInstance() => create();
+  static $pb.PbList<LoginEmployeeRequest> createRepeated() => $pb.PbList<LoginEmployeeRequest>();
+  @$core.pragma('dart2js:noInline')
+  static LoginEmployeeRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LoginEmployeeRequest>(create);
+  static LoginEmployeeRequest? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get login => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set login($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasLogin() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearLogin() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.String get password => $_getSZ(1);
+  @$pb.TagNumber(2)
+  set password($core.String v) { $_setString(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasPassword() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearPassword() => $_clearField(2);
+}
+
+class LoginEmployeeResponse extends $pb.GeneratedMessage {
+  factory LoginEmployeeResponse({
+    $core.String? token,
+    Employee? employee,
+  }) {
+    final $result = create();
+    if (token != null) {
+      $result.token = token;
+    }
+    if (employee != null) {
+      $result.employee = employee;
+    }
+    return $result;
+  }
+  LoginEmployeeResponse._() : super();
+  factory LoginEmployeeResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory LoginEmployeeResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LoginEmployeeResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'token')
+    ..aOM<Employee>(2, _omitFieldNames ? '' : 'employee', subBuilder: Employee.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  LoginEmployeeResponse clone() => LoginEmployeeResponse()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  LoginEmployeeResponse copyWith(void Function(LoginEmployeeResponse) updates) => super.copyWith((message) => updates(message as LoginEmployeeResponse)) as LoginEmployeeResponse;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static LoginEmployeeResponse create() => LoginEmployeeResponse._();
+  LoginEmployeeResponse createEmptyInstance() => create();
+  static $pb.PbList<LoginEmployeeResponse> createRepeated() => $pb.PbList<LoginEmployeeResponse>();
+  @$core.pragma('dart2js:noInline')
+  static LoginEmployeeResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LoginEmployeeResponse>(create);
+  static LoginEmployeeResponse? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get token => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set token($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasToken() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearToken() => $_clearField(1);
+
+  @$pb.TagNumber(2)
+  Employee get employee => $_getN(1);
+  @$pb.TagNumber(2)
+  set employee(Employee v) { $_setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasEmployee() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearEmployee() => $_clearField(2);
+  @$pb.TagNumber(2)
+  Employee ensureEmployee() => $_ensure(1);
 }
 
 

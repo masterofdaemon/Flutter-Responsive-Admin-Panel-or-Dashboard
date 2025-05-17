@@ -26,6 +26,8 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
   final _telegramIdController = TextEditingController();
   final _whatsappNumberController = TextEditingController();
   final _notesController = TextEditingController();
+  final _loginController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   // Dropdown selections
   crm.User? _selectedUser;
@@ -203,10 +205,18 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
           const SnackBar(content: Text('Employee updated successfully')),
         );
       } else {
-        // CreateEmployeeRequest in proto includes user_login/password, but our service
-        // method createEmployee only takes Employee object. Assuming backend links
-        // the selected User ID correctly when creating the Employee record.
-        await _grpcService.createEmployee(employeeData);
+        // Call createEmployee with all required named arguments.
+        // Passing an empty string for userPassword, assuming backend handles
+        // linking to an existing user where password is not newly set.
+        await _grpcService.createEmployee(
+            employee: employeeData,
+            userLogin:
+                _selectedUser!.login, // Login of the selected existing user
+            userPassword:
+                "", // Assumption: Backend handles empty password for existing user linking
+            telegramId:
+                employeeData.telegramId // Use the telegramId from the form
+            );
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Employee created successfully')),
@@ -243,6 +253,8 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
     _telegramIdController.dispose();
     _whatsappNumberController.dispose();
     _notesController.dispose();
+    _loginController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -272,7 +284,7 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        // User Dropdown
+                        // User Dropdown (Customer account)
                         DropdownButtonFormField<crm.User>(
                           value: _selectedUser,
                           hint: const Text('Select User'),
@@ -313,6 +325,40 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
                               ? TextStyle(
                                   color: Theme.of(context).disabledColor)
                               : null,
+                        ),
+                        const SizedBox(height: 16.0),
+                        // Employee Login field
+                        TextFormField(
+                          controller: _loginController,
+                          decoration: const InputDecoration(
+                            labelText: 'Employee Login',
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'Please enter an employee login';
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 16.0),
+                        // Employee Password field
+                        TextFormField(
+                          controller: _passwordController,
+                          decoration: const InputDecoration(
+                            labelText: 'Employee Password',
+                            border: OutlineInputBorder(),
+                          ),
+                          obscureText: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a password';
+                            }
+                            if (value.length < 6) {
+                              return 'Password must be at least 6 characters';
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(height: 16.0),
 

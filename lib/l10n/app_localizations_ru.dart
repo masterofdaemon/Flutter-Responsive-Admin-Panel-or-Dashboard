@@ -80,6 +80,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get employeeListScreenButtonAddFirst => 'Добавить первого сотрудника';
 
   @override
+  String get employeeLoginScreenTitle => 'Вход для сотрудника';
+
+  @override
+  String get loginAsEmployee => 'Войти как сотрудник';
+
+  @override
+  String get loginAsUser => 'Войти как пользователь';
+
+  @override
+  String get employeeUsernameHint => 'Имя пользователя сотрудника';
+
+  @override
   String get loginScreenTitle => 'Вход';
 
   @override

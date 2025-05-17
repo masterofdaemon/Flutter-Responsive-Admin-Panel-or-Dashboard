@@ -19,6 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _isLoading = false;
   String? _errorMessage;
+  bool _isEmployeeLogin = false; // Added to toggle between user/employee login
 
   @override
   void dispose() {
@@ -38,13 +39,21 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     final authService = Provider.of<AuthService>(context, listen: false);
-    final localizations = AppLocalizations.of(context); // Add this line
+    final localizations = AppLocalizations.of(context);
 
     try {
-      final result = await authService.login(
-        _usernameController.text.trim(),
-        _passwordController.text.trim(),
-      );
+      bool result;
+      if (_isEmployeeLogin) {
+        result = await authService.loginEmployee(
+          _usernameController.text.trim(),
+          _passwordController.text.trim(),
+        );
+      } else {
+        result = await authService.login(
+          _usernameController.text.trim(),
+          _passwordController.text.trim(),
+        );
+      }
       
       if (result) {
         // Successful login - navigate to MainScreen
@@ -56,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         setState(() {
           _errorMessage = authService.errorMessage ??
-              localizations.loginScreenErrorLoginFailed;
+              (_isEmployeeLogin ? localizations.loginScreenErrorLoginFailed : localizations.loginScreenErrorLoginFailed); // TODO: Differentiate error messages if needed
         });
       }
     } on GrpcError catch (e) {
@@ -79,42 +88,26 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Get the AppLocalizations instance
-    final localizations = AppLocalizations.of(context); // Removed ! operator
+    final localizations = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(localizations.loginScreenTitle), // Localized title
-        // leading: IconButton(
-        //   icon: const Icon(Icons.arrow_back),
-        //   onPressed: () {
-        //     if (Navigator.of(context).canPop()) {
-        //       Navigator.of(context).maybePop();
-        //     } else {
-        //       Navigator.pushReplacement(
-        //         context,
-        //         MaterialPageRoute(builder: (context) => MainScreen()),
-        //       );
-        //     }
-        //   },
-        //   tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-        // ),
+        title: Text(_isEmployeeLogin ? localizations.employeeLoginScreenTitle : localizations.loginScreenTitle), // Dynamic title
       ),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(32.0),
           child: ConstrainedBox(
             constraints:
-                const BoxConstraints(maxWidth: 400), // Limit form width
+                const BoxConstraints(maxWidth: 400),
             child: Form(
               key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  // Placeholder for Logo or App Title
                   Text(
-                    localizations.loginScreenTitle, // Localized text
+                    _isEmployeeLogin ? localizations.employeeLoginScreenTitle : localizations.loginScreenTitle, // Dynamic text
                     style: Theme.of(context)
                         .textTheme
                         .headlineMedium
@@ -122,26 +115,44 @@ class _LoginScreenState extends State<LoginScreen> {
                     textAlign: TextAlign.center,
                     selectionColor: Color.fromARGB(0, 67, 67, 218),
                   ),
-                  const SizedBox(height: 48.0),
+                  const SizedBox(height: 24.0),
 
-                  // Signup Button
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const SignupScreen(),
-                        ),
-                      );
+                  // Toggle between User and Employee Login
+                  SwitchListTile(
+                    title: Text(_isEmployeeLogin ? localizations.loginAsEmployee : localizations.loginAsUser),
+                    value: _isEmployeeLogin,
+                    onChanged: (bool value) {
+                      setState(() {
+                        _isEmployeeLogin = value;
+                        // Optionally clear fields or error messages when toggling
+                        _usernameController.clear();
+                        _passwordController.clear();
+                        _errorMessage = null;
+                      });
                     },
-                    child: Text(localizations.loginScreenSignUpPromptText),
+                    secondary: Icon(_isEmployeeLogin ? Icons.work_outline : Icons.person_outline),
                   ),
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 24.0),
+                  
+                  // Signup Button (only for User login)
+                  if (!_isEmployeeLogin)
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const SignupScreen(),
+                          ),
+                        );
+                      },
+                      child: Text(localizations.loginScreenSignUpPromptText),
+                    ),
+                  if (!_isEmployeeLogin) const SizedBox(height: 16.0),
 
                   // Username Field
                   TextFormField(
                     controller: _usernameController,
                     decoration: InputDecoration(
-                      labelText: localizations.usernameHint, // Localized hint
+                      labelText: _isEmployeeLogin ? localizations.employeeUsernameHint : localizations.usernameHint, // Dynamic hint
                       prefixIcon: Icon(Icons.person_outline),
                       border: OutlineInputBorder(),
                     ),

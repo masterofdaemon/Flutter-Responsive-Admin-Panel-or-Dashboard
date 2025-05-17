@@ -1,7 +1,8 @@
 import 'package:grpc/grpc.dart';
 import 'package:admin/services/grpc_client.dart'; // Import shared client
-import 'package:admin/generated/crm.pbgrpc.dart';
-import 'package:admin/generated/crm.pb.dart' as crm;
+import 'package:admin/generated/crm.pb.dart' as crm; // Added crm alias
+import 'package:admin/generated/crm.pbgrpc.dart'; // Removed duplicate import
+import 'package:fixnum/fixnum.dart' as $fixnum;
 
 class GrpcClientService {
   // Shared channel with authentication
@@ -100,21 +101,55 @@ class GrpcClientService {
     }
   }
 
-  Future<crm.Employee> createEmployee(crm.Employee employee) async {
-    final request = crm.CreateEmployeeRequest(employee: employee);
+  /// Creates an employee with login credentials. Returns the full Employee object after creation.
+  Future<crm.Employee> createEmployee({
+    required crm.Employee employee,
+    required String userLogin,
+    required String userPassword,
+    $fixnum.Int64? telegramId,
+  }) async {
+    final request = crm.CreateEmployeeRequest(
+      employee: employee,
+      userLogin: userLogin,
+      userPassword: userPassword,
+      telegramId: telegramId,
+    );
     try {
-      print('Creating employee: ${employee.name}');
+      print('Creating employee: \\${employee.name} (login: \\${userLogin})');
       final response = await _client.createEmployee(
         request,
         options: GrpcClient().getCallOptions(),
       );
-      // Assuming CreateEmployeeResponse returns the ID, fetch the full employee
+      // Fetch the full employee object using the returned employeeId
       return await getEmployee(response.employeeId);
     } catch (e) {
       print('Error during createEmployee: $e');
       rethrow;
     }
   }
+
+  // /// Authenticates an employee and returns the login response (token, etc).
+  // Future<crm.LoginEmployeeResponse> loginEmployee({
+  //   required String login,
+  //   required String password,
+  // }) async {
+  //   final authClient = AuthServiceClient(GrpcClient().channel);
+  //   final request = crm.LoginEmployeeRequest(
+  //     login: login,
+  //     password: password,
+  //   );
+  //   try {
+  //     print('Logging in employee: $login');
+  //     final response = await authClient.loginEmployee(
+  //       request,
+  //       options: GrpcClient().getCallOptions(),
+  //     );
+  //     return response;
+  //   } catch (e) {
+  //     print('Error during loginEmployee: $e');
+  //     rethrow;
+  //   }
+  // }
 
   Future<crm.Employee> getEmployee(String employeeId) async {
     final request = crm.GetEmployeeRequest(employeeId: employeeId);
@@ -234,4 +269,4 @@ GrpcClientService getGrpcClientService({
   int grpcWebPort = 50051, // Keep signature consistent
   bool useTls = false,
 }) =>
-    GrpcClientService();
+    GrpcClientService(); // Completed the factory function

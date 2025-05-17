@@ -164,20 +164,23 @@ message User {
   optional google.protobuf.Timestamp last_login = 3;
   // Notes about the user
   optional string notes = 4;
+  optional string email = 5; // Added for explicit email setting
 }
 
 message Employee {
   string employee_id = 1;
-  string user_id = 2; // Link to User
-  string name = 3;
-  EmployeeRole role = 4;
-  string office_id = 5; // Link to Office
-  optional int64 telegram_id = 6;
-  optional string whatsapp_number = 7;
-  string email = 8;
-  bool is_active = 9;
+  string user_id = 2; // Link to User (optional, for legacy)
+  string login = 3; // Employee login (unique)
+  string name = 4;
+  EmployeeRole role = 5;
+  string office_id = 6; // Link to Office
+  optional int64 telegram_id = 7;
+  optional string whatsapp_number = 8;
+  string email = 9;
+  bool is_active = 10;
   // Notes about the employee
-  optional string notes = 10;
+  optional string notes = 11;
+  // password_hash is not exposed in API, only used for storage
   // Relationships omitted for brevity
 }
 
@@ -530,6 +533,7 @@ message UpdateEmployeeRequest {
   Employee employee_data = 2; // Fields to update
   // Optionally allow updating related User info
   optional int64 telegram_id = 3; // Added
+  optional string password = 4; // Added
 }
 message UpdateEmployeeResponse {
   Employee employee = 1;
@@ -879,7 +883,18 @@ message LoginResponse {
   string token = 1;
 }
 
+message LoginEmployeeRequest {
+  string login = 1;
+  string password = 2;
+}
+
+message LoginEmployeeResponse {
+  string token = 1;
+  Employee employee = 2; 
+}
+
 // --- Authentication Service ---
 service AuthService {
   rpc Login(LoginRequest) returns (LoginResponse);
+  rpc LoginEmployee(LoginEmployeeRequest) returns (LoginEmployeeResponse);
 }

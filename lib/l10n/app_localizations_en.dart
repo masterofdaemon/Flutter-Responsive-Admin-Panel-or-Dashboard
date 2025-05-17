@@ -80,6 +80,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get employeeListScreenButtonAddFirst => 'Add First Employee';
 
   @override
+  String get employeeLoginScreenTitle => 'Employee Login';
+
+  @override
+  String get loginAsEmployee => 'Login as Employee';
+
+  @override
+  String get loginAsUser => 'Login as User';
+
+  @override
+  String get employeeUsernameHint => 'Employee Username';
+
+  @override
   String get loginScreenTitle => 'Login';
 
   @override

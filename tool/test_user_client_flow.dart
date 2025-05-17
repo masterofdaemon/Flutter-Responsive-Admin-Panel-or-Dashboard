@@ -43,53 +43,60 @@ Future<void> testUserClientFlow() async {
 
   try {
     debugPrint('1. Creating User: $userLogin...');
-    // Use the 'crm' prefix for protobuf messages
     final createUserReq = crm.CreateUserRequest(
       user: crm.User(login: userLogin),
       password: userPassword,
     );
-    // Assuming CreateUser doesn't require auth for this example
     final createUserRes = await crmClient.createUser(createUserReq);
     newUserId = createUserRes.userId;
-    // Simplify null check - userId from proto is non-nullable string
     if (newUserId.isEmpty) {
       throw Exception("Received empty user ID");
     }
     debugPrint('   User created successfully! User ID: $newUserId');
 
-    // IMPORTANT: Manual step required!
-    debugPrint(
-        '   *** MANUAL STEP REQUIRED: Ensure Employee with MANAGER role exists for User ID $newUserId ***');
-    debugPrint('   (Pausing for 5 seconds to allow manual step...)');
-    await Future.delayed(
-        const Duration(seconds: 5)); // Pause for manual step simulation
+    // --- 1b. Create Employee for the new User ---
+    debugPrint('1b. Creating Employee for User...');
+    final createEmployeeReq = crm.CreateEmployeeRequest(
+      employee: crm.Employee(
+        userId: newUserId,
+        login: userLogin,
+        name: 'Test Manager',
+        role: crm.EmployeeRole.MANAGER,
+        isActive: true,
+        email: userLogin,
+      ),
+      userLogin: userLogin,
+      userPassword: userPassword,
+    );
+    final createEmployeeRes = await crmClient.createEmployee(createEmployeeReq);
+    final newEmployeeId = createEmployeeRes.employeeId;
+    if (newEmployeeId.isEmpty) {
+      throw Exception("Received empty employee ID");
+    }
+    debugPrint('   Employee created successfully! Employee ID: $newEmployeeId');
   } catch (e) {
-    debugPrint('   Error creating user: $e');
-    debugPrint('--- Test Failed at User Creation ---');
-    return; // Stop the flow if user creation fails
+    debugPrint('   Error creating user/employee: $e');
+    debugPrint('--- Test Failed at User/Employee Creation ---');
+    return;
   }
 
-  // --- 2. Login as the new User (expecting MANAGER role) ---
+  // --- 2. Login as the new Employee ---
   try {
-    debugPrint('2. Logging in as: $userLogin...');
-    // Use the 'crm' prefix for protobuf messages
-    final loginReq = crm.LoginRequest(
-      email: userLogin,
+    debugPrint('2. Logging in as Employee: $userLogin...');
+    final loginEmployeeReq = crm.LoginEmployeeRequest(
+      login: userLogin,
       password: userPassword,
     );
-    final loginRes = await authClient.login(loginReq);
-    managerToken = loginRes.token;
-    // Simplify null check - token from proto is non-nullable string
+    final loginEmployeeRes = await authClient.loginEmployee(loginEmployeeReq);
+    managerToken = loginEmployeeRes.token;
     if (managerToken.isEmpty) {
       throw Exception("Received empty token");
     }
-    debugPrint('   Login successful! Token received.');
+    debugPrint('   Employee login successful! Token received.');
   } catch (e) {
-    debugPrint('   Error logging in: $e');
-    debugPrint(
-        '   (Did you complete the manual Employee creation step for User ID $newUserId?)');
-    debugPrint('--- Test Failed at Login ---');
-    return; // Stop if login fails
+    debugPrint('   Error logging in as employee: $e');
+    debugPrint('--- Test Failed at Employee Login ---');
+    return;
   }
 
   // --- 3. Create a Client using the Manager's token ---

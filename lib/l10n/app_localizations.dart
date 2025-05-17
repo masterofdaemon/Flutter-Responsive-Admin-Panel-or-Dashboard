@@ -224,6 +224,30 @@ abstract class AppLocalizations {
   /// **'Add First Employee'**
   String get employeeListScreenButtonAddFirst;
 
+  /// Title for the employee login screen
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Login'**
+  String get employeeLoginScreenTitle;
+
+  /// Toggle to login as employee
+  ///
+  /// In en, this message translates to:
+  /// **'Login as Employee'**
+  String get loginAsEmployee;
+
+  /// Toggle to login as user
+  ///
+  /// In en, this message translates to:
+  /// **'Login as User'**
+  String get loginAsUser;
+
+  /// Hint for employee username input
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Username'**
+  String get employeeUsernameHint;
+
   /// No description provided for @loginScreenTitle.
   ///
   /// In en, this message translates to:
