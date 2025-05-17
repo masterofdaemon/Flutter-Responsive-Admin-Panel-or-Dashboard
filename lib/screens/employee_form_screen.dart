@@ -213,7 +213,7 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
             userLogin:
                 _selectedUser!.login, // Login of the selected existing user
             userPassword:
-                "", // Assumption: Backend handles empty password for existing user linking
+                _passwordController.text.trim(), // Assumption: Backend handles empty password for existing user linking
             telegramId:
                 employeeData.telegramId // Use the telegramId from the form
             );

@@ -4,7 +4,6 @@ import 'package:admin/services/auth_service.dart';
 import 'package:admin/screens/signup_screen.dart';
 import 'package:grpc/grpc.dart';
 import 'package:admin/l10n/app_localizations.dart'; // Import AppLocalizations
-import 'package:admin/screens/main/main_screen.dart'; // Import MainScreen
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -54,18 +53,23 @@ class _LoginScreenState extends State<LoginScreen> {
           _passwordController.text.trim(),
         );
       }
-      
+
       if (result) {
-        // Successful login - navigate to MainScreen
-        if (mounted) {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => MainScreen()),
-          );
-        }
+        // Successful login - AuthService will notify listeners,
+        // and MyApp will rebuild to show MainScreen.
+        // No explicit navigation needed here if MyApp handles it.
+        // if (mounted) {
+        //   Navigator.of(context).pushReplacement(
+        //     MaterialPageRoute(builder: (context) => MainScreen()),
+        //   );
+        // }
       } else {
         setState(() {
           _errorMessage = authService.errorMessage ??
-              (_isEmployeeLogin ? localizations.loginScreenErrorLoginFailed : localizations.loginScreenErrorLoginFailed); // TODO: Differentiate error messages if needed
+              (_isEmployeeLogin
+                  ? localizations.loginScreenErrorLoginFailed
+                  : localizations
+                      .loginScreenErrorLoginFailed); // TODO: Differentiate error messages if needed
         });
       }
     } on GrpcError catch (e) {
@@ -92,14 +96,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(_isEmployeeLogin ? localizations.employeeLoginScreenTitle : localizations.loginScreenTitle), // Dynamic title
+        title: Text(_isEmployeeLogin
+            ? localizations.employeeLoginScreenTitle
+            : localizations.loginScreenTitle), // Dynamic title
       ),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(32.0),
           child: ConstrainedBox(
-            constraints:
-                const BoxConstraints(maxWidth: 400),
+            constraints: const BoxConstraints(maxWidth: 400),
             child: Form(
               key: _formKey,
               child: Column(
@@ -107,7 +112,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Text(
-                    _isEmployeeLogin ? localizations.employeeLoginScreenTitle : localizations.loginScreenTitle, // Dynamic text
+                    _isEmployeeLogin
+                        ? localizations.employeeLoginScreenTitle
+                        : localizations.loginScreenTitle, // Dynamic text
                     style: Theme.of(context)
                         .textTheme
                         .headlineMedium
@@ -119,7 +126,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // Toggle between User and Employee Login
                   SwitchListTile(
-                    title: Text(_isEmployeeLogin ? localizations.loginAsEmployee : localizations.loginAsUser),
+                    title: Text(_isEmployeeLogin
+                        ? localizations.loginAsEmployee
+                        : localizations.loginAsUser),
                     value: _isEmployeeLogin,
                     onChanged: (bool value) {
                       setState(() {
@@ -130,10 +139,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         _errorMessage = null;
                       });
                     },
-                    secondary: Icon(_isEmployeeLogin ? Icons.work_outline : Icons.person_outline),
+                    secondary: Icon(_isEmployeeLogin
+                        ? Icons.work_outline
+                        : Icons.person_outline),
                   ),
                   const SizedBox(height: 24.0),
-                  
+
                   // Signup Button (only for User login)
                   if (!_isEmployeeLogin)
                     TextButton(
@@ -152,7 +163,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextFormField(
                     controller: _usernameController,
                     decoration: InputDecoration(
-                      labelText: _isEmployeeLogin ? localizations.employeeUsernameHint : localizations.usernameHint, // Dynamic hint
+                      labelText: _isEmployeeLogin
+                          ? localizations.employeeUsernameHint
+                          : localizations.usernameHint, // Dynamic hint
                       prefixIcon: Icon(Icons.person_outline),
                       border: OutlineInputBorder(),
                     ),

@@ -138,22 +138,37 @@ class _TranslationOrderListScreenState
   void _updatePlutoGridRows() {
     if (_plutoGridStateManager == null) return;
     final rows = _orders.map((order) {
-      String customerNameValue = _getClientFullName(order.clientId);
+      // String customerNameValue = _getClientFullName(order.clientId);
+
+      String blankNumberValue = 'N/A';
+      if (order.blanks.isNotEmpty) {
+        blankNumberValue = order.blanks[0].blankNumber;
+      }
+
+      String incorrectBlankValue = 'N/A';
+      if (order.blanks.length > 1) {
+        final secondBlank = order.blanks[1];
+        incorrectBlankValue = secondBlank.isSpoiled
+            ? secondBlank.replacementBlankNumber
+            : secondBlank.blankNumber;
+      }
 
       return PlutoRow(cells: {
-        'orderId': PlutoCell(value: order.orderId),
-        'title': PlutoCell(value: order.title),
-        'customerName': PlutoCell(value: customerNameValue), // New Cell
-        'status': PlutoCell(
-            value: order.hasTranslationProgress()
-                ? order.translationProgress.name
-                : 'N/A'),
-        'createdAt': PlutoCell(
-            value:
-                formatTimestamp(order.hasCreatedAt() ? order.createdAt : null)),
-        'doneAt': PlutoCell(
-            value: formatTimestamp(order.hasDoneAt() ? order.doneAt : null)),
-        'actions': PlutoCell(value: order.orderId),
+        'blankNumber': PlutoCell(value: blankNumberValue),
+        'incorrectBlank': PlutoCell(value: incorrectBlankValue),
+        // 'orderId': PlutoCell(value: order.orderId),
+        // 'title': PlutoCell(value: order.title),
+        // 'customerName': PlutoCell(value: customerNameValue), // New Cell
+        // 'status': PlutoCell(
+        //     value: order.hasTranslationProgress()
+        //         ? order.translationProgress.name
+        //         : 'N/A'),
+        // 'createdAt': PlutoCell(
+        //     value:
+        //         formatTimestamp(order.hasCreatedAt() ? order.createdAt : null)),
+        // 'doneAt': PlutoCell(
+        //     value: formatTimestamp(order.hasDoneAt() ? order.doneAt : null)),
+        'actions': PlutoCell(value: order.orderId), // Keep actions for now, or decide if it should be removed
       });
     }).toList();
     _plutoGridStateManager!.removeAllRows();
@@ -314,93 +329,61 @@ class _TranslationOrderListScreenState
   List<PlutoColumn> _getPlutoColumns() {
     final localizations = AppLocalizations.of(context);
     return [
+      // Column for original blank number
       PlutoColumn(
-        title: localizations.translationOrderListScreenOrderIdLabel(''),
-        field: 'orderId',
+        title: 'Blank', // Consider localizing if needed: localizations.blankColumnTitle
+        field: 'blankNumber',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
         width: 120,
         readOnly: true,
       ),
+      // Column for incorrect blank (if any)
       PlutoColumn(
-        title: localizations.translationOrderListScreenOrderTitleLabel(''),
-        field: 'title',
+        title: 'Incorrect Blank', // Consider localizing if needed: localizations.incorrectBlankColumnTitle
+        field: 'incorrectBlank',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
-        width: 200,
+        width: 140,
         readOnly: true,
       ),
-      PlutoColumn(
-        // New Column for Customer Name
-        title: localizations.translationOrderListScreenCustomerNameLabel,
-        field: 'customerName',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 180, // Adjust width as needed
-        readOnly: true,
-      ),
-      PlutoColumn(
-        title: localizations.translationOrderListScreenOrderStatusLabel(''),
-        field: 'status',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 120,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        title: localizations.translationOrderListScreenOrderCreatedLabel(''),
-        field: 'createdAt',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 160,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        title: localizations.translationOrderListScreenOrderDoneLabel(''),
-        field: 'doneAt',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 160,
-        readOnly: true,
-      ),
+      // Actions column - kept for now, can be removed if not needed with the new column setup
       PlutoColumn(
         title: localizations.translationOrderListScreenColumnActions,
         field: 'actions',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
-        width: 100, // Reduced width
+        width: 100,
         readOnly: true,
         textAlign: PlutoColumnTextAlign.center,
         renderer: (rendererContext) {
           final String orderId = rendererContext.cell.value as String;
-          // final order = _orders.firstWhere((o) => o.orderId == orderId, orElse: () => crm.TranslationOrder());
-          // final orderTitle = order.title.isNotEmpty ? order.title : localizations.translationOrderListScreenUntitledOrder;
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
                 icon: const Icon(Icons.edit),
-                iconSize: 20.0, // Smaller icon
-                padding: const EdgeInsets.all(4.0), // Reduced padding
+                iconSize: 20.0,
+                padding: const EdgeInsets.all(4.0),
                 constraints: const BoxConstraints(
                     minWidth: 30,
                     minHeight: 30,
                     maxWidth: 30,
-                    maxHeight: 30), // Explicit constraints
-                splashRadius: 18.0, // Adjusted splash radius
+                    maxHeight: 30),
+                splashRadius: 18.0,
                 tooltip: localizations.translationOrderListScreenTooltipEdit,
                 onPressed: () => _navigateAndRefresh(orderId: orderId),
               ),
               IconButton(
                 icon: const Icon(Icons.delete),
-                iconSize: 20.0, // Smaller icon
-                padding: const EdgeInsets.all(4.0), // Reduced padding
+                iconSize: 20.0,
+                padding: const EdgeInsets.all(4.0),
                 constraints: const BoxConstraints(
                     minWidth: 30,
                     minHeight: 30,
                     maxWidth: 30,
-                    maxHeight: 30), // Explicit constraints
-                splashRadius: 18.0, // Adjusted splash radius
+                    maxHeight: 30),
+                splashRadius: 18.0,
                 tooltip: localizations.translationOrderListScreenTooltipDelete,
                 onPressed: () => _deleteOrder(orderId),
               ),
