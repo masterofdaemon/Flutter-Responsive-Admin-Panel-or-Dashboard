@@ -46,10 +46,22 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
   void initState() {
     super.initState();
     _isEditMode = widget.employeeId != null;
-    _loadDropdownData(); // Start loading dropdown data
+
+    // _roles is already initialized with crm.EmployeeRole.values (excluding UNSPECIFIED)
+    // Set initial _selectedRole.
+    // For new employees, it defaults to null (prompting "Select Role")
+    // or you could default to a specific role if desired, e.g., _roles.first if _roles is not empty.
+    // For existing employees, _selectedRole will be set in _loadEmployeeData.
+    if (!_isEditMode) {
+      // If you want a default selection for new employees, uncomment and adjust:
+      // _selectedRole = _roles.isNotEmpty ? _roles.first : null;
+      // Or, to keep the "Select Role" hint, ensure _selectedRole is null.
+      _selectedRole = null;
+    }
+
+    _loadDropdownData(); // Loads users and offices
     if (_isEditMode) {
-      // Don't await here, let dropdowns load in parallel
-      _loadEmployeeData();
+      _loadEmployeeData(); // Loads employee data, including their role for _selectedRole
     }
   }
 
@@ -130,7 +142,10 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
         _telegramIdController.text = employee.telegramId.toString();
         _whatsappNumberController.text = employee.whatsappNumber;
         _notesController.text = employee.notes;
-        _selectedRole = employee.role;
+        _selectedRole =
+            (employee.role == crm.EmployeeRole.EMPLOYEE_ROLE_UNSPECIFIED)
+                ? null
+                : employee.role;
         _isActive = employee.isActive;
 
         // Assign the potentially null found user/office
@@ -188,6 +203,7 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       name: _nameController.text.trim(),
       role: _selectedRole!,
       officeId: _selectedOffice!.officeId,
+      login: _loginController.text.trim(),
       email: _emailController.text.trim(),
       telegramId: _telegramIdController.text.trim().isNotEmpty
           ? Int64.parseInt(_telegramIdController.text.trim())
@@ -211,9 +227,9 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
         await _grpcService.createEmployee(
             employee: employeeData,
             userLogin:
-                _selectedUser!.login, // Login of the selected existing user
-            userPassword:
-                _passwordController.text.trim(), // Assumption: Backend handles empty password for existing user linking
+                _loginController.text, // Login of the selected existing user
+            userPassword: _passwordController.text
+                .trim(), // Assumption: Backend handles empty password for existing user linking
             telegramId:
                 employeeData.telegramId // Use the telegramId from the form
             );
