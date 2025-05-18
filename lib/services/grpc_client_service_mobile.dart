@@ -89,11 +89,12 @@ class GrpcClientService {
     final request =
         crm.ListEmployeesRequest(pageSize: pageSize, pageToken: pageToken);
     try {
-      // print('Requesting employees, pageSize: $pageSize, pageToken: $pageToken');
+      print('Requesting employees, pageSize: $pageSize, pageToken: $pageToken');
       final response = await _client.listEmployees(
         request,
         options: GrpcClient().getCallOptions(),
       );
+      print('Received ${response.employees.length} employees');
       return response.employees;
     } catch (e) {
       print('Error during listEmployees: $e');

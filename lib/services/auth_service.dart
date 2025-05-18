@@ -41,20 +41,23 @@ class AuthService with ChangeNotifier {
     print('AuthService: _checkToken: Token read from storage: $_token');
     if (_token != null && _token!.isNotEmpty) {
       GrpcClient().setAuthToken(_token);
-      bool profileFetched =
-          await fetchSelfProfile(); // fetchSelfProfile now returns bool
-      // Check _isAuthenticated as fetchSelfProfile might set it to false on auth error
-      if (profileFetched && _isAuthenticated) {
-        // _isAuthenticated remains true if profileFetched is true and fetchSelfProfile didn't set it to false
+      bool profileFetched = await fetchSelfProfile();
+
+      if (profileFetched) {
+        // If profile was fetched successfully, then we are authenticated.
+        // fetchSelfProfile itself might set _isAuthenticated to false on specific auth errors,
+        // so we check its return value first.
+        _isAuthenticated = true;
         print(
-            'AuthService: _checkToken: Profile fetched or auth still valid, isAuthenticated = $_isAuthenticated');
+            'AuthService: _checkToken: Profile fetched successfully. isAuthenticated = true.');
       } else {
-        // If profile fetch failed, or returned no data, or fetchSelfProfile set _isAuthenticated to false
+        // If profile fetch failed (either no data, or an error including auth error in fetchSelfProfile)
         _isAuthenticated = false; // Ensure it is false
         print(
-            'AuthService: _checkToken: Profile fetch failed, no data, or auth error. isAuthenticated = false. Clearing token.');
-        // Ensure token is cleared if profile fetch indicates it's invalid or if it was already cleared by fetchSelfProfile
+            'AuthService: _checkToken: Profile fetch failed or auth error during fetch. isAuthenticated = false. Clearing token.');
+        // Token is cleared here (or already cleared in fetchSelfProfile if it was an auth error)
         if (_token != null) {
+          // Check if token wasn't already nulled by fetchSelfProfile
           _token = null;
           await _storage.delete(key: 'authToken');
           GrpcClient().setAuthToken(null);

@@ -65,7 +65,9 @@ class _TranslationOrderFormScreenState
   final _notesController = TextEditingController();
   // Controller for editable document type
   final _documentTypeController = TextEditingController();
-  // TODO: Add controller/state for 'blanks' if implementing complex UI
+  // Controllers for blank fields
+  final TextEditingController _blankNumberController = TextEditingController();
+  final TextEditingController _incorrectBlankController = TextEditingController();
 
   // Dropdown/Selection State
   crm.Client? _selectedClient; // Store the selected Client object
@@ -131,6 +133,8 @@ class _TranslationOrderFormScreenState
     _notesController.dispose();
     _documentTypeController.dispose();
     // Dispose any other controllers added
+    _blankNumberController.dispose();
+    _incorrectBlankController.dispose();
     super.dispose();
   }
 
@@ -154,14 +158,24 @@ class _TranslationOrderFormScreenState
       _clients = results[0] as List<crm.Client>;
       final allEmployees = results[1] as List<crm.Employee>;
       _offices = results[2] as List<crm.Office>;
-
       // Filter employees for dropdowns
       _managers = allEmployees
           .where((e) =>
-              e.role == crm.EmployeeRole.MANAGER ||
-              e.role == crm.EmployeeRole.CHIEF_MANAGER ||
-              e.role == crm.EmployeeRole.DIRECTOR)
+              (e.role == crm.EmployeeRole.MANAGER ||
+                  e.role == crm.EmployeeRole.CHIEF_MANAGER ||
+                  e.role == crm.EmployeeRole.DIRECTOR ||
+                  e.role ==
+                      crm.EmployeeRole
+                          .EMPLOYEE_ROLE_UNSPECIFIED) && // TEMPORARY
+              (e.hasIsActive() ? e.isActive : true))
           .toList();
+
+      // Debug print filtered managers
+      print('Filtered managers:');
+      for (final m in _managers) {
+        print(
+            'Manager: id=${m.employeeId}, name=${m.name}, role=${m.role}, isActive=${m.hasIsActive() ? m.isActive : 'unset'}');
+      }
       _translators = allEmployees
           .where((e) => e.role == crm.EmployeeRole.TRANSLATOR)
           .toList();
@@ -315,6 +329,21 @@ class _TranslationOrderFormScreenState
         notarialSum: double.tryParse(_notarialSumController.text) ?? 0.0,
         priority: _selectedPriority ?? crm.Priority.NORMAL,
       );
+     
+      // Add blanks using TranslationOrder_BlankInfo
+      orderData.blanks.add(
+        crm.TranslationOrder_BlankInfo()
+          ..blankNumber = _blankNumberController.text.trim()
+          ..isSpoiled = false
+      );
+      if (_incorrectBlankController.text.trim().isNotEmpty) {
+        orderData.blanks.add(
+          crm.TranslationOrder_BlankInfo()
+            ..blankNumber = _incorrectBlankController.text.trim()
+            ..isSpoiled = true
+            ..replacementBlankNumber = _blankNumberController.text.trim()
+        );
+      }
 
       if (widget.orderId == null) {
         await _orderService.createTranslationOrder(orderData);
@@ -530,6 +559,26 @@ class _TranslationOrderFormScreenState
                                             decoration: InputDecoration(
                                                 labelText: localizations
                                                     .translationOrderFormScreenFieldOfficeLabel),
+                                          ),
+                                          const SizedBox(height: 16),
+                                          TextFormField(
+                                            controller: _blankNumberController,
+                                            decoration: const InputDecoration(
+                                              labelText: 'Blank Number',
+                                            ),
+                                            validator: (value) {
+                                              if (value == null || value.trim().isEmpty) {
+                                                return 'Please enter the blank number';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                          const SizedBox(height: 16),
+                                          TextFormField(
+                                            controller: _incorrectBlankController,
+                                            decoration: const InputDecoration(
+                                              labelText: 'Incorrect Blank',
+                                            ),
                                           ),
                                         ],
                                       ),
