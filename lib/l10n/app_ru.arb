@@ -491,6 +491,8 @@
   "translationOrderFormScreenFieldTranslatorLabel": "Переводчик",
   "translationOrderFormScreenFieldTranslatorHint": "Выберите переводчика (Необязательно)",
   "translationOrderFormScreenFieldStatusLabel": "Статус (Только чтение)",
+  "translationOrderFormScreenFieldTranslationProgressLabel": "Ход перевода (Только чтение)",
+  "translationOrderFormScreenTranslationProgressNotAvailable": "Ход перевода недоступен",
   "translationOrderFormScreenFieldNotesLabel": "Примечания",
   "translationOrderFormScreenSwitchUrgent": "Срочный",
   "translationOrderFormScreenSwitchSemiUrgent": "Полу-срочный",

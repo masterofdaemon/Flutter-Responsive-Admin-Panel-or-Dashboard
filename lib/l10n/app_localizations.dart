@@ -1774,6 +1774,18 @@ abstract class AppLocalizations {
   /// **'Status (Read-Only)'**
   String get translationOrderFormScreenFieldStatusLabel;
 
+  /// No description provided for @translationOrderFormScreenFieldTranslationProgressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation Progress (Read-Only)'**
+  String get translationOrderFormScreenFieldTranslationProgressLabel;
+
+  /// No description provided for @translationOrderFormScreenTranslationProgressNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation Progress Not Available'**
+  String get translationOrderFormScreenTranslationProgressNotAvailable;
+
   /// No description provided for @translationOrderFormScreenFieldNotesLabel.
   ///
   /// In en, this message translates to:

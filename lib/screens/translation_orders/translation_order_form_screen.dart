@@ -1,3 +1,4 @@
+import 'package:admin/generated/crm.pbgrpc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For TextInputFormatters
 import 'package:admin/generated/crm.pb.dart' as crm;
@@ -67,7 +68,8 @@ class _TranslationOrderFormScreenState
   final _documentTypeController = TextEditingController();
   // Controllers for blank fields
   final TextEditingController _blankNumberController = TextEditingController();
-  final TextEditingController _incorrectBlankController = TextEditingController();
+  final TextEditingController _incorrectBlankController =
+      TextEditingController();
 
   // Dropdown/Selection State
   crm.Client? _selectedClient; // Store the selected Client object
@@ -84,8 +86,8 @@ class _TranslationOrderFormScreenState
     'other'
   ];
   crm.Priority? _selectedPriority;
-  // Status is read-only, store fetched value if editing
-  crm.Status? _currentStatus;
+  // TranslationProgress is read-only, store fetched value if editing
+  crm.TranslationProgressStatus? _currentTranslationProgress;
 
   // Switches
   bool _isUrgent = false;
@@ -279,7 +281,7 @@ class _TranslationOrderFormScreenState
     _selectedPriority = (order.priority == crm.Priority.PRIORITY_UNSPECIFIED)
         ? null
         : order.priority;
-    // _currentStatus = order.status; // Field removed from proto, skip
+    _currentTranslationProgress = order.translationProgress;
 
     // Set switches (fields removed from proto, so set to false or ignore)
     _isUrgent = false;
@@ -328,21 +330,19 @@ class _TranslationOrderFormScreenState
         notes: _notesController.text.isNotEmpty ? _notesController.text : null,
         notarialSum: double.tryParse(_notarialSumController.text) ?? 0.0,
         priority: _selectedPriority ?? crm.Priority.NORMAL,
+        translationProgress: TranslationProgressStatus.valueOf(
+            _currentTranslationProgress?.value ?? 0),
       );
-     
+
       // Add blanks using TranslationOrder_BlankInfo
-      orderData.blanks.add(
-        crm.TranslationOrder_BlankInfo()
-          ..blankNumber = _blankNumberController.text.trim()
-          ..isSpoiled = false
-      );
+      orderData.blanks.add(crm.TranslationOrder_BlankInfo()
+        ..blankNumber = _blankNumberController.text.trim()
+        ..isSpoiled = false);
       if (_incorrectBlankController.text.trim().isNotEmpty) {
-        orderData.blanks.add(
-          crm.TranslationOrder_BlankInfo()
-            ..blankNumber = _incorrectBlankController.text.trim()
-            ..isSpoiled = true
-            ..replacementBlankNumber = _blankNumberController.text.trim()
-        );
+        orderData.blanks.add(crm.TranslationOrder_BlankInfo()
+          ..blankNumber = _incorrectBlankController.text.trim()
+          ..isSpoiled = true
+          ..replacementBlankNumber = _blankNumberController.text.trim());
       }
 
       if (widget.orderId == null) {
@@ -407,12 +407,30 @@ class _TranslationOrderFormScreenState
     return p.name.replaceFirst('PRIORITY_', '').replaceAll('_', ' ');
   }
 
-  // Helper for Status (read-only display)
-  String _getStatusDisplayName(crm.Status? s) {
-    final localizations = AppLocalizations.of(context);
-    if (s == null)
-      return localizations.translationOrderFormScreenStatusNotAvailable;
-    return s.name.replaceFirst('STATUS_', '').replaceAll('_', ' ');
+  // Helper for Translation Progress (read-only display)
+  String _getTranslationProgressDisplayName(
+      crm.TranslationProgressStatus? status) {
+    // For production, these strings should come from AppLocalizations
+    switch (status) {
+      case crm.TranslationProgressStatus.PENDING_ASSIGNMENT:
+        return "Pending Assignment";
+      case crm.TranslationProgressStatus.IN_PROGRESS:
+        return "In Progress";
+      case crm.TranslationProgressStatus.TRANSLATED:
+        return "Translation Complete (Needs Review)";
+      case crm.TranslationProgressStatus.CHECKED_BY_MANAGER:
+        return "Manager Approved";
+      case crm.TranslationProgressStatus.CLIENT_NOTIFIED:
+        return "Client Notified";
+      case crm.TranslationProgressStatus.DELIVERED:
+        return "Delivered";
+      case crm
+            .TranslationProgressStatus.TRANSLATION_PROGRESS_STATUS_UNSPECIFIED:
+      default: // Handles null or UNSPECIFIED
+        final localizations = AppLocalizations.of(context);
+        return localizations
+            .translationOrderFormScreenTranslationProgressNotAvailable;
+    }
   }
 
   @override
@@ -567,7 +585,8 @@ class _TranslationOrderFormScreenState
                                               labelText: 'Blank Number',
                                             ),
                                             validator: (value) {
-                                              if (value == null || value.trim().isEmpty) {
+                                              if (value == null ||
+                                                  value.trim().isEmpty) {
                                                 return 'Please enter the blank number';
                                               }
                                               return null;
@@ -575,7 +594,8 @@ class _TranslationOrderFormScreenState
                                           ),
                                           const SizedBox(height: 16),
                                           TextFormField(
-                                            controller: _incorrectBlankController,
+                                            controller:
+                                                _incorrectBlankController,
                                             decoration: const InputDecoration(
                                               labelText: 'Incorrect Blank',
                                             ),
@@ -963,20 +983,42 @@ class _TranslationOrderFormScreenState
                                           ),
                                           if (widget.orderId != null) ...[
                                             const SizedBox(height: 16),
-                                            InputDecorator(
+                                            DropdownButtonFormField<
+                                                crm.TranslationProgressStatus>(
+                                              value: (_currentTranslationProgress ==
+                                                          null ||
+                                                      _currentTranslationProgress ==
+                                                          crm.TranslationProgressStatus
+                                                              .TRANSLATION_PROGRESS_STATUS_UNSPECIFIED)
+                                                  ? null
+                                                  : _currentTranslationProgress,
                                               decoration: InputDecoration(
                                                 labelText: localizations
-                                                    .translationOrderFormScreenFieldStatusLabel,
-                                                border: InputBorder.none,
-                                                contentPadding: EdgeInsets.zero,
+                                                    .translationOrderFormScreenFieldTranslationProgressLabel,
+                                                border:
+                                                    const OutlineInputBorder(),
                                               ),
-                                              child: Text(
-                                                _getStatusDisplayName(
-                                                    _currentStatus),
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleMedium,
-                                              ),
+                                              items: crm
+                                                  .TranslationProgressStatus
+                                                  .values
+                                                  .where((status) =>
+                                                      status !=
+                                                      crm.TranslationProgressStatus
+                                                          .TRANSLATION_PROGRESS_STATUS_UNSPECIFIED)
+                                                  .map((status) =>
+                                                      DropdownMenuItem(
+                                                        value: status,
+                                                        child: Text(
+                                                            _getTranslationProgressDisplayName(
+                                                                status)),
+                                                      ))
+                                                  .toList(),
+                                              onChanged: (newStatus) {
+                                                setState(() {
+                                                  _currentTranslationProgress =
+                                                      newStatus;
+                                                });
+                                              },
                                             ),
                                           ],
                                         ],

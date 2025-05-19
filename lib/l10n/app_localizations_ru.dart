@@ -990,6 +990,14 @@ class AppLocalizationsRu extends AppLocalizations {
       'Статус (Только чтение)';
 
   @override
+  String get translationOrderFormScreenFieldTranslationProgressLabel =>
+      'Ход перевода (Только чтение)';
+
+  @override
+  String get translationOrderFormScreenTranslationProgressNotAvailable =>
+      'Ход перевода недоступен';
+
+  @override
   String get translationOrderFormScreenFieldNotesLabel => 'Примечания';
 
   @override

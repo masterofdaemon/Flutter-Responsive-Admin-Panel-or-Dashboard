@@ -987,6 +987,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translationOrderFormScreenFieldStatusLabel => 'Status (Read-Only)';
 
   @override
+  String get translationOrderFormScreenFieldTranslationProgressLabel =>
+      'Translation Progress (Read-Only)';
+
+  @override
+  String get translationOrderFormScreenTranslationProgressNotAvailable =>
+      'Translation Progress Not Available';
+
+  @override
   String get translationOrderFormScreenFieldNotesLabel => 'Notes';
 
   @override

@@ -20,13 +20,13 @@ class MainScreen extends StatelessWidget {
           child: Column(
             // Use Column instead of ListView
             children: [
-              DrawerHeader(
+              Padding(
+                padding: const EdgeInsets.only(top: 32, left: 16, right: 16, bottom: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const CircleAvatar(
-                      backgroundImage:
-                          AssetImage('assets/images/profile_pic.png'),
+                      backgroundImage: AssetImage('assets/images/profile_pic.png'),
                       radius: 40,
                     ),
                     const SizedBox(height: 16),

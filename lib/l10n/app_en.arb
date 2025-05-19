@@ -507,6 +507,8 @@
   "translationOrderFormScreenFieldTranslatorLabel": "Translator",
   "translationOrderFormScreenFieldTranslatorHint": "Select Translator (Optional)",
   "translationOrderFormScreenFieldStatusLabel": "Status (Read-Only)",
+  "translationOrderFormScreenFieldTranslationProgressLabel": "Translation Progress (Read-Only)",
+  "translationOrderFormScreenTranslationProgressNotAvailable": "Translation Progress Not Available",
   "translationOrderFormScreenFieldNotesLabel": "Notes",
   "translationOrderFormScreenSwitchUrgent": "Urgent",
   "translationOrderFormScreenSwitchSemiUrgent": "Semi-Urgent",
