@@ -1494,4 +1494,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String interactionFormScreenFeedbackErrorUnexpected(String error) {
     return 'An unexpected error occurred: $error';
   }
+
+  @override
+  String get translationOrderListScreenColumnBlank => 'Blank';
+
+  @override
+  String get translationOrderListScreenColumnIncorrectBlank =>
+      'Incorrect Blank';
+
+  @override
+  String get translationOrderListScreenColumnTotalSum => 'Total Sum';
+
+  @override
+  String get translationOrderListScreenColumnCreatedAt => 'Created At';
+
+  @override
+  String get translationOrderListScreenColumnDoneAt => 'Done At';
 }

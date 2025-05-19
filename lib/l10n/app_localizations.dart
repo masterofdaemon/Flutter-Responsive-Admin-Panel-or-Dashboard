@@ -2651,6 +2651,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An unexpected error occurred: {error}'**
   String interactionFormScreenFeedbackErrorUnexpected(String error);
+
+  /// No description provided for @translationOrderListScreenColumnBlank.
+  ///
+  /// In en, this message translates to:
+  /// **'Blank'**
+  String get translationOrderListScreenColumnBlank;
+
+  /// No description provided for @translationOrderListScreenColumnIncorrectBlank.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect Blank'**
+  String get translationOrderListScreenColumnIncorrectBlank;
+
+  /// No description provided for @translationOrderListScreenColumnTotalSum.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Sum'**
+  String get translationOrderListScreenColumnTotalSum;
+
+  /// No description provided for @translationOrderListScreenColumnCreatedAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Created At'**
+  String get translationOrderListScreenColumnCreatedAt;
+
+  /// No description provided for @translationOrderListScreenColumnDoneAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Done At'**
+  String get translationOrderListScreenColumnDoneAt;
 }
 
 class _AppLocalizationsDelegate

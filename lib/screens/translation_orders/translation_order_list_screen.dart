@@ -341,7 +341,10 @@ class _TranslationOrderListScreenState
     final localizations = AppLocalizations.of(context);
     return [
       PlutoColumn(
-        title: 'Blank',
+        // TODO: Add to l10n: "translationOrderListScreenColumnBlank": "Blank"
+        title: localizations is dynamic && localizations.translationOrderListScreenColumnBlank != null
+            ? localizations.translationOrderListScreenColumnBlank
+            : 'Blank',
         field: 'blankNumber',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -349,7 +352,10 @@ class _TranslationOrderListScreenState
         readOnly: true,
       ),
       PlutoColumn(
-        title: 'Incorrect Blank',
+        // TODO: Add to l10n: "translationOrderListScreenColumnIncorrectBlank": "Incorrect Blank"
+        title: localizations is dynamic && localizations.translationOrderListScreenColumnIncorrectBlank != null
+            ? localizations.translationOrderListScreenColumnIncorrectBlank
+            : 'Incorrect Blank',
         field: 'incorrectBlank',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -357,7 +363,7 @@ class _TranslationOrderListScreenState
         readOnly: true,
       ),
       PlutoColumn(
-        title: 'Client',
+        title: localizations.clientLabelText, // 'Client'
         field: 'customerName',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -365,7 +371,7 @@ class _TranslationOrderListScreenState
         readOnly: true,
       ),
       PlutoColumn(
-        title: 'Client Phone',
+        title: localizations.clientListScreenColumnPhone, // 'Phone'
         field: 'clientPhoneNumber',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -373,15 +379,18 @@ class _TranslationOrderListScreenState
         readOnly: true,
       ),
       PlutoColumn(
-        title: 'Document Type', // New Column Title
-        field: 'documentTypeKey', // New Column Field
+        title: localizations.translationOrderFormScreenFieldDocumentTypeLabel, // 'Document Type'
+        field: 'documentTypeKey',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
-        width: 150, // Adjust width as needed
+        width: 150,
         readOnly: true,
       ),
       PlutoColumn(
-        title: 'Total Sum',
+        // TODO: Add to l10n: "translationOrderListScreenColumnTotalSum": "Total Sum"
+        title: localizations is dynamic && localizations.translationOrderListScreenColumnTotalSum != null
+            ? localizations.translationOrderListScreenColumnTotalSum
+            : 'Total Sum',
         field: 'totalSum',
         type: PlutoColumnType.number(),
         enableEditingMode: false,
@@ -398,7 +407,7 @@ class _TranslationOrderListScreenState
         },
       ),
       PlutoColumn(
-        title: 'Status',
+        title: localizations.statusLabelText, // 'Status'
         field: 'status',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -406,7 +415,10 @@ class _TranslationOrderListScreenState
         readOnly: true,
       ),
       PlutoColumn(
-        title: 'Created At',
+        // TODO: Add to l10n: "translationOrderListScreenColumnCreatedAt": "Created At"
+        title: localizations is dynamic && localizations.translationOrderListScreenColumnCreatedAt != null
+            ? localizations.translationOrderListScreenColumnCreatedAt
+            : 'Created At',
         field: 'createdAt',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -414,7 +426,10 @@ class _TranslationOrderListScreenState
         readOnly: true,
       ),
       PlutoColumn(
-        title: 'Done At',
+        // TODO: Add to l10n: "translationOrderListScreenColumnDoneAt": "Done At"
+        title: localizations is dynamic && localizations.translationOrderListScreenColumnDoneAt != null
+            ? localizations.translationOrderListScreenColumnDoneAt
+            : 'Done At',
         field: 'doneAt',
         type: PlutoColumnType.text(),
         enableEditingMode: false,

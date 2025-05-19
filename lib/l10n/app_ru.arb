@@ -770,5 +770,10 @@
   "translationOrderFormScreenDocumentTypeDialogTitle": "Выберите тип документа",
   "translationOrderFormScreenDocumentTypeDialogSearchHint": "Поиск типа документа",
   "translationOrderFormScreenDocumentTypeDialogNotFound": "Типы документов не найдены.",
-  "translationOrderFormScreenDocumentTypeDialogCustomEntry": "Другое..."
+  "translationOrderFormScreenDocumentTypeDialogCustomEntry": "Другое...",
+  "translationOrderListScreenColumnBlank": "Бланк",
+  "translationOrderListScreenColumnIncorrectBlank": "Некорректный бланк",
+  "translationOrderListScreenColumnTotalSum": "Итоговая сумма",
+  "translationOrderListScreenColumnCreatedAt": "Создано",
+  "translationOrderListScreenColumnDoneAt": "Выполнено"
 }

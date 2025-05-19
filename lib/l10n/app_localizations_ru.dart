@@ -1504,4 +1504,20 @@ class AppLocalizationsRu extends AppLocalizations {
   String interactionFormScreenFeedbackErrorUnexpected(String error) {
     return 'Произошла непредвиденная ошибка: $error';
   }
+
+  @override
+  String get translationOrderListScreenColumnBlank => 'Бланк';
+
+  @override
+  String get translationOrderListScreenColumnIncorrectBlank =>
+      'Некорректный бланк';
+
+  @override
+  String get translationOrderListScreenColumnTotalSum => 'Итоговая сумма';
+
+  @override
+  String get translationOrderListScreenColumnCreatedAt => 'Создано';
+
+  @override
+  String get translationOrderListScreenColumnDoneAt => 'Выполнено';
 }
