@@ -139,6 +139,8 @@ class _TranslationOrderListScreenState
     if (_plutoGridStateManager == null) return;
     final rows = _orders.map((order) {
       String customerNameValue = _getClientFullName(order.clientId);
+      final client = _clientsMap[order.clientId];
+      String clientPhoneNumberValue = client?.phone ?? 'N/A';
 
       String blankNumberValue = 'N/A';
       if (order.blanks.isNotEmpty) {
@@ -152,13 +154,20 @@ class _TranslationOrderListScreenState
             ? secondBlank.replacementBlankNumber
             : secondBlank.blankNumber;
       }
+      String documentTypeValue =
+          order.hasDocumentTypeKey() ? order.documentTypeKey : 'N/A';
+      String totalSumValue =
+          order.hasTotalSum() ? order.totalSum.toStringAsFixed(2) : 'N/A';
 
       return PlutoRow(cells: {
         'blankNumber': PlutoCell(value: blankNumberValue),
         'incorrectBlank': PlutoCell(value: incorrectBlankValue),
         'orderId': PlutoCell(value: order.orderId),
         'title': PlutoCell(value: order.title),
-        'customerName': PlutoCell(value: customerNameValue), // New Cell
+        'customerName': PlutoCell(value: customerNameValue),
+        'clientPhoneNumber': PlutoCell(value: clientPhoneNumberValue),
+        'documentTypeKey': PlutoCell(value: documentTypeValue),
+        'totalSum': PlutoCell(value: totalSumValue),
         'status': PlutoCell(
             value: order.hasTranslationProgress()
                 ? order.translationProgress.name
@@ -336,7 +345,7 @@ class _TranslationOrderListScreenState
         field: 'blankNumber',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
-        width: 120,
+        width: 40,
         readOnly: true,
       ),
       PlutoColumn(
@@ -344,7 +353,7 @@ class _TranslationOrderListScreenState
         field: 'incorrectBlank',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
-        width: 140,
+        width: 90,
         readOnly: true,
       ),
       PlutoColumn(
@@ -354,6 +363,39 @@ class _TranslationOrderListScreenState
         enableEditingMode: false,
         width: 180,
         readOnly: true,
+      ),
+      PlutoColumn(
+        title: 'Client Phone',
+        field: 'clientPhoneNumber',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 150,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: 'Document Type', // New Column Title
+        field: 'documentTypeKey', // New Column Field
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 150, // Adjust width as needed
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: 'Total Sum',
+        field: 'totalSum',
+        type: PlutoColumnType.number(),
+        enableEditingMode: false,
+        width: 100,
+        readOnly: true,
+        textAlign: PlutoColumnTextAlign.right,
+        formatter: (dynamic value) {
+          if (value == 'N/A') return 'N/A';
+          try {
+            return double.parse(value.toString()).toStringAsFixed(2);
+          } catch (e) {
+            return 'N/A';
+          }
+        },
       ),
       PlutoColumn(
         title: 'Status',
@@ -376,7 +418,7 @@ class _TranslationOrderListScreenState
         field: 'doneAt',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
-        width: 140,
+        width: 80,
         readOnly: true,
       ),
       PlutoColumn(

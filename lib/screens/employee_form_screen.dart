@@ -19,6 +19,7 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
   final GrpcClientService _grpcService = GrpcClientService();
   bool _isLoading = false;
   bool _isEditMode = false;
+  Int64? _originalTelegramId; // Added to store original telegramId
 
   // Text Editing Controllers
   final _nameController = TextEditingController();
@@ -139,7 +140,13 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       setState(() {
         _nameController.text = employee.name;
         _emailController.text = employee.email;
+
+        // Store original telegramId and set controller
+        _originalTelegramId = employee.telegramId;
         _telegramIdController.text = employee.telegramId.toString();
+        // If telegramId is 0, it will be "0". If user wants empty for 0, adjust display logic here.
+        // The save logic below will handle empty field by reverting to _originalTelegramId in edit mode.
+
         _whatsappNumberController.text = employee.whatsappNumber;
         _notesController.text = employee.notes;
         _selectedRole =
@@ -196,6 +203,36 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       _isLoading = true;
     });
 
+    Int64 finalTelegramId;
+    final String telegramIdText = _telegramIdController.text.trim();
+
+    if (telegramIdText.isNotEmpty) {
+      try {
+        finalTelegramId = Int64.parseInt(telegramIdText);
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content:
+                    Text('Invalid Telegram ID format. Please enter a number.')),
+          );
+        }
+        setState(() => _isLoading = false);
+        return; // Stop saving
+      }
+    } else {
+      // Text field is empty
+      if (_isEditMode) {
+        // In edit mode, if field is cleared, use the original loaded value.
+        // _originalTelegramId should have been set in _loadEmployeeData.
+        finalTelegramId = _originalTelegramId ??
+            Int64(0); // Use original, fallback to 0 if somehow null
+      } else {
+        // In add mode, if field is empty, default to 0.
+        finalTelegramId = Int64(0);
+      }
+    }
+
     final employeeData = crm.Employee(
       // employeeId is set by server on create, included for update
       employeeId: _isEditMode ? widget.employeeId : null,
@@ -205,9 +242,7 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       officeId: _selectedOffice!.officeId,
       login: _loginController.text.trim(),
       email: _emailController.text.trim(),
-      telegramId: _telegramIdController.text.trim().isNotEmpty
-          ? Int64.parseInt(_telegramIdController.text.trim())
-          : Int64(0),
+      telegramId: finalTelegramId, // Use the determined telegramId
       whatsappNumber: _whatsappNumberController.text.trim(),
       isActive: _isActive,
       notes: _notesController.text.trim(),

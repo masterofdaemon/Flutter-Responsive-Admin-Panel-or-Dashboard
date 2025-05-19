@@ -77,12 +77,16 @@ class AuthService with ChangeNotifier {
     await _storage.delete(key: _cachedEmployeeProfileTokenKey);
     GrpcClient().setAuthToken(null);
     if (notify) {
+      print(
+          'AuthService: Notifying listeners. Location: _clearSessionData_notify. isAuthenticated: $_isAuthenticated, isLoading: $_isLoading, error: $_errorMessage');
       notifyListeners();
     }
   }
 
   Future<void> _checkToken() async {
     _isLoading = true; // Indicate loading during token check
+    print(
+        'AuthService: Notifying listeners. Location: _checkToken_start. isAuthenticated: $_isAuthenticated, isLoading: $_isLoading, error: $_errorMessage');
     notifyListeners();
 
     _token = await _storage.read(key: _authTokenKey);
@@ -171,6 +175,8 @@ class AuthService with ChangeNotifier {
       await _clearSessionData(); // Ensure clean state if no token
     }
     _isLoading = false;
+    print(
+        'AuthService: Notifying listeners. Location: _checkToken_end. isAuthenticated: $_isAuthenticated, isLoading: $_isLoading, error: $_errorMessage');
     notifyListeners();
   }
 
@@ -236,9 +242,15 @@ class AuthService with ChangeNotifier {
   Future<bool> login(String email, String password) async {
     _isLoading = true;
     _errorMessage = null;
+    // Initial notification that loading has started and errors are cleared.
+    print(
+        'AuthService: Notifying listeners. Location: login_start_minimal. isAuthenticated: $_isAuthenticated, isLoading: $_isLoading, error: $_errorMessage');
     notifyListeners();
-    await _clearSessionData(); // Clear previous session data before new login attempt
 
+    // Perform pre-login cleanup without notifying, as the main notification will be in finally.
+    await _clearSessionData(notify: false);
+
+    bool loginSuccess = false;
     try {
       final client = _authClient;
       final request = pb.LoginRequest(email: email, password: password);
@@ -249,30 +261,28 @@ class AuthService with ChangeNotifier {
         await _storage.write(key: _authTokenKey, value: _token);
         GrpcClient().setAuthToken(_token);
 
-        // Attempt to fetch profile
         FetchProfileResponse profileResponse =
             await _fetchSelfProfileInternal();
         if (profileResponse.success && profileResponse.userProfile != null) {
           _isAuthenticated = true;
           _userProfile = profileResponse.userProfile;
-          _employeeProfile = null; // Ensure employee profile is null
+          _employeeProfile = null;
           _errorMessage = null;
-          // Clear any employee cache as this is a user login
           await _storage.delete(key: _cachedEmployeeProfileDataKey);
           await _storage.delete(key: _cachedEmployeeProfileTokenKey);
           print('AuthService: User login successful and profile fetched.');
-          return true;
+          loginSuccess = true;
+          // No notifyListeners() here, will be done in finally
         } else {
           _errorMessage = profileResponse.errorMessage ??
               "User login successful, but failed to fetch profile.";
-          // Even if token received, if profile fetch fails, treat as failed login for consistency
-          await _clearSessionData();
-          return false;
+          await _clearSessionData(notify: false);
+          loginSuccess = false;
         }
       } else {
         _errorMessage = "User login successful, but no token received.";
-        await _clearSessionData(); // No token, so clear everything
-        return false;
+        await _clearSessionData(notify: false);
+        loginSuccess = false;
       }
     } catch (e) {
       print('User login failed: $e');
@@ -282,20 +292,32 @@ class AuthService with ChangeNotifier {
       } else {
         _errorMessage = "User login failed: An unexpected error occurred.";
       }
-      await _clearSessionData(); // Ensure clean state on error
-      return false;
+      await _clearSessionData(notify: false); // Ensure clean state on error
+      loginSuccess = false;
     } finally {
-      _isLoading = false;
+      _isLoading = false; // Always set loading to false at the end
+      // This is now the single point of notification for the login operation's outcome.
+      print(
+          'AuthService: Notifying listeners. Location: login_finally_minimal. isAuthenticated: $_isAuthenticated, isLoading: $_isLoading, error: $_errorMessage');
+      // Introduce a small delay before the final notification
+      await Future.delayed(const Duration(milliseconds: 50));
       notifyListeners();
     }
+    return loginSuccess;
   }
 
   Future<bool> loginEmployee(String loginVal, String password) async {
     _isLoading = true;
     _errorMessage = null;
+    // Initial notification that loading has started and errors are cleared.
+    print(
+        'AuthService: Notifying listeners. Location: loginEmployee_start_minimal. isAuthenticated: $_isAuthenticated, isLoading: $_isLoading, error: $_errorMessage');
     notifyListeners();
-    await _clearSessionData(); // Clear previous session data
 
+    // Perform pre-login cleanup without notifying.
+    await _clearSessionData(notify: false);
+
+    bool loginSuccess = false;
     try {
       final client = _authClient;
       final request =
@@ -310,10 +332,9 @@ class AuthService with ChangeNotifier {
         if (response.hasEmployee()) {
           _isAuthenticated = true;
           _employeeProfile = response.employee;
-          _userProfile = null; // Ensure user profile is null
+          _userProfile = null;
           _errorMessage = null;
 
-          // Cache employee profile
           try {
             await _storage.write(
                 key: _cachedEmployeeProfileDataKey,
@@ -324,19 +345,19 @@ class AuthService with ChangeNotifier {
           } catch (e) {
             print(
                 'AuthService: Employee login successful, but failed to cache profile: $e');
-            // Continue, as login itself was successful
           }
-          return true;
+          loginSuccess = true;
+          // No notifyListeners() here, will be done in finally
         } else {
           _errorMessage =
               "Employee login successful, but no employee data in response.";
-          await _clearSessionData();
-          return false;
+          await _clearSessionData(notify: false);
+          loginSuccess = false;
         }
       } else {
         _errorMessage = "Employee login successful, but no token received.";
-        await _clearSessionData();
-        return false;
+        await _clearSessionData(notify: false);
+        loginSuccess = false;
       }
     } catch (e) {
       print('Employee login failed: $e');
@@ -346,12 +367,18 @@ class AuthService with ChangeNotifier {
       } else {
         _errorMessage = "Employee login failed: An unexpected error occurred.";
       }
-      await _clearSessionData();
-      return false;
+      await _clearSessionData(notify: false);
+      loginSuccess = false;
     } finally {
-      _isLoading = false;
+      _isLoading = false; // Always set loading to false at the end
+      // This is now the single point of notification for the login operation's outcome.
+      print(
+          'AuthService: Notifying listeners. Location: loginEmployee_finally_minimal. isAuthenticated: $_isAuthenticated, isLoading: $_isLoading, error: $_errorMessage');
+      // Introduce a small delay before the final notification
+      await Future.delayed(const Duration(milliseconds: 50));
       notifyListeners();
     }
+    return loginSuccess;
   }
 
   Future<void> logout() async {
