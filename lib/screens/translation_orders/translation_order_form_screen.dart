@@ -417,7 +417,7 @@ class _TranslationOrderFormScreenState
       case crm.TranslationProgressStatus.IN_PROGRESS:
         return "In Progress";
       case crm.TranslationProgressStatus.TRANSLATED:
-        return "Translation Complete (Needs Review)";
+        return "Translation Complete";
       case crm.TranslationProgressStatus.CHECKED_BY_MANAGER:
         return "Manager Approved";
       case crm.TranslationProgressStatus.CLIENT_NOTIFIED:
@@ -985,6 +985,8 @@ class _TranslationOrderFormScreenState
                                             const SizedBox(height: 16),
                                             DropdownButtonFormField<
                                                 crm.TranslationProgressStatus>(
+                                              isExpanded:
+                                                  true, // Allow the dropdown to expand
                                               value: (_currentTranslationProgress ==
                                                           null ||
                                                       _currentTranslationProgress ==
@@ -1009,8 +1011,11 @@ class _TranslationOrderFormScreenState
                                                       DropdownMenuItem(
                                                         value: status,
                                                         child: Text(
-                                                            _getTranslationProgressDisplayName(
-                                                                status)),
+                                                          _getTranslationProgressDisplayName(
+                                                              status),
+                                                          overflow: TextOverflow
+                                                              .ellipsis, // Handle long text
+                                                        ),
                                                       ))
                                                   .toList(),
                                               onChanged: (newStatus) {
