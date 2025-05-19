@@ -1,3 +1,5 @@
+import 'dart:convert'; // For base64 encoding/decoding
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:grpc/grpc.dart';
@@ -8,12 +10,39 @@ import 'package:admin/generated/crm.pbgrpc.dart'
     as pbgrpc; // Contains Service Clients
 import 'package:admin/services/grpc_client.dart';
 
+// Helper class to wrap the response from _fetchSelfProfileInternal
+class FetchProfileResponse {
+  final bool success;
+  final pb.User? userProfile;
+  final pb.Employee? employeeProfile;
+  final bool isAuthError; // True if gRPC unauthenticated/permission denied
+  final bool
+      isUserNotFoundError; // True if gRPC specific "user not found" error
+  final String? errorMessage;
+
+  FetchProfileResponse({
+    this.success = false,
+    this.userProfile,
+    this.employeeProfile,
+    this.isAuthError = false,
+    this.isUserNotFoundError = false,
+    this.errorMessage,
+  });
+}
+
 class AuthService with ChangeNotifier {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   String? _token;
   bool _isLoading = false;
   String? _errorMessage;
   bool _isAuthenticated = false;
+
+  // Keys for secure storage
+  static const String _authTokenKey = 'authToken';
+  static const String _cachedEmployeeProfileDataKey =
+      'cachedEmployeeProfileData';
+  static const String _cachedEmployeeProfileTokenKey =
+      'cachedEmployeeProfileToken';
 
   String? get token => _token;
   bool get isLoading => _isLoading;
@@ -36,101 +65,179 @@ class AuthService with ChangeNotifier {
     _checkToken();
   }
 
+  Future<void> _clearSessionData({bool notify = false}) async {
+    print("AuthService: _clearSessionData called");
+    _token = null;
+    _isAuthenticated = false;
+    _userProfile = null;
+    _employeeProfile = null;
+    _errorMessage = null; // Clear error message on session clear
+    await _storage.delete(key: _authTokenKey);
+    await _storage.delete(key: _cachedEmployeeProfileDataKey);
+    await _storage.delete(key: _cachedEmployeeProfileTokenKey);
+    GrpcClient().setAuthToken(null);
+    if (notify) {
+      notifyListeners();
+    }
+  }
+
   Future<void> _checkToken() async {
-    _token = await _storage.read(key: 'authToken');
+    _isLoading = true; // Indicate loading during token check
+    notifyListeners();
+
+    _token = await _storage.read(key: _authTokenKey);
     print('AuthService: _checkToken: Token read from storage: $_token');
+
     if (_token != null && _token!.isNotEmpty) {
       GrpcClient().setAuthToken(_token);
-      bool profileFetched = await fetchSelfProfile();
+      FetchProfileResponse profileResponse = await _fetchSelfProfileInternal();
 
-      if (profileFetched) {
-        // If profile was fetched successfully, then we are authenticated.
-        // fetchSelfProfile itself might set _isAuthenticated to false on specific auth errors,
-        // so we check its return value first.
+      if (profileResponse.success) {
         _isAuthenticated = true;
+        _userProfile = profileResponse.userProfile;
+        _employeeProfile = profileResponse.employeeProfile;
+        _errorMessage = null;
         print(
-            'AuthService: _checkToken: Profile fetched successfully. isAuthenticated = true.');
+            'AuthService: _checkToken: Profile fetched successfully. User: ${_userProfile != null}, Employee: ${_employeeProfile != null}');
+        if (_employeeProfile != null) {
+          // Cache employee profile if fetched successfully
+          try {
+            await _storage.write(
+                key: _cachedEmployeeProfileDataKey,
+                value: base64Encode(_employeeProfile!.writeToBuffer()));
+            await _storage.write(
+                key: _cachedEmployeeProfileTokenKey, value: _token);
+            print(
+                'AuthService: _checkToken: Employee profile cached successfully.');
+          } catch (e) {
+            print(
+                'AuthService: _checkToken: Failed to cache employee profile: $e');
+          }
+        } else {
+          // If it's a user profile, ensure any old employee cache is cleared for this token
+          // (though _clearSessionData on logout/new login should handle most cases)
+          final cachedToken =
+              await _storage.read(key: _cachedEmployeeProfileTokenKey);
+          if (cachedToken == _token) {
+            await _storage.delete(key: _cachedEmployeeProfileDataKey);
+            await _storage.delete(key: _cachedEmployeeProfileTokenKey);
+            print(
+                'AuthService: _checkToken: Cleared employee cache as current session is for a user.');
+          }
+        }
       } else {
-        // If profile fetch failed (either no data, or an error including auth error in fetchSelfProfile)
-        _isAuthenticated = false; // Ensure it is false
-        print(
-            'AuthService: _checkToken: Profile fetch failed or auth error during fetch. isAuthenticated = false. Clearing token.');
-        // Token is cleared here (or already cleared in fetchSelfProfile if it was an auth error)
-        if (_token != null) {
-          // Check if token wasn't already nulled by fetchSelfProfile
-          _token = null;
-          await _storage.delete(key: 'authToken');
-          GrpcClient().setAuthToken(null);
+        if (profileResponse.isAuthError) {
+          print(
+              'AuthService: _checkToken: Auth error during profile fetch. Clearing session.');
+          await _clearSessionData();
+        } else if (profileResponse.isUserNotFoundError) {
+          print(
+              'AuthService: _checkToken: "User not found" error during profile fetch. Attempting to use cached employee profile.');
+          String? cachedProfileData =
+              await _storage.read(key: _cachedEmployeeProfileDataKey);
+          String? cachedProfileToken =
+              await _storage.read(key: _cachedEmployeeProfileTokenKey);
+
+          if (cachedProfileData != null &&
+              cachedProfileToken != null &&
+              cachedProfileToken == _token) {
+            try {
+              _employeeProfile =
+                  pb.Employee.fromBuffer(base64Decode(cachedProfileData));
+              _isAuthenticated = true;
+              _userProfile = null; // Ensure user profile is null
+              _errorMessage = null;
+              print(
+                  'AuthService: _checkToken: Successfully restored session using cached employee profile.');
+            } catch (e) {
+              print(
+                  'AuthService: _checkToken: Failed to decode cached employee profile: $e. Clearing session.');
+              await _clearSessionData();
+            }
+          } else {
+            print(
+                'AuthService: _checkToken: No matching cached employee profile found despite "user not found" error. Clearing session.');
+            await _clearSessionData();
+          }
+        } else {
+          // Other errors
+          print(
+              'AuthService: _checkToken: Profile fetch failed (Reason: ${profileResponse.errorMessage}). Clearing session.');
+          await _clearSessionData();
         }
       }
     } else {
-      _isAuthenticated = false;
-      GrpcClient().setAuthToken(null);
-      print(
-          'AuthService: _checkToken: No token in storage, isAuthenticated = false');
+      print('AuthService: _checkToken: No token in storage.');
+      await _clearSessionData(); // Ensure clean state if no token
     }
-    notifyListeners(); // Single notify at the end of _checkToken
+    _isLoading = false;
+    notifyListeners();
   }
 
-  // Modified fetchSelfProfile to not notify and to return a success status
-  Future<bool> fetchSelfProfile() async {
+  // Renamed and refactored from fetchSelfProfile
+  Future<FetchProfileResponse> _fetchSelfProfileInternal() async {
     if (_token == null || _token!.isEmpty) {
-      print("AuthService: fetchSelfProfile called with no token.");
-      _isAuthenticated = false; // Ensure state is consistent
-      return false;
+      print("AuthService: _fetchSelfProfileInternal called with no token.");
+      return FetchProfileResponse(
+          isAuthError: true, errorMessage: "No token available");
     }
     try {
       final crmClient = pbgrpc.CrmServiceClient(GrpcClient().channel);
-      final currentToken =
-          GrpcClient().getCallOptions().metadata['authorization'];
       print(
-          'AuthService: Attempting to fetch self profile. Token from getCallOptions: $currentToken');
+          'AuthService: _fetchSelfProfileInternal: Attempting to fetch self profile.');
 
       final response = await crmClient.getSelfProfile(
         pb.GetSelfProfileRequest(),
         options: GrpcClient().getCallOptions(),
       );
-      _userProfile = response.hasUser() ? response.user : null;
-      _employeeProfile = response.hasEmployee() ? response.employee : null;
 
-      if (_userProfile != null || _employeeProfile != null) {
+      if (response.hasUser() || response.hasEmployee()) {
         print(
-            'AuthService: Self profile fetched successfully. User: ${_userProfile != null}, Employee: ${_employeeProfile != null}');
-        // _isAuthenticated = true; // Caller will set this based on overall flow
-        return true; // Indicate success
+            'AuthService: _fetchSelfProfileInternal: Self profile fetched successfully. User: ${response.hasUser()}, Employee: ${response.hasEmployee()}');
+        return FetchProfileResponse(
+          success: true,
+          userProfile: response.hasUser() ? response.user : null,
+          employeeProfile: response.hasEmployee() ? response.employee : null,
+        );
       } else {
         print(
-            'AuthService: Self profile fetch call completed, but no user or employee data was found in the response.');
-        _userProfile = null;
-        _employeeProfile = null;
-        // This situation might mean the token is valid but there's no profile, or an issue.
-        // Consider it a failure for authentication purposes if no profile is found with a token.
-        // _isAuthenticated = false; // Caller will decide based on this return
-        return false; // Indicate profile not found
+            'AuthService: _fetchSelfProfileInternal: Call completed, but no user or employee data found.');
+        return FetchProfileResponse(
+            errorMessage: "No user or employee data in profile response.");
       }
     } catch (e) {
-      print('Failed to fetch self profile: $e');
-      _userProfile = null;
-      _employeeProfile = null;
-      if (e is GrpcError &&
-          (e.code == StatusCode.unauthenticated ||
-              e.code == StatusCode.permissionDenied)) {
+      print('AuthService: _fetchSelfProfileInternal: Failed: $e');
+      if (e is GrpcError) {
+        bool authErr = (e.code == StatusCode.unauthenticated ||
+            e.code == StatusCode.permissionDenied);
+        // Check for the specific "user not found" error from logs: code 13 (INTERNAL), message "Failed to get user: not found"
+        bool userNotFoundErr = (e.code == StatusCode.internal &&
+                (e.message?.toLowerCase().contains("user not found") ??
+                    false) ||
+            (e.message
+                    ?.toLowerCase()
+                    .contains("failed to get user: not found") ??
+                false));
+
         print(
-            'AuthService: Fetch self profile failed due to auth error. Clearing token.');
-        _token = null;
-        await _storage.delete(key: 'authToken');
-        GrpcClient().setAuthToken(null);
-        _isAuthenticated = false; // Explicitly set to false due to auth error
+            'AuthService: _fetchSelfProfileInternal: gRPC Error - Code: ${e.code}, Message: ${e.message}, isAuthError: $authErr, isUserNotFoundError: $userNotFoundErr');
+        return FetchProfileResponse(
+          isAuthError: authErr,
+          isUserNotFoundError: userNotFoundErr,
+          errorMessage:
+              "gRPC Error: ${e.message ?? 'Unknown'} (Code: ${e.code})",
+        );
       }
-      return false; // Indicate failure
+      return FetchProfileResponse(
+          errorMessage: "Non-gRPC Error: ${e.toString()}");
     }
-    // No notifyListeners() here
   }
 
   Future<bool> login(String email, String password) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
+    await _clearSessionData(); // Clear previous session data before new login attempt
 
     try {
       final client = _authClient;
@@ -139,31 +246,32 @@ class AuthService with ChangeNotifier {
 
       if (response.token.isNotEmpty) {
         _token = response.token;
-        await _storage.write(key: 'authToken', value: _token);
+        await _storage.write(key: _authTokenKey, value: _token);
         GrpcClient().setAuthToken(_token);
-        _employeeProfile = null; // Clear employee profile on user login
 
-        bool profileFetched = await fetchSelfProfile();
-        if (profileFetched) {
+        // Attempt to fetch profile
+        FetchProfileResponse profileResponse =
+            await _fetchSelfProfileInternal();
+        if (profileResponse.success && profileResponse.userProfile != null) {
           _isAuthenticated = true;
+          _userProfile = profileResponse.userProfile;
+          _employeeProfile = null; // Ensure employee profile is null
           _errorMessage = null;
-          print(
-              'AuthService: User login successful. Profile fetched. IsAuthenticated: $_isAuthenticated');
+          // Clear any employee cache as this is a user login
+          await _storage.delete(key: _cachedEmployeeProfileDataKey);
+          await _storage.delete(key: _cachedEmployeeProfileTokenKey);
+          print('AuthService: User login successful and profile fetched.');
           return true;
         } else {
-          _errorMessage = "User login successful, but failed to fetch profile.";
-          _isAuthenticated =
-              false; // Ensure this is false if profile fetch fails
-          _token = null; // Clean up token as it might be invalid
-          await _storage.delete(key: 'authToken');
-          GrpcClient().setAuthToken(null);
-          print(
-              'AuthService: User login, but profile fetch failed. Token cleared.');
+          _errorMessage = profileResponse.errorMessage ??
+              "User login successful, but failed to fetch profile.";
+          // Even if token received, if profile fetch fails, treat as failed login for consistency
+          await _clearSessionData();
           return false;
         }
       } else {
         _errorMessage = "User login successful, but no token received.";
-        _isAuthenticated = false;
+        await _clearSessionData(); // No token, so clear everything
         return false;
       }
     } catch (e) {
@@ -174,7 +282,7 @@ class AuthService with ChangeNotifier {
       } else {
         _errorMessage = "User login failed: An unexpected error occurred.";
       }
-      _isAuthenticated = false;
+      await _clearSessionData(); // Ensure clean state on error
       return false;
     } finally {
       _isLoading = false;
@@ -186,6 +294,7 @@ class AuthService with ChangeNotifier {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
+    await _clearSessionData(); // Clear previous session data
 
     try {
       final client = _authClient;
@@ -195,44 +304,38 @@ class AuthService with ChangeNotifier {
 
       if (response.token.isNotEmpty) {
         _token = response.token;
-        await _storage.write(key: 'authToken', value: _token);
+        await _storage.write(key: _authTokenKey, value: _token);
         GrpcClient().setAuthToken(_token);
-        _userProfile = null; // Clear user profile on employee login
 
         if (response.hasEmployee()) {
+          _isAuthenticated = true;
           _employeeProfile = response.employee;
-          _isAuthenticated = true; // Employee profile came with login response
+          _userProfile = null; // Ensure user profile is null
           _errorMessage = null;
-          print(
-              'AuthService: Employee login successful (profile in response). IsAuthenticated: $_isAuthenticated');
-          // Optionally, still call fetchSelfProfile to ensure everything is consistent or get more data
-          // bool consistentProfile = await fetchSelfProfile();
-          // if (!consistentProfile || _employeeProfile == null) { ... handle inconsistency ... }
+
+          // Cache employee profile
+          try {
+            await _storage.write(
+                key: _cachedEmployeeProfileDataKey,
+                value: base64Encode(_employeeProfile!.writeToBuffer()));
+            await _storage.write(
+                key: _cachedEmployeeProfileTokenKey, value: _token);
+            print('AuthService: Employee login successful, profile cached.');
+          } catch (e) {
+            print(
+                'AuthService: Employee login successful, but failed to cache profile: $e');
+            // Continue, as login itself was successful
+          }
           return true;
         } else {
-          // Try to fetch profile if not included in login response
-          bool profileFetched = await fetchSelfProfile();
-          if (profileFetched && _employeeProfile != null) {
-            _isAuthenticated = true;
-            _errorMessage = null;
-            print(
-                'AuthService: Employee login successful (profile fetched). IsAuthenticated: $_isAuthenticated');
-            return true;
-          } else {
-            _errorMessage =
-                "Employee login successful, but failed to fetch employee profile.";
-            _isAuthenticated = false;
-            _token = null;
-            await _storage.delete(key: 'authToken');
-            GrpcClient().setAuthToken(null);
-            print(
-                'AuthService: Employee login, but profile fetch failed. Token cleared.');
-            return false;
-          }
+          _errorMessage =
+              "Employee login successful, but no employee data in response.";
+          await _clearSessionData();
+          return false;
         }
       } else {
         _errorMessage = "Employee login successful, but no token received.";
-        _isAuthenticated = false;
+        await _clearSessionData();
         return false;
       }
     } catch (e) {
@@ -243,7 +346,7 @@ class AuthService with ChangeNotifier {
       } else {
         _errorMessage = "Employee login failed: An unexpected error occurred.";
       }
-      _isAuthenticated = false;
+      await _clearSessionData();
       return false;
     } finally {
       _isLoading = false;
@@ -252,18 +355,13 @@ class AuthService with ChangeNotifier {
   }
 
   Future<void> logout() async {
-    _token = null;
-    _isAuthenticated = false;
-    _userProfile = null;
-    _employeeProfile = null;
-    await _storage.delete(key: 'authToken');
-    GrpcClient().setAuthToken(null);
-    notifyListeners();
-    // Optional: Call backend logout
+    print("AuthService: logout called");
+    await _clearSessionData(notify: true);
+    // Optional: Call backend logout if endpoint exists
     // try {
-    //   await _authClient.logout(pb.Empty()); // Assuming Empty message exists in pb
+    //   await _authClient.logout(pb.Empty());
     // } catch (e) {
-    //   print('Failed to notify backend of logout: $e');
+    //   print('AuthService: Failed to notify backend of logout: $e');
     // }
   }
 }
