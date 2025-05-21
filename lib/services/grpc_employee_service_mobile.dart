@@ -10,7 +10,7 @@ class GrpcEmployeeService {
   static const String _tag = 'GrpcEmployeeService';
 
   GrpcEmployeeService({
-    String host = '185.245.106.139',
+    String host = '31.41.13.175',
     int grpcPort = 50051,
     bool useTls = false,
   }) {
@@ -25,14 +25,16 @@ class GrpcEmployeeService {
     );
     _client = CrmServiceClient(_channel);
     if (kDebugMode) {
-      print('$_tag: Initialized with host: $host, port: $grpcPort, useTls: $useTls');
+      print(
+          '$_tag: Initialized with host: $host, port: $grpcPort, useTls: $useTls');
     }
   }
 
   Future<List<crm.Employee>> listEmployees(
       {int pageSize = 20, String pageToken = ''}) async {
     if (kDebugMode) {
-      print('$_tag: listEmployees called with pageSize: $pageSize, pageToken: "$pageToken"');
+      print(
+          '$_tag: listEmployees called with pageSize: $pageSize, pageToken: "$pageToken"');
     }
     final request = crm.ListEmployeesRequest(
       pageSize: pageSize,
@@ -41,11 +43,13 @@ class GrpcEmployeeService {
     try {
       final response = await _client.listEmployees(request);
       if (kDebugMode) {
-        print('$_tag: listEmployees successful, ${response.employees.length} employees fetched.');
+        print(
+            '$_tag: listEmployees successful, ${response.employees.length} employees fetched.');
         // Log the role of each employee
         for (int i = 0; i < response.employees.length; i++) {
           final employee = response.employees[i];
-          print('$_tag: Employee #${i + 1}: ID=${employee.employeeId}, Name=${employee.name}, Role=${employee.role}');
+          print(
+              '$_tag: Employee #${i + 1}: ID=${employee.employeeId}, Name=${employee.name}, Role=${employee.role}');
         }
       }
       return response.employees;
@@ -60,17 +64,17 @@ class GrpcEmployeeService {
   Future<crm.Employee> createEmployee(crm.Employee employee) async {
     if (kDebugMode) {
       // Using writeToJsonMap for potentially better structured logging if toShortString isn't available or suitable
-      print('$_tag: createEmployee called with employee data: ${employee.writeToJsonMap()}');
+      print(
+          '$_tag: createEmployee called with employee data: ${employee.writeToJsonMap()}');
     }
     final request = crm.CreateEmployeeRequest(employee: employee);
     try {
       final response = await _client.createEmployee(request);
       if (kDebugMode) {
-        print('$_tag: createEmployee call successful, server responded with employeeId: ${response.employeeId}. Fetching created employee details...');
+        print(
+            '$_tag: createEmployee call successful, server responded with employeeId: ${response.employeeId}. Fetching created employee details...');
       }
-      // The original code fetches the employee after creation.
-      // getEmployee will log its own success/failure.
-      return await getEmployee(response.employeeId);
+      return await getEmployee(response.employeeId.toString());
     } catch (e) {
       if (kDebugMode) {
         print('$_tag: createEmployee failed: $e');
@@ -83,11 +87,13 @@ class GrpcEmployeeService {
     if (kDebugMode) {
       print('$_tag: getEmployee called with employeeId: $employeeId');
     }
-    final request = crm.GetEmployeeRequest(employeeId: employeeId);
+    final request =
+        crm.GetEmployeeRequest(employeeId: int.tryParse(employeeId) ?? 0);
     try {
       final response = await _client.getEmployee(request);
       if (kDebugMode) {
-        print('$_tag: getEmployee successful for employeeId: $employeeId. Employee data: ${response.employee.writeToJsonMap()}');
+        print(
+            '$_tag: getEmployee successful for employeeId: $employeeId. Employee data: ${response.employee.writeToJsonMap()}');
       }
       return response.employee;
     } catch (e) {
@@ -101,16 +107,18 @@ class GrpcEmployeeService {
   Future<crm.Employee> updateEmployee(
       String employeeId, crm.Employee data) async {
     if (kDebugMode) {
-      print('$_tag: updateEmployee called for employeeId: $employeeId with data: ${data.writeToJsonMap()}');
+      print(
+          '$_tag: updateEmployee called for employeeId: $employeeId with data: ${data.writeToJsonMap()}');
     }
     final request = crm.UpdateEmployeeRequest(
-      employeeId: employeeId,
+      employeeId: int.tryParse(employeeId) ?? 0,
       employeeData: data,
     );
     try {
       final response = await _client.updateEmployee(request);
       if (kDebugMode) {
-        print('$_tag: updateEmployee successful for employeeId: $employeeId. Updated employee data: ${response.employee.writeToJsonMap()}');
+        print(
+            '$_tag: updateEmployee successful for employeeId: $employeeId. Updated employee data: ${response.employee.writeToJsonMap()}');
       }
       return response.employee;
     } catch (e) {
@@ -125,7 +133,8 @@ class GrpcEmployeeService {
     if (kDebugMode) {
       print('$_tag: deleteEmployee called for employeeId: $employeeId');
     }
-    final request = crm.DeleteEmployeeRequest(employeeId: employeeId);
+    final request =
+        crm.DeleteEmployeeRequest(employeeId: int.tryParse(employeeId) ?? 0);
     try {
       await _client.deleteEmployee(request);
       if (kDebugMode) {
@@ -158,7 +167,7 @@ class GrpcEmployeeService {
 }
 
 GrpcEmployeeService getGrpcEmployeeService({
-  String host = '185.245.106.139',
+  String host = '31.41.13.175',
   int grpcPort = 50051,
   bool useTls = false,
 }) {

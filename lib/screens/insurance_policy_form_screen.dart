@@ -54,8 +54,8 @@ class _InsurancePolicyFormScreenState extends State<InsurancePolicyFormScreen> {
       final policy = await _service.getInsurancePolicy(widget.policyId!);
       if (!mounted) return;
       _policyNumberController.text = policy.policyNumber;
-      _clientIdController.text = policy.clientId;
-      _managerIdController.text = policy.managerId;
+      _clientIdController.text = policy.clientId.toString();
+      _managerIdController.text = policy.managerId.toString();
       _amountController.text = policy.amount.toString();
       _renewalStatus = policy.renewalStatus;
       _notesController.text = policy.notes;
@@ -84,10 +84,11 @@ class _InsurancePolicyFormScreenState extends State<InsurancePolicyFormScreen> {
     final localizations = AppLocalizations.of(context);
     try {
       final policy = crm.InsurancePolicy(
-        policyId: widget.policyId ?? '',
+        policyId:
+            widget.policyId != null ? int.tryParse(widget.policyId!) ?? 0 : 0,
         policyNumber: _policyNumberController.text.trim(),
-        clientId: _clientIdController.text.trim(),
-        managerId: _managerIdController.text.trim(),
+        clientId: int.tryParse(_clientIdController.text.trim()) ?? 0,
+        managerId: int.tryParse(_managerIdController.text.trim()) ?? 0,
         amount: double.tryParse(_amountController.text.trim()) ?? 0.0,
         renewalStatus: _renewalStatus ??
             crm.PolicyRenewalStatus.POLICY_RENEWAL_STATUS_UNSPECIFIED,

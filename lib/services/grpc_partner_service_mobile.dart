@@ -27,14 +27,14 @@ class GrpcPartnerService {
     return await getPartner(response.partnerId);
   }
 
-  Future<crm.Partner> getPartner(String partnerId) async {
+  Future<crm.Partner> getPartner(int partnerId) async {
     final request = crm.GetPartnerRequest(partnerId: partnerId);
     final response = await _client.getPartner(request,
         options: GrpcClient().getCallOptions());
     return response.partner;
   }
 
-  Future<crm.Partner> updatePartner(String partnerId, crm.Partner data) async {
+  Future<crm.Partner> updatePartner(int partnerId, crm.Partner data) async {
     final request =
         crm.UpdatePartnerRequest(partnerId: partnerId, partnerData: data);
     final response = await _client.updatePartner(request,
@@ -42,7 +42,7 @@ class GrpcPartnerService {
     return response.partner;
   }
 
-  Future<void> deletePartner(String partnerId) async {
+  Future<void> deletePartner(int partnerId) async {
     final request = crm.DeletePartnerRequest(partnerId: partnerId);
     await _client.deletePartner(request,
         options: GrpcClient().getCallOptions());

@@ -127,7 +127,7 @@ class _InteractionListScreenState extends State<InteractionListScreen> {
     );
     if (confirm == true) {
       try {
-        await _interactionService.deleteInteraction(id);
+        await _interactionService.deleteInteraction(int.parse(id));
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(localizations.interactionListDeletedSuccess)));
         _loadInteractions();
@@ -260,14 +260,16 @@ class _InteractionListScreenState extends State<InteractionListScreen> {
                             Text(localizations.interactionListActionsHeader)),
                   ],
                   rows: interactions.map((interaction) {
-                    final clientName = _clientNames[interaction.clientId] ??
-                        interaction.clientId;
-                    final managerName = _managerNames[interaction.managerId] ??
-                        interaction.managerId;
+                    final clientName =
+                        _clientNames[interaction.clientId.toString()] ??
+                            interaction.clientId.toString();
+                    final managerName =
+                        _managerNames[interaction.managerId.toString()] ??
+                            interaction.managerId.toString();
 
                     return DataRow(
                       cells: [
-                        DataCell(Text(interaction.interactionId)),
+                        DataCell(Text(interaction.interactionId.toString())),
                         DataCell(Text(clientName)),
                         DataCell(Text(managerName)),
                         DataCell(Text(formatInteractionDateHelper(
@@ -294,8 +296,8 @@ class _InteractionListScreenState extends State<InteractionListScreen> {
                               icon: const Icon(Icons.delete, color: Colors.red),
                               tooltip: localizations
                                   .interactionListDeleteInteractionTooltip,
-                              onPressed: () =>
-                                  _deleteInteraction(interaction.interactionId),
+                              onPressed: () => _deleteInteraction(
+                                  interaction.interactionId.toString()),
                             ),
                           ],
                         )),
@@ -312,7 +314,7 @@ class _InteractionListScreenState extends State<InteractionListScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                      '${localizations.interactionListIdHeader}: ${interaction.interactionId}'),
+                                      '${localizations.interactionListIdHeader}: ${interaction.interactionId.toString()}'),
                                   Text(
                                       '${localizations.interactionListClientHeader}: $clientName'),
                                   Text(

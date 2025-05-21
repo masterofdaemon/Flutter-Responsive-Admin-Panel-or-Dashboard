@@ -27,22 +27,21 @@ class GrpcLegalCaseService {
     return await getLegalCase(response.caseId);
   }
 
-  Future<crm.LegalCase> getLegalCase(String caseId) async {
+  Future<crm.LegalCase> getLegalCase(int caseId) async {
     final request = crm.GetLegalCaseRequest(caseId: caseId);
     final response = await _client.getLegalCase(request,
         options: GrpcClient().getCallOptions());
     return response.legalCase;
   }
 
-  Future<crm.LegalCase> updateLegalCase(
-      String caseId, crm.LegalCase data) async {
+  Future<crm.LegalCase> updateLegalCase(int caseId, crm.LegalCase data) async {
     final request = crm.UpdateLegalCaseRequest(caseId: caseId, caseData: data);
     final response = await _client.updateLegalCase(request,
         options: GrpcClient().getCallOptions());
     return response.legalCase;
   }
 
-  Future<void> deleteLegalCase(String caseId) async {
+  Future<void> deleteLegalCase(int caseId) async {
     final request = crm.DeleteLegalCaseRequest(caseId: caseId);
     await _client.deleteLegalCase(request,
         options: GrpcClient().getCallOptions());

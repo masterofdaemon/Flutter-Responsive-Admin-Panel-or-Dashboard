@@ -25,14 +25,10 @@ class GrpcLegalIssueTypeService {
     final request = crm.CreateLegalIssueTypeRequest(legalIssueType: issueType);
     final response = await _client.createLegalIssueType(request,
         options: GrpcClient().getCallOptions());
-    // Assuming the response contains the ID of the created issue type, adjust if necessary
-    // For example, if the response directly returns the created object:
-    // return response.legalIssueType;
-    // If it returns an ID, fetch the object:
     return await getLegalIssueType(response.issueTypeId);
   }
 
-  Future<crm.LegalIssueType> getLegalIssueType(String issueTypeId) async {
+  Future<crm.LegalIssueType> getLegalIssueType(int issueTypeId) async {
     final request = crm.GetLegalIssueTypeRequest(issueTypeId: issueTypeId);
     final response = await _client.getLegalIssueType(request,
         options: GrpcClient().getCallOptions());
@@ -40,7 +36,7 @@ class GrpcLegalIssueTypeService {
   }
 
   Future<crm.LegalIssueType> updateLegalIssueType(
-      String issueTypeId, crm.LegalIssueType data) async {
+      int issueTypeId, crm.LegalIssueType data) async {
     final request = crm.UpdateLegalIssueTypeRequest(
         issueTypeId: issueTypeId, issueTypeData: data);
     final response = await _client.updateLegalIssueType(request,
@@ -48,7 +44,7 @@ class GrpcLegalIssueTypeService {
     return response.legalIssueType;
   }
 
-  Future<void> deleteLegalIssueType(String issueTypeId) async {
+  Future<void> deleteLegalIssueType(int issueTypeId) async {
     final request = crm.DeleteLegalIssueTypeRequest(issueTypeId: issueTypeId);
     await _client.deleteLegalIssueType(request,
         options: GrpcClient().getCallOptions());

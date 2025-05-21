@@ -25,11 +25,12 @@ class GrpcInsurancePolicyService {
     final request = crm.CreateInsurancePolicyRequest(insurancePolicy: policy);
     final response = await _client.createInsurancePolicy(request,
         options: GrpcClient().getCallOptions());
-    return await getInsurancePolicy(response.policyId);
+    return await getInsurancePolicy(response.policyId.toString());
   }
 
   Future<crm.InsurancePolicy> getInsurancePolicy(String policyId) async {
-    final request = crm.GetInsurancePolicyRequest(policyId: policyId);
+    final request =
+        crm.GetInsurancePolicyRequest(policyId: int.tryParse(policyId) ?? 0);
     final response = await _client.getInsurancePolicy(request,
         options: GrpcClient().getCallOptions());
     return response.insurancePolicy;
@@ -37,15 +38,16 @@ class GrpcInsurancePolicyService {
 
   Future<crm.InsurancePolicy> updateInsurancePolicy(
       String policyId, crm.InsurancePolicy data) async {
-    final request =
-        crm.UpdateInsurancePolicyRequest(policyId: policyId, policyData: data);
+    final request = crm.UpdateInsurancePolicyRequest(
+        policyId: int.tryParse(policyId) ?? 0, policyData: data);
     final response = await _client.updateInsurancePolicy(request,
         options: GrpcClient().getCallOptions());
     return response.insurancePolicy;
   }
 
   Future<void> deleteInsurancePolicy(String policyId) async {
-    final request = crm.DeleteInsurancePolicyRequest(policyId: policyId);
+    final request =
+        crm.DeleteInsurancePolicyRequest(policyId: int.tryParse(policyId) ?? 0);
     await _client.deleteInsurancePolicy(request,
         options: GrpcClient().getCallOptions());
   }

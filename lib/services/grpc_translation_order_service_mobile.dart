@@ -25,11 +25,12 @@ class GrpcTranslationOrderService {
     final request = crm.CreateTranslationOrderRequest(translationOrder: order);
     final response = await _client.createTranslationOrder(request,
         options: GrpcClient().getCallOptions());
-    return await getTranslationOrder(response.orderId);
+    return await getTranslationOrder(response.orderId.toString());
   }
 
   Future<crm.TranslationOrder> getTranslationOrder(String orderId) async {
-    final request = crm.GetTranslationOrderRequest(orderId: orderId);
+    final request =
+        crm.GetTranslationOrderRequest(orderId: int.tryParse(orderId) ?? 0);
     final response = await _client.getTranslationOrder(request,
         options: GrpcClient().getCallOptions());
     return response.translationOrder;
@@ -37,15 +38,16 @@ class GrpcTranslationOrderService {
 
   Future<crm.TranslationOrder> updateTranslationOrder(
       String orderId, crm.TranslationOrder data) async {
-    final request =
-        crm.UpdateTranslationOrderRequest(orderId: orderId, orderData: data);
+    final request = crm.UpdateTranslationOrderRequest(
+        orderId: int.tryParse(orderId) ?? 0, orderData: data);
     final response = await _client.updateTranslationOrder(request,
         options: GrpcClient().getCallOptions());
     return response.translationOrder;
   }
 
   Future<void> deleteTranslationOrder(String orderId) async {
-    final request = crm.DeleteTranslationOrderRequest(orderId: orderId);
+    final request =
+        crm.DeleteTranslationOrderRequest(orderId: int.tryParse(orderId) ?? 0);
     await _client.deleteTranslationOrder(request,
         options: GrpcClient().getCallOptions());
   }

@@ -141,15 +141,15 @@ class _LendingApplicationListScreenState
                   margin:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: ListTile(
-                    title: Text(app.requestId.isNotEmpty
-                        ? app.requestId
+                    title: Text(app.requestId != 0
+                        ? app.requestId.toString()
                         : localizations
                             .lendingApplicationListScreenListItemNoId),
                     subtitle: Text(localizations
                         .lendingApplicationListScreenListItemSubtitle(
-                      app.clientId,
-                      app.managerId,
-                      app.bankId,
+                      app.clientId.toString(),
+                      app.managerId.toString(),
+                      app.bankId.toString(),
                     )),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -158,14 +158,15 @@ class _LendingApplicationListScreenState
                           icon: const Icon(Icons.edit),
                           tooltip: localizations
                               .lendingApplicationListScreenTooltipEdit,
-                          onPressed: () =>
-                              _navigateToForm(requestId: app.requestId),
+                          onPressed: () => _navigateToForm(
+                              requestId: app.requestId.toString()),
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete),
                           tooltip: localizations
                               .lendingApplicationListScreenTooltipDelete,
-                          onPressed: () => _deleteApplication(app.requestId),
+                          onPressed: () =>
+                              _deleteApplication(app.requestId.toString()),
                         ),
                       ],
                     ),

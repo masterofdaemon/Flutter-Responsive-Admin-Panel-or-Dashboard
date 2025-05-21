@@ -128,8 +128,9 @@ class _BusinessRegistrationListScreenState
                   margin:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: ListTile(
-                    title: Text(
-                        reg.requestId.isNotEmpty ? reg.requestId : 'No ID'),
+                    title: Text(reg.requestId != 0
+                        ? reg.requestId.toString()
+                        : 'No ID'),
                     subtitle: Text(
                         'Client: ${reg.clientId}\nManager: ${reg.managerId}\nBank: ${reg.bankId}'),
                     trailing: Row(
@@ -138,13 +139,14 @@ class _BusinessRegistrationListScreenState
                         IconButton(
                           icon: const Icon(Icons.edit),
                           tooltip: 'Edit Registration',
-                          onPressed: () =>
-                              _navigateToForm(requestId: reg.requestId),
+                          onPressed: () => _navigateToForm(
+                              requestId: reg.requestId.toString()),
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete),
                           tooltip: 'Delete Registration',
-                          onPressed: () => _deleteRegistration(reg.requestId),
+                          onPressed: () =>
+                              _deleteRegistration(reg.requestId.toString()),
                         ),
                       ],
                     ),

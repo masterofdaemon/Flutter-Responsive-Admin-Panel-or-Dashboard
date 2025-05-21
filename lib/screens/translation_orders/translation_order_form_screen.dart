@@ -232,7 +232,7 @@ class _TranslationOrderFormScreenState
     } catch (e) {
       _selectedTranslator = null; // Not found or translatorId is null/empty
       // Only warn if translatorId was actually set in the order data
-      if (order.hasTranslatorId() && order.translatorId.isNotEmpty) {
+      if (order.hasTranslatorId() && order.translatorId != 0) {
         print(
             'Warning: Translator ID ${order.translatorId} not found in loaded translators.');
       }
@@ -249,7 +249,7 @@ class _TranslationOrderFormScreenState
     // Set controllers based on order data or selected objects
     _titleController.text = order.hasTitle() ? order.title : '';
     _clientIdController.text =
-        order.clientId; // Keep ID in controller for saving
+        order.clientId.toString(); // Convert int to string for controller
     _doneAt = order.hasDoneAt() ? timestampToDateTime(order.doneAt) : null;
     _sourceLangController.text = order.sourceLanguage;
     _targetLangController.text = order.targetLanguage;
@@ -257,7 +257,8 @@ class _TranslationOrderFormScreenState
         order.hasPageCount() ? order.pageCount.toString() : '';
     _notarialSumController.text =
         order.notarialSum.toString(); // Assuming double
-    _paymentIdController.text = order.hasPaymentId() ? order.paymentId : '';
+    _paymentIdController.text =
+        order.hasPaymentId() ? order.paymentId.toString() : '';
     _notesController.text = order.hasNotes() ? order.notes : '';
 
     // Handle DocumentTypeKey (string)
@@ -312,9 +313,9 @@ class _TranslationOrderFormScreenState
         createdAt: createdAt,
         title: _titleController.text.trim(),
         doneAt: dateTimeToTimestamp(_doneAt),
-        clientId: _selectedClient?.clientId ?? '',
-        managerId: _selectedManager?.employeeId ?? '',
-        officeId: _selectedOffice?.officeId ?? '',
+        clientId: _selectedClient?.clientId ?? 0,
+        managerId: _selectedManager?.employeeId ?? 0,
+        officeId: _selectedOffice?.officeId ?? 0,
         translatorId: _selectedTranslator?.employeeId,
         documentTypeKey: _selectedDocumentTypeKey ?? '',
         sourceLanguage: _sourceLangController.text.isNotEmpty
@@ -324,9 +325,7 @@ class _TranslationOrderFormScreenState
             ? _targetLangController.text
             : null,
         pageCount: int.tryParse(_pageCountController.text),
-        paymentId: _paymentIdController.text.isNotEmpty
-            ? _paymentIdController.text
-            : null,
+        paymentId: int.tryParse(_paymentIdController.text),
         notes: _notesController.text.isNotEmpty ? _notesController.text : null,
         notarialSum: double.tryParse(_notarialSumController.text) ?? 0.0,
         priority: _selectedPriority ?? crm.Priority.NORMAL,
@@ -384,22 +383,28 @@ class _TranslationOrderFormScreenState
   // Helper to display employee names in dropdowns
   String _getEmployeeDisplayName(crm.Employee emp) {
     final localizations = AppLocalizations.of(context);
+    final idString = emp.employeeId.toString();
+    final shortId = idString.length > 6 ? idString.substring(0, 6) : idString;
     return localizations.translationOrderFormScreenDisplayEmployee(
-        emp.name, emp.employeeId.substring(0, 6));
+        emp.name, shortId);
   }
 
   // Helper to display office names
   String _getOfficeDisplayName(crm.Office office) {
     final localizations = AppLocalizations.of(context);
+    final idString = office.officeId.toString();
+    final shortId = idString.length > 6 ? idString.substring(0, 6) : idString;
     return localizations.translationOrderFormScreenDisplayOffice(
-        office.city, office.officeId.substring(0, 6));
+        office.city, shortId);
   }
 
   // Helper to display client names
   String _getClientDisplayName(crm.Client client) {
     final localizations = AppLocalizations.of(context);
+    final idString = client.clientId.toString();
+    final shortId = idString.length > 6 ? idString.substring(0, 6) : idString;
     return localizations.translationOrderFormScreenDisplayClient(
-        client.firstName, client.lastName, client.clientId.substring(0, 6));
+        client.firstName, client.lastName, shortId);
   }
 
   // Helper for Priority
@@ -535,7 +540,10 @@ class _TranslationOrderFormScreenState
                                               setState(() {
                                                 _selectedClient = newValue;
                                                 _clientIdController.text =
-                                                    newValue?.clientId ?? '';
+                                                    newValue?.clientId != null
+                                                        ? newValue!.clientId
+                                                            .toString()
+                                                        : '';
                                               });
                                             },
                                             validator: (value) => value == null
@@ -712,7 +720,7 @@ class _TranslationOrderFormScreenState
                                           ),
                                         ],
                                       ),
-                                    ),
+                                    )
                                   ],
                                 ),
                               ],
@@ -1028,7 +1036,7 @@ class _TranslationOrderFormScreenState
                                           ],
                                         ],
                                       ),
-                                    ),
+                                    )
                                   ],
                                 ),
                               ],

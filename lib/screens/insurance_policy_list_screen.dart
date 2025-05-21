@@ -144,8 +144,8 @@ class _InsurancePolicyListScreenState extends State<InsurancePolicyListScreen> {
                             .insurancePolicyListScreenNoPolicyNumber),
                     subtitle: Text(
                         localizations.insurancePolicyListScreenListItemSubtitle(
-                            policy.clientId,
-                            policy.managerId,
+                            policy.clientId.toString(),
+                            policy.managerId.toString(),
                             policy.amount.toString())),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -154,14 +154,15 @@ class _InsurancePolicyListScreenState extends State<InsurancePolicyListScreen> {
                           icon: const Icon(Icons.edit),
                           tooltip: localizations
                               .insurancePolicyListScreenEditPolicyTooltip,
-                          onPressed: () =>
-                              _navigateToForm(policyId: policy.policyId),
+                          onPressed: () => _navigateToForm(
+                              policyId: policy.policyId.toString()),
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete),
                           tooltip: localizations
                               .insurancePolicyListScreenDeletePolicyTooltip,
-                          onPressed: () => _deletePolicy(policy.policyId),
+                          onPressed: () =>
+                              _deletePolicy(policy.policyId.toString()),
                         ),
                       ],
                     ),

@@ -30,7 +30,7 @@ class GrpcAccountOpeningRequestService {
   }
 
   Future<crm.AccountOpeningRequest> getAccountOpeningRequest(
-      String requestId) async {
+      int requestId) async {
     final request = crm.GetAccountOpeningRequestRequest(requestId: requestId);
     final response = await _client.getAccountOpeningRequest(request,
         options: GrpcClient().getCallOptions());
@@ -38,7 +38,7 @@ class GrpcAccountOpeningRequestService {
   }
 
   Future<crm.AccountOpeningRequest> updateAccountOpeningRequest(
-      String requestId, crm.AccountOpeningRequest data) async {
+      int requestId, crm.AccountOpeningRequest data) async {
     final request = crm.UpdateAccountOpeningRequestRequest(
         requestId: requestId, requestData: data);
     final response = await _client.updateAccountOpeningRequest(request,
@@ -46,7 +46,7 @@ class GrpcAccountOpeningRequestService {
     return response.accountOpeningRequest;
   }
 
-  Future<void> deleteAccountOpeningRequest(String requestId) async {
+  Future<void> deleteAccountOpeningRequest(int requestId) async {
     final request =
         crm.DeleteAccountOpeningRequestRequest(requestId: requestId);
     await _client.deleteAccountOpeningRequest(request,

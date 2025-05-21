@@ -7,7 +7,6 @@ import 'package:fixnum/fixnum.dart';
 class EmployeeFormScreen extends StatefulWidget {
   final String? employeeId; // Null for Add mode, non-null for Edit mode
 
-  // Remove const from the constructor
   EmployeeFormScreen({super.key, this.employeeId});
 
   @override
@@ -35,6 +34,8 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
   crm.EmployeeRole? _selectedRole;
   crm.Office? _selectedOffice;
   bool _isActive = true;
+
+  // Removed unused _employeeIdInt
 
   // Data for dropdowns
   List<crm.User> _users = [];
@@ -138,14 +139,13 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       }
 
       setState(() {
+        // _employeeIdInt = employee.employeeId; // Removed, not needed
         _nameController.text = employee.name;
         _emailController.text = employee.email;
 
         // Store original telegramId and set controller
         _originalTelegramId = employee.telegramId;
         _telegramIdController.text = employee.telegramId.toString();
-        // If telegramId is 0, it will be "0". If user wants empty for 0, adjust display logic here.
-        // The save logic below will handle empty field by reverting to _originalTelegramId in edit mode.
 
         _whatsappNumberController.text = employee.whatsappNumber;
         _notesController.text = employee.notes;
@@ -235,7 +235,7 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
 
     final employeeData = crm.Employee(
       // employeeId is set by server on create, included for update
-      employeeId: _isEditMode ? widget.employeeId : null,
+      employeeId: _isEditMode ? int.tryParse(widget.employeeId ?? '') ?? 0 : 0,
       userId: _selectedUser!.userId,
       name: _nameController.text.trim(),
       role: _selectedRole!,

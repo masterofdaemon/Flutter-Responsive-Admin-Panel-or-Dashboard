@@ -29,8 +29,7 @@ class GrpcTrainingEnrollmentService {
     return await getTrainingEnrollment(response.enrollmentId);
   }
 
-  Future<crm.TrainingEnrollment> getTrainingEnrollment(
-      String enrollmentId) async {
+  Future<crm.TrainingEnrollment> getTrainingEnrollment(int enrollmentId) async {
     final request =
         crm.GetTrainingEnrollmentRequest(enrollmentId: enrollmentId);
     final response = await _client.getTrainingEnrollment(request,
@@ -39,7 +38,7 @@ class GrpcTrainingEnrollmentService {
   }
 
   Future<crm.TrainingEnrollment> updateTrainingEnrollment(
-      String enrollmentId, crm.TrainingEnrollment data) async {
+      int enrollmentId, crm.TrainingEnrollment data) async {
     final request = crm.UpdateTrainingEnrollmentRequest(
         enrollmentId: enrollmentId, enrollmentData: data);
     final response = await _client.updateTrainingEnrollment(request,
@@ -47,7 +46,7 @@ class GrpcTrainingEnrollmentService {
     return response.trainingEnrollment;
   }
 
-  Future<void> deleteTrainingEnrollment(String enrollmentId) async {
+  Future<void> deleteTrainingEnrollment(int enrollmentId) async {
     final request =
         crm.DeleteTrainingEnrollmentRequest(enrollmentId: enrollmentId);
     await _client.deleteTrainingEnrollment(request,

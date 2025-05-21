@@ -83,7 +83,7 @@ enum ClientSource {
 // Translation Progress Status
 enum TranslationProgressStatus {
   TRANSLATION_PROGRESS_STATUS_UNSPECIFIED = 0;
-  PENDING_ASSIGNMENT = 1; 
+  PENDING_ASSIGNMENT = 1;
   IN_PROGRESS = 2;        // "In Progress"
   TRANSLATED = 3;         // "Translated" (set by translator)
   CHECKED_BY_MANAGER = 4; // "Checked" (set by manager after review)
@@ -128,8 +128,8 @@ enum ReportPaymentStatus {
 // Client represents a customer in the CRM system.
 // All fields are required unless marked as optional.
 message Client {
-  // Unique identifier for the client (UUID format)
-  string client_id = 1;
+  // Unique identifier for the client (auto-incremented number)
+  uint32 client_id = 1;
   // Client's first name (min 2 chars, max 255 chars)
   string first_name = 2;
   // Client's last name (min 2 chars, max 255 chars)
@@ -149,15 +149,15 @@ message Client {
   // Notes about the client
   optional string notes = 10;
   // Linking client to manager and office as per TS
-  optional string manager_id = 11; // ID of the employee (manager)
-  optional string office_id = 12;  // ID of the office
+  optional uint32 manager_id = 11; // ID of the employee (manager)
+  optional uint32 office_id = 12;  // ID of the office
 }
 
 // User represents a system user with authentication credentials.
 // All fields are required unless marked as optional.
 message User {
-  // Unique identifier for the user (UUID format)
-  string user_id = 1;
+  // Unique identifier for the user (auto-incremented number)
+  uint32 user_id = 1;
   // User's login name (min 3 chars, max 100 chars, alphanumeric only)
   string login = 2;
   // PasswordHash is intentionally omitted from proto messages for security
@@ -168,12 +168,12 @@ message User {
 }
 
 message Employee {
-  string employee_id = 1;
-  string user_id = 2; // Link to User (optional, for legacy)
+  uint32 employee_id = 1;
+  uint32 user_id = 2; // Link to User (optional, for legacy)
   string login = 3; // Employee login (unique)
   string name = 4;
   EmployeeRole role = 5;
-  string office_id = 6; // Link to Office
+  uint32 office_id = 6; // Link to Office
   optional int64 telegram_id = 7;
   optional string whatsapp_number = 8;
   string email = 9;
@@ -185,7 +185,7 @@ message Employee {
 }
 
 message Office {
-  string office_id = 1;
+  uint32 office_id = 1;
   string city = 2;
   optional string address = 3;
   optional string phone = 4;
@@ -195,17 +195,17 @@ message Office {
 }
 
 message LegalCase {
-  string case_id = 1;
-  string client_id = 2;
-  string manager_id = 3; // Employee ID of the manager handling the case
-  string issue_type_id = 4;
-  optional string partner_id = 5;
+  uint32 case_id = 1;
+  uint32 client_id = 2;
+  uint32 manager_id = 3; // Employee ID of the manager handling the case
+  uint32 issue_type_id = 4;
+  optional uint32 partner_id = 5;
   optional google.protobuf.Timestamp consultation_date = 6; // Actual date of consultation
   optional google.protobuf.Timestamp contract_date = 7;
   double contract_amount = 8;
   double expected_commission = 9; // Calculated field
   Status status = 10; // Consider enum
-  optional string payment_id = 11;
+  optional uint32 payment_id = 11;
   // Notes about the legal case
   optional string notes = 12;
   optional google.protobuf.Timestamp consultation_scheduled_date = 13; // New
@@ -214,12 +214,12 @@ message LegalCase {
 }
 
 message TranslationOrder {
-  string order_id = 1;
+  uint32 order_id = 1;
   string title = 2;
-  string client_id = 3;
-  string manager_id = 4;
-  optional string translator_id = 5;
-  string office_id = 6;
+  uint32 client_id = 3;
+  uint32 manager_id = 4;
+  optional uint32 translator_id = 5;
+  uint32 office_id = 6;
   // Document type is now a string to support an extensive list managed by the application.
   optional string document_type_key = 7; // e.g., "passport_rf", "birth_certificate_usa"
   optional string source_language = 8;
@@ -230,7 +230,7 @@ message TranslationOrder {
   double total_sum = 13;       // Calculated: (translation_sum * urgency_multiplier) + notarial_sum
   Priority priority = 14;
   TranslationProgressStatus translation_progress = 15; // Specific status for translation workflow
-  optional string payment_id = 16;
+  optional uint32 payment_id = 16;
   repeated BlankInfo blanks = 17;
   // Notes about the translation order
   optional string notes = 18;
@@ -259,9 +259,9 @@ message TranslationOrder {
 }
 
 message InsurancePolicy {
-  string policy_id = 1;
-  string client_id = 2;
-  string manager_id = 3; // Employee ID of the manager
+  uint32 policy_id = 1;
+  uint32 client_id = 2;
+  uint32 manager_id = 3; // Employee ID of the manager
   string policy_number = 4;
   optional string insurance_company_name = 5; // New: Name of the insurance provider
   optional string insurance_line = 6;         // New: e.g., "Auto Insurance", "Property Insurance"
@@ -276,13 +276,13 @@ message InsurancePolicy {
 }
 
 message TrainingEnrollment {
-  string enrollment_id = 1;
-  string client_id = 2;
-  string manager_id = 3; // Employee ID of the manager
-  string course_id = 4;
+  uint32 enrollment_id = 1;
+  uint32 client_id = 2;
+  uint32 manager_id = 3; // Employee ID of the manager
+  uint32 course_id = 4;
   optional google.protobuf.Timestamp contract_date = 5;
   Status status = 6; // Consider enum
-  optional string payment_id = 7;
+  optional uint32 payment_id = 7;
   optional string notes = 8;
   bool paid = 9; // Client has paid
   bool accountant_verified = 10; // Accountant verified payment from partner
@@ -292,39 +292,39 @@ message TrainingEnrollment {
 }
 
 message AccountOpeningRequest {
-  string request_id = 1;
-  string client_id = 2;
-  string manager_id = 3; // Employee ID of the manager
-  string bank_id = 4;
+  uint32 request_id = 1;
+  uint32 client_id = 2;
+  uint32 manager_id = 3; // Employee ID of the manager
+  uint32 bank_id = 4;
   Status status = 5; // Consider enum
   optional google.protobuf.Timestamp application_date = 6;
   optional google.protobuf.Timestamp opened_date = 7;
-  optional string payment_id = 8;
+  optional uint32 payment_id = 8;
   optional string notes = 9;
   bool agent_commission_received = 10; // Accountant marks "Funds Received"
   double agency_commission_amount_at_request = 11; // Store the commission amount applicable at time of request
 }
 
 message BusinessRegistration {
-  string request_id = 1;
-  string client_id = 2;
-  string manager_id = 3; 
-  string bank_id = 4;
-  RegistrationType registration_type = 5; 
-  Status status = 6; 
+  uint32 request_id = 1;
+  uint32 client_id = 2;
+  uint32 manager_id = 3;
+  uint32 bank_id = 4;
+  RegistrationType registration_type = 5;
+  Status status = 6;
   optional google.protobuf.Timestamp application_date = 7;
   optional google.protobuf.Timestamp registration_date = 8;
-  optional string payment_id = 9;
+  optional uint32 payment_id = 9;
   optional string notes = 10;
   bool agent_commission_received = 11; // Accountant marks "Funds Received"
   double agency_commission_amount_at_request = 12; // New: Store the commission amount applicable at time of request
 }
 
 message LendingApplication {
-  string request_id = 1;
-  string client_id = 2;
-  string manager_id = 3; 
-  string bank_id = 4;
+  uint32 request_id = 1;
+  uint32 client_id = 2;
+  uint32 manager_id = 3;
+  uint32 bank_id = 4;
   double requested_amount = 5;
   optional double approved_amount = 6;
   optional google.protobuf.Timestamp application_date = 7;
@@ -332,7 +332,7 @@ message LendingApplication {
   optional google.protobuf.Timestamp funds_received_date = 9;    // Client receives loan
   optional google.protobuf.Timestamp company_contract_date = 10; // Service agreement date with client
   Status status = 11;
-  optional string payment_id = 12; // Refers to the payment of company's commission by the client
+  optional uint32 payment_id = 12; // Refers to the payment of company's commission by the client
   optional string notes = 13;
   double company_commission_percent = 14;    // e.g., 7% of loan amount, configurable by Supervisor
   double calculated_commission_amount = 15; // approved_amount * company_commission_percent / 100
@@ -341,7 +341,7 @@ message LendingApplication {
 }
 
 message Partner {
-  string partner_id = 1;
+  uint32 partner_id = 1;
   string name = 2;
   optional string city_of_residence = 3;
   optional string contact_info = 4;
@@ -353,7 +353,7 @@ message Partner {
 }
 
 message LegalIssueType {
-  string issue_type_id = 1;
+  uint32 issue_type_id = 1;
   string name = 2;
   optional string description = 3;
   // Notes about the legal issue type
@@ -361,21 +361,21 @@ message LegalIssueType {
 }
 
 message TrainingCourse {
-  string course_id = 1;
+  uint32 course_id = 1;
   string name = 2;
   double price = 3;
   double commission_percent = 4; // Required field, must be between 0 and 100
   optional string description = 5;
   // Notes about the training course
   optional string notes = 6;
-  optional string parent_course_id = 7; // New: For sub-courses, links to parent TrainingCourse ID
+  optional uint32 parent_course_id = 7; // New: For sub-courses, links to parent TrainingCourse ID
 }
 
 // Message for storing translation price list items.
 // Service methods would be needed to manage (CRUD) these price lists.
 message TranslationPriceListItem {
-  string item_id = 1; // Unique ID for the price list item
-  string office_id = 2; // Link to Office, for city/office specific pricing
+  uint32 item_id = 1; // Unique ID for the price list item
+  uint32 office_id = 2; // Link to Office, for city/office specific pricing
   string document_type_key = 3; // Key matching document types used in TranslationOrder
   double price_per_page = 4;    // Price per page for this document type in this office
   // optional double fixed_price = 5; // Alternative to price_per_page
@@ -386,7 +386,7 @@ message TranslationPriceListItem {
 
 // Bank message
 message Bank {
-  string bank_id = 1;
+  uint32 bank_id = 1;
   string name = 2;
   optional string address = 3;
   optional string contact_person = 4;
@@ -396,9 +396,9 @@ message Bank {
 
 // Interaction message
 message Interaction {
-  string interaction_id = 1;
-  string client_id = 2;
-  string manager_id = 3;
+  uint32 interaction_id = 1;
+  uint32 client_id = 2;
+  uint32 manager_id = 3;
   InteractionType type = 4;
   google.protobuf.Timestamp interaction_date = 5;
   string summary = 6; // Min 10 chars, max 1000 chars
@@ -407,9 +407,9 @@ message Interaction {
 
 // Payment message
 message Payment {
-  string payment_id = 1;
-  string client_id = 2;
-  string related_entity_id = 3; // e.g., CaseID, OrderID, RequestID
+  uint32 payment_id = 1;
+  uint32 client_id = 2;
+  uint32 related_entity_id = 3; // e.g., CaseID, OrderID, RequestID
   ServiceCategory service_category = 4; // To categorize the payment
   double amount = 5;
   string currency_code = 6; // e.g., "RUB", "USD"
@@ -423,12 +423,12 @@ message Payment {
 // --- Reporting Messages ---
 
 message FinancialReportItem {
-  string item_id = 1;                 // e.g., LegalCase ID, TranslationOrder ID
+  uint32 item_id = 1;                 // e.g., LegalCase ID, TranslationOrder ID
   ServiceCategory service_category = 2;
   string item_description = 3;        // e.g., "Legal Consultation - John Doe", "Passport Translation - Jane Smith"
-  string client_id = 4;
+  uint32 client_id = 4;
   string client_name = 5;             // Denormalized for easier display
-  string manager_id = 6;
+  uint32 manager_id = 6;
   string manager_name = 7;            // Denormalized for easier display
   google.protobuf.Timestamp item_date = 8; // Relevant date (e.g., contract date, order creation date)
   optional google.protobuf.Timestamp due_date = 9;
@@ -444,8 +444,8 @@ message GetFinancialReportRequest {
   google.protobuf.Timestamp start_date = 1;
   google.protobuf.Timestamp end_date = 2;
   repeated ServiceCategory service_categories = 3; // Filter by specific categories; if empty, assume all
-  optional string manager_id_filter = 4;         // Filter by a specific manager
-  optional string client_id_filter = 5;          // Filter by a specific client
+  optional uint32 manager_id_filter = 4;         // Filter by a specific manager
+  optional uint32 client_id_filter = 5;          // Filter by a specific client
   int32 page_size = 6;
   string page_token = 7;
 }
@@ -468,18 +468,18 @@ message CreateClientRequest {
   optional int64 telegram_id = 2; // Added
 }
 message CreateClientResponse {
-  string client_id = 1; // Return the generated ID
+  uint32 client_id = 1; // Return the generated ID
 }
 
 message GetClientRequest {
-  string client_id = 1;
+  uint32 client_id = 1;
 }
 message GetClientResponse {
   Client client = 1;
 }
 
 message UpdateClientRequest {
-  string client_id = 1; // ID to identify the client
+  uint32 client_id = 1; // ID to identify the client
   Client client_data = 2; // Fields to update (server should handle partial updates)
   optional int64 telegram_id = 3; // Added
 }
@@ -489,7 +489,7 @@ message UpdateClientResponse {
 }
 
 message DeleteClientRequest {
-  string client_id = 1;
+  uint32 client_id = 1;
 }
 // Delete often returns Empty
 message DeleteClientResponse {
@@ -516,12 +516,12 @@ message CreateEmployeeRequest {
   optional int64 telegram_id = 4; // Added
 }
 message CreateEmployeeResponse {
-  string employee_id = 1;
-  string user_id = 2;
+  uint32 employee_id = 1;
+  uint32 user_id = 2;
 }
 
 message GetEmployeeRequest {
-  string employee_id = 1;
+  uint32 employee_id = 1;
 }
 message GetEmployeeResponse {
   Employee employee = 1;
@@ -529,7 +529,7 @@ message GetEmployeeResponse {
 }
 
 message UpdateEmployeeRequest {
-  string employee_id = 1;
+  uint32 employee_id = 1;
   Employee employee_data = 2; // Fields to update
   // Optionally allow updating related User info
   optional int64 telegram_id = 3; // Added
@@ -540,7 +540,7 @@ message UpdateEmployeeResponse {
 }
 
 message DeleteEmployeeRequest {
-  string employee_id = 1;
+  uint32 employee_id = 1;
 }
 message DeleteEmployeeResponse {
   google.protobuf.Empty response = 1;
@@ -695,180 +695,180 @@ message GetSelfProfileResponse {
 
 // User (Password handled separately)
 message CreateUserRequest { User user = 1; string password = 2; } // Password only for creation, handled securely server-side
-message CreateUserResponse { string user_id = 1; }
-message GetUserRequest { string user_id = 1; }
+message CreateUserResponse { uint32 user_id = 1; }
+message GetUserRequest { uint32 user_id = 1; }
 message GetUserResponse { User user = 1; }
-message UpdateUserRequest { string user_id = 1; User user_data = 2; } // No password update here
+message UpdateUserRequest { uint32 user_id = 1; User user_data = 2; } // No password update here
 message UpdateUserResponse { User user = 1; }
-message DeleteUserRequest { string user_id = 1; }
+message DeleteUserRequest { uint32 user_id = 1; }
 message DeleteUserResponse { google.protobuf.Empty response = 1; }
 message ListUsersRequest { int32 page_size = 1; string page_token = 2; }
 message ListUsersResponse { repeated User users = 1; string next_page_token = 2; }
 
 // Office
 message CreateOfficeRequest { Office office = 1; }
-message CreateOfficeResponse { string office_id = 1; }
-message GetOfficeRequest { string office_id = 1; }
+message CreateOfficeResponse { uint32 office_id = 1; }
+message GetOfficeRequest { uint32 office_id = 1; }
 message GetOfficeResponse { Office office = 1; }
-message UpdateOfficeRequest { string office_id = 1; Office office_data = 2; }
+message UpdateOfficeRequest { uint32 office_id = 1; Office office_data = 2; }
 message UpdateOfficeResponse { Office office = 1; }
-message DeleteOfficeRequest { string office_id = 1; }
+message DeleteOfficeRequest { uint32 office_id = 1; }
 message DeleteOfficeResponse { google.protobuf.Empty response = 1; }
 message ListOfficesRequest { int32 page_size = 1; string page_token = 2; }
 message ListOfficesResponse { repeated Office offices = 1; string next_page_token = 2; }
 
 // LegalCase
 message CreateLegalCaseRequest { LegalCase legal_case = 1; }
-message CreateLegalCaseResponse { string case_id = 1; }
-message GetLegalCaseRequest { string case_id = 1; }
+message CreateLegalCaseResponse { uint32 case_id = 1; }
+message GetLegalCaseRequest { uint32 case_id = 1; }
 message GetLegalCaseResponse { LegalCase legal_case = 1; }
-message UpdateLegalCaseRequest { string case_id = 1; LegalCase case_data = 2; }
+message UpdateLegalCaseRequest { uint32 case_id = 1; LegalCase case_data = 2; }
 message UpdateLegalCaseResponse { LegalCase legal_case = 1; }
-message DeleteLegalCaseRequest { string case_id = 1; }
+message DeleteLegalCaseRequest { uint32 case_id = 1; }
 message DeleteLegalCaseResponse { google.protobuf.Empty response = 1; }
 message ListLegalCasesRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
 message ListLegalCasesResponse { repeated LegalCase legal_cases = 1; string next_page_token = 2; }
 
 // TranslationOrder
 message CreateTranslationOrderRequest { TranslationOrder translation_order = 1; }
-message CreateTranslationOrderResponse { string order_id = 1; }
-message GetTranslationOrderRequest { string order_id = 1; }
+message CreateTranslationOrderResponse { uint32 order_id = 1; }
+message GetTranslationOrderRequest { uint32 order_id = 1; }
 message GetTranslationOrderResponse { TranslationOrder translation_order = 1; }
-message UpdateTranslationOrderRequest { string order_id = 1; TranslationOrder order_data = 2; }
+message UpdateTranslationOrderRequest { uint32 order_id = 1; TranslationOrder order_data = 2; }
 message UpdateTranslationOrderResponse { TranslationOrder translation_order = 1; }
-message DeleteTranslationOrderRequest { string order_id = 1; }
+message DeleteTranslationOrderRequest { uint32 order_id = 1; }
 message DeleteTranslationOrderResponse { google.protobuf.Empty response = 1; }
 message ListTranslationOrdersRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
 message ListTranslationOrdersResponse { repeated TranslationOrder translation_orders = 1; string next_page_token = 2; }
 
 // InsurancePolicy
 message CreateInsurancePolicyRequest { InsurancePolicy insurance_policy = 1; }
-message CreateInsurancePolicyResponse { string policy_id = 1; }
-message GetInsurancePolicyRequest { string policy_id = 1; }
+message CreateInsurancePolicyResponse { uint32 policy_id = 1; }
+message GetInsurancePolicyRequest { uint32 policy_id = 1; }
 message GetInsurancePolicyResponse { InsurancePolicy insurance_policy = 1; }
-message UpdateInsurancePolicyRequest { string policy_id = 1; InsurancePolicy policy_data = 2; }
+message UpdateInsurancePolicyRequest { uint32 policy_id = 1; InsurancePolicy policy_data = 2; }
 message UpdateInsurancePolicyResponse { InsurancePolicy insurance_policy = 1; }
-message DeleteInsurancePolicyRequest { string policy_id = 1; }
+message DeleteInsurancePolicyRequest { uint32 policy_id = 1; }
 message DeleteInsurancePolicyResponse { google.protobuf.Empty response = 1; }
 message ListInsurancePoliciesRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
 message ListInsurancePoliciesResponse { repeated InsurancePolicy insurance_policies = 1; string next_page_token = 2; }
 
 // TrainingEnrollment
 message CreateTrainingEnrollmentRequest { TrainingEnrollment training_enrollment = 1; }
-message CreateTrainingEnrollmentResponse { string enrollment_id = 1; }
-message GetTrainingEnrollmentRequest { string enrollment_id = 1; }
+message CreateTrainingEnrollmentResponse { uint32 enrollment_id = 1; }
+message GetTrainingEnrollmentRequest { uint32 enrollment_id = 1; }
 message GetTrainingEnrollmentResponse { TrainingEnrollment training_enrollment = 1; }
-message UpdateTrainingEnrollmentRequest { string enrollment_id = 1; TrainingEnrollment enrollment_data = 2; }
+message UpdateTrainingEnrollmentRequest { uint32 enrollment_id = 1; TrainingEnrollment enrollment_data = 2; }
 message UpdateTrainingEnrollmentResponse { TrainingEnrollment training_enrollment = 1; }
-message DeleteTrainingEnrollmentRequest { string enrollment_id = 1; }
+message DeleteTrainingEnrollmentRequest { uint32 enrollment_id = 1; }
 message DeleteTrainingEnrollmentResponse { google.protobuf.Empty response = 1; }
 message ListTrainingEnrollmentsRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
 message ListTrainingEnrollmentsResponse { repeated TrainingEnrollment training_enrollments = 1; string next_page_token = 2; }
 
 // AccountOpeningRequest
 message CreateAccountOpeningRequestRequest { AccountOpeningRequest account_opening_request = 1; }
-message CreateAccountOpeningRequestResponse { string request_id = 1; }
-message GetAccountOpeningRequestRequest { string request_id = 1; }
+message CreateAccountOpeningRequestResponse { uint32 request_id = 1; }
+message GetAccountOpeningRequestRequest { uint32 request_id = 1; }
 message GetAccountOpeningRequestResponse { AccountOpeningRequest account_opening_request = 1; }
-message UpdateAccountOpeningRequestRequest { string request_id = 1; AccountOpeningRequest request_data = 2; }
+message UpdateAccountOpeningRequestRequest { uint32 request_id = 1; AccountOpeningRequest request_data = 2; }
 message UpdateAccountOpeningRequestResponse { AccountOpeningRequest account_opening_request = 1; }
-message DeleteAccountOpeningRequestRequest { string request_id = 1; }
+message DeleteAccountOpeningRequestRequest { uint32 request_id = 1; }
 message DeleteAccountOpeningRequestResponse { google.protobuf.Empty response = 1; }
 message ListAccountOpeningRequestsRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
 message ListAccountOpeningRequestsResponse { repeated AccountOpeningRequest account_opening_requests = 1; string next_page_token = 2; }
 
 // BusinessRegistration
 message CreateBusinessRegistrationRequest { BusinessRegistration business_registration = 1; }
-message CreateBusinessRegistrationResponse { string request_id = 1; }
-message GetBusinessRegistrationRequest { string request_id = 1; }
+message CreateBusinessRegistrationResponse { uint32 request_id = 1; }
+message GetBusinessRegistrationRequest { uint32 request_id = 1; }
 message GetBusinessRegistrationResponse { BusinessRegistration business_registration = 1; }
-message UpdateBusinessRegistrationRequest { string request_id = 1; BusinessRegistration registration_data = 2; }
+message UpdateBusinessRegistrationRequest { uint32 request_id = 1; BusinessRegistration registration_data = 2; }
 message UpdateBusinessRegistrationResponse { BusinessRegistration business_registration = 1; }
-message DeleteBusinessRegistrationRequest { string request_id = 1; }
+message DeleteBusinessRegistrationRequest { uint32 request_id = 1; }
 message DeleteBusinessRegistrationResponse { google.protobuf.Empty response = 1; }
 message ListBusinessRegistrationsRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
 message ListBusinessRegistrationsResponse { repeated BusinessRegistration business_registrations = 1; string next_page_token = 2; }
 
 // LendingApplication
 message CreateLendingApplicationRequest { LendingApplication lending_application = 1; }
-message CreateLendingApplicationResponse { string request_id = 1; }
-message GetLendingApplicationRequest { string request_id = 1; }
+message CreateLendingApplicationResponse { uint32 request_id = 1; }
+message GetLendingApplicationRequest { uint32 request_id = 1; }
 message GetLendingApplicationResponse { LendingApplication lending_application = 1; }
-message UpdateLendingApplicationRequest { string request_id = 1; LendingApplication application_data = 2; }
+message UpdateLendingApplicationRequest { uint32 request_id = 1; LendingApplication application_data = 2; }
 message UpdateLendingApplicationResponse { LendingApplication lending_application = 1; }
-message DeleteLendingApplicationRequest { string request_id = 1; }
+message DeleteLendingApplicationRequest { uint32 request_id = 1; }
 message DeleteLendingApplicationResponse { google.protobuf.Empty response = 1; }
 message ListLendingApplicationsRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
 message ListLendingApplicationsResponse { repeated LendingApplication lending_applications = 1; string next_page_token = 2; }
 
 // Partner
 message CreatePartnerRequest { Partner partner = 1; }
-message CreatePartnerResponse { string partner_id = 1; }
-message GetPartnerRequest { string partner_id = 1; }
+message CreatePartnerResponse { uint32 partner_id = 1; }
+message GetPartnerRequest { uint32 partner_id = 1; }
 message GetPartnerResponse { Partner partner = 1; }
-message UpdatePartnerRequest { string partner_id = 1; Partner partner_data = 2; }
+message UpdatePartnerRequest { uint32 partner_id = 1; Partner partner_data = 2; }
 message UpdatePartnerResponse { Partner partner = 1; }
-message DeletePartnerRequest { string partner_id = 1; }
+message DeletePartnerRequest { uint32 partner_id = 1; }
 message DeletePartnerResponse { google.protobuf.Empty response = 1; }
 message ListPartnersRequest { int32 page_size = 1; string page_token = 2; }
 message ListPartnersResponse { repeated Partner partners = 1; string next_page_token = 2; }
 
 // LegalIssueType
 message CreateLegalIssueTypeRequest { LegalIssueType legal_issue_type = 1; }
-message CreateLegalIssueTypeResponse { string issue_type_id = 1; }
-message GetLegalIssueTypeRequest { string issue_type_id = 1; }
+message CreateLegalIssueTypeResponse { uint32 issue_type_id = 1; }
+message GetLegalIssueTypeRequest { uint32 issue_type_id = 1; }
 message GetLegalIssueTypeResponse { LegalIssueType legal_issue_type = 1; }
-message UpdateLegalIssueTypeRequest { string issue_type_id = 1; LegalIssueType issue_type_data = 2; }
+message UpdateLegalIssueTypeRequest { uint32 issue_type_id = 1; LegalIssueType issue_type_data = 2; }
 message UpdateLegalIssueTypeResponse { LegalIssueType legal_issue_type = 1; }
-message DeleteLegalIssueTypeRequest { string issue_type_id = 1; }
+message DeleteLegalIssueTypeRequest { uint32 issue_type_id = 1; }
 message DeleteLegalIssueTypeResponse { google.protobuf.Empty response = 1; }
 message ListLegalIssueTypesRequest { int32 page_size = 1; string page_token = 2; }
 message ListLegalIssueTypesResponse { repeated LegalIssueType legal_issue_types = 1; string next_page_token = 2; }
 
 // TrainingCourse
 message CreateTrainingCourseRequest { TrainingCourse training_course = 1; }
-message CreateTrainingCourseResponse { string course_id = 1; }
-message GetTrainingCourseRequest { string course_id = 1; }
+message CreateTrainingCourseResponse { uint32 course_id = 1; }
+message GetTrainingCourseRequest { uint32 course_id = 1; }
 message GetTrainingCourseResponse { TrainingCourse training_course = 1; }
-message UpdateTrainingCourseRequest { string course_id = 1; TrainingCourse course_data = 2; }
+message UpdateTrainingCourseRequest { uint32 course_id = 1; TrainingCourse course_data = 2; }
 message UpdateTrainingCourseResponse { TrainingCourse training_course = 1; }
-message DeleteTrainingCourseRequest { string course_id = 1; }
+message DeleteTrainingCourseRequest { uint32 course_id = 1; }
 message DeleteTrainingCourseResponse { google.protobuf.Empty response = 1; }
 message ListTrainingCoursesRequest { int32 page_size = 1; string page_token = 2; }
 message ListTrainingCoursesResponse { repeated TrainingCourse training_courses = 1; string next_page_token = 2; }
 
 // Bank
 message CreateBankRequest { Bank bank = 1; }
-message CreateBankResponse { string bank_id = 1; }
-message GetBankRequest { string bank_id = 1; }
+message CreateBankResponse { uint32 bank_id = 1; }
+message GetBankRequest { uint32 bank_id = 1; }
 message GetBankResponse { Bank bank = 1; }
-message UpdateBankRequest { string bank_id = 1; Bank bank_data = 2; }
+message UpdateBankRequest { uint32 bank_id = 1; Bank bank_data = 2; }
 message UpdateBankResponse { Bank bank = 1; }
-message DeleteBankRequest { string bank_id = 1; }
+message DeleteBankRequest { uint32 bank_id = 1; }
 message DeleteBankResponse { google.protobuf.Empty response = 1; }
 message ListBanksRequest { int32 page_size = 1; string page_token = 2; }
 message ListBanksResponse { repeated Bank banks = 1; string next_page_token = 2; }
 
 // Interaction
 message CreateInteractionRequest { Interaction interaction = 1; }
-message CreateInteractionResponse { string interaction_id = 1; }
-message GetInteractionRequest { string interaction_id = 1; }
+message CreateInteractionResponse { uint32 interaction_id = 1; }
+message GetInteractionRequest { uint32 interaction_id = 1; }
 message GetInteractionResponse { Interaction interaction = 1; }
-message UpdateInteractionRequest { string interaction_id = 1; Interaction interaction_data = 2; }
+message UpdateInteractionRequest { uint32 interaction_id = 1; Interaction interaction_data = 2; }
 message UpdateInteractionResponse { Interaction interaction = 1; }
-message DeleteInteractionRequest { string interaction_id = 1; }
+message DeleteInteractionRequest { uint32 interaction_id = 1; }
 message DeleteInteractionResponse { google.protobuf.Empty response = 1; }
 message ListInteractionsRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
 message ListInteractionsResponse { repeated Interaction interactions = 1; string next_page_token = 2; }
 
 // Payment
 message CreatePaymentRequest { Payment payment = 1; }
-message CreatePaymentResponse { string payment_id = 1; }
-message GetPaymentRequest { string payment_id = 1; }
+message CreatePaymentResponse { uint32 payment_id = 1; }
+message GetPaymentRequest { uint32 payment_id = 1; }
 message GetPaymentResponse { Payment payment = 1; }
-message UpdatePaymentRequest { string payment_id = 1; Payment payment_data = 2; }
+message UpdatePaymentRequest { uint32 payment_id = 1; Payment payment_data = 2; }
 message UpdatePaymentResponse { Payment payment = 1; }
-message DeletePaymentRequest { string payment_id = 1; }
+message DeletePaymentRequest { uint32 payment_id = 1; }
 message DeletePaymentResponse { google.protobuf.Empty response = 1; }
 message ListPaymentsRequest { int32 page_size = 1; string page_token = 2; /* Add filters */ }
 message ListPaymentsResponse { repeated Payment payments = 1; string next_page_token = 2; }
@@ -890,7 +890,7 @@ message LoginEmployeeRequest {
 
 message LoginEmployeeResponse {
   string token = 1;
-  Employee employee = 2; 
+  Employee employee = 2;
 }
 
 // --- Authentication Service ---

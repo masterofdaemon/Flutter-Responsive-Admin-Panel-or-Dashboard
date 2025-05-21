@@ -92,24 +92,31 @@ class _LendingApplicationFormScreenState
       _selectedClient = _clients.isEmpty
           ? null
           : _clients
-              .where((c) => c.clientId == app.clientId)
+              .where((c) =>
+                  c.clientId.toString() ==
+                  app.clientId) // Compare string with string
               .cast<crm.Client?>()
               .firstWhere((c) => c != null, orElse: () => null);
       _selectedManager = _managers.isEmpty
           ? null
           : _managers
-              .where((m) => m.employeeId == app.managerId)
+              .where((m) =>
+                  m.employeeId.toString() ==
+                  app.managerId) // Compare string with string
               .cast<crm.Employee?>()
               .firstWhere((m) => m != null, orElse: () => null);
       _selectedBank = _banks.isEmpty
           ? null
           : _banks
-              .where((b) => b.bankId == app.bankId)
+              .where((b) =>
+                  b.bankId.toString() ==
+                  app.bankId) // Compare string with string
               .cast<crm.Bank?>()
               .firstWhere((b) => b != null, orElse: () => null);
       _requestedAmountController.text = app.requestedAmount.toString();
       _approvedAmountController.text = app.approvedAmount.toString();
-      _paymentIdController.text = app.paymentId;
+      _paymentIdController.text =
+          app.paymentId.toString(); // Convert int to string for text controller
       _notesController.text = app.notes;
       _companyCommissionPercentController.text =
           app.companyCommissionPercent.toString();
@@ -144,10 +151,10 @@ class _LendingApplicationFormScreenState
     final localizations = AppLocalizations.of(context);
     try {
       final app = crm.LendingApplication(
-        requestId: widget.requestId ?? '',
-        clientId: _selectedClient?.clientId ?? '',
-        managerId: _selectedManager?.employeeId ?? '',
-        bankId: _selectedBank?.bankId ?? '',
+        requestId: widget.requestId != null ? int.tryParse(widget.requestId!) ?? 0 : 0, // Convert requestId to int for proto
+        clientId: _selectedClient?.clientId ?? 0,
+        managerId: _selectedManager?.employeeId ?? 0,
+        bankId: _selectedBank?.bankId ?? 0,
         requestedAmount:
             double.tryParse(_requestedAmountController.text.trim()) ?? 0.0,
         approvedAmount:
@@ -164,7 +171,8 @@ class _LendingApplicationFormScreenState
             ? dateTimeToTimestamp(_companyContractDate!)
             : null,
         status: _status ?? crm.Status.STATUS_UNSPECIFIED,
-        paymentId: _paymentIdController.text.trim(),
+        paymentId: int.tryParse(_paymentIdController.text.trim()) ??
+            0, // Parse to int for proto
         notes: _notesController.text.trim(),
         companyCommissionPercent:
             double.tryParse(_companyCommissionPercentController.text.trim()) ??
@@ -175,12 +183,15 @@ class _LendingApplicationFormScreenState
         commissionPaid: _commissionPaid,
       );
       if (_isEditMode) {
+        // The service's updateLendingApplication expects requestId as String, and LendingApplication object
         await _service.updateLendingApplication(widget.requestId!, app);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text(localizations.applicationUpdatedSuccessMessage)),
         );
       } else {
+        // The service's createLendingApplication expects LendingApplication object
+        // The LendingApplication proto has requestId as int, but service might implicitly handle it or ignore it on create
         await _service.createLendingApplication(app);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -273,7 +284,7 @@ class _LendingApplicationFormScreenState
                           .map((c) => DropdownMenuItem(
                                 value: c,
                                 child: Text(
-                                    '${c.firstName} ${c.lastName} (${c.clientId})'),
+                                    '${c.firstName} ${c.lastName} (${c.clientId.toString()})'), // Convert int to string for display
                               ))
                           .toList(),
                       onChanged: (val) => setState(() => _selectedClient = val),
@@ -290,7 +301,8 @@ class _LendingApplicationFormScreenState
                       items: _managers
                           .map((m) => DropdownMenuItem(
                                 value: m,
-                                child: Text('${m.name} (${m.employeeId})'),
+                                child: Text(
+                                    '${m.name} (${m.employeeId.toString()})'), // Convert int to string for display
                               ))
                           .toList(),
                       onChanged: (val) =>
@@ -308,7 +320,8 @@ class _LendingApplicationFormScreenState
                       items: _banks
                           .map((b) => DropdownMenuItem(
                                 value: b,
-                                child: Text('${b.name} (${b.bankId})'),
+                                child: Text(
+                                    '${b.name} (${b.bankId.toString()})'), // Convert int to string for display
                               ))
                           .toList(),
                       onChanged: (val) => setState(() => _selectedBank = val),

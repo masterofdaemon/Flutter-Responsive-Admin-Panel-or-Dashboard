@@ -35,6 +35,7 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
   // Enum state variable
   crm.ClientSource? _selectedSource;
 
+  // (Removed unused _clientIdInt)
   bool _didLoadInitialData = false; // Add this flag
 
   @override
@@ -78,9 +79,8 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
             client.source == crm.ClientSource.CLIENT_SOURCE_UNSPECIFIED
                 ? null
                 : client.source;
-        _passportDataController.text = client.hasPassportData()
-            ? client.passportData.writeToJson()
-            : ''; // Changed here
+        _passportDataController.text =
+            client.hasPassportData() ? client.passportData.writeToJson() : '';
         _notesController.text = client.notes;
         _isLoading = false;
       });
@@ -127,7 +127,7 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
 
       // Prepare client data from controllers
       final clientToSave = crm.Client(
-        clientId: _isEditMode ? widget.clientId : null,
+        clientId: _isEditMode ? int.tryParse(widget.clientId ?? '') ?? 0 : 0,
         firstName: _firstNameController.text.trim(),
         lastName: _lastNameController.text.trim(),
         email: _emailController.text.trim(),

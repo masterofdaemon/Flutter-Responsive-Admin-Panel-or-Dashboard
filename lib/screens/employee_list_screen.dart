@@ -92,7 +92,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
     });
 
     try {
-      await _grpcService.deleteEmployee(employeeToDelete.employeeId);
+      await _grpcService.deleteEmployee(employeeToDelete.employeeId.toString());
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -222,24 +222,30 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
         readOnly: true,
         textAlign: PlutoColumnTextAlign.center,
         renderer: (rendererContext) {
-          final String employeeId =
-              rendererContext.row.cells['id']?.value ?? '';
+          final String employeeIdStr =
+              rendererContext.row.cells['id']?.value?.toString() ?? '';
+          // Find the original employee object to pass to _deleteEmployee if needed,
+          // or ensure _deleteEmployee can work with just the ID string.
+          // For _navigateToEditEmployee, the string ID is fine.
+          final employee = _employees.firstWhere(
+              (e) => e.employeeId.toString() == employeeIdStr,
+              orElse: () =>
+                  crm.Employee() // Return a default/empty employee if not found
+              );
+
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
                 icon: const Icon(Icons.edit, color: primaryColor),
-                onPressed: () => _navigateToEditEmployee(employeeId),
+                onPressed: () => _navigateToEditEmployee(employeeIdStr),
                 tooltip: localizations.employeeListScreenTooltipEdit,
                 splashRadius: 20,
               ),
               const SizedBox(width: 4),
               IconButton(
                 icon: const Icon(Icons.delete, color: Colors.redAccent),
-                onPressed: () => _deleteEmployee(
-                  _employees.firstWhere((e) => e.employeeId == employeeId,
-                      orElse: () => crm.Employee()),
-                ),
+                onPressed: () => _deleteEmployee(employee),
                 tooltip: localizations.employeeListScreenTooltipDelete,
                 splashRadius: 20,
               ),
@@ -257,13 +263,17 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
           "Processing employee for grid: ID: ${employee.employeeId}, Name: ${employee.name}, Role: ${employee.role}, Role Name: ${employee.role.name}, Role Value: ${employee.role.value}");
       return PlutoRow(
         cells: {
-          'id': PlutoCell(value: employee.employeeId),
+          'id': PlutoCell(
+              value: employee.employeeId
+                  .toString()), // Ensure ID is string for consistency if used as string elsewhere
           'name': PlutoCell(value: employee.name),
           'email': PlutoCell(value: employee.email),
           'role': PlutoCell(value: _getRoleDisplayName(employee.role)),
-          'officeId': PlutoCell(value: employee.officeId),
+          'officeId': PlutoCell(value: employee.officeId.toString()),
           'active': PlutoCell(value: employee.isActive ? 'Yes' : 'No'),
-          'actions': PlutoCell(value: employee.employeeId),
+          'actions': PlutoCell(
+              value: employee.employeeId
+                  .toString()), // Ensure ID is string for consistency
         },
       );
     }).toList();
@@ -385,8 +395,8 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
       cells: [
         DataCell(Text(employeeInfo.email)),
         DataCell(Text(_getRoleDisplayName(employeeInfo.role))),
-        DataCell(Text(employeeInfo
-            .officeId)), // TODO: Fetch office name if needed for display
+        DataCell(Text(employeeInfo.officeId
+            .toString())), // TODO: Fetch office name if needed for display
         DataCell(Icon(
           employeeInfo.isActive ? Icons.check_circle : Icons.cancel,
           color: employeeInfo.isActive ? Colors.green : Colors.grey,
@@ -400,7 +410,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
               IconButton(
                 icon: const Icon(Icons.edit, color: primaryColor),
                 onPressed: () =>
-                    _navigateToEditEmployee(employeeInfo.employeeId),
+                    _navigateToEditEmployee(employeeInfo.employeeId.toString()),
                 tooltip: 'Edit Employee',
                 splashRadius: 20, // Smaller splash for icon buttons
               ),

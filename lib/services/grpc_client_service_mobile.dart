@@ -16,16 +16,23 @@ class GrpcClientService {
     final request =
         crm.ListClientsRequest(pageSize: pageSize, pageToken: pageToken);
     try {
+      print('Requesting clients, pageSize: $pageSize, pageToken: $pageToken');
       // Include authorization header via GrpcClient
       final response = await _client.listClients(
         request,
         options: GrpcClient().getCallOptions(),
       );
+      print('Received ${response.clients.length} clients');
       return response.clients;
-    } on GrpcError {
-      return [];
-    } catch (_) {
-      return [];
+    } on GrpcError catch (e) {
+      print('GrpcError during listClients: ${e.message} (Code: ${e.code})');
+      // Depending on the error code, you might want to rethrow or handle differently
+      // For example, if (e.code == StatusCode.unauthenticated) { /* handle auth error */ }
+      return []; // Return empty list on gRPC error
+    } catch (e, s) {
+      print('Unexpected error during listClients: $e');
+      print('Stack trace: $s');
+      return []; // Return empty list on other errors
     }
   }
 
@@ -37,14 +44,14 @@ class GrpcClientService {
         options: GrpcClient().getCallOptions(), // Add auth options
       );
       // Fetch the created client to return the full object
-      return await getClient(response.clientId);
+      return await getClient(response.clientId.toString());
     } catch (e) {
       rethrow;
     }
   }
 
   Future<crm.Client> getClient(String clientId) async {
-    final request = crm.GetClientRequest(clientId: clientId);
+    final request = crm.GetClientRequest(clientId: int.tryParse(clientId) ?? 0);
     try {
       final response = await _client.getClient(
         request,
@@ -58,8 +65,8 @@ class GrpcClientService {
 
   Future<crm.Client> updateClient(
       String clientId, crm.Client clientData) async {
-    final request =
-        crm.UpdateClientRequest(clientId: clientId, clientData: clientData);
+    final request = crm.UpdateClientRequest(
+        clientId: int.tryParse(clientId) ?? 0, clientData: clientData);
     try {
       final response = await _client.updateClient(
         request,
@@ -72,7 +79,8 @@ class GrpcClientService {
   }
 
   Future<void> deleteClient(String clientId) async {
-    final request = crm.DeleteClientRequest(clientId: clientId);
+    final request =
+        crm.DeleteClientRequest(clientId: int.tryParse(clientId) ?? 0);
     try {
       await _client.deleteClient(
         request,
@@ -122,7 +130,7 @@ class GrpcClientService {
         options: GrpcClient().getCallOptions(),
       );
       // Fetch the full employee object using the returned employeeId
-      return await getEmployee(response.employeeId);
+      return await getEmployee(response.employeeId.toString());
     } catch (e) {
       print('Error during createEmployee: $e');
       rethrow;
@@ -153,7 +161,8 @@ class GrpcClientService {
   // }
 
   Future<crm.Employee> getEmployee(String employeeId) async {
-    final request = crm.GetEmployeeRequest(employeeId: employeeId);
+    final request =
+        crm.GetEmployeeRequest(employeeId: int.tryParse(employeeId) ?? 0);
     try {
       print('Fetching employee ID: $employeeId');
       final response = await _client.getEmployee(
@@ -170,7 +179,7 @@ class GrpcClientService {
   Future<crm.Employee> updateEmployee(
       String employeeId, crm.Employee employeeData) async {
     final request = crm.UpdateEmployeeRequest(
-        employeeId: employeeId, employeeData: employeeData);
+        employeeId: int.tryParse(employeeId) ?? 0, employeeData: employeeData);
     try {
       print('Updating employee ID: $employeeId');
       final response = await _client.updateEmployee(
@@ -185,7 +194,8 @@ class GrpcClientService {
   }
 
   Future<void> deleteEmployee(String employeeId) async {
-    final request = crm.DeleteEmployeeRequest(employeeId: employeeId);
+    final request =
+        crm.DeleteEmployeeRequest(employeeId: int.tryParse(employeeId) ?? 0);
     try {
       print('Deleting employee ID: $employeeId');
       await _client.deleteEmployee(
@@ -212,8 +222,8 @@ class GrpcClientService {
         options: GrpcClient().getCallOptions(), // Requires admin privileges
       );
       // Response contains the userId
-      if (response.userId.isNotEmpty) {
-        return response.userId;
+      if (response.userId != 0) {
+        return response.userId.toString();
       } else {
         throw Exception('CreateUserResponse did not contain userId');
       }

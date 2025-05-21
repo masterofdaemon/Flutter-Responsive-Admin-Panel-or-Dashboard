@@ -39,13 +39,22 @@ class _ClientListScreenState extends State<ClientListScreen> {
 
   void _loadClients() {
     setState(() {
+      print('Attempting to load clients...'); // Added log
       _clientsFuture = _grpcService.listClients().then((clients) {
+        print(
+            'Successfully loaded ${clients.length} clients.'); // Corrected log
         // Removed debug print loop; variable 'c' was unused
         _clients = clients; // Update local list
         if (_plutoGridStateManager != null) {
           _updatePlutoGridRows();
         }
         return clients;
+      }).catchError((error) {
+        // Added error logging
+        print('Error loading clients: \$error'); // Added log
+        // Optionally, rethrow the error if you want the FutureBuilder to handle it
+        // throw error;
+        return <Client>[]; // Return an empty list or handle as appropriate
       });
     });
   }
@@ -237,8 +246,12 @@ class _ClientListScreenState extends State<ClientListScreen> {
         readOnly: true,
         textAlign: PlutoColumnTextAlign.center,
         renderer: (rendererContext) {
-          final String clientId = rendererContext.cell.value as String;
-          final client = _clients.firstWhere((c) => c.clientId == clientId,
+          final int clientIdInt =
+              rendererContext.cell.value as int; // Changed to int
+          final String clientIdString =
+              clientIdInt.toString(); // Convert to String for usage
+          final client = _clients.firstWhere(
+              (c) => c.clientId == clientIdInt, // Use int for comparison
               orElse: () => Client()
                 ..firstName = ''
                 ..lastName = '');
@@ -251,14 +264,15 @@ class _ClientListScreenState extends State<ClientListScreen> {
                 icon: const Icon(Icons.edit),
                 tooltip: localizations.clientListScreenTooltipEdit, // Changed
                 onPressed: () {
-                  _navigateAndRefresh(ClientFormScreen(clientId: clientId));
+                  _navigateAndRefresh(ClientFormScreen(
+                      clientId: clientIdString)); // Use String ID here
                 },
               ),
               IconButton(
                 icon: const Icon(Icons.delete),
                 tooltip: localizations.clientListScreenTooltipDelete, // Changed
                 onPressed: () => _deleteClient(
-                    clientId,
+                    clientIdString, // Use String ID here
                     clientName.isNotEmpty
                         ? clientName
                         : localizations

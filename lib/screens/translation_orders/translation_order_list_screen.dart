@@ -47,7 +47,9 @@ class _TranslationOrderListScreenState
 
       if (mounted) {
         _orders = orders;
-        _clientsMap = {for (var client in clients) client.clientId: client};
+        _clientsMap = {
+          for (var client in clients) client.clientId.toString(): client
+        };
         if (_plutoGridStateManager != null) {
           _updatePlutoGridRows();
         }
@@ -83,7 +85,9 @@ class _TranslationOrderListScreenState
 
         if (mounted) {
           _orders = orders;
-          _clientsMap = {for (var client in clients) client.clientId: client};
+          _clientsMap = {
+            for (var client in clients) client.clientId.toString(): client
+          };
           if (_plutoGridStateManager != null) {
             _updatePlutoGridRows();
           }
@@ -138,8 +142,8 @@ class _TranslationOrderListScreenState
   void _updatePlutoGridRows() {
     if (_plutoGridStateManager == null) return;
     final rows = _orders.map((order) {
-      String customerNameValue = _getClientFullName(order.clientId);
-      final client = _clientsMap[order.clientId];
+      String customerNameValue = _getClientFullName(order.clientId.toString());
+      final client = _clientsMap[order.clientId.toString()];
       String clientPhoneNumberValue = client?.phone ?? 'N/A';
 
       String blankNumberValue = 'N/A';
@@ -162,7 +166,7 @@ class _TranslationOrderListScreenState
       return PlutoRow(cells: {
         'blankNumber': PlutoCell(value: blankNumberValue),
         'incorrectBlank': PlutoCell(value: incorrectBlankValue),
-        'orderId': PlutoCell(value: order.orderId),
+        'orderId': PlutoCell(value: order.orderId.toString()),
         'title': PlutoCell(value: order.title),
         'customerName': PlutoCell(value: customerNameValue),
         'clientPhoneNumber': PlutoCell(value: clientPhoneNumberValue),
@@ -178,8 +182,8 @@ class _TranslationOrderListScreenState
         'doneAt': PlutoCell(
             value: formatTimestamp(order.hasDoneAt() ? order.doneAt : null)),
         'actions': PlutoCell(
-            value: order
-                .orderId), // Keep actions for now, or decide if it should be removed
+            value: order.orderId
+                .toString()), // Keep actions for now, or decide if it should be removed
       });
     }).toList();
     _plutoGridStateManager!.removeAllRows();
@@ -342,9 +346,7 @@ class _TranslationOrderListScreenState
     return [
       PlutoColumn(
         // TODO: Add to l10n: "translationOrderListScreenColumnBlank": "Blank"
-        title: localizations is dynamic && localizations.translationOrderListScreenColumnBlank != null
-            ? localizations.translationOrderListScreenColumnBlank
-            : 'Blank',
+        title: localizations.translationOrderListScreenColumnBlank,
         field: 'blankNumber',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -353,9 +355,7 @@ class _TranslationOrderListScreenState
       ),
       PlutoColumn(
         // TODO: Add to l10n: "translationOrderListScreenColumnIncorrectBlank": "Incorrect Blank"
-        title: localizations is dynamic && localizations.translationOrderListScreenColumnIncorrectBlank != null
-            ? localizations.translationOrderListScreenColumnIncorrectBlank
-            : 'Incorrect Blank',
+        title: localizations.translationOrderListScreenColumnIncorrectBlank,
         field: 'incorrectBlank',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -379,7 +379,8 @@ class _TranslationOrderListScreenState
         readOnly: true,
       ),
       PlutoColumn(
-        title: localizations.translationOrderFormScreenFieldDocumentTypeLabel, // 'Document Type'
+        title: localizations
+            .translationOrderFormScreenFieldDocumentTypeLabel, // 'Document Type'
         field: 'documentTypeKey',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -388,9 +389,7 @@ class _TranslationOrderListScreenState
       ),
       PlutoColumn(
         // TODO: Add to l10n: "translationOrderListScreenColumnTotalSum": "Total Sum"
-        title: localizations is dynamic && localizations.translationOrderListScreenColumnTotalSum != null
-            ? localizations.translationOrderListScreenColumnTotalSum
-            : 'Total Sum',
+        title: localizations.translationOrderListScreenColumnTotalSum,
         field: 'totalSum',
         type: PlutoColumnType.number(),
         enableEditingMode: false,
@@ -416,9 +415,7 @@ class _TranslationOrderListScreenState
       ),
       PlutoColumn(
         // TODO: Add to l10n: "translationOrderListScreenColumnCreatedAt": "Created At"
-        title: localizations is dynamic && localizations.translationOrderListScreenColumnCreatedAt != null
-            ? localizations.translationOrderListScreenColumnCreatedAt
-            : 'Created At',
+        title: localizations.translationOrderListScreenColumnCreatedAt,
         field: 'createdAt',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -427,9 +424,7 @@ class _TranslationOrderListScreenState
       ),
       PlutoColumn(
         // TODO: Add to l10n: "translationOrderListScreenColumnDoneAt": "Done At"
-        title: localizations is dynamic && localizations.translationOrderListScreenColumnDoneAt != null
-            ? localizations.translationOrderListScreenColumnDoneAt
-            : 'Done At',
+        title: localizations.translationOrderListScreenColumnDoneAt,
         field: 'doneAt',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -445,7 +440,7 @@ class _TranslationOrderListScreenState
         readOnly: true,
         textAlign: PlutoColumnTextAlign.center,
         renderer: (rendererContext) {
-          final String orderId = rendererContext.cell.value as String;
+          final String orderIdStr = rendererContext.cell.value as String;
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -457,7 +452,7 @@ class _TranslationOrderListScreenState
                     minWidth: 30, minHeight: 30, maxWidth: 30, maxHeight: 30),
                 splashRadius: 18.0,
                 tooltip: localizations.translationOrderListScreenTooltipEdit,
-                onPressed: () => _navigateAndRefresh(orderId: orderId),
+                onPressed: () => _navigateAndRefresh(orderId: orderIdStr),
               ),
               IconButton(
                 icon: const Icon(Icons.delete),
@@ -467,7 +462,7 @@ class _TranslationOrderListScreenState
                     minWidth: 30, minHeight: 30, maxWidth: 30, maxHeight: 30),
                 splashRadius: 18.0,
                 tooltip: localizations.translationOrderListScreenTooltipDelete,
-                onPressed: () => _deleteOrder(orderId),
+                onPressed: () => _deleteOrder(orderIdStr),
               ),
             ],
           );

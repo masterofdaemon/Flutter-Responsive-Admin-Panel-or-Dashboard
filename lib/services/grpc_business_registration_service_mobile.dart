@@ -26,12 +26,13 @@ class GrpcBusinessRegistrationService {
         businessRegistration: registration);
     final response = await _client.createBusinessRegistration(request,
         options: GrpcClient().getCallOptions());
-    return await getBusinessRegistration(response.requestId);
+    return await getBusinessRegistration(response.requestId.toString());
   }
 
   Future<crm.BusinessRegistration> getBusinessRegistration(
       String requestId) async {
-    final request = crm.GetBusinessRegistrationRequest(requestId: requestId);
+    final request = crm.GetBusinessRegistrationRequest(
+        requestId: int.tryParse(requestId) ?? 0);
     final response = await _client.getBusinessRegistration(request,
         options: GrpcClient().getCallOptions());
     return response.businessRegistration;
@@ -40,14 +41,15 @@ class GrpcBusinessRegistrationService {
   Future<crm.BusinessRegistration> updateBusinessRegistration(
       String requestId, crm.BusinessRegistration data) async {
     final request = crm.UpdateBusinessRegistrationRequest(
-        requestId: requestId, registrationData: data);
+        requestId: int.tryParse(requestId) ?? 0, registrationData: data);
     final response = await _client.updateBusinessRegistration(request,
         options: GrpcClient().getCallOptions());
     return response.businessRegistration;
   }
 
   Future<void> deleteBusinessRegistration(String requestId) async {
-    final request = crm.DeleteBusinessRegistrationRequest(requestId: requestId);
+    final request = crm.DeleteBusinessRegistrationRequest(
+        requestId: int.tryParse(requestId) ?? 0);
     await _client.deleteBusinessRegistration(request,
         options: GrpcClient().getCallOptions());
   }

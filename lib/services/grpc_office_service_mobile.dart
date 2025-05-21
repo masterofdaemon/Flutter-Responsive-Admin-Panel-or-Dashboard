@@ -27,14 +27,14 @@ class GrpcOfficeService {
     return await getOffice(response.officeId);
   }
 
-  Future<crm.Office> getOffice(String officeId) async {
+  Future<crm.Office> getOffice(int officeId) async {
     final request = crm.GetOfficeRequest(officeId: officeId);
     final response = await _client.getOffice(request,
         options: GrpcClient().getCallOptions());
     return response.office;
   }
 
-  Future<crm.Office> updateOffice(String officeId, crm.Office data) async {
+  Future<crm.Office> updateOffice(int officeId, crm.Office data) async {
     final request =
         crm.UpdateOfficeRequest(officeId: officeId, officeData: data);
     final response = await _client.updateOffice(request,
@@ -42,7 +42,7 @@ class GrpcOfficeService {
     return response.office;
   }
 
-  Future<void> deleteOffice(String officeId) async {
+  Future<void> deleteOffice(int officeId) async {
     final request = crm.DeleteOfficeRequest(officeId: officeId);
     await _client.deleteOffice(request, options: GrpcClient().getCallOptions());
   }

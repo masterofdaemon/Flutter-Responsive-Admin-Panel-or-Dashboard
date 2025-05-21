@@ -46,10 +46,10 @@ class _BusinessRegistrationFormScreenState
     setState(() => _isLoading = true);
     try {
       final reg = await _service.getBusinessRegistration(widget.requestId!);
-      _clientIdController.text = reg.clientId;
-      _managerIdController.text = reg.managerId;
-      _bankIdController.text = reg.bankId;
-      _paymentIdController.text = reg.paymentId;
+      _clientIdController.text = reg.clientId.toString();
+      _managerIdController.text = reg.managerId.toString();
+      _bankIdController.text = reg.bankId.toString();
+      _paymentIdController.text = reg.paymentId.toString();
       _notesController.text = reg.notes;
       _registrationType = reg.registrationType;
       _status = reg.status;
@@ -72,11 +72,12 @@ class _BusinessRegistrationFormScreenState
     setState(() => _isLoading = true);
     try {
       final reg = crm.BusinessRegistration(
-        requestId: widget.requestId ?? '',
-        clientId: _clientIdController.text.trim(),
-        managerId: _managerIdController.text.trim(),
-        bankId: _bankIdController.text.trim(),
-        paymentId: _paymentIdController.text.trim(),
+        requestId:
+            widget.requestId != null ? int.tryParse(widget.requestId!) ?? 0 : 0,
+        clientId: int.tryParse(_clientIdController.text.trim()) ?? 0,
+        managerId: int.tryParse(_managerIdController.text.trim()) ?? 0,
+        bankId: int.tryParse(_bankIdController.text.trim()) ?? 0,
+        paymentId: int.tryParse(_paymentIdController.text.trim()) ?? 0,
         notes: _notesController.text.trim(),
         registrationType: _registrationType ??
             crm.RegistrationType.REGISTRATION_TYPE_UNSPECIFIED,
