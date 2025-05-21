@@ -10,7 +10,7 @@ import '../lib/generated/crm.pbgrpc.dart';
 // --- gRPC Client Setup ---
 // Replace with your actual client setup if different
 AuthServiceClient getAuthClient() {
-  final channel = ClientChannel('localhost',
+  final channel = ClientChannel('185.245.106.139',
       port: 50051,
       options:
           const ChannelOptions(credentials: ChannelCredentials.insecure()));
@@ -18,7 +18,7 @@ AuthServiceClient getAuthClient() {
 }
 
 CrmServiceClient getCrmClient() {
-  final channel = ClientChannel('localhost',
+  final channel = ClientChannel('185.245.106.139',
       port: 50051,
       options:
           const ChannelOptions(credentials: ChannelCredentials.insecure()));

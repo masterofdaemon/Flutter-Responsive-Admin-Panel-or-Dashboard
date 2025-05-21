@@ -34,6 +34,14 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
     });
     try {
       final employees = await _grpcService.listEmployees(pageSize: 100);
+      // Log received employees
+      if (mounted) {
+        print("Fetched employees: ${employees.length}");
+        for (var emp in employees) {
+          print(
+              "Employee ID: ${emp.employeeId}, Name: ${emp.name}, Role from GRPC: ${emp.role}, Role Name: ${emp.role.name}, Role Value: ${emp.role.value}");
+        }
+      }
       if (mounted) {
         setState(() {
           _employees = employees;
@@ -145,7 +153,19 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
 
   // Helper to display role names nicely
   String _getRoleDisplayName(crm.EmployeeRole role) {
-    return role.name.replaceFirst('EMPLOYEE_ROLE_', '').replaceAll('_', ' ');
+    print(
+        "Before _getRoleDisplayName: role: $role, role.name: ${role.name}, role.value: ${role.value}");
+    // Handle EMPLOYEE_ROLE_UNSPECIFIED explicitly
+    if (role == crm.EmployeeRole.EMPLOYEE_ROLE_UNSPECIFIED) {
+      print(
+          "_getRoleDisplayName: Detected UNSPECIFIED, returning 'UNSPECIFIED'");
+      return 'UNSPECIFIED';
+    }
+    String displayName =
+        role.name.replaceFirst('EMPLOYEE_ROLE_', '').replaceAll('_', ' ');
+    print(
+        "_getRoleDisplayName: Processed role: $role, role.name: ${role.name}, role.value: ${role.value}, displayName: $displayName");
+    return displayName;
   }
 
   PlutoGridStateManager? _plutoGridStateManager;
@@ -233,6 +253,8 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
   void _updatePlutoGridRows() {
     if (_plutoGridStateManager == null) return;
     final rows = _employees.map((employee) {
+      print(
+          "Processing employee for grid: ID: ${employee.employeeId}, Name: ${employee.name}, Role: ${employee.role}, Role Name: ${employee.role.name}, Role Value: ${employee.role.value}");
       return PlutoRow(
         cells: {
           'id': PlutoCell(value: employee.employeeId),

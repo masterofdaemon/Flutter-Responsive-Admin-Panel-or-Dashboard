@@ -32,17 +32,12 @@ class SideMenu extends StatelessWidget {
           title: localizations.sideMenuDashboard,
           svgSrc: "assets/icons/menu_dashboard.svg",
           press: () {
-            // Close drawer first
-            Navigator.pop(context);
-            // Check if already on MainScreen or navigate
-            // Assuming MainScreen is the root or initial screen after login
-            if (ModalRoute.of(context)?.settings.name != '/') {
-              // Use pushReplacement to avoid stacking main screens
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => MainScreen()),
-              );
-            }
+            Navigator.pop(context); // Close drawer
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => MainScreen()),
+              (Route<dynamic> route) => false, 
+            );
           },
         ),
         DrawerListTile(
