@@ -262,6 +262,8 @@ class _ClientListScreenState extends State<ClientListScreen> {
             children: [
               IconButton(
                 icon: const Icon(Icons.edit),
+                padding: EdgeInsets.zero, // Reduce padding
+                constraints: const BoxConstraints(), // Remove default min size
                 tooltip: localizations.clientListScreenTooltipEdit, // Changed
                 onPressed: () {
                   _navigateAndRefresh(ClientFormScreen(
@@ -270,6 +272,8 @@ class _ClientListScreenState extends State<ClientListScreen> {
               ),
               IconButton(
                 icon: const Icon(Icons.delete),
+                padding: EdgeInsets.zero, // Reduce padding
+                constraints: const BoxConstraints(), // Remove default min size
                 tooltip: localizations.clientListScreenTooltipDelete, // Changed
                 onPressed: () => _deleteClient(
                     clientIdString, // Use String ID here
