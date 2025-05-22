@@ -323,6 +323,8 @@ class AuthService with ChangeNotifier {
       final request =
           pb.LoginEmployeeRequest(login: loginVal, password: password);
       final response = await client.loginEmployee(request);
+      // log all response fields
+      print('AuthService: Employee login response: ${response.toString()}');
 
       if (response.token.isNotEmpty) {
         _token = response.token;
