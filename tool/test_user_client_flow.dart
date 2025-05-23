@@ -103,8 +103,6 @@ Future<void> testUserClientFlow() async {
   try {
     debugPrint('3. Creating Client using Manager token...');
     final clientFirstName = 'FlutterClient_${uuid.v4()}';
-    // Use the 'crm' prefix for protobuf enums
-    const clientSource = crm.ClientSource.CLIENT_SOURCE_ONLINE; // Enum value
 
     // Use the 'crm' prefix for protobuf messages
     final createClientReq = crm.CreateClientRequest(
@@ -112,7 +110,7 @@ Future<void> testUserClientFlow() async {
         firstName: clientFirstName,
         lastName: 'TestFlutter',
         phone: '+98765432109', // Example valid E.164
-        source: clientSource, // Assign enum value directly
+        // source: clientSource, // Assign enum value directly
       ),
     );
 

@@ -1723,14 +1723,74 @@ abstract class AppLocalizations {
   /// No description provided for @translationOrderFormScreenFieldNotarialSumValidationRequired.
   ///
   /// In en, this message translates to:
-  /// **'Please enter notarial sum'**
+  /// **'Notarial sum is required.'**
   String get translationOrderFormScreenFieldNotarialSumValidationRequired;
 
   /// No description provided for @translationOrderFormScreenFieldNotarialSumValidationNumber.
   ///
   /// In en, this message translates to:
-  /// **'Please enter a valid number'**
+  /// **'Please enter a valid number for the notarial sum'**
   String get translationOrderFormScreenFieldNotarialSumValidationNumber;
+
+  /// No description provided for @priorityNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get priorityNormal;
+
+  /// No description provided for @priorityUrgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Urgent'**
+  String get priorityUrgent;
+
+  /// No description provided for @prioritySemiUrgent.
+  ///
+  /// In en, this message translates to:
+  /// **'Semi-Urgent'**
+  String get prioritySemiUrgent;
+
+  /// No description provided for @clientSourceReferral.
+  ///
+  /// In en, this message translates to:
+  /// **'Referral'**
+  String get clientSourceReferral;
+
+  /// No description provided for @clientSourceOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get clientSourceOnline;
+
+  /// No description provided for @clientSourceWalkIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Walk-In'**
+  String get clientSourceWalkIn;
+
+  /// No description provided for @clientSourcePartner.
+  ///
+  /// In en, this message translates to:
+  /// **'Partner'**
+  String get clientSourcePartner;
+
+  /// No description provided for @clientSourceOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get clientSourceOther;
+
+  /// No description provided for @clientSourceUnspecified.
+  ///
+  /// In en, this message translates to:
+  /// **'Unspecified'**
+  String get clientSourceUnspecified;
+
+  /// No description provided for @clientSourceColumnTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Source'**
+  String get clientSourceColumnTitle;
 
   /// No description provided for @translationOrderFormScreenFieldPriorityLabel.
   ///

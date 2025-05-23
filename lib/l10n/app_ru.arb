@@ -482,8 +482,8 @@
   "translationOrderFormScreenFieldDocumentTypeHint": "Выберите тип документа",
   "translationOrderFormScreenFieldPageCountLabel": "Количество страниц",
   "translationOrderFormScreenFieldNotarialSumLabel": "Нотариальная сумма *",
-  "translationOrderFormScreenFieldNotarialSumValidationRequired": "Пожалуйста, введите нотариальную сумму",
-  "translationOrderFormScreenFieldNotarialSumValidationNumber": "Пожалуйста, введите действительное число",
+  "translationOrderFormScreenFieldNotarialSumValidationRequired": "Сумма нотариального заверения обязательна.",
+  "translationOrderFormScreenFieldNotarialSumValidationNumber": "Пожалуйста, введите действительное число для нотариальной суммы",
   "translationOrderFormScreenFieldPriorityLabel": "Приоритет *",
   "translationOrderFormScreenFieldPriorityHint": "Выберите приоритет",
   "translationOrderFormScreenFieldPriorityValidation": "Пожалуйста, выберите приоритет",
@@ -777,5 +777,15 @@
   "translationOrderListScreenColumnIncorrectBlank": "Некорректный бланк",
   "translationOrderListScreenColumnTotalSum": "Итоговая сумма",
   "translationOrderListScreenColumnCreatedAt": "Создано",
-  "translationOrderListScreenColumnDoneAt": "Выполнено"
+  "translationOrderListScreenColumnDoneAt": "Выполнено",
+  "priorityNormal": "Обычный",
+  "priorityUrgent": "Срочный",
+  "prioritySemiUrgent": "Полу-срочный",
+  "clientSourceReferral": "Рекомендация",
+  "clientSourceOnline": "Онлайн",
+  "clientSourceWalkIn": "Самообращение",
+  "clientSourcePartner": "Партнер",
+  "clientSourceOther": "Другое",
+  "clientSourceUnspecified": "Не указан",
+  "clientSourceColumnTitle": "Источник"
 }

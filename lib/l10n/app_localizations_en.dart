@@ -957,11 +957,41 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get translationOrderFormScreenFieldNotarialSumValidationRequired =>
-      'Please enter notarial sum';
+      'Notarial sum is required.';
 
   @override
   String get translationOrderFormScreenFieldNotarialSumValidationNumber =>
-      'Please enter a valid number';
+      'Please enter a valid number for the notarial sum';
+
+  @override
+  String get priorityNormal => 'Normal';
+
+  @override
+  String get priorityUrgent => 'Urgent';
+
+  @override
+  String get prioritySemiUrgent => 'Semi-Urgent';
+
+  @override
+  String get clientSourceReferral => 'Referral';
+
+  @override
+  String get clientSourceOnline => 'Online';
+
+  @override
+  String get clientSourceWalkIn => 'Walk-In';
+
+  @override
+  String get clientSourcePartner => 'Partner';
+
+  @override
+  String get clientSourceOther => 'Other';
+
+  @override
+  String get clientSourceUnspecified => 'Unspecified';
+
+  @override
+  String get clientSourceColumnTitle => 'Source';
 
   @override
   String get translationOrderFormScreenFieldPriorityLabel => 'Priority *';

@@ -61,7 +61,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
 
   void _updatePlutoGridRows() {
     if (_plutoGridStateManager == null) return;
-    final localizations = AppLocalizations.of(context); // Added
+    // final localizations = AppLocalizations.of(context); // No longer needed here
 
     final rows = _clients.map((client) {
       return PlutoRow(
@@ -73,22 +73,20 @@ class _ClientListScreenState extends State<ClientListScreen> {
           'email': PlutoCell(value: client.email),
           'telegramId': PlutoCell(value: client.telegramId),
           'whatsappNumber': PlutoCell(value: client.whatsappNumber),
-          'source': PlutoCell(
-              value:
-                  getClientSourceName(client.source, localizations)), // Changed
+          // 'source': PlutoCell( // Removed source as it's not part of Client model
+          //     value: getClientSourceName(client.source, localizations)),
           'passportData': PlutoCell(
               value: client.hasPassportData()
                   ? client.passportData.toString()
                   : '-'),
           'notes': PlutoCell(value: client.notes),
-          'actions': PlutoCell(value: client.clientId), // Store ID for actions
+          'actions': PlutoCell(value: client.clientId),
         },
       );
     }).toList();
 
-    _plutoGridStateManager!
-        .removeAllRows(); // Corrected: Remove all existing rows
-    _plutoGridStateManager!.appendRows(rows); // Append new rows
+    _plutoGridStateManager!.removeAllRows();
+    _plutoGridStateManager!.appendRows(rows);
   }
 
   // Method to navigate to the form screen for adding or editing
@@ -155,10 +153,10 @@ class _ClientListScreenState extends State<ClientListScreen> {
   }
 
   List<PlutoColumn> _getPlutoColumns() {
-    final localizations = AppLocalizations.of(context); // Added
+    final localizations = AppLocalizations.of(context);
     return [
       PlutoColumn(
-        title: localizations.clientListScreenColumnId, // Changed
+        title: localizations.clientListScreenColumnId,
         field: 'id',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -166,7 +164,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
         readOnly: true,
       ),
       PlutoColumn(
-        title: localizations.clientListScreenColumnFirstName, // Changed
+        title: localizations.clientListScreenColumnFirstName,
         field: 'firstName',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -174,7 +172,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
         readOnly: true,
       ),
       PlutoColumn(
-        title: localizations.clientListScreenColumnLastName, // Changed
+        title: localizations.clientListScreenColumnLastName,
         field: 'lastName',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -182,7 +180,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
         readOnly: true,
       ),
       PlutoColumn(
-        title: localizations.clientListScreenColumnPhone, // Changed
+        title: localizations.clientListScreenColumnPhone,
         field: 'phone',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -190,7 +188,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
         readOnly: true,
       ),
       PlutoColumn(
-        title: localizations.clientListScreenColumnEmail, // Changed
+        title: localizations.clientListScreenColumnEmail,
         field: 'email',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -198,7 +196,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
         readOnly: true,
       ),
       PlutoColumn(
-        title: localizations.clientListScreenColumnTelegramId, // Changed
+        title: localizations.clientListScreenColumnTelegramId,
         field: 'telegramId',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -206,23 +204,23 @@ class _ClientListScreenState extends State<ClientListScreen> {
         readOnly: true,
       ),
       PlutoColumn(
-        title: localizations.clientListScreenColumnWhatsapp, // Changed
+        title: localizations.clientListScreenColumnWhatsapp,
         field: 'whatsappNumber',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
         width: 150,
         readOnly: true,
       ),
+      // PlutoColumn( // Removed source column
+      //   title: localizations.clientListScreenColumnSource,
+      //   field: 'source',
+      //   type: PlutoColumnType.text(),
+      //   enableEditingMode: false,
+      //   width: 150,
+      //   readOnly: true,
+      // ),
       PlutoColumn(
-        title: localizations.clientListScreenColumnSource, // Changed
-        field: 'source',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 150,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        title: localizations.clientListScreenColumnPassportData, // Changed
+        title: localizations.clientListScreenColumnPassportData,
         field: 'passportData',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -230,7 +228,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
         readOnly: true,
       ),
       PlutoColumn(
-        title: localizations.clientListScreenColumnNotes, // Changed
+        title: localizations.clientListScreenColumnNotes,
         field: 'notes',
         type: PlutoColumnType.text(),
         enableEditingMode: false,

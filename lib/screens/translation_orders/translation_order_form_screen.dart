@@ -88,6 +88,7 @@ class _TranslationOrderFormScreenState
   crm.Priority? _selectedPriority;
   // TranslationProgress is read-only, store fetched value if editing
   crm.TranslationProgressStatus? _currentTranslationProgress;
+  crm.ClientSource? _selectedClientSource; // Added for ClientSource
 
   // Switches
   bool _isUrgent = false;
@@ -289,6 +290,13 @@ class _TranslationOrderFormScreenState
     _isSemiUrgent = false;
     _clientNotified = false;
 
+    _selectedClientSource = // Added for ClientSource
+        (order.source ==
+                crm.ClientSource
+                    .CLIENT_SOURCE_UNSPECIFIED) // Added for ClientSource
+            ? null // Added for ClientSource
+            : order.source; // Added for ClientSource
+
     // TODO: Handle population for 'blanks' if implementing complex UI
   }
 
@@ -331,6 +339,7 @@ class _TranslationOrderFormScreenState
         priority: _selectedPriority ?? crm.Priority.NORMAL,
         translationProgress: TranslationProgressStatus.valueOf(
             _currentTranslationProgress?.value ?? 0),
+        source: _selectedClientSource, // Added for ClientSource
       );
 
       // Add blanks using TranslationOrder_BlankInfo
@@ -407,12 +416,22 @@ class _TranslationOrderFormScreenState
         client.firstName, client.lastName, shortId);
   }
 
-  // Helper for Priority
-  String _getPriorityDisplayName(crm.Priority p) {
-    return p.name.replaceFirst('PRIORITY_', '').replaceAll('_', ' ');
+  // Helper to display priority names
+  String _getPriorityDisplayName(crm.Priority priority) {
+    final localizations = AppLocalizations.of(context);
+    switch (priority) {
+      case crm.Priority.NORMAL:
+        return localizations.priorityNormal;
+      case crm.Priority.URGENT:
+        return localizations.priorityUrgent;
+      case crm.Priority.SEMI_URGENT:
+        return localizations.prioritySemiUrgent;
+      default:
+        return priority.toString().split('.').last;
+    }
   }
 
-  // Helper for Translation Progress (read-only display)
+  // Helper for ServiceType
   String _getTranslationProgressDisplayName(
       crm.TranslationProgressStatus? status) {
     // For production, these strings should come from AppLocalizations

@@ -34,7 +34,6 @@ class Client extends $pb.GeneratedMessage {
     $core.String? email,
     $fixnum.Int64? telegramId,
     $core.String? whatsappNumber,
-    ClientSource? source,
     $1.Value? passportData,
     $core.String? notes,
     $core.int? managerId,
@@ -62,9 +61,6 @@ class Client extends $pb.GeneratedMessage {
     if (whatsappNumber != null) {
       $result.whatsappNumber = whatsappNumber;
     }
-    if (source != null) {
-      $result.source = source;
-    }
     if (passportData != null) {
       $result.passportData = passportData;
     }
@@ -91,7 +87,6 @@ class Client extends $pb.GeneratedMessage {
     ..aOS(5, _omitFieldNames ? '' : 'email')
     ..aInt64(6, _omitFieldNames ? '' : 'telegramId')
     ..aOS(7, _omitFieldNames ? '' : 'whatsappNumber')
-    ..e<ClientSource>(8, _omitFieldNames ? '' : 'source', $pb.PbFieldType.OE, defaultOrMaker: ClientSource.CLIENT_SOURCE_UNSPECIFIED, valueOf: ClientSource.valueOf, enumValues: ClientSource.values)
     ..aOM<$1.Value>(9, _omitFieldNames ? '' : 'passportData', subBuilder: $1.Value.create)
     ..aOS(10, _omitFieldNames ? '' : 'notes')
     ..a<$core.int>(11, _omitFieldNames ? '' : 'managerId', $pb.PbFieldType.OU3)
@@ -190,54 +185,44 @@ class Client extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   void clearWhatsappNumber() => $_clearField(7);
 
-  /// Source of the client
-  @$pb.TagNumber(8)
-  ClientSource get source => $_getN(7);
-  @$pb.TagNumber(8)
-  set source(ClientSource v) { $_setField(8, v); }
-  @$pb.TagNumber(8)
-  $core.bool hasSource() => $_has(7);
-  @$pb.TagNumber(8)
-  void clearSource() => $_clearField(8);
-
   /// Client's passport data (stored as JSON)
   @$pb.TagNumber(9)
-  $1.Value get passportData => $_getN(8);
+  $1.Value get passportData => $_getN(7);
   @$pb.TagNumber(9)
   set passportData($1.Value v) { $_setField(9, v); }
   @$pb.TagNumber(9)
-  $core.bool hasPassportData() => $_has(8);
+  $core.bool hasPassportData() => $_has(7);
   @$pb.TagNumber(9)
   void clearPassportData() => $_clearField(9);
   @$pb.TagNumber(9)
-  $1.Value ensurePassportData() => $_ensure(8);
+  $1.Value ensurePassportData() => $_ensure(7);
 
   /// Notes about the client
   @$pb.TagNumber(10)
-  $core.String get notes => $_getSZ(9);
+  $core.String get notes => $_getSZ(8);
   @$pb.TagNumber(10)
-  set notes($core.String v) { $_setString(9, v); }
+  set notes($core.String v) { $_setString(8, v); }
   @$pb.TagNumber(10)
-  $core.bool hasNotes() => $_has(9);
+  $core.bool hasNotes() => $_has(8);
   @$pb.TagNumber(10)
   void clearNotes() => $_clearField(10);
 
   /// Linking client to manager and office as per TS
   @$pb.TagNumber(11)
-  $core.int get managerId => $_getIZ(10);
+  $core.int get managerId => $_getIZ(9);
   @$pb.TagNumber(11)
-  set managerId($core.int v) { $_setUnsignedInt32(10, v); }
+  set managerId($core.int v) { $_setUnsignedInt32(9, v); }
   @$pb.TagNumber(11)
-  $core.bool hasManagerId() => $_has(10);
+  $core.bool hasManagerId() => $_has(9);
   @$pb.TagNumber(11)
   void clearManagerId() => $_clearField(11);
 
   @$pb.TagNumber(12)
-  $core.int get officeId => $_getIZ(11);
+  $core.int get officeId => $_getIZ(10);
   @$pb.TagNumber(12)
-  set officeId($core.int v) { $_setUnsignedInt32(11, v); }
+  set officeId($core.int v) { $_setUnsignedInt32(10, v); }
   @$pb.TagNumber(12)
-  $core.bool hasOfficeId() => $_has(11);
+  $core.bool hasOfficeId() => $_has(10);
   @$pb.TagNumber(12)
   void clearOfficeId() => $_clearField(12);
 }
@@ -1008,6 +993,7 @@ class TranslationOrder extends $pb.GeneratedMessage {
     $core.int? paymentId,
     $core.Iterable<TranslationOrder_BlankInfo>? blanks,
     $core.String? notes,
+    ClientSource? source,
     $2.Timestamp? createdAt,
     $2.Timestamp? doneAt,
   }) {
@@ -1066,6 +1052,9 @@ class TranslationOrder extends $pb.GeneratedMessage {
     if (notes != null) {
       $result.notes = notes;
     }
+    if (source != null) {
+      $result.source = source;
+    }
     if (createdAt != null) {
       $result.createdAt = createdAt;
     }
@@ -1097,6 +1086,7 @@ class TranslationOrder extends $pb.GeneratedMessage {
     ..a<$core.int>(16, _omitFieldNames ? '' : 'paymentId', $pb.PbFieldType.OU3)
     ..pc<TranslationOrder_BlankInfo>(17, _omitFieldNames ? '' : 'blanks', $pb.PbFieldType.PM, subBuilder: TranslationOrder_BlankInfo.create)
     ..aOS(18, _omitFieldNames ? '' : 'notes')
+    ..e<ClientSource>(19, _omitFieldNames ? '' : 'source', $pb.PbFieldType.OE, defaultOrMaker: ClientSource.CLIENT_SOURCE_UNSPECIFIED, valueOf: ClientSource.valueOf, enumValues: ClientSource.values)
     ..aOM<$2.Timestamp>(22, _omitFieldNames ? '' : 'createdAt', subBuilder: $2.Timestamp.create)
     ..aOM<$2.Timestamp>(23, _omitFieldNames ? '' : 'doneAt', subBuilder: $2.Timestamp.create)
     ..hasRequiredFields = false
@@ -1281,30 +1271,39 @@ class TranslationOrder extends $pb.GeneratedMessage {
   @$pb.TagNumber(18)
   void clearNotes() => $_clearField(18);
 
+  @$pb.TagNumber(19)
+  ClientSource get source => $_getN(18);
+  @$pb.TagNumber(19)
+  set source(ClientSource v) { $_setField(19, v); }
+  @$pb.TagNumber(19)
+  $core.bool hasSource() => $_has(18);
+  @$pb.TagNumber(19)
+  void clearSource() => $_clearField(19);
+
   /// bool is_urgent = 19; // REMOVED - Redundant with Priority enum
   /// bool is_semi_urgent = 20; // REMOVED - Redundant with Priority enum
   /// client_notified field was here, now covered by TranslationProgressStatus.CLIENT_NOTIFIED
   @$pb.TagNumber(22)
-  $2.Timestamp get createdAt => $_getN(18);
+  $2.Timestamp get createdAt => $_getN(19);
   @$pb.TagNumber(22)
   set createdAt($2.Timestamp v) { $_setField(22, v); }
   @$pb.TagNumber(22)
-  $core.bool hasCreatedAt() => $_has(18);
+  $core.bool hasCreatedAt() => $_has(19);
   @$pb.TagNumber(22)
   void clearCreatedAt() => $_clearField(22);
   @$pb.TagNumber(22)
-  $2.Timestamp ensureCreatedAt() => $_ensure(18);
+  $2.Timestamp ensureCreatedAt() => $_ensure(19);
 
   @$pb.TagNumber(23)
-  $2.Timestamp get doneAt => $_getN(19);
+  $2.Timestamp get doneAt => $_getN(20);
   @$pb.TagNumber(23)
   set doneAt($2.Timestamp v) { $_setField(23, v); }
   @$pb.TagNumber(23)
-  $core.bool hasDoneAt() => $_has(19);
+  $core.bool hasDoneAt() => $_has(20);
   @$pb.TagNumber(23)
   void clearDoneAt() => $_clearField(23);
   @$pb.TagNumber(23)
-  $2.Timestamp ensureDoneAt() => $_ensure(19);
+  $2.Timestamp ensureDoneAt() => $_ensure(20);
 }
 
 class InsurancePolicy extends $pb.GeneratedMessage {

@@ -958,11 +958,41 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get translationOrderFormScreenFieldNotarialSumValidationRequired =>
-      'Пожалуйста, введите нотариальную сумму';
+      'Сумма нотариального заверения обязательна.';
 
   @override
   String get translationOrderFormScreenFieldNotarialSumValidationNumber =>
-      'Пожалуйста, введите действительное число';
+      'Пожалуйста, введите действительное число для нотариальной суммы';
+
+  @override
+  String get priorityNormal => 'Обычный';
+
+  @override
+  String get priorityUrgent => 'Срочный';
+
+  @override
+  String get prioritySemiUrgent => 'Полу-срочный';
+
+  @override
+  String get clientSourceReferral => 'Рекомендация';
+
+  @override
+  String get clientSourceOnline => 'Онлайн';
+
+  @override
+  String get clientSourceWalkIn => 'Самообращение';
+
+  @override
+  String get clientSourcePartner => 'Партнер';
+
+  @override
+  String get clientSourceOther => 'Другое';
+
+  @override
+  String get clientSourceUnspecified => 'Не указан';
+
+  @override
+  String get clientSourceColumnTitle => 'Источник';
 
   @override
   String get translationOrderFormScreenFieldPriorityLabel => 'Приоритет *';

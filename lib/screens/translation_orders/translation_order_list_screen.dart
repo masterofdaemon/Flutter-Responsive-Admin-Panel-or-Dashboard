@@ -139,12 +139,16 @@ class _TranslationOrderListScreenState
     return 'N/A'; // Default if no client or name parts found
   }
 
-  void _updatePlutoGridRows() {
+  Future<void> _updatePlutoGridRows() async {
     if (_plutoGridStateManager == null) return;
-    final rows = _orders.map((order) {
+    final stateManager = _plutoGridStateManager!;
+    final rows = <PlutoRow>[];
+
+    for (var order in _orders) {
       String customerNameValue = _getClientFullName(order.clientId.toString());
-      final client = _clientsMap[order.clientId.toString()];
+      final client = await _fetchClient(order.clientId.toString()); // Convert clientId to String
       String clientPhoneNumberValue = client?.phone ?? 'N/A';
+      String clientSourceValue = _getClientSourceDisplayName(order.source);
 
       String blankNumberValue = 'N/A';
       if (order.blanks.isNotEmpty) {
@@ -163,13 +167,14 @@ class _TranslationOrderListScreenState
       String totalSumValue =
           order.hasTotalSum() ? order.totalSum.toStringAsFixed(2) : 'N/A';
 
-      return PlutoRow(cells: {
+      rows.add(PlutoRow(cells: {
         'blankNumber': PlutoCell(value: blankNumberValue),
         'incorrectBlank': PlutoCell(value: incorrectBlankValue),
         'orderId': PlutoCell(value: order.orderId.toString()),
         'title': PlutoCell(value: order.title),
         'customerName': PlutoCell(value: customerNameValue),
         'clientPhoneNumber': PlutoCell(value: clientPhoneNumberValue),
+        'clientSource': PlutoCell(value: clientSourceValue),
         'documentTypeKey': PlutoCell(value: documentTypeValue),
         'totalSum': PlutoCell(value: totalSumValue),
         'status': PlutoCell(
@@ -184,10 +189,180 @@ class _TranslationOrderListScreenState
         'actions': PlutoCell(
             value: order.orderId
                 .toString()), // Keep actions for now, or decide if it should be removed
-      });
-    }).toList();
-    _plutoGridStateManager!.removeAllRows();
-    _plutoGridStateManager!.appendRows(rows);
+      }));
+    }
+
+    stateManager.removeAllRows();
+    stateManager.appendRows(rows);
+  }
+
+  String _getClientSourceDisplayName(crm.ClientSource source) {
+    final localizations = AppLocalizations.of(context);
+    switch (source) {
+      case crm.ClientSource.CLIENT_SOURCE_REFERRAL:
+        return localizations.clientSourceReferral;
+      case crm.ClientSource.CLIENT_SOURCE_ONLINE:
+        return localizations.clientSourceOnline;
+      case crm.ClientSource.CLIENT_SOURCE_WALK_IN:
+        return localizations.clientSourceWalkIn;
+      case crm.ClientSource.CLIENT_SOURCE_PARTNER:
+        return localizations.clientSourcePartner;
+      case crm.ClientSource.CLIENT_SOURCE_OTHER:
+        return localizations.clientSourceOther;
+      case crm.ClientSource.CLIENT_SOURCE_UNSPECIFIED:
+        return localizations.clientSourceUnspecified;
+      default:
+        return localizations.clientSourceUnspecified;
+    }
+  }
+
+  List<PlutoColumn> _getPlutoColumns(AppLocalizations localizations) {
+    return [
+      PlutoColumn(
+        // TODO: Add to l10n: "translationOrderListScreenColumnBlank": "Blank"
+        title: localizations.translationOrderListScreenColumnBlank,
+        field: 'blankNumber',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 40,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        // TODO: Add to l10n: "translationOrderListScreenColumnIncorrectBlank": "Incorrect Blank"
+        title: localizations.translationOrderListScreenColumnIncorrectBlank,
+        field: 'incorrectBlank',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 90,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.clientLabelText, // 'Client'
+        field: 'customerName',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 180,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.clientListScreenColumnPhone, // 'Phone'
+        field: 'clientPhoneNumber',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 150,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        // TODO: Add to l10n: "clientSourceColumnTitle": "Source"
+        title: localizations.clientSourceColumnTitle,
+        field: 'clientSource',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 120,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations
+            .translationOrderFormScreenFieldDocumentTypeLabel, // 'Document Type'
+        field: 'documentTypeKey',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 150,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        // TODO: Add to l10n: "translationOrderListScreenColumnTotalSum": "Total Sum"
+        title: localizations.translationOrderListScreenColumnTotalSum,
+        field: 'totalSum',
+        type: PlutoColumnType.number(),
+        enableEditingMode: false,
+        width: 100,
+        readOnly: true,
+        textAlign: PlutoColumnTextAlign.right,
+        formatter: (dynamic value) {
+          if (value == 'N/A') return 'N/A';
+          try {
+            return double.parse(value.toString()).toStringAsFixed(2);
+          } catch (e) {
+            return 'N/A';
+          }
+        },
+      ),
+      PlutoColumn(
+        title: localizations.statusLabelText, // 'Status'
+        field: 'status',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 120,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        // TODO: Add to l10n: "translationOrderListScreenColumnCreatedAt": "Created At"
+        title: localizations.translationOrderListScreenColumnCreatedAt,
+        field: 'createdAt',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 140,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        // TODO: Add to l10n: "translationOrderListScreenColumnDoneAt": "Done At"
+        title: localizations.translationOrderListScreenColumnDoneAt,
+        field: 'doneAt',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 80,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.translationOrderListScreenColumnActions,
+        field: 'actions',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 100,
+        readOnly: true,
+        textAlign: PlutoColumnTextAlign.center,
+        renderer: (rendererContext) {
+          final String orderIdStr = rendererContext.cell.value as String;
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.edit),
+                iconSize: 20.0,
+                padding: const EdgeInsets.all(4.0),
+                constraints: const BoxConstraints(
+                    minWidth: 30, minHeight: 30, maxWidth: 30, maxHeight: 30),
+                splashRadius: 18.0,
+                tooltip: localizations.translationOrderListScreenTooltipEdit,
+                onPressed: () => _navigateAndRefresh(orderId: orderIdStr),
+              ),
+              IconButton(
+                icon: const Icon(Icons.delete),
+                iconSize: 20.0,
+                padding: const EdgeInsets.all(4.0),
+                constraints: const BoxConstraints(
+                    minWidth: 30, minHeight: 30, maxWidth: 30, maxHeight: 30),
+                splashRadius: 18.0,
+                tooltip: localizations.translationOrderListScreenTooltipDelete,
+                onPressed: () => _deleteOrder(orderIdStr),
+              ),
+            ],
+          );
+        },
+      ),
+    ];
+  }
+
+  Future<crm.Client?> _fetchClient(String clientId) async {
+    // Fetch client details by ID, handle errors, and return null if not found
+    try {
+      final client = await _clientService.getClient(clientId);
+      return client;
+    } catch (e) {
+      print('Error fetching client $clientId: $e');
+      return null;
+    }
   }
 
   Future<void> _navigateAndRefresh({String? orderId}) async {
@@ -306,7 +481,7 @@ class _TranslationOrderListScreenState
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: PlutoGrid(
-                columns: _getPlutoColumns(),
+                columns: _getPlutoColumns(localizations),
                 rows: [],
                 onLoaded: (PlutoGridOnLoadedEvent event) {
                   _plutoGridStateManager = event.stateManager;
@@ -339,135 +514,5 @@ class _TranslationOrderListScreenState
         child: const Icon(Icons.add),
       ),
     );
-  }
-
-  List<PlutoColumn> _getPlutoColumns() {
-    final localizations = AppLocalizations.of(context);
-    return [
-      PlutoColumn(
-        // TODO: Add to l10n: "translationOrderListScreenColumnBlank": "Blank"
-        title: localizations.translationOrderListScreenColumnBlank,
-        field: 'blankNumber',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 40,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        // TODO: Add to l10n: "translationOrderListScreenColumnIncorrectBlank": "Incorrect Blank"
-        title: localizations.translationOrderListScreenColumnIncorrectBlank,
-        field: 'incorrectBlank',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 90,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        title: localizations.clientLabelText, // 'Client'
-        field: 'customerName',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 180,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        title: localizations.clientListScreenColumnPhone, // 'Phone'
-        field: 'clientPhoneNumber',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 150,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        title: localizations
-            .translationOrderFormScreenFieldDocumentTypeLabel, // 'Document Type'
-        field: 'documentTypeKey',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 150,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        // TODO: Add to l10n: "translationOrderListScreenColumnTotalSum": "Total Sum"
-        title: localizations.translationOrderListScreenColumnTotalSum,
-        field: 'totalSum',
-        type: PlutoColumnType.number(),
-        enableEditingMode: false,
-        width: 100,
-        readOnly: true,
-        textAlign: PlutoColumnTextAlign.right,
-        formatter: (dynamic value) {
-          if (value == 'N/A') return 'N/A';
-          try {
-            return double.parse(value.toString()).toStringAsFixed(2);
-          } catch (e) {
-            return 'N/A';
-          }
-        },
-      ),
-      PlutoColumn(
-        title: localizations.statusLabelText, // 'Status'
-        field: 'status',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 120,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        // TODO: Add to l10n: "translationOrderListScreenColumnCreatedAt": "Created At"
-        title: localizations.translationOrderListScreenColumnCreatedAt,
-        field: 'createdAt',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 140,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        // TODO: Add to l10n: "translationOrderListScreenColumnDoneAt": "Done At"
-        title: localizations.translationOrderListScreenColumnDoneAt,
-        field: 'doneAt',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 80,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        title: localizations.translationOrderListScreenColumnActions,
-        field: 'actions',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 100,
-        readOnly: true,
-        textAlign: PlutoColumnTextAlign.center,
-        renderer: (rendererContext) {
-          final String orderIdStr = rendererContext.cell.value as String;
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.edit),
-                iconSize: 20.0,
-                padding: const EdgeInsets.all(4.0),
-                constraints: const BoxConstraints(
-                    minWidth: 30, minHeight: 30, maxWidth: 30, maxHeight: 30),
-                splashRadius: 18.0,
-                tooltip: localizations.translationOrderListScreenTooltipEdit,
-                onPressed: () => _navigateAndRefresh(orderId: orderIdStr),
-              ),
-              IconButton(
-                icon: const Icon(Icons.delete),
-                iconSize: 20.0,
-                padding: const EdgeInsets.all(4.0),
-                constraints: const BoxConstraints(
-                    minWidth: 30, minHeight: 30, maxWidth: 30, maxHeight: 30),
-                splashRadius: 18.0,
-                tooltip: localizations.translationOrderListScreenTooltipDelete,
-                onPressed: () => _deleteOrder(orderIdStr),
-              ),
-            ],
-          );
-        },
-      ),
-    ];
   }
 }

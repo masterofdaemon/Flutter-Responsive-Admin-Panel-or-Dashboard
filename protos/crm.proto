@@ -142,8 +142,6 @@ message Client {
   optional int64 telegram_id = 6; // Changed type to int64
   // Client's WhatsApp number (E.164 format)
   optional string whatsapp_number = 7;
-  // Source of the client
-  optional ClientSource source = 8;
   // Client's passport data (stored as JSON)
   optional google.protobuf.Value passport_data = 9;
   // Notes about the client
@@ -234,6 +232,7 @@ message TranslationOrder {
   repeated BlankInfo blanks = 17;
   // Notes about the translation order
   optional string notes = 18;
+  optional ClientSource source = 19; // MOVED: Source of the client for this order
   // bool is_urgent = 19; // REMOVED - Redundant with Priority enum
   // bool is_semi_urgent = 20; // REMOVED - Redundant with Priority enum
   // client_notified field was here, now covered by TranslationProgressStatus.CLIENT_NOTIFIED

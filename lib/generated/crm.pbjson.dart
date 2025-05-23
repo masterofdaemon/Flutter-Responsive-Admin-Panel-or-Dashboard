@@ -231,17 +231,15 @@ const Client$json = {
     {'1': 'email', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'email', '17': true},
     {'1': 'telegram_id', '3': 6, '4': 1, '5': 3, '9': 1, '10': 'telegramId', '17': true},
     {'1': 'whatsapp_number', '3': 7, '4': 1, '5': 9, '9': 2, '10': 'whatsappNumber', '17': true},
-    {'1': 'source', '3': 8, '4': 1, '5': 14, '6': '.proto.ClientSource', '9': 3, '10': 'source', '17': true},
-    {'1': 'passport_data', '3': 9, '4': 1, '5': 11, '6': '.google.protobuf.Value', '9': 4, '10': 'passportData', '17': true},
-    {'1': 'notes', '3': 10, '4': 1, '5': 9, '9': 5, '10': 'notes', '17': true},
-    {'1': 'manager_id', '3': 11, '4': 1, '5': 13, '9': 6, '10': 'managerId', '17': true},
-    {'1': 'office_id', '3': 12, '4': 1, '5': 13, '9': 7, '10': 'officeId', '17': true},
+    {'1': 'passport_data', '3': 9, '4': 1, '5': 11, '6': '.google.protobuf.Value', '9': 3, '10': 'passportData', '17': true},
+    {'1': 'notes', '3': 10, '4': 1, '5': 9, '9': 4, '10': 'notes', '17': true},
+    {'1': 'manager_id', '3': 11, '4': 1, '5': 13, '9': 5, '10': 'managerId', '17': true},
+    {'1': 'office_id', '3': 12, '4': 1, '5': 13, '9': 6, '10': 'officeId', '17': true},
   ],
   '8': [
     {'1': '_email'},
     {'1': '_telegram_id'},
     {'1': '_whatsapp_number'},
-    {'1': '_source'},
     {'1': '_passport_data'},
     {'1': '_notes'},
     {'1': '_manager_id'},
@@ -255,13 +253,11 @@ final $typed_data.Uint8List clientDescriptor = $convert.base64Decode(
     'gJUglmaXJzdE5hbWUSGwoJbGFzdF9uYW1lGAMgASgJUghsYXN0TmFtZRIUCgVwaG9uZRgEIAEo'
     'CVIFcGhvbmUSGQoFZW1haWwYBSABKAlIAFIFZW1haWyIAQESJAoLdGVsZWdyYW1faWQYBiABKA'
     'NIAVIKdGVsZWdyYW1JZIgBARIsCg93aGF0c2FwcF9udW1iZXIYByABKAlIAlIOd2hhdHNhcHBO'
-    'dW1iZXKIAQESMAoGc291cmNlGAggASgOMhMucHJvdG8uQ2xpZW50U291cmNlSANSBnNvdXJjZY'
-    'gBARJACg1wYXNzcG9ydF9kYXRhGAkgASgLMhYuZ29vZ2xlLnByb3RvYnVmLlZhbHVlSARSDHBh'
-    'c3Nwb3J0RGF0YYgBARIZCgVub3RlcxgKIAEoCUgFUgVub3Rlc4gBARIiCgptYW5hZ2VyX2lkGA'
-    'sgASgNSAZSCW1hbmFnZXJJZIgBARIgCglvZmZpY2VfaWQYDCABKA1IB1IIb2ZmaWNlSWSIAQFC'
-    'CAoGX2VtYWlsQg4KDF90ZWxlZ3JhbV9pZEISChBfd2hhdHNhcHBfbnVtYmVyQgkKB19zb3VyY2'
-    'VCEAoOX3Bhc3Nwb3J0X2RhdGFCCAoGX25vdGVzQg0KC19tYW5hZ2VyX2lkQgwKCl9vZmZpY2Vf'
-    'aWQ=');
+    'dW1iZXKIAQESQAoNcGFzc3BvcnRfZGF0YRgJIAEoCzIWLmdvb2dsZS5wcm90b2J1Zi5WYWx1ZU'
+    'gDUgxwYXNzcG9ydERhdGGIAQESGQoFbm90ZXMYCiABKAlIBFIFbm90ZXOIAQESIgoKbWFuYWdl'
+    'cl9pZBgLIAEoDUgFUgltYW5hZ2VySWSIAQESIAoJb2ZmaWNlX2lkGAwgASgNSAZSCG9mZmljZU'
+    'lkiAEBQggKBl9lbWFpbEIOCgxfdGVsZWdyYW1faWRCEgoQX3doYXRzYXBwX251bWJlckIQCg5f'
+    'cGFzc3BvcnRfZGF0YUIICgZfbm90ZXNCDQoLX21hbmFnZXJfaWRCDAoKX29mZmljZV9pZA==');
 
 @$core.Deprecated('Use userDescriptor instead')
 const User$json = {
@@ -419,8 +415,9 @@ const TranslationOrder$json = {
     {'1': 'payment_id', '3': 16, '4': 1, '5': 13, '9': 5, '10': 'paymentId', '17': true},
     {'1': 'blanks', '3': 17, '4': 3, '5': 11, '6': '.proto.TranslationOrder.BlankInfo', '10': 'blanks'},
     {'1': 'notes', '3': 18, '4': 1, '5': 9, '9': 6, '10': 'notes', '17': true},
+    {'1': 'source', '3': 19, '4': 1, '5': 14, '6': '.proto.ClientSource', '9': 7, '10': 'source', '17': true},
     {'1': 'created_at', '3': 22, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
-    {'1': 'done_at', '3': 23, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 7, '10': 'doneAt', '17': true},
+    {'1': 'done_at', '3': 23, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 8, '10': 'doneAt', '17': true},
   ],
   '3': [TranslationOrder_BlankInfo$json],
   '8': [
@@ -431,6 +428,7 @@ const TranslationOrder$json = {
     {'1': '_page_count'},
     {'1': '_payment_id'},
     {'1': '_notes'},
+    {'1': '_source'},
     {'1': '_done_at'},
   ],
 };
@@ -460,14 +458,15 @@ final $typed_data.Uint8List translationOrderDescriptor = $convert.base64Decode(
     'MiAucHJvdG8uVHJhbnNsYXRpb25Qcm9ncmVzc1N0YXR1c1ITdHJhbnNsYXRpb25Qcm9ncmVzcx'
     'IiCgpwYXltZW50X2lkGBAgASgNSAVSCXBheW1lbnRJZIgBARI5CgZibGFua3MYESADKAsyIS5w'
     'cm90by5UcmFuc2xhdGlvbk9yZGVyLkJsYW5rSW5mb1IGYmxhbmtzEhkKBW5vdGVzGBIgASgJSA'
-    'ZSBW5vdGVziAEBEjkKCmNyZWF0ZWRfYXQYFiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0'
-    'YW1wUgljcmVhdGVkQXQSOAoHZG9uZV9hdBgXIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3'
-    'RhbXBIB1IGZG9uZUF0iAEBGocBCglCbGFua0luZm8SIQoMYmxhbmtfbnVtYmVyGAEgASgJUgti'
-    'bGFua051bWJlchIdCgppc19zcG9pbGVkGAIgASgIUglpc1Nwb2lsZWQSOAoYcmVwbGFjZW1lbn'
-    'RfYmxhbmtfbnVtYmVyGAMgASgJUhZyZXBsYWNlbWVudEJsYW5rTnVtYmVyQhAKDl90cmFuc2xh'
-    'dG9yX2lkQhQKEl9kb2N1bWVudF90eXBlX2tleUISChBfc291cmNlX2xhbmd1YWdlQhIKEF90YX'
-    'JnZXRfbGFuZ3VhZ2VCDQoLX3BhZ2VfY291bnRCDQoLX3BheW1lbnRfaWRCCAoGX25vdGVzQgoK'
-    'CF9kb25lX2F0');
+    'ZSBW5vdGVziAEBEjAKBnNvdXJjZRgTIAEoDjITLnByb3RvLkNsaWVudFNvdXJjZUgHUgZzb3Vy'
+    'Y2WIAQESOQoKY3JlYXRlZF9hdBgWIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCW'
+    'NyZWF0ZWRBdBI4Cgdkb25lX2F0GBcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEgI'
+    'UgZkb25lQXSIAQEahwEKCUJsYW5rSW5mbxIhCgxibGFua19udW1iZXIYASABKAlSC2JsYW5rTn'
+    'VtYmVyEh0KCmlzX3Nwb2lsZWQYAiABKAhSCWlzU3BvaWxlZBI4ChhyZXBsYWNlbWVudF9ibGFu'
+    'a19udW1iZXIYAyABKAlSFnJlcGxhY2VtZW50QmxhbmtOdW1iZXJCEAoOX3RyYW5zbGF0b3JfaW'
+    'RCFAoSX2RvY3VtZW50X3R5cGVfa2V5QhIKEF9zb3VyY2VfbGFuZ3VhZ2VCEgoQX3RhcmdldF9s'
+    'YW5ndWFnZUINCgtfcGFnZV9jb3VudEINCgtfcGF5bWVudF9pZEIICgZfbm90ZXNCCQoHX3NvdX'
+    'JjZUIKCghfZG9uZV9hdA==');
 
 @$core.Deprecated('Use insurancePolicyDescriptor instead')
 const InsurancePolicy$json = {

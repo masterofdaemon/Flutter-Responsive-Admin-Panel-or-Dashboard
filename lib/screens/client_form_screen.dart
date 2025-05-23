@@ -75,10 +75,10 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
         _phoneController.text = client.phone;
         _telegramIdController.text = client.telegramId.toString();
         _whatsappNumberController.text = client.whatsappNumber;
-        _selectedSource =
-            client.source == crm.ClientSource.CLIENT_SOURCE_UNSPECIFIED
-                ? null
-                : client.source;
+        // _selectedSource =
+        //     client.source == crm.ClientSource.CLIENT_SOURCE_UNSPECIFIED
+        //         ? null
+        //         : client.source;
         _passportDataController.text =
             client.hasPassportData() ? client.passportData.writeToJson() : '';
         _notesController.text = client.notes;
@@ -136,8 +136,8 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
             ? Int64.parseInt(_telegramIdController.text.trim())
             : Int64(0),
         whatsappNumber: _whatsappNumberController.text.trim(),
-        source: _selectedSource ??
-            crm.ClientSource.CLIENT_SOURCE_UNSPECIFIED, // Use selected enum
+        // source: _selectedSource ??
+        //     crm.ClientSource.CLIENT_SOURCE_UNSPECIFIED, // Use selected enum
         passportData: parsedPassportData, // Use validated JSON
         notes: _notesController.text.trim(),
       );
