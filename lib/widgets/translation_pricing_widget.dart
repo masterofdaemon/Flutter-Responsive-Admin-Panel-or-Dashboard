@@ -26,6 +26,8 @@ class TranslationPricingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pricingService = TranslationPricingService();
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     if (documentTypeKey == null || documentTypeKey!.isEmpty) {
       return Card(
@@ -36,20 +38,21 @@ class TranslationPricingWidget extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.calculate, color: Colors.orange),
+                  Icon(Icons.calculate, color: colorScheme.primary),
                   const SizedBox(width: 8),
                   Text(
                     'Pricing Calculation',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.onSurface,
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 'Please select a document type to see pricing',
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(color: colorScheme.onSurface.withOpacity(0.6)),
               ),
             ],
           ),
@@ -79,13 +82,14 @@ class TranslationPricingWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Icon(Icons.calculate, color: Colors.green),
+                Icon(Icons.calculate, color: colorScheme.primary),
                 const SizedBox(width: 8),
                 Text(
                   'Pricing Calculation',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.onSurface,
+                  ),
                 ),
               ],
             ),
@@ -133,7 +137,7 @@ class TranslationPricingWidget extends StatelessWidget {
           _buildPricingRow(
             _getUrgencyText(pricing.urgencyMultiplier),
             '${pricing.urgencyMultiplier}x',
-            color: _getUrgencyColor(pricing.urgencyMultiplier),
+            color: _getUrgencyColor(pricing.urgencyMultiplier, context),
           ),
           _buildPricingRow(
             'Urgent Translation Sum',
@@ -164,7 +168,7 @@ class TranslationPricingWidget extends StatelessWidget {
         // Additional info
         if (pricing.cityName != null || pricing.urgencyMultiplier != 1.0) ...[
           const SizedBox(height: 8),
-          _buildAdditionalInfo(pricing),
+          _buildAdditionalInfo(pricing, context),
         ],
       ],
     );
@@ -179,49 +183,55 @@ class TranslationPricingWidget extends StatelessWidget {
     bool isSubtle = false,
     Color? color,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontWeight:
-                        isBold || isTotal ? FontWeight.bold : FontWeight.normal,
-                    fontSize: isTotal ? 16 : 14,
-                    color: isSubtle
-                        ? Colors.grey.shade600
-                        : (color ?? Colors.black87),
-                  ),
-                ),
-                if (subtitle != null)
+    return Builder(builder: (context) {
+      final theme = Theme.of(context);
+      final colorScheme = theme.colorScheme;
+
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    subtitle,
+                    label,
                     style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey.shade600,
+                      fontWeight: isBold || isTotal
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      fontSize: isTotal ? 16 : 14,
+                      color: isSubtle
+                          ? colorScheme.onSurface.withOpacity(0.6)
+                          : (color ?? colorScheme.onSurface),
                     ),
                   ),
-              ],
+                  if (subtitle != null)
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: colorScheme.onSurface.withOpacity(0.6),
+                      ),
+                    ),
+                ],
+              ),
             ),
-          ),
-          Text(
-            value,
-            style: TextStyle(
-              fontWeight:
-                  isBold || isTotal ? FontWeight.bold : FontWeight.normal,
-              fontSize: isTotal ? 16 : 14,
-              color: color ?? Colors.black87,
+            Text(
+              value,
+              style: TextStyle(
+                fontWeight:
+                    isBold || isTotal ? FontWeight.bold : FontWeight.normal,
+                fontSize: isTotal ? 16 : 14,
+                color: color ?? colorScheme.onSurface,
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   String _buildMultiplierText(TranslationPricing pricing) {
@@ -248,36 +258,40 @@ class TranslationPricingWidget extends StatelessWidget {
     return 'Priority Multiplier';
   }
 
-  Color _getUrgencyColor(double multiplier) {
+  Color _getUrgencyColor(double multiplier, BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     if (multiplier == 2.0) {
-      return Colors.red;
+      return colorScheme.error;
     } else if (multiplier == 1.5) {
       return Colors.orange;
     }
-    return Colors.blue;
+    return colorScheme.primary;
   }
 
-  Widget _buildAdditionalInfo(TranslationPricing pricing) {
+  Widget _buildAdditionalInfo(
+      TranslationPricing pricing, BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        color: Colors.blue.shade50,
+        color: colorScheme.primaryContainer.withOpacity(0.3),
         borderRadius: BorderRadius.circular(8.0),
-        border: Border.all(color: Colors.blue.shade200),
+        border: Border.all(color: colorScheme.primary.withOpacity(0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.info_outline, size: 16, color: Colors.blue),
-              SizedBox(width: 4),
+              Icon(Icons.info_outline, size: 16, color: colorScheme.primary),
+              const SizedBox(width: 4),
               Text(
                 'Pricing Information',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue,
+                  color: colorScheme.onPrimaryContainer,
                 ),
               ),
             ],
@@ -285,7 +299,8 @@ class TranslationPricingWidget extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             _buildInfoText(pricing),
-            style: const TextStyle(fontSize: 12, color: Colors.blue),
+            style:
+                TextStyle(fontSize: 12, color: colorScheme.onPrimaryContainer),
           ),
         ],
       ),

@@ -1669,7 +1669,7 @@ abstract class AppLocalizations {
   /// No description provided for @translationOrderFormScreenFieldManagerHint.
   ///
   /// In en, this message translates to:
-  /// **'Select Manager'**
+  /// **'Assign manager'**
   String get translationOrderFormScreenFieldManagerHint;
 
   /// No description provided for @translationOrderFormScreenFieldManagerValidation.
@@ -1729,7 +1729,7 @@ abstract class AppLocalizations {
   /// No description provided for @translationOrderFormScreenFieldNotarialSumLabel.
   ///
   /// In en, this message translates to:
-  /// **'Notarial Sum *'**
+  /// **'Notarial Sum'**
   String get translationOrderFormScreenFieldNotarialSumLabel;
 
   /// No description provided for @translationOrderFormScreenFieldNotarialSumValidationRequired.
@@ -1936,6 +1936,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'N/A'**
   String get translationOrderFormScreenStatusNotAvailable;
+
+  /// No description provided for @translationOrderFormScreenFieldCompletionDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Completion Date'**
+  String get translationOrderFormScreenFieldCompletionDateLabel;
+
+  /// No description provided for @translationOrderFormScreenFieldCompletionDateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select completion date'**
+  String get translationOrderFormScreenFieldCompletionDateHint;
+
+  /// No description provided for @translationOrderFormScreenFieldNotarialSumHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter notarial sum'**
+  String get translationOrderFormScreenFieldNotarialSumHint;
+
+  /// No description provided for @translationOrderFormScreenFieldPaymentIdHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter payment reference'**
+  String get translationOrderFormScreenFieldPaymentIdHint;
+
+  /// No description provided for @translationOrderFormScreenSectionTitleActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Actions'**
+  String get translationOrderFormScreenSectionTitleActions;
+
+  /// No description provided for @translationOrderFormScreenSectionTitlePricingPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Pricing & Payment'**
+  String get translationOrderFormScreenSectionTitlePricingPayment;
+
+  /// No description provided for @translationOrderFormScreenButtonSaving.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving...'**
+  String get translationOrderFormScreenButtonSaving;
+
+  /// No description provided for @translationOrderFormScreenButtonSaveOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Order'**
+  String get translationOrderFormScreenButtonSaveOrder;
+
+  /// No description provided for @translationOrderFormScreenDialogConfirmDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Deletion'**
+  String get translationOrderFormScreenDialogConfirmDeleteTitle;
+
+  /// No description provided for @translationOrderFormScreenDialogConfirmDeleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this order? This action cannot be undone.'**
+  String get translationOrderFormScreenDialogConfirmDeleteMessage;
+
+  /// No description provided for @translationOrderFormScreenDialogButtonCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get translationOrderFormScreenDialogButtonCancel;
+
+  /// No description provided for @translationOrderFormScreenDialogButtonDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get translationOrderFormScreenDialogButtonDelete;
+
+  /// No description provided for @translationOrderFormScreenButtonDeleteOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Order'**
+  String get translationOrderFormScreenButtonDeleteOrder;
+
+  /// No description provided for @translationOrderFormScreenAppBarTitleCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Order'**
+  String get translationOrderFormScreenAppBarTitleCreate;
+
+  /// No description provided for @translationOrderFormScreenAppBarTitleUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Order'**
+  String get translationOrderFormScreenAppBarTitleUpdate;
 
   /// No description provided for @insurancePolicyListScreenTitle.
   ///
@@ -3137,6 +3227,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'+7XXXXXXXXXX'**
   String get employeeFormScreenHintWhatsappNumber;
+
+  /// No description provided for @translationOrderFormScreenCreateNewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create New Translation Order'**
+  String get translationOrderFormScreenCreateNewTitle;
+
+  /// No description provided for @translationOrderFormScreenEditTitleFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Translation Order'**
+  String get translationOrderFormScreenEditTitleFull;
+
+  /// No description provided for @translationOrderFormScreenCreateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in the details to create a new translation order'**
+  String get translationOrderFormScreenCreateDescription;
+
+  /// No description provided for @translationOrderFormScreenEditDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Update the order details and status'**
+  String get translationOrderFormScreenEditDescription;
+
+  /// No description provided for @translationOrderFormScreenFieldTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a descriptive title for this order'**
+  String get translationOrderFormScreenFieldTitleHint;
+
+  /// No description provided for @translationOrderFormScreenFieldTranslatorHintSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Assign translator'**
+  String get translationOrderFormScreenFieldTranslatorHintSelect;
+
+  /// No description provided for @translationOrderFormScreenFieldBlankNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Blank Number'**
+  String get translationOrderFormScreenFieldBlankNumberLabel;
+
+  /// No description provided for @translationOrderFormScreenSectionTitleTranslation.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation Details'**
+  String get translationOrderFormScreenSectionTitleTranslation;
+
+  /// No description provided for @translationOrderFormScreenFieldSourceLanguageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., English'**
+  String get translationOrderFormScreenFieldSourceLanguageHint;
+
+  /// No description provided for @translationOrderFormScreenFieldSourceLanguageValidationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Source language is required'**
+  String get translationOrderFormScreenFieldSourceLanguageValidationRequired;
+
+  /// No description provided for @translationOrderFormScreenFieldTargetLanguageHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Russian'**
+  String get translationOrderFormScreenFieldTargetLanguageHint;
+
+  /// No description provided for @translationOrderFormScreenFieldTargetLanguageValidationRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Target language is required'**
+  String get translationOrderFormScreenFieldTargetLanguageValidationRequired;
+
+  /// No description provided for @translationOrderFormScreenFieldPageCountHint.
+  ///
+  /// In en, this message translates to:
+  /// **'1'**
+  String get translationOrderFormScreenFieldPageCountHint;
+
+  /// No description provided for @translationOrderFormScreenSectionTitleNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get translationOrderFormScreenSectionTitleNotes;
+
+  /// No description provided for @translationOrderFormScreenSectionTitleStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status & Progress'**
+  String get translationOrderFormScreenSectionTitleStatus;
+
+  /// No description provided for @translationOrderFormScreenSectionTitlePricing.
+  ///
+  /// In en, this message translates to:
+  /// **'Pricing'**
+  String get translationOrderFormScreenSectionTitlePricing;
+
+  /// No description provided for @translationOrderFormScreenFieldIncorrectBlankLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect Blank Number'**
+  String get translationOrderFormScreenFieldIncorrectBlankLabel;
+
+  /// No description provided for @translationOrderFormScreenFieldIncorrectBlankHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter incorrect blank number if applicable'**
+  String get translationOrderFormScreenFieldIncorrectBlankHint;
+
+  /// No description provided for @translationOrderFormScreenFieldNotesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add any additional notes or special instructions...'**
+  String get translationOrderFormScreenFieldNotesHint;
+
+  /// No description provided for @translationOrderFormScreenStatusCurrentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Status'**
+  String get translationOrderFormScreenStatusCurrentLabel;
+
+  /// No description provided for @translationOrderFormScreenStatusUpdateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Status'**
+  String get translationOrderFormScreenStatusUpdateLabel;
 }
 
 class _AppLocalizationsDelegate

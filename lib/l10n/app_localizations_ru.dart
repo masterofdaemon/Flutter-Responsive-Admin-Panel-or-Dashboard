@@ -924,7 +924,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get translationOrderFormScreenFieldManagerLabel => 'Менеджер *';
 
   @override
-  String get translationOrderFormScreenFieldManagerHint => 'Выберите менеджера';
+  String get translationOrderFormScreenFieldManagerHint =>
+      'Назначить менеджера';
 
   @override
   String get translationOrderFormScreenFieldManagerValidation =>
@@ -962,7 +963,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get translationOrderFormScreenFieldNotarialSumLabel =>
-      'Нотариальная сумма *';
+      'Нотариальная сумма';
 
   @override
   String get translationOrderFormScreenFieldNotarialSumValidationRequired =>
@@ -1082,6 +1083,58 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get translationOrderFormScreenStatusNotAvailable => 'Н/Д';
+
+  @override
+  String get translationOrderFormScreenFieldCompletionDateLabel =>
+      'Дата завершения';
+
+  @override
+  String get translationOrderFormScreenFieldCompletionDateHint =>
+      'Выберите дату завершения';
+
+  @override
+  String get translationOrderFormScreenFieldNotarialSumHint =>
+      'Введите нотариальную сумму';
+
+  @override
+  String get translationOrderFormScreenFieldPaymentIdHint =>
+      'Введите идентификатор платежа';
+
+  @override
+  String get translationOrderFormScreenSectionTitleActions => 'Действия';
+
+  @override
+  String get translationOrderFormScreenSectionTitlePricingPayment =>
+      'Цены и оплата';
+
+  @override
+  String get translationOrderFormScreenButtonSaving => 'Сохранение...';
+
+  @override
+  String get translationOrderFormScreenButtonSaveOrder => 'Сохранить заказ';
+
+  @override
+  String get translationOrderFormScreenDialogConfirmDeleteTitle =>
+      'Подтвердить удаление';
+
+  @override
+  String get translationOrderFormScreenDialogConfirmDeleteMessage =>
+      'Вы уверены, что хотите удалить этот заказ? Это действие нельзя отменить.';
+
+  @override
+  String get translationOrderFormScreenDialogButtonCancel => 'Отмена';
+
+  @override
+  String get translationOrderFormScreenDialogButtonDelete => 'Удалить';
+
+  @override
+  String get translationOrderFormScreenButtonDeleteOrder => 'Удалить заказ';
+
+  @override
+  String get translationOrderFormScreenAppBarTitleCreate => 'Создать заказ';
+
+  @override
+  String get translationOrderFormScreenAppBarTitleUpdate => 'Обновить заказ';
 
   @override
   String get insurancePolicyListScreenTitle => 'Страховые полисы';
@@ -1772,4 +1825,83 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get employeeFormScreenHintWhatsappNumber => '+7XXXXXXXXXX';
+
+  @override
+  String get translationOrderFormScreenCreateNewTitle =>
+      'Создать новый заказ на перевод';
+
+  @override
+  String get translationOrderFormScreenEditTitleFull =>
+      'Редактировать заказ на перевод';
+
+  @override
+  String get translationOrderFormScreenCreateDescription =>
+      'Заполните детали для создания нового заказа на перевод';
+
+  @override
+  String get translationOrderFormScreenEditDescription =>
+      'Обновите детали заказа и статус';
+
+  @override
+  String get translationOrderFormScreenFieldTitleHint =>
+      'Введите описательное название для этого заказа';
+
+  @override
+  String get translationOrderFormScreenFieldTranslatorHintSelect =>
+      'Назначить переводчика';
+
+  @override
+  String get translationOrderFormScreenFieldBlankNumberLabel => 'Номер бланка';
+
+  @override
+  String get translationOrderFormScreenSectionTitleTranslation =>
+      'Детали перевода';
+
+  @override
+  String get translationOrderFormScreenFieldSourceLanguageHint =>
+      'например, Английский';
+
+  @override
+  String get translationOrderFormScreenFieldSourceLanguageValidationRequired =>
+      'Исходный язык обязателен';
+
+  @override
+  String get translationOrderFormScreenFieldTargetLanguageHint =>
+      'например, Русский';
+
+  @override
+  String get translationOrderFormScreenFieldTargetLanguageValidationRequired =>
+      'Целевой язык обязателен';
+
+  @override
+  String get translationOrderFormScreenFieldPageCountHint => '1';
+
+  @override
+  String get translationOrderFormScreenSectionTitleNotes => 'Примечания';
+
+  @override
+  String get translationOrderFormScreenSectionTitleStatus =>
+      'Статус и прогресс';
+
+  @override
+  String get translationOrderFormScreenSectionTitlePricing =>
+      'Расчет стоимости';
+
+  @override
+  String get translationOrderFormScreenFieldIncorrectBlankLabel =>
+      'Номер неправильного бланка';
+
+  @override
+  String get translationOrderFormScreenFieldIncorrectBlankHint =>
+      'Введите номер неправильного бланка, если применимо';
+
+  @override
+  String get translationOrderFormScreenFieldNotesHint =>
+      'Добавьте любые дополнительные заметки или специальные инструкции...';
+
+  @override
+  String get translationOrderFormScreenStatusCurrentLabel => 'Текущий статус';
+
+  @override
+  String get translationOrderFormScreenStatusUpdateLabel => 'Обновить статус';
 }

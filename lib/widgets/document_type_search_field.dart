@@ -36,7 +36,6 @@ class _DocumentTypeSearchFieldState extends State<DocumentTypeSearchField> {
   void initState() {
     super.initState();
     _filteredDocumentTypes = _documentTypeService.getAllDocumentTypes();
-    _updateDisplayText();
 
     _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
@@ -48,6 +47,12 @@ class _DocumentTypeSearchFieldState extends State<DocumentTypeSearchField> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _updateDisplayText();
+  }
+
+  @override
   void didUpdateWidget(DocumentTypeSearchField oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.selectedDocumentTypeKey != widget.selectedDocumentTypeKey) {
@@ -56,6 +61,8 @@ class _DocumentTypeSearchFieldState extends State<DocumentTypeSearchField> {
   }
 
   void _updateDisplayText() {
+    if (!mounted) return;
+
     if (widget.selectedDocumentTypeKey != null &&
         widget.selectedDocumentTypeKey!.isNotEmpty) {
       final localizations = AppLocalizations.of(context);

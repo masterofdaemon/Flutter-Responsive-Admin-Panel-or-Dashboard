@@ -923,7 +923,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translationOrderFormScreenFieldManagerLabel => 'Manager *';
 
   @override
-  String get translationOrderFormScreenFieldManagerHint => 'Select Manager';
+  String get translationOrderFormScreenFieldManagerHint => 'Assign manager';
 
   @override
   String get translationOrderFormScreenFieldManagerValidation =>
@@ -959,8 +959,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translationOrderFormScreenFieldPageCountLabel => 'Page Count';
 
   @override
-  String get translationOrderFormScreenFieldNotarialSumLabel =>
-      'Notarial Sum *';
+  String get translationOrderFormScreenFieldNotarialSumLabel => 'Notarial Sum';
 
   @override
   String get translationOrderFormScreenFieldNotarialSumValidationRequired =>
@@ -1078,6 +1077,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get translationOrderFormScreenStatusNotAvailable => 'N/A';
+
+  @override
+  String get translationOrderFormScreenFieldCompletionDateLabel =>
+      'Completion Date';
+
+  @override
+  String get translationOrderFormScreenFieldCompletionDateHint =>
+      'Select completion date';
+
+  @override
+  String get translationOrderFormScreenFieldNotarialSumHint =>
+      'Enter notarial sum';
+
+  @override
+  String get translationOrderFormScreenFieldPaymentIdHint =>
+      'Enter payment reference';
+
+  @override
+  String get translationOrderFormScreenSectionTitleActions => 'Actions';
+
+  @override
+  String get translationOrderFormScreenSectionTitlePricingPayment =>
+      'Pricing & Payment';
+
+  @override
+  String get translationOrderFormScreenButtonSaving => 'Saving...';
+
+  @override
+  String get translationOrderFormScreenButtonSaveOrder => 'Save Order';
+
+  @override
+  String get translationOrderFormScreenDialogConfirmDeleteTitle =>
+      'Confirm Deletion';
+
+  @override
+  String get translationOrderFormScreenDialogConfirmDeleteMessage =>
+      'Are you sure you want to delete this order? This action cannot be undone.';
+
+  @override
+  String get translationOrderFormScreenDialogButtonCancel => 'Cancel';
+
+  @override
+  String get translationOrderFormScreenDialogButtonDelete => 'Delete';
+
+  @override
+  String get translationOrderFormScreenButtonDeleteOrder => 'Delete Order';
+
+  @override
+  String get translationOrderFormScreenAppBarTitleCreate => 'Create Order';
+
+  @override
+  String get translationOrderFormScreenAppBarTitleUpdate => 'Update Order';
 
   @override
   String get insurancePolicyListScreenTitle => 'Insurance Policies';
@@ -1758,4 +1809,82 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get employeeFormScreenHintWhatsappNumber => '+7XXXXXXXXXX';
+
+  @override
+  String get translationOrderFormScreenCreateNewTitle =>
+      'Create New Translation Order';
+
+  @override
+  String get translationOrderFormScreenEditTitleFull =>
+      'Edit Translation Order';
+
+  @override
+  String get translationOrderFormScreenCreateDescription =>
+      'Fill in the details to create a new translation order';
+
+  @override
+  String get translationOrderFormScreenEditDescription =>
+      'Update the order details and status';
+
+  @override
+  String get translationOrderFormScreenFieldTitleHint =>
+      'Enter a descriptive title for this order';
+
+  @override
+  String get translationOrderFormScreenFieldTranslatorHintSelect =>
+      'Assign translator';
+
+  @override
+  String get translationOrderFormScreenFieldBlankNumberLabel => 'Blank Number';
+
+  @override
+  String get translationOrderFormScreenSectionTitleTranslation =>
+      'Translation Details';
+
+  @override
+  String get translationOrderFormScreenFieldSourceLanguageHint =>
+      'e.g., English';
+
+  @override
+  String get translationOrderFormScreenFieldSourceLanguageValidationRequired =>
+      'Source language is required';
+
+  @override
+  String get translationOrderFormScreenFieldTargetLanguageHint =>
+      'e.g., Russian';
+
+  @override
+  String get translationOrderFormScreenFieldTargetLanguageValidationRequired =>
+      'Target language is required';
+
+  @override
+  String get translationOrderFormScreenFieldPageCountHint => '1';
+
+  @override
+  String get translationOrderFormScreenSectionTitleNotes => 'Notes';
+
+  @override
+  String get translationOrderFormScreenSectionTitleStatus =>
+      'Status & Progress';
+
+  @override
+  String get translationOrderFormScreenSectionTitlePricing => 'Pricing';
+
+  @override
+  String get translationOrderFormScreenFieldIncorrectBlankLabel =>
+      'Incorrect Blank Number';
+
+  @override
+  String get translationOrderFormScreenFieldIncorrectBlankHint =>
+      'Enter incorrect blank number if applicable';
+
+  @override
+  String get translationOrderFormScreenFieldNotesHint =>
+      'Add any additional notes or special instructions...';
+
+  @override
+  String get translationOrderFormScreenStatusCurrentLabel => 'Current Status';
+
+  @override
+  String get translationOrderFormScreenStatusUpdateLabel => 'Update Status';
 }
