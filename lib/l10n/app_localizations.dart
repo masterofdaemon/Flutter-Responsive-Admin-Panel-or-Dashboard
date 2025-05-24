@@ -2778,6 +2778,36 @@ abstract class AppLocalizations {
   /// **'No'**
   String get translationOrderListScreenValueNo;
 
+  /// No description provided for @documentTypePassport.
+  ///
+  /// In en, this message translates to:
+  /// **'Passport'**
+  String get documentTypePassport;
+
+  /// No description provided for @documentTypeDiploma.
+  ///
+  /// In en, this message translates to:
+  /// **'Diploma'**
+  String get documentTypeDiploma;
+
+  /// No description provided for @documentTypeBirthCertificate.
+  ///
+  /// In en, this message translates to:
+  /// **'Birth Certificate'**
+  String get documentTypeBirthCertificate;
+
+  /// No description provided for @documentTypeContract.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract'**
+  String get documentTypeContract;
+
+  /// No description provided for @documentTypeOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get documentTypeOther;
+
   /// No description provided for @employeeFormScreenTitleEdit.
   ///
   /// In en, this message translates to:

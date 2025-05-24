@@ -274,7 +274,7 @@ class _TranslationOrderFormScreenState
         _documentTypeController.text = _selectedDocumentTypeKey!;
       } else {
         _documentTypeController.text =
-            _selectedDocumentTypeKey!.replaceAll('_', ' ');
+            _getDocumentTypeDisplayName(_selectedDocumentTypeKey!);
       }
     } else {
       _documentTypeController.clear();
@@ -454,6 +454,26 @@ class _TranslationOrderFormScreenState
         final localizations = AppLocalizations.of(context);
         return localizations
             .translationOrderFormScreenTranslationProgressNotAvailable;
+    }
+  }
+
+  // Helper method to get localized document type display name
+  String _getDocumentTypeDisplayName(String documentTypeKey) {
+    final localizations = AppLocalizations.of(context);
+    switch (documentTypeKey) {
+      case 'passport':
+        return localizations.documentTypePassport;
+      case 'diploma':
+        return localizations.documentTypeDiploma;
+      case 'birth_certificate':
+        return localizations.documentTypeBirthCertificate;
+      case 'contract':
+        return localizations.documentTypeContract;
+      case 'other':
+        return localizations.documentTypeOther;
+      default:
+        // For custom document types, return as is
+        return documentTypeKey;
     }
   }
 
@@ -828,9 +848,8 @@ class _TranslationOrderFormScreenState
                                                                         onPressed: () => Navigator.pop(
                                                                             context,
                                                                             key),
-                                                                        child: Text(key.replaceAll(
-                                                                            '_',
-                                                                            ' ')),
+                                                                        child: Text(
+                                                                            _getDocumentTypeDisplayName(key)),
                                                                       ))
                                                                   .toList(),
                                                         );
@@ -889,8 +908,8 @@ class _TranslationOrderFormScreenState
                                                         choice;
                                                     _documentTypeController
                                                             .text =
-                                                        choice.replaceAll(
-                                                            '_', ' ');
+                                                        _getDocumentTypeDisplayName(
+                                                            choice);
                                                   });
                                                 }
                                               }

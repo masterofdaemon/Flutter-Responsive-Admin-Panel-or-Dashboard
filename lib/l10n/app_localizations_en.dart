@@ -1563,6 +1563,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translationOrderListScreenValueNo => 'No';
 
   @override
+  String get documentTypePassport => 'Passport';
+
+  @override
+  String get documentTypeDiploma => 'Diploma';
+
+  @override
+  String get documentTypeBirthCertificate => 'Birth Certificate';
+
+  @override
+  String get documentTypeContract => 'Contract';
+
+  @override
+  String get documentTypeOther => 'Other';
+
+  @override
   String get employeeFormScreenTitleEdit => 'Edit Employee';
 
   @override

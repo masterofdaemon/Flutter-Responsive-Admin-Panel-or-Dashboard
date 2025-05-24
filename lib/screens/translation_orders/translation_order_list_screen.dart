@@ -163,8 +163,9 @@ class _TranslationOrderListScreenState
             ? secondBlank.replacementBlankNumber
             : secondBlank.blankNumber;
       }
-      String documentTypeValue =
-          order.hasDocumentTypeKey() ? order.documentTypeKey : 'N/A';
+      String documentTypeValue = order.hasDocumentTypeKey()
+          ? _getDocumentTypeDisplayName(order.documentTypeKey)
+          : 'N/A';
       String totalSumValue =
           order.hasTotalSum() ? order.totalSum.toStringAsFixed(2) : 'N/A';
       String pageCountValue =
@@ -226,6 +227,24 @@ class _TranslationOrderListScreenState
         return localizations.clientSourceUnspecified;
       default:
         return localizations.clientSourceUnspecified;
+    }
+  }
+
+  String _getDocumentTypeDisplayName(String documentTypeKey) {
+    final localizations = AppLocalizations.of(context);
+    switch (documentTypeKey.toLowerCase()) {
+      case 'passport':
+        return localizations.documentTypePassport;
+      case 'diploma':
+        return localizations.documentTypeDiploma;
+      case 'birth_certificate':
+        return localizations.documentTypeBirthCertificate;
+      case 'contract':
+        return localizations.documentTypeContract;
+      case 'other':
+        return localizations.documentTypeOther;
+      default:
+        return documentTypeKey; // Return the original key if no match found
     }
   }
 

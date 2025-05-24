@@ -1574,6 +1574,21 @@ class AppLocalizationsRu extends AppLocalizations {
   String get translationOrderListScreenValueNo => 'Нет';
 
   @override
+  String get documentTypePassport => 'Паспорт';
+
+  @override
+  String get documentTypeDiploma => 'Диплом';
+
+  @override
+  String get documentTypeBirthCertificate => 'Свидетельство о рождении';
+
+  @override
+  String get documentTypeContract => 'Договор';
+
+  @override
+  String get documentTypeOther => 'Другое';
+
+  @override
   String get employeeFormScreenTitleEdit => 'Редактировать сотрудника';
 
   @override
