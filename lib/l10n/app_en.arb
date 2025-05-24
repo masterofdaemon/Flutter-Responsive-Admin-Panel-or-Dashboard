@@ -828,5 +828,61 @@
   "translationOrderListScreenColumnIncorrectBlank": "Incorrect Blank",
   "translationOrderListScreenColumnTotalSum": "Total Sum",
   "translationOrderListScreenColumnCreatedAt": "Created At",
-  "translationOrderListScreenColumnDoneAt": "Done At"
+  "translationOrderListScreenColumnDoneAt": "Done At",
+  "translationOrderListScreenColumnActions": "Actions",
+  "translationOrderListScreenTooltipEdit": "Edit Translation Order",
+  "employeeFormScreenTitleEdit": "Edit Employee",
+  "employeeFormScreenTitleAdd": "Add Employee",
+  "employeeFormScreenLabelSelectUser": "Select User",
+  "employeeFormScreenValidationUserRequired": "User is required",
+  "employeeFormScreenLabelUserAccount": "User Account",
+  "employeeFormScreenErrorCannotChangeUser": "Cannot change user for existing employee.",
+  "employeeFormScreenLabelEmployeeLogin": "Employee Login",
+  "employeeFormScreenValidationLoginRequired": "Please enter an employee login",
+  "employeeFormScreenLabelEmployeePassword": "Employee Password",
+  "employeeFormScreenValidationPasswordRequired": "Please enter a password",
+  "employeeFormScreenValidationPasswordMinLength": "Password must be at least 6 characters",
+  "employeeFormScreenLabelFullName": "Full Name",
+  "employeeFormScreenValidationNameRequired": "Please enter employee name",
+  "employeeFormScreenLabelEmail": "Email",
+  "employeeFormScreenValidationEmailRequired": "Please enter an email",
+  "employeeFormScreenValidationEmailInvalid": "Please enter a valid email",
+  "employeeFormScreenLabelSelectRole": "Select Role",
+  "employeeFormScreenValidationRoleRequired": "Role is required",
+  "employeeFormScreenLabelRole": "Role",
+  "employeeFormScreenLabelSelectOffice": "Select Office",
+  "employeeFormScreenValidationOfficeRequired": "Office is required",
+  "employeeFormScreenLabelOffice": "Office",
+  "employeeFormScreenLabelTelegramId": "Telegram ID",
+  "employeeFormScreenLabelWhatsappNumber": "WhatsApp Number",
+  "employeeFormScreenLabelNotes": "Notes",
+  "employeeFormScreenLabelActive": "Active",
+  "employeeFormScreenButtonUpdate": "Update Employee",
+  "employeeFormScreenButtonCreate": "Create Employee",
+  "employeeFormScreenFeedbackErrorLoading": "Error loading employee: {error}",
+  "@employeeFormScreenFeedbackErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "employeeFormScreenFeedbackSuccessUpdate": "Employee updated successfully",
+  "employeeFormScreenFeedbackSuccessCreate": "Employee created successfully",
+  "employeeFormScreenFeedbackErrorSaving": "Error saving employee: {error}",
+  "@employeeFormScreenFeedbackErrorSaving": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "employeeFormScreenFeedbackErrorLoadingDropdowns": "Error loading dropdown data: {error}",
+  "@employeeFormScreenFeedbackErrorLoadingDropdowns": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
 }

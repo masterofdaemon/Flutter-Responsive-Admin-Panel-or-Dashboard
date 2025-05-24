@@ -4,7 +4,6 @@ import 'package:admin/services/grpc_client_service.dart';
 import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
 import 'package:fixnum/fixnum.dart';
-import 'package:admin/screens/main/main_screen.dart'; // Added
 import 'package:admin/l10n/app_localizations.dart'; // Added
 
 class ClientFormScreen extends StatefulWidget {
@@ -198,199 +197,228 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_isEditMode
-            ? localizations.clientFormScreenTitleEdit
-            : localizations.clientFormScreenTitleAdd),
-        leading: IconButton(
-          // Added leading IconButton
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            if (Navigator.of(context).canPop()) {
-              Navigator.of(context).maybePop();
-            } else {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => MainScreen()),
-              );
-            }
-          },
-          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.save),
-            tooltip: localizations.clientFormScreenSaveTooltip,
-            onPressed: _isLoading ? null : _saveClient,
-          ),
-        ],
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Center(
-              // Center the form content
-              child: ConstrainedBox(
-                constraints:
-                    const BoxConstraints(maxWidth: 800), // Constrain the width
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        TextFormField(
-                          controller: _firstNameController,
-                          decoration: InputDecoration(
-                              labelText:
-                                  localizations.clientFormScreenLabelFirstName),
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return localizations
-                                  .clientFormScreenValidationFirstNameRequired;
-                            }
-                            if (value.trim().length < 2) {
-                              return localizations
-                                  .clientFormScreenValidationFirstNameMinLength;
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _lastNameController,
-                          decoration: InputDecoration(
-                              labelText:
-                                  localizations.clientFormScreenLabelLastName),
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return localizations
-                                  .clientFormScreenValidationLastNameRequired;
-                            }
-                            if (value.trim().length < 2) {
-                              return localizations
-                                  .clientFormScreenValidationLastNameMinLength;
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                              labelText:
-                                  localizations.clientFormScreenLabelEmail),
-                          keyboardType: TextInputType.emailAddress,
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return localizations
-                                  .clientFormScreenValidationEmailRequired;
-                            }
-                            // Basic email validation regex
-                            final emailRegex =
-                                RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-                            if (!emailRegex.hasMatch(value.trim())) {
-                              return localizations
-                                  .clientFormScreenValidationEmailInvalid;
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _phoneController,
-                          decoration: InputDecoration(
-                              labelText:
-                                  localizations.clientFormScreenLabelPhone),
-                          keyboardType: TextInputType.phone,
-                          validator: (value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return localizations
-                                  .clientFormScreenValidationPhoneRequired;
-                            }
-                            // Add more specific phone validation if needed (e.g., E.164 format)
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _telegramIdController,
-                          decoration: InputDecoration(
-                              labelText: localizations
-                                  .clientFormScreenLabelTelegramId),
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _whatsappNumberController,
-                          decoration: InputDecoration(
-                              labelText: localizations
-                                  .clientFormScreenLabelWhatsappNumber),
-                        ),
-                        const SizedBox(height: 16),
-                        // Dropdown for ClientSource
-                        DropdownButtonFormField<crm.ClientSource>(
-                          value:
-                              _selectedSource, // This will now be null if the original was UNSPECIFIED
-                          decoration: InputDecoration(
-                              labelText:
-                                  localizations.clientFormScreenLabelSource),
-                          hint: Text(localizations.clientFormScreenHintSource),
-                          items: crm.ClientSource.values
-                              .where((source) =>
-                                  source !=
-                                  crm.ClientSource.CLIENT_SOURCE_UNSPECIFIED)
-                              .map((crm.ClientSource source) {
-                            return DropdownMenuItem<crm.ClientSource>(
-                              value: source,
-                              child: Text(source.name
-                                  .replaceFirst('CLIENT_SOURCE_', '')
-                                  .replaceAll('_', ' ')), // User-friendly name
-                            );
-                          }).toList(),
-                          onChanged: (crm.ClientSource? newValue) {
-                            setState(() {
-                              _selectedSource = newValue;
-                            });
-                          },
-                          validator: (value) => value ==
-                                  null // Simplified validator: null means no valid selection
-                              ? localizations
-                                  .clientFormScreenValidationSourceRequired
-                              : null,
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _passportDataController,
-                          decoration: InputDecoration(
-                              labelText: localizations
-                                  .clientFormScreenLabelPassportData),
-                          maxLines: 3,
-                          // Add JSON validation if needed
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _notesController,
-                          decoration: InputDecoration(
-                              labelText:
-                                  localizations.clientFormScreenLabelNotes),
-                          maxLines: 3,
-                        ),
-                        const SizedBox(height: 24),
-                        Center(
-                          child: ElevatedButton(
-                            onPressed: _isLoading ? null : _saveClient,
-                            child: Text(_isEditMode
-                                ? localizations.clientFormScreenButtonUpdate
-                                : localizations.clientFormScreenButtonCreate),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+    return Dialog(
+      child: Container(
+        width: 600,
+        constraints: const BoxConstraints(maxHeight: 700),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Dialog Header
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: const BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(4.0),
+                  topRight: Radius.circular(4.0),
                 ),
               ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      _isEditMode
+                          ? localizations.clientFormScreenTitleEdit
+                          : localizations.clientFormScreenTitleAdd,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close, color: Colors.white),
+                    onPressed: () => Navigator.of(context).pop(),
+                    tooltip:
+                        MaterialLocalizations.of(context).closeButtonTooltip,
+                  ),
+                ],
+              ),
             ),
+            // Dialog Body
+            Expanded(
+              child: _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : SingleChildScrollView(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            TextFormField(
+                              controller: _firstNameController,
+                              decoration: InputDecoration(
+                                  labelText: localizations
+                                      .clientFormScreenLabelFirstName),
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return localizations
+                                      .clientFormScreenValidationFirstNameRequired;
+                                }
+                                if (value.trim().length < 2) {
+                                  return localizations
+                                      .clientFormScreenValidationFirstNameMinLength;
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: _lastNameController,
+                              decoration: InputDecoration(
+                                  labelText: localizations
+                                      .clientFormScreenLabelLastName),
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return localizations
+                                      .clientFormScreenValidationLastNameRequired;
+                                }
+                                if (value.trim().length < 2) {
+                                  return localizations
+                                      .clientFormScreenValidationLastNameMinLength;
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: _emailController,
+                              decoration: InputDecoration(
+                                  labelText:
+                                      localizations.clientFormScreenLabelEmail),
+                              keyboardType: TextInputType.emailAddress,
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return localizations
+                                      .clientFormScreenValidationEmailRequired;
+                                }
+                                // Basic email validation regex
+                                final emailRegex =
+                                    RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
+                                if (!emailRegex.hasMatch(value.trim())) {
+                                  return localizations
+                                      .clientFormScreenValidationEmailInvalid;
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: _phoneController,
+                              decoration: InputDecoration(
+                                  labelText:
+                                      localizations.clientFormScreenLabelPhone),
+                              keyboardType: TextInputType.phone,
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  return localizations
+                                      .clientFormScreenValidationPhoneRequired;
+                                }
+                                // Add more specific phone validation if needed (e.g., E.164 format)
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: _telegramIdController,
+                              decoration: InputDecoration(
+                                  labelText: localizations
+                                      .clientFormScreenLabelTelegramId),
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: _whatsappNumberController,
+                              decoration: InputDecoration(
+                                  labelText: localizations
+                                      .clientFormScreenLabelWhatsappNumber),
+                            ),
+                            const SizedBox(height: 16),
+                            // Dropdown for ClientSource
+                            DropdownButtonFormField<crm.ClientSource>(
+                              value:
+                                  _selectedSource, // This will now be null if the original was UNSPECIFIED
+                              decoration: InputDecoration(
+                                  labelText: localizations
+                                      .clientFormScreenLabelSource),
+                              hint: Text(
+                                  localizations.clientFormScreenHintSource),
+                              items: crm.ClientSource.values
+                                  .where((source) =>
+                                      source !=
+                                      crm.ClientSource
+                                          .CLIENT_SOURCE_UNSPECIFIED)
+                                  .map((crm.ClientSource source) {
+                                return DropdownMenuItem<crm.ClientSource>(
+                                  value: source,
+                                  child: Text(source.name
+                                      .replaceFirst('CLIENT_SOURCE_', '')
+                                      .replaceAll(
+                                          '_', ' ')), // User-friendly name
+                                );
+                              }).toList(),
+                              onChanged: (crm.ClientSource? newValue) {
+                                setState(() {
+                                  _selectedSource = newValue;
+                                });
+                              },
+                              validator: (value) => value ==
+                                      null // Simplified validator: null means no valid selection
+                                  ? localizations
+                                      .clientFormScreenValidationSourceRequired
+                                  : null,
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: _passportDataController,
+                              decoration: InputDecoration(
+                                  labelText: localizations
+                                      .clientFormScreenLabelPassportData),
+                              maxLines: 3,
+                              // Add JSON validation if needed
+                            ),
+                            const SizedBox(height: 16),
+                            TextFormField(
+                              controller: _notesController,
+                              decoration: InputDecoration(
+                                  labelText:
+                                      localizations.clientFormScreenLabelNotes),
+                              maxLines: 3,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+            ),
+            // Dialog Footer with action buttons
+            Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: const BoxDecoration(
+                border: Border(top: BorderSide(color: Colors.grey, width: 0.5)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(
+                        MaterialLocalizations.of(context).cancelButtonLabel),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: _isLoading ? null : _saveClient,
+                    child: Text(_isEditMode
+                        ? localizations.clientFormScreenButtonUpdate
+                        : localizations.clientFormScreenButtonCreate),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

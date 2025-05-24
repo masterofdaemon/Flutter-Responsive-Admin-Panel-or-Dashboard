@@ -430,7 +430,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translationOrderListScreenColumnActions => 'Actions';
 
   @override
-  String get translationOrderListScreenTooltipEdit => 'Edit Order';
+  String get translationOrderListScreenTooltipEdit => 'Edit Translation Order';
 
   @override
   String get translationOrderListScreenTooltipDelete => 'Delete Order';
@@ -1548,4 +1548,118 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get translationOrderListScreenColumnDoneAt => 'Done At';
+
+  @override
+  String get employeeFormScreenTitleEdit => 'Edit Employee';
+
+  @override
+  String get employeeFormScreenTitleAdd => 'Add Employee';
+
+  @override
+  String get employeeFormScreenLabelSelectUser => 'Select User';
+
+  @override
+  String get employeeFormScreenValidationUserRequired => 'User is required';
+
+  @override
+  String get employeeFormScreenLabelUserAccount => 'User Account';
+
+  @override
+  String get employeeFormScreenErrorCannotChangeUser =>
+      'Cannot change user for existing employee.';
+
+  @override
+  String get employeeFormScreenLabelEmployeeLogin => 'Employee Login';
+
+  @override
+  String get employeeFormScreenValidationLoginRequired =>
+      'Please enter an employee login';
+
+  @override
+  String get employeeFormScreenLabelEmployeePassword => 'Employee Password';
+
+  @override
+  String get employeeFormScreenValidationPasswordRequired =>
+      'Please enter a password';
+
+  @override
+  String get employeeFormScreenValidationPasswordMinLength =>
+      'Password must be at least 6 characters';
+
+  @override
+  String get employeeFormScreenLabelFullName => 'Full Name';
+
+  @override
+  String get employeeFormScreenValidationNameRequired =>
+      'Please enter employee name';
+
+  @override
+  String get employeeFormScreenLabelEmail => 'Email';
+
+  @override
+  String get employeeFormScreenValidationEmailRequired =>
+      'Please enter an email';
+
+  @override
+  String get employeeFormScreenValidationEmailInvalid =>
+      'Please enter a valid email';
+
+  @override
+  String get employeeFormScreenLabelSelectRole => 'Select Role';
+
+  @override
+  String get employeeFormScreenValidationRoleRequired => 'Role is required';
+
+  @override
+  String get employeeFormScreenLabelRole => 'Role';
+
+  @override
+  String get employeeFormScreenLabelSelectOffice => 'Select Office';
+
+  @override
+  String get employeeFormScreenValidationOfficeRequired => 'Office is required';
+
+  @override
+  String get employeeFormScreenLabelOffice => 'Office';
+
+  @override
+  String get employeeFormScreenLabelTelegramId => 'Telegram ID';
+
+  @override
+  String get employeeFormScreenLabelWhatsappNumber => 'WhatsApp Number';
+
+  @override
+  String get employeeFormScreenLabelNotes => 'Notes';
+
+  @override
+  String get employeeFormScreenLabelActive => 'Active';
+
+  @override
+  String get employeeFormScreenButtonUpdate => 'Update Employee';
+
+  @override
+  String get employeeFormScreenButtonCreate => 'Create Employee';
+
+  @override
+  String employeeFormScreenFeedbackErrorLoading(String error) {
+    return 'Error loading employee: $error';
+  }
+
+  @override
+  String get employeeFormScreenFeedbackSuccessUpdate =>
+      'Employee updated successfully';
+
+  @override
+  String get employeeFormScreenFeedbackSuccessCreate =>
+      'Employee created successfully';
+
+  @override
+  String employeeFormScreenFeedbackErrorSaving(String error) {
+    return 'Error saving employee: $error';
+  }
+
+  @override
+  String employeeFormScreenFeedbackErrorLoadingDropdowns(String error) {
+    return 'Error loading dropdown data: $error';
+  }
 }

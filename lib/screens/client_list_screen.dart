@@ -2,7 +2,6 @@ import 'package:admin/generated/crm.pb.dart';
 import 'package:admin/services/grpc_client_service.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart'; // Import PlutoGrid
-import 'package:admin/screens/main/main_screen.dart'; // Added
 import 'package:admin/l10n/app_localizations.dart'; // Added
 
 import 'package:admin/screens/client_form_screen.dart'; // Import the new form screen
@@ -89,11 +88,11 @@ class _ClientListScreenState extends State<ClientListScreen> {
     _plutoGridStateManager!.appendRows(rows);
   }
 
-  // Method to navigate to the form screen for adding or editing
-  Future<void> _navigateAndRefresh(Widget screen) async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => screen),
+  // Method to show the form modal for adding or editing
+  Future<void> _showClientFormModal({String? clientId}) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => ClientFormScreen(clientId: clientId),
     );
 
     if (result == true && mounted) {
@@ -264,8 +263,8 @@ class _ClientListScreenState extends State<ClientListScreen> {
                 constraints: const BoxConstraints(), // Remove default min size
                 tooltip: localizations.clientListScreenTooltipEdit, // Changed
                 onPressed: () {
-                  _navigateAndRefresh(ClientFormScreen(
-                      clientId: clientIdString)); // Use String ID here
+                  _showClientFormModal(
+                      clientId: clientIdString); // Use String ID here
                 },
               ),
               IconButton(
@@ -291,93 +290,96 @@ class _ClientListScreenState extends State<ClientListScreen> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context); // Added
     return Scaffold(
-      appBar: AppBar(
-        title: Text(localizations.clientListScreenTitle), // Changed
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          // onPressed: () => Navigator.of(context).maybePop(), // Original
-          onPressed: () {
-            // Changed
-            if (Navigator.of(context).canPop()) {
-              Navigator.of(context).maybePop();
-            } else {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => MainScreen()),
-              );
-            }
-          },
-          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            tooltip: localizations.clientListScreenTooltipAdd, // Changed
-            onPressed: () {
-              _navigateAndRefresh(const ClientFormScreen());
-            },
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header section with title and add button
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  localizations.clientListScreenTitle,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    _showClientFormModal(); // No clientId for adding new client
+                  },
+                  icon: const Icon(Icons.add),
+                  label: Text(localizations.clientListScreenTooltipAdd),
+                ),
+              ],
+            ),
+          ),
+          // Content section
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () async => _loadClients(),
+              child: FutureBuilder<List<Client>>(
+                future: _clientsFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting &&
+                      _clients.isEmpty) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError && _clients.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(localizations.clientListScreenErrorLoading(
+                              snapshot.error.toString())), // Changed
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: _loadClients,
+                            child: Text(localizations
+                                .clientListScreenButtonRetry), // Changed
+                          ),
+                        ],
+                      ),
+                    );
+                  } else if (_clients.isEmpty &&
+                      snapshot.connectionState != ConnectionState.waiting) {
+                    return Center(
+                        child: Text(localizations
+                            .clientListScreenNoClientsFound)); // Changed
+                  }
+
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: PlutoGrid(
+                      columns: _getPlutoColumns(),
+                      rows: [], // Changed from const [] to a mutable empty list
+                      onLoaded: (PlutoGridOnLoadedEvent event) {
+                        _plutoGridStateManager = event.stateManager;
+                        _updatePlutoGridRows();
+                      },
+                      configuration: const PlutoGridConfiguration(
+                          style: PlutoGridStyleConfig(
+                            gridBorderColor: Colors.grey,
+                            rowHeight: 45,
+                            columnHeight: 45,
+                            borderColor: Colors.black38,
+                            gridBackgroundColor: Colors.white,
+                          ),
+                          columnSize: PlutoGridColumnSizeConfig(
+                            autoSizeMode: PlutoAutoSizeMode.scale,
+                          ),
+                          scrollbar: PlutoGridScrollbarConfig(
+                            isAlwaysShown: true,
+                            draggableScrollbar: true,
+                          )),
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
         ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async => _loadClients(),
-        child: FutureBuilder<List<Client>>(
-          future: _clientsFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting &&
-                _clients.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError && _clients.isEmpty) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(localizations.clientListScreenErrorLoading(
-                        snapshot.error.toString())), // Changed
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: _loadClients,
-                      child: Text(
-                          localizations.clientListScreenButtonRetry), // Changed
-                    ),
-                  ],
-                ),
-              );
-            } else if (_clients.isEmpty &&
-                snapshot.connectionState != ConnectionState.waiting) {
-              return Center(
-                  child: Text(
-                      localizations.clientListScreenNoClientsFound)); // Changed
-            }
-
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: PlutoGrid(
-                columns: _getPlutoColumns(),
-                rows: [], // Changed from const [] to a mutable empty list
-                onLoaded: (PlutoGridOnLoadedEvent event) {
-                  _plutoGridStateManager = event.stateManager;
-                  _updatePlutoGridRows();
-                },
-                configuration: const PlutoGridConfiguration(
-                    style: PlutoGridStyleConfig(
-                      gridBorderColor: Colors.grey,
-                      rowHeight: 45,
-                      columnHeight: 45,
-                      borderColor: Colors.black38,
-                      gridBackgroundColor: Colors.white,
-                    ),
-                    columnSize: PlutoGridColumnSizeConfig(
-                      autoSizeMode: PlutoAutoSizeMode.scale,
-                    ),
-                    scrollbar: PlutoGridScrollbarConfig(
-                      isAlwaysShown: true,
-                      draggableScrollbar: true,
-                    )),
-              ),
-            );
-          },
-        ),
       ),
     );
   }

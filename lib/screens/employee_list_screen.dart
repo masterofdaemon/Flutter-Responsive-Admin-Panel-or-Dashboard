@@ -5,7 +5,6 @@ import 'package:admin/services/grpc_client_service.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:grpc/grpc.dart';
-import 'package:admin/screens/main/main_screen.dart';
 import 'package:admin/l10n/app_localizations.dart';
 
 class EmployeeListScreen extends StatefulWidget {
@@ -128,23 +127,10 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
     // No finally block needed here as _loadEmployees handles the final state
   }
 
-  void _navigateToAddEmployee() async {
-    final result = await Navigator.push(
-      context,
-      // Call constructor directly without prefix
-      MaterialPageRoute(builder: (context) => EmployeeFormScreen()),
-    );
-    if (result == true && mounted) {
-      _loadEmployees(); // Refresh list if an employee was added/updated
-    }
-  }
-
-  void _navigateToEditEmployee(String employeeId) async {
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-          // Call constructor directly without prefix
-          builder: (context) => EmployeeFormScreen(employeeId: employeeId)),
+  void _showEmployeeFormModal({String? employeeId}) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) => EmployeeFormScreen(employeeId: employeeId),
     );
     if (result == true && mounted) {
       _loadEmployees(); // Refresh list if an employee was added/updated
@@ -238,7 +224,8 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
             children: [
               IconButton(
                 icon: const Icon(Icons.edit, color: primaryColor),
-                onPressed: () => _navigateToEditEmployee(employeeIdStr),
+                onPressed: () =>
+                    _showEmployeeFormModal(employeeId: employeeIdStr),
                 tooltip: localizations.employeeListScreenTooltipEdit,
                 splashRadius: 20,
               ),
@@ -285,104 +272,110 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(localizations.employeeListScreenTitle),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            if (Navigator.of(context).canPop()) {
-              Navigator.of(context).maybePop();
-            } else {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => MainScreen()),
-              );
-            }
-          },
-          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _isLoading ? null : _loadEmployees,
-            tooltip: localizations.employeeListScreenTooltipRefresh,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header section with title and refresh button
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  localizations.employeeListScreenTitle,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                ElevatedButton.icon(
+                  onPressed: _isLoading ? null : _loadEmployees,
+                  icon: const Icon(Icons.refresh),
+                  label: Text(localizations.employeeListScreenTooltipRefresh),
+                ),
+              ],
+            ),
+          ),
+          // Content section
+          Expanded(
+            child: SafeArea(
+              child: _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _errorMessage != null
+                      ? Center(
+                          child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(_errorMessage!,
+                                      style:
+                                          const TextStyle(color: Colors.red)),
+                                  const SizedBox(height: 10),
+                                  ElevatedButton.icon(
+                                    icon: const Icon(Icons.refresh),
+                                    label: Text(localizations
+                                        .employeeListScreenButtonRetry),
+                                    onPressed: _loadEmployees,
+                                  )
+                                ],
+                              )))
+                      : _employees.isEmpty
+                          ? Center(
+                              child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(localizations
+                                    .employeeListScreenNoEmployeesFound),
+                                const SizedBox(height: 10),
+                                ElevatedButton.icon(
+                                  icon: const Icon(Icons.add),
+                                  label: Text(localizations
+                                      .employeeListScreenButtonAddFirst),
+                                  onPressed: () => _showEmployeeFormModal(),
+                                )
+                              ],
+                            ))
+                          : RefreshIndicator(
+                              onRefresh: _loadEmployees,
+                              child: Padding(
+                                padding: const EdgeInsets.all(defaultPadding),
+                                child: PlutoGrid(
+                                  columns: _getPlutoColumns(),
+                                  rows: [],
+                                  onLoaded: (PlutoGridOnLoadedEvent event) {
+                                    _plutoGridStateManager = event.stateManager;
+                                    _updatePlutoGridRows();
+                                  },
+                                  configuration: PlutoGridConfiguration(
+                                    style: PlutoGridStyleConfig(
+                                      gridBorderColor: Colors.grey,
+                                      rowHeight: 45,
+                                      columnHeight: 45,
+                                      borderColor: Colors.black38,
+                                      gridBackgroundColor: secondaryColor,
+                                      columnTextStyle: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    columnSize: const PlutoGridColumnSizeConfig(
+                                      autoSizeMode: PlutoAutoSizeMode.scale,
+                                    ),
+                                    scrollbar: const PlutoGridScrollbarConfig(
+                                      isAlwaysShown: true,
+                                      draggableScrollbar: true,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+            ),
           ),
         ],
       ),
-      body: SafeArea(
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : _errorMessage != null
-                ? Center(
-                    child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(_errorMessage!,
-                                style: const TextStyle(color: Colors.red)),
-                            const SizedBox(height: 10),
-                            ElevatedButton.icon(
-                              icon: const Icon(Icons.refresh),
-                              label: Text(
-                                  localizations.employeeListScreenButtonRetry),
-                              onPressed: _loadEmployees,
-                            )
-                          ],
-                        )))
-                : _employees.isEmpty
-                    ? Center(
-                        child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                              localizations.employeeListScreenNoEmployeesFound),
-                          const SizedBox(height: 10),
-                          ElevatedButton.icon(
-                            icon: const Icon(Icons.add),
-                            label: Text(
-                                localizations.employeeListScreenButtonAddFirst),
-                            onPressed: _navigateToAddEmployee,
-                          )
-                        ],
-                      ))
-                    : RefreshIndicator(
-                        onRefresh: _loadEmployees,
-                        child: Padding(
-                          padding: const EdgeInsets.all(defaultPadding),
-                          child: PlutoGrid(
-                            columns: _getPlutoColumns(),
-                            rows: [],
-                            onLoaded: (PlutoGridOnLoadedEvent event) {
-                              _plutoGridStateManager = event.stateManager;
-                              _updatePlutoGridRows();
-                            },
-                            configuration: PlutoGridConfiguration(
-                              style: PlutoGridStyleConfig(
-                                gridBorderColor: Colors.grey,
-                                rowHeight: 45,
-                                columnHeight: 45,
-                                borderColor: Colors.black38,
-                                gridBackgroundColor: secondaryColor,
-                                columnTextStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              columnSize: const PlutoGridColumnSizeConfig(
-                                autoSizeMode: PlutoAutoSizeMode.scale,
-                              ),
-                              scrollbar: const PlutoGridScrollbarConfig(
-                                isAlwaysShown: true,
-                                draggableScrollbar: true,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-      ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _navigateToAddEmployee,
+        onPressed: () => _showEmployeeFormModal(),
         tooltip: localizations.employeeListScreenTooltipAdd,
         child: const Icon(Icons.add),
         backgroundColor: primaryColor,
@@ -409,8 +402,8 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
             children: [
               IconButton(
                 icon: const Icon(Icons.edit, color: primaryColor),
-                onPressed: () =>
-                    _navigateToEditEmployee(employeeInfo.employeeId.toString()),
+                onPressed: () => _showEmployeeFormModal(
+                    employeeId: employeeInfo.employeeId.toString()),
                 tooltip: 'Edit Employee',
                 splashRadius: 20, // Smaller splash for icon buttons
               ),

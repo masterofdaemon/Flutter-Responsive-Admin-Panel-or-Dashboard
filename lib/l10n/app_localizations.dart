@@ -833,7 +833,7 @@ abstract class AppLocalizations {
   /// Tooltip for the edit translation order icon button
   ///
   /// In en, this message translates to:
-  /// **'Edit Order'**
+  /// **'Edit Translation Order'**
   String get translationOrderListScreenTooltipEdit;
 
   /// Tooltip for the delete translation order icon button
@@ -2753,6 +2753,204 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Done At'**
   String get translationOrderListScreenColumnDoneAt;
+
+  /// No description provided for @employeeFormScreenTitleEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Employee'**
+  String get employeeFormScreenTitleEdit;
+
+  /// No description provided for @employeeFormScreenTitleAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Employee'**
+  String get employeeFormScreenTitleAdd;
+
+  /// No description provided for @employeeFormScreenLabelSelectUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Select User'**
+  String get employeeFormScreenLabelSelectUser;
+
+  /// No description provided for @employeeFormScreenValidationUserRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'User is required'**
+  String get employeeFormScreenValidationUserRequired;
+
+  /// No description provided for @employeeFormScreenLabelUserAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'User Account'**
+  String get employeeFormScreenLabelUserAccount;
+
+  /// No description provided for @employeeFormScreenErrorCannotChangeUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot change user for existing employee.'**
+  String get employeeFormScreenErrorCannotChangeUser;
+
+  /// No description provided for @employeeFormScreenLabelEmployeeLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Login'**
+  String get employeeFormScreenLabelEmployeeLogin;
+
+  /// No description provided for @employeeFormScreenValidationLoginRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter an employee login'**
+  String get employeeFormScreenValidationLoginRequired;
+
+  /// No description provided for @employeeFormScreenLabelEmployeePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Password'**
+  String get employeeFormScreenLabelEmployeePassword;
+
+  /// No description provided for @employeeFormScreenValidationPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a password'**
+  String get employeeFormScreenValidationPasswordRequired;
+
+  /// No description provided for @employeeFormScreenValidationPasswordMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters'**
+  String get employeeFormScreenValidationPasswordMinLength;
+
+  /// No description provided for @employeeFormScreenLabelFullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Name'**
+  String get employeeFormScreenLabelFullName;
+
+  /// No description provided for @employeeFormScreenValidationNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter employee name'**
+  String get employeeFormScreenValidationNameRequired;
+
+  /// No description provided for @employeeFormScreenLabelEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get employeeFormScreenLabelEmail;
+
+  /// No description provided for @employeeFormScreenValidationEmailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter an email'**
+  String get employeeFormScreenValidationEmailRequired;
+
+  /// No description provided for @employeeFormScreenValidationEmailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email'**
+  String get employeeFormScreenValidationEmailInvalid;
+
+  /// No description provided for @employeeFormScreenLabelSelectRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Role'**
+  String get employeeFormScreenLabelSelectRole;
+
+  /// No description provided for @employeeFormScreenValidationRoleRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Role is required'**
+  String get employeeFormScreenValidationRoleRequired;
+
+  /// No description provided for @employeeFormScreenLabelRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Role'**
+  String get employeeFormScreenLabelRole;
+
+  /// No description provided for @employeeFormScreenLabelSelectOffice.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Office'**
+  String get employeeFormScreenLabelSelectOffice;
+
+  /// No description provided for @employeeFormScreenValidationOfficeRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Office is required'**
+  String get employeeFormScreenValidationOfficeRequired;
+
+  /// No description provided for @employeeFormScreenLabelOffice.
+  ///
+  /// In en, this message translates to:
+  /// **'Office'**
+  String get employeeFormScreenLabelOffice;
+
+  /// No description provided for @employeeFormScreenLabelTelegramId.
+  ///
+  /// In en, this message translates to:
+  /// **'Telegram ID'**
+  String get employeeFormScreenLabelTelegramId;
+
+  /// No description provided for @employeeFormScreenLabelWhatsappNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp Number'**
+  String get employeeFormScreenLabelWhatsappNumber;
+
+  /// No description provided for @employeeFormScreenLabelNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get employeeFormScreenLabelNotes;
+
+  /// No description provided for @employeeFormScreenLabelActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get employeeFormScreenLabelActive;
+
+  /// No description provided for @employeeFormScreenButtonUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Employee'**
+  String get employeeFormScreenButtonUpdate;
+
+  /// No description provided for @employeeFormScreenButtonCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Employee'**
+  String get employeeFormScreenButtonCreate;
+
+  /// No description provided for @employeeFormScreenFeedbackErrorLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading employee: {error}'**
+  String employeeFormScreenFeedbackErrorLoading(String error);
+
+  /// No description provided for @employeeFormScreenFeedbackSuccessUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee updated successfully'**
+  String get employeeFormScreenFeedbackSuccessUpdate;
+
+  /// No description provided for @employeeFormScreenFeedbackSuccessCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee created successfully'**
+  String get employeeFormScreenFeedbackSuccessCreate;
+
+  /// No description provided for @employeeFormScreenFeedbackErrorSaving.
+  ///
+  /// In en, this message translates to:
+  /// **'Error saving employee: {error}'**
+  String employeeFormScreenFeedbackErrorSaving(String error);
+
+  /// No description provided for @employeeFormScreenFeedbackErrorLoadingDropdowns.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading dropdown data: {error}'**
+  String employeeFormScreenFeedbackErrorLoadingDropdowns(String error);
 }
 
 class _AppLocalizationsDelegate

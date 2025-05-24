@@ -778,6 +778,8 @@
   "translationOrderListScreenColumnTotalSum": "Итоговая сумма",
   "translationOrderListScreenColumnCreatedAt": "Создано",
   "translationOrderListScreenColumnDoneAt": "Выполнено",
+  "translationOrderListScreenColumnActions": "Действия",
+  "translationOrderListScreenTooltipEdit": "Редактировать заказ на перевод",
   "priorityNormal": "Обычный",
   "priorityUrgent": "Срочный",
   "prioritySemiUrgent": "Полу-срочный",
@@ -787,5 +789,59 @@
   "clientSourcePartner": "Партнер",
   "clientSourceOther": "Другое",
   "clientSourceUnspecified": "Не указан",
-  "clientSourceColumnTitle": "Источник"
+  "clientSourceColumnTitle": "Источник",
+  "employeeFormScreenTitleEdit": "Редактировать сотрудника",
+  "employeeFormScreenTitleAdd": "Добавить сотрудника",
+  "employeeFormScreenLabelSelectUser": "Выберите пользователя",
+  "employeeFormScreenValidationUserRequired": "Требуется выбрать пользователя",
+  "employeeFormScreenLabelUserAccount": "Аккаунт пользователя",
+  "employeeFormScreenErrorCannotChangeUser": "Нельзя изменить пользователя для существующего сотрудника.",
+  "employeeFormScreenLabelEmployeeLogin": "Логин сотрудника",
+  "employeeFormScreenValidationLoginRequired": "Пожалуйста, введите логин сотрудника",
+  "employeeFormScreenLabelEmployeePassword": "Пароль сотрудника",
+  "employeeFormScreenValidationPasswordRequired": "Пожалуйста, введите пароль",
+  "employeeFormScreenValidationPasswordMinLength": "Пароль должен содержать не менее 6 символов",
+  "employeeFormScreenLabelFullName": "Полное имя",
+  "employeeFormScreenValidationNameRequired": "Пожалуйста, введите имя сотрудника",
+  "employeeFormScreenLabelEmail": "Email",
+  "employeeFormScreenValidationEmailRequired": "Пожалуйста, введите email",
+  "employeeFormScreenValidationEmailInvalid": "Пожалуйста, введите действительный email",
+  "employeeFormScreenLabelSelectRole": "Выберите роль",
+  "employeeFormScreenValidationRoleRequired": "Требуется выбрать роль",
+  "employeeFormScreenLabelRole": "Роль",
+  "employeeFormScreenLabelSelectOffice": "Выберите офис",
+  "employeeFormScreenValidationOfficeRequired": "Требуется выбрать офис",
+  "employeeFormScreenLabelOffice": "Офис",
+  "employeeFormScreenLabelTelegramId": "ID Telegram",
+  "employeeFormScreenLabelWhatsappNumber": "Номер WhatsApp",
+  "employeeFormScreenLabelNotes": "Примечания",
+  "employeeFormScreenLabelActive": "Активен",
+  "employeeFormScreenButtonUpdate": "Обновить сотрудника",
+  "employeeFormScreenButtonCreate": "Создать сотрудника",
+  "employeeFormScreenFeedbackErrorLoading": "Ошибка загрузки сотрудника: {error}",
+  "@employeeFormScreenFeedbackErrorLoading": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "employeeFormScreenFeedbackSuccessUpdate": "Сотрудник успешно обновлён",
+  "employeeFormScreenFeedbackSuccessCreate": "Сотрудник успешно создан",
+  "employeeFormScreenFeedbackErrorSaving": "Ошибка сохранения сотрудника: {error}",
+  "@employeeFormScreenFeedbackErrorSaving": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "employeeFormScreenFeedbackErrorLoadingDropdowns": "Ошибка загрузки данных выпадающих списков: {error}",
+  "@employeeFormScreenFeedbackErrorLoadingDropdowns": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
 }

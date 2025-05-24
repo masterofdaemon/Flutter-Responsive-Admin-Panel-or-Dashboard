@@ -430,7 +430,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get translationOrderListScreenColumnActions => 'Действия';
 
   @override
-  String get translationOrderListScreenTooltipEdit => 'Редактировать заказ';
+  String get translationOrderListScreenTooltipEdit =>
+      'Редактировать заказ на перевод';
 
   @override
   String get translationOrderListScreenTooltipDelete => 'Удалить заказ';
@@ -1558,4 +1559,121 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get translationOrderListScreenColumnDoneAt => 'Выполнено';
+
+  @override
+  String get employeeFormScreenTitleEdit => 'Редактировать сотрудника';
+
+  @override
+  String get employeeFormScreenTitleAdd => 'Добавить сотрудника';
+
+  @override
+  String get employeeFormScreenLabelSelectUser => 'Выберите пользователя';
+
+  @override
+  String get employeeFormScreenValidationUserRequired =>
+      'Требуется выбрать пользователя';
+
+  @override
+  String get employeeFormScreenLabelUserAccount => 'Аккаунт пользователя';
+
+  @override
+  String get employeeFormScreenErrorCannotChangeUser =>
+      'Нельзя изменить пользователя для существующего сотрудника.';
+
+  @override
+  String get employeeFormScreenLabelEmployeeLogin => 'Логин сотрудника';
+
+  @override
+  String get employeeFormScreenValidationLoginRequired =>
+      'Пожалуйста, введите логин сотрудника';
+
+  @override
+  String get employeeFormScreenLabelEmployeePassword => 'Пароль сотрудника';
+
+  @override
+  String get employeeFormScreenValidationPasswordRequired =>
+      'Пожалуйста, введите пароль';
+
+  @override
+  String get employeeFormScreenValidationPasswordMinLength =>
+      'Пароль должен содержать не менее 6 символов';
+
+  @override
+  String get employeeFormScreenLabelFullName => 'Полное имя';
+
+  @override
+  String get employeeFormScreenValidationNameRequired =>
+      'Пожалуйста, введите имя сотрудника';
+
+  @override
+  String get employeeFormScreenLabelEmail => 'Email';
+
+  @override
+  String get employeeFormScreenValidationEmailRequired =>
+      'Пожалуйста, введите email';
+
+  @override
+  String get employeeFormScreenValidationEmailInvalid =>
+      'Пожалуйста, введите действительный email';
+
+  @override
+  String get employeeFormScreenLabelSelectRole => 'Выберите роль';
+
+  @override
+  String get employeeFormScreenValidationRoleRequired =>
+      'Требуется выбрать роль';
+
+  @override
+  String get employeeFormScreenLabelRole => 'Роль';
+
+  @override
+  String get employeeFormScreenLabelSelectOffice => 'Выберите офис';
+
+  @override
+  String get employeeFormScreenValidationOfficeRequired =>
+      'Требуется выбрать офис';
+
+  @override
+  String get employeeFormScreenLabelOffice => 'Офис';
+
+  @override
+  String get employeeFormScreenLabelTelegramId => 'ID Telegram';
+
+  @override
+  String get employeeFormScreenLabelWhatsappNumber => 'Номер WhatsApp';
+
+  @override
+  String get employeeFormScreenLabelNotes => 'Примечания';
+
+  @override
+  String get employeeFormScreenLabelActive => 'Активен';
+
+  @override
+  String get employeeFormScreenButtonUpdate => 'Обновить сотрудника';
+
+  @override
+  String get employeeFormScreenButtonCreate => 'Создать сотрудника';
+
+  @override
+  String employeeFormScreenFeedbackErrorLoading(String error) {
+    return 'Ошибка загрузки сотрудника: $error';
+  }
+
+  @override
+  String get employeeFormScreenFeedbackSuccessUpdate =>
+      'Сотрудник успешно обновлён';
+
+  @override
+  String get employeeFormScreenFeedbackSuccessCreate =>
+      'Сотрудник успешно создан';
+
+  @override
+  String employeeFormScreenFeedbackErrorSaving(String error) {
+    return 'Ошибка сохранения сотрудника: $error';
+  }
+
+  @override
+  String employeeFormScreenFeedbackErrorLoadingDropdowns(String error) {
+    return 'Ошибка загрузки данных выпадающих списков: $error';
+  }
 }

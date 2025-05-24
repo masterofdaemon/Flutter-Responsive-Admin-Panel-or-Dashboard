@@ -1,4 +1,3 @@
-import 'package:admin/screens/main/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
 import 'package:admin/services/grpc_translation_order_service_mobile.dart';
@@ -7,7 +6,7 @@ import 'package:admin/widgets/loading_indicator.dart';
 import 'package:admin/utils/timestamp_helpers.dart';
 import 'package:admin/l10n/app_localizations.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:admin/services/grpc_client_service.dart'; // Added import
+import 'package:admin/services/grpc_client_service.dart';
 
 class TranslationOrderListScreen extends StatefulWidget {
   const TranslationOrderListScreen({super.key});
@@ -437,77 +436,75 @@ class _TranslationOrderListScreenState
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(localizations.translationOrderListScreenTitle),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // Removed print statements
-            if (Navigator.canPop(context)) {
-              Navigator.pop(context);
-            } else {
-              // go to main page
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MainScreen(),
-                ),
-              );
-            }
-          },
-          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-        ),
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async => _loadOrders(),
-        child: FutureBuilder<List<crm.TranslationOrder>>(
-          future: _ordersFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting &&
-                _orders.isEmpty) {
-              return const LoadingIndicator();
-            } else if (snapshot.hasError && _orders.isEmpty) {
-              return Center(
-                child: Text(
-                    localizations.translationOrderListScreenErrorLoading(
-                        snapshot.error.toString())),
-              );
-            } else if (_orders.isEmpty &&
-                snapshot.connectionState != ConnectionState.waiting) {
-              return Center(
-                child:
-                    Text(localizations.translationOrderListScreenNoOrdersFound),
-              );
-            }
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: PlutoGrid(
-                columns: _getPlutoColumns(localizations),
-                rows: [],
-                onLoaded: (PlutoGridOnLoadedEvent event) {
-                  _plutoGridStateManager = event.stateManager;
-                  _updatePlutoGridRows();
-                },
-                configuration: const PlutoGridConfiguration(
-                  style: PlutoGridStyleConfig(
-                    gridBorderColor: Colors.grey,
-                    rowHeight: 45,
-                    columnHeight: 45,
-                    borderColor: Colors.black38,
-                    gridBackgroundColor: Colors.white,
-                  ),
-                  columnSize: PlutoGridColumnSizeConfig(
-                    autoSizeMode: PlutoAutoSizeMode.scale,
-                  ),
-                  scrollbar: PlutoGridScrollbarConfig(
-                    isAlwaysShown: true,
-                    draggableScrollbar: true,
-                  ),
-                ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header section
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              localizations.translationOrderListScreenTitle,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
-            );
-          },
-        ),
+            ),
+          ),
+          // Content section
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () async => _loadOrders(),
+              child: FutureBuilder<List<crm.TranslationOrder>>(
+                future: _ordersFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting &&
+                      _orders.isEmpty) {
+                    return const LoadingIndicator();
+                  } else if (snapshot.hasError && _orders.isEmpty) {
+                    return Center(
+                      child: Text(
+                          localizations.translationOrderListScreenErrorLoading(
+                              snapshot.error.toString())),
+                    );
+                  } else if (_orders.isEmpty &&
+                      snapshot.connectionState != ConnectionState.waiting) {
+                    return Center(
+                      child: Text(localizations
+                          .translationOrderListScreenNoOrdersFound),
+                    );
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: PlutoGrid(
+                      columns: _getPlutoColumns(localizations),
+                      rows: [],
+                      onLoaded: (PlutoGridOnLoadedEvent event) {
+                        _plutoGridStateManager = event.stateManager;
+                        _updatePlutoGridRows();
+                      },
+                      configuration: const PlutoGridConfiguration(
+                        style: PlutoGridStyleConfig(
+                          gridBorderColor: Colors.grey,
+                          rowHeight: 45,
+                          columnHeight: 45,
+                          borderColor: Colors.black38,
+                          gridBackgroundColor: Colors.white,
+                        ),
+                        columnSize: PlutoGridColumnSizeConfig(
+                          autoSizeMode: PlutoAutoSizeMode.scale,
+                        ),
+                        scrollbar: PlutoGridScrollbarConfig(
+                          isAlwaysShown: true,
+                          draggableScrollbar: true,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _navigateAndRefresh(),
