@@ -362,7 +362,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                                 gridBorderColor: Colors.grey,
                                 rowHeight: 45,
                                 columnHeight: 45,
-                                borderColor: Colors.transparent,
+                                borderColor: Colors.black38,
                                 gridBackgroundColor: secondaryColor,
                                 columnTextStyle: TextStyle(
                                   color: Colors.white,

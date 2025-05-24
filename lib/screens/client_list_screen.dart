@@ -364,7 +364,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
                       gridBorderColor: Colors.grey,
                       rowHeight: 45,
                       columnHeight: 45,
-                      borderColor: Colors.transparent,
+                      borderColor: Colors.black38,
                       gridBackgroundColor: Colors.white,
                     ),
                     columnSize: PlutoGridColumnSizeConfig(

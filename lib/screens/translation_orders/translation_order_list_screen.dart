@@ -146,7 +146,8 @@ class _TranslationOrderListScreenState
 
     for (var order in _orders) {
       String customerNameValue = _getClientFullName(order.clientId.toString());
-      final client = await _fetchClient(order.clientId.toString()); // Convert clientId to String
+      final client = await _fetchClient(
+          order.clientId.toString()); // Convert clientId to String
       String clientPhoneNumberValue = client?.phone ?? 'N/A';
       String clientSourceValue = _getClientSourceDisplayName(order.source);
 
@@ -492,7 +493,7 @@ class _TranslationOrderListScreenState
                     gridBorderColor: Colors.grey,
                     rowHeight: 45,
                     columnHeight: 45,
-                    borderColor: Colors.transparent,
+                    borderColor: Colors.black38,
                     gridBackgroundColor: Colors.white,
                   ),
                   columnSize: PlutoGridColumnSizeConfig(
