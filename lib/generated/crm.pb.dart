@@ -34,6 +34,7 @@ class Client extends $pb.GeneratedMessage {
     $core.String? email,
     $fixnum.Int64? telegramId,
     $core.String? whatsappNumber,
+    $core.String? middleName,
     $1.Value? passportData,
     $core.String? notes,
     $core.int? managerId,
@@ -61,6 +62,9 @@ class Client extends $pb.GeneratedMessage {
     if (whatsappNumber != null) {
       $result.whatsappNumber = whatsappNumber;
     }
+    if (middleName != null) {
+      $result.middleName = middleName;
+    }
     if (passportData != null) {
       $result.passportData = passportData;
     }
@@ -87,6 +91,7 @@ class Client extends $pb.GeneratedMessage {
     ..aOS(5, _omitFieldNames ? '' : 'email')
     ..aInt64(6, _omitFieldNames ? '' : 'telegramId')
     ..aOS(7, _omitFieldNames ? '' : 'whatsappNumber')
+    ..aOS(8, _omitFieldNames ? '' : 'middleName')
     ..aOM<$1.Value>(9, _omitFieldNames ? '' : 'passportData', subBuilder: $1.Value.create)
     ..aOS(10, _omitFieldNames ? '' : 'notes')
     ..a<$core.int>(11, _omitFieldNames ? '' : 'managerId', $pb.PbFieldType.OU3)
@@ -185,44 +190,54 @@ class Client extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   void clearWhatsappNumber() => $_clearField(7);
 
+  /// Client's middle name (отчество) - optional for Russian clients
+  @$pb.TagNumber(8)
+  $core.String get middleName => $_getSZ(7);
+  @$pb.TagNumber(8)
+  set middleName($core.String v) { $_setString(7, v); }
+  @$pb.TagNumber(8)
+  $core.bool hasMiddleName() => $_has(7);
+  @$pb.TagNumber(8)
+  void clearMiddleName() => $_clearField(8);
+
   /// Client's passport data (stored as JSON)
   @$pb.TagNumber(9)
-  $1.Value get passportData => $_getN(7);
+  $1.Value get passportData => $_getN(8);
   @$pb.TagNumber(9)
   set passportData($1.Value v) { $_setField(9, v); }
   @$pb.TagNumber(9)
-  $core.bool hasPassportData() => $_has(7);
+  $core.bool hasPassportData() => $_has(8);
   @$pb.TagNumber(9)
   void clearPassportData() => $_clearField(9);
   @$pb.TagNumber(9)
-  $1.Value ensurePassportData() => $_ensure(7);
+  $1.Value ensurePassportData() => $_ensure(8);
 
   /// Notes about the client
   @$pb.TagNumber(10)
-  $core.String get notes => $_getSZ(8);
+  $core.String get notes => $_getSZ(9);
   @$pb.TagNumber(10)
-  set notes($core.String v) { $_setString(8, v); }
+  set notes($core.String v) { $_setString(9, v); }
   @$pb.TagNumber(10)
-  $core.bool hasNotes() => $_has(8);
+  $core.bool hasNotes() => $_has(9);
   @$pb.TagNumber(10)
   void clearNotes() => $_clearField(10);
 
   /// Linking client to manager and office as per TS
   @$pb.TagNumber(11)
-  $core.int get managerId => $_getIZ(9);
+  $core.int get managerId => $_getIZ(10);
   @$pb.TagNumber(11)
-  set managerId($core.int v) { $_setUnsignedInt32(9, v); }
+  set managerId($core.int v) { $_setUnsignedInt32(10, v); }
   @$pb.TagNumber(11)
-  $core.bool hasManagerId() => $_has(9);
+  $core.bool hasManagerId() => $_has(10);
   @$pb.TagNumber(11)
   void clearManagerId() => $_clearField(11);
 
   @$pb.TagNumber(12)
-  $core.int get officeId => $_getIZ(10);
+  $core.int get officeId => $_getIZ(11);
   @$pb.TagNumber(12)
-  set officeId($core.int v) { $_setUnsignedInt32(10, v); }
+  set officeId($core.int v) { $_setUnsignedInt32(11, v); }
   @$pb.TagNumber(12)
-  $core.bool hasOfficeId() => $_has(10);
+  $core.bool hasOfficeId() => $_has(11);
   @$pb.TagNumber(12)
   void clearOfficeId() => $_clearField(12);
 }

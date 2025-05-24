@@ -10,7 +10,6 @@ import 'package:admin/screens/training_course_list_screen.dart';
 import 'package:admin/screens/business_registration_list_screen.dart';
 import 'package:admin/screens/lending_application_list_screen.dart';
 import 'package:admin/services/auth_service.dart';
-import 'package:admin/generated/crm.pb.dart' as crm;
 import 'package:admin/constants.dart';
 import 'package:admin/controllers/menu_app_controller.dart';
 import 'package:flutter/material.dart';
@@ -25,90 +24,99 @@ class SideMenu extends StatelessWidget {
     final localizations = AppLocalizations.of(context);
     return Container(
       color: secondaryColor,
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          const SizedBox(height: defaultPadding),
-          DrawerListTile(
-            title: localizations.sideMenuDashboard,
-            svgSrc: "assets/icons/menu_dashboard.svg",
-            press: () {
-              context.read<MenuAppController>().setSelectedScreen(
-                    DashboardScreen(),
-                  );
-            },
-          ),
-          DrawerListTile(
-            title: localizations.sideMenuClients,
-            svgSrc: "assets/icons/menu_tran.svg",
-            press: () {
-              context.read<MenuAppController>().setSelectedScreen(
-                    const ClientListScreen(),
-                  );
-            },
-          ),
-          DrawerListTile(
-            title: localizations.sideMenuEmployees,
-            svgSrc: "assets/icons/menu_profile.svg",
-            press: () {
-              context.read<MenuAppController>().setSelectedScreen(
-                    const EmployeeListScreen(),
-                  );
-            },
-          ),
-          DrawerListTile(
-            title: localizations.sideMenuTranslations,
-            svgSrc: "assets/icons/menu_doc.svg",
-            press: () {
-              context.read<MenuAppController>().setSelectedScreen(
-                    const TranslationOrderListScreen(),
-                  );
-            },
-          ),
-          DrawerListTile(
-            title: localizations.sideMenuInsurancePolicies,
-            svgSrc: "assets/icons/menu_store.svg",
-            press: () {
-              context.read<MenuAppController>().setSelectedScreen(
-                    const InsurancePolicyListScreen(),
-                  );
-            },
-          ),
-          DrawerListTile(
-            title: localizations.sideMenuTrainingCourses,
-            svgSrc: "assets/icons/menu_doc.svg",
-            press: () {
-              context.read<MenuAppController>().setSelectedScreen(
-                    const TrainingCourseListScreen(),
-                  );
-            },
-          ),
-          DrawerListTile(
-            title: localizations.sideMenuBusinessRegistrations,
-            svgSrc: "assets/icons/menu_store.svg",
-            press: () {
-              context.read<MenuAppController>().setSelectedScreen(
-                    const BusinessRegistrationListScreen(),
-                  );
-            },
-          ),
-          DrawerListTile(
-            title: localizations.sideMenuLendingApplications,
-            svgSrc: "assets/icons/menu_store.svg",
-            press: () {
-              context.read<MenuAppController>().setSelectedScreen(
-                    const LendingApplicationListScreen(),
-                  );
-            },
-          ),
-          // Admin Section
-          Consumer<AuthService>(
-            builder: (context, auth, _) {
-              final employee = auth.employeeProfile;
-              if (auth.isAuthenticated &&
-                  employee != null &&
-                  employee.role == crm.EmployeeRole.DIRECTOR) {
-                return Column(
+      child: Consumer<AuthService>(
+        builder: (context, auth, _) {
+          return ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const SizedBox(height: defaultPadding),
+              // Dashboard - always accessible
+              DrawerListTile(
+                title: localizations.sideMenuDashboard,
+                svgSrc: "assets/icons/menu_dashboard.svg",
+                press: () {
+                  context.read<MenuAppController>().setSelectedScreen(
+                        DashboardScreen(),
+                      );
+                },
+              ),
+              // Clients - accessible to managers and above
+              if (auth.canViewClients())
+                DrawerListTile(
+                  title: localizations.sideMenuClients,
+                  svgSrc: "assets/icons/menu_tran.svg",
+                  press: () {
+                    context.read<MenuAppController>().setSelectedScreen(
+                          const ClientListScreen(),
+                        );
+                  },
+                ),
+              // Employees - accessible to chief managers and directors
+              if (auth.canViewEmployees())
+                DrawerListTile(
+                  title: localizations.sideMenuEmployees,
+                  svgSrc: "assets/icons/menu_profile.svg",
+                  press: () {
+                    context.read<MenuAppController>().setSelectedScreen(
+                          const EmployeeListScreen(),
+                        );
+                  },
+                ),
+              // Translation Orders - accessible to translators and above
+              if (auth.canViewTranslationOrders())
+                DrawerListTile(
+                  title: localizations.sideMenuTranslations,
+                  svgSrc: "assets/icons/menu_doc.svg",
+                  press: () {
+                    context.read<MenuAppController>().setSelectedScreen(
+                          const TranslationOrderListScreen(),
+                        );
+                  },
+                ),
+              // Business services - accessible to managers and above
+              if (auth.canViewClients())
+                DrawerListTile(
+                  title: localizations.sideMenuInsurancePolicies,
+                  svgSrc: "assets/icons/menu_store.svg",
+                  press: () {
+                    context.read<MenuAppController>().setSelectedScreen(
+                          const InsurancePolicyListScreen(),
+                        );
+                  },
+                ),
+              if (auth.canViewClients())
+                DrawerListTile(
+                  title: localizations.sideMenuTrainingCourses,
+                  svgSrc: "assets/icons/menu_doc.svg",
+                  press: () {
+                    context.read<MenuAppController>().setSelectedScreen(
+                          const TrainingCourseListScreen(),
+                        );
+                  },
+                ),
+              if (auth.canViewClients())
+                DrawerListTile(
+                  title: localizations.sideMenuBusinessRegistrations,
+                  svgSrc: "assets/icons/menu_store.svg",
+                  press: () {
+                    context.read<MenuAppController>().setSelectedScreen(
+                          const BusinessRegistrationListScreen(),
+                        );
+                  },
+                ),
+              if (auth.canViewClients())
+                DrawerListTile(
+                  title: localizations.sideMenuLendingApplications,
+                  svgSrc: "assets/icons/menu_store.svg",
+                  press: () {
+                    context.read<MenuAppController>().setSelectedScreen(
+                          const LendingApplicationListScreen(),
+                        );
+                  },
+                ),
+              // Admin Section - only directors can access
+              if (auth.canViewAdminTools())
+                Column(
                   children: [
                     const Divider(color: Colors.white24),
                     Padding(
@@ -134,72 +142,72 @@ class SideMenu extends StatelessWidget {
                       },
                     ),
                   ],
-                );
-              }
-              return Container();
-            },
-          ),
-          const Divider(color: Colors.white24),
-          DrawerListTile(
-            title: localizations.sideMenuTask,
-            svgSrc: "assets/icons/menu_task.svg",
-            press: () {},
-          ),
-          DrawerListTile(
-            title: localizations.sideMenuStore,
-            svgSrc: "assets/icons/menu_store.svg",
-            press: () {},
-          ),
-          DrawerListTile(
-            title: localizations.sideMenuNotification,
-            svgSrc: "assets/icons/menu_notification.svg",
-            press: () {},
-          ),
-          DrawerListTile(
-            title: localizations.sideMenuProfile,
-            svgSrc: "assets/icons/menu_profile.svg",
-            press: () {},
-          ),
-          DrawerListTile(
-            title: localizations.sideMenuSettings,
-            svgSrc: "assets/icons/menu_setting.svg",
-            press: () {},
-          ),
-          const SizedBox(height: defaultPadding),
-          // Logout Tile
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            child: ListTile(
-              onTap: () async {
-                await Provider.of<AuthService>(context, listen: false).logout();
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  (Route<dynamic> route) => false,
-                );
-              },
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+                ),
+              const Divider(color: Colors.white24),
+              DrawerListTile(
+                title: localizations.sideMenuTask,
+                svgSrc: "assets/icons/menu_task.svg",
+                press: () {},
               ),
-              tileColor: Colors.red.withOpacity(0.1),
-              horizontalTitleGap: 12.0,
-              leading: SvgPicture.asset(
-                "assets/icons/menu_setting.svg",
-                colorFilter:
-                    const ColorFilter.mode(Colors.red, BlendMode.srcIn),
-                height: 16,
+              DrawerListTile(
+                title: localizations.sideMenuStore,
+                svgSrc: "assets/icons/menu_store.svg",
+                press: () {},
               ),
-              title: Text(
-                'Logout', // Use localization key if available
-                style: const TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.w500,
+              DrawerListTile(
+                title: localizations.sideMenuNotification,
+                svgSrc: "assets/icons/menu_notification.svg",
+                press: () {},
+              ),
+              DrawerListTile(
+                title: localizations.sideMenuProfile,
+                svgSrc: "assets/icons/menu_profile.svg",
+                press: () {},
+              ),
+              DrawerListTile(
+                title: localizations.sideMenuSettings,
+                svgSrc: "assets/icons/menu_setting.svg",
+                press: () {},
+              ),
+              const SizedBox(height: defaultPadding),
+              // Logout Tile
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                child: ListTile(
+                  onTap: () async {
+                    await Provider.of<AuthService>(context, listen: false)
+                        .logout();
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()),
+                      (Route<dynamic> route) => false,
+                    );
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  tileColor: Colors.red.withOpacity(0.1),
+                  horizontalTitleGap: 12.0,
+                  leading: SvgPicture.asset(
+                    "assets/icons/menu_setting.svg",
+                    colorFilter:
+                        const ColorFilter.mode(Colors.red, BlendMode.srcIn),
+                    height: 16,
+                  ),
+                  title: Text(
+                    'Logout', // Use localization key if available
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          const SizedBox(height: defaultPadding),
-        ],
+              const SizedBox(height: defaultPadding),
+            ],
+          );
+        },
       ),
     );
   }

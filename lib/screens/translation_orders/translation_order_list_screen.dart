@@ -7,6 +7,8 @@ import 'package:admin/utils/timestamp_helpers.dart';
 import 'package:admin/l10n/app_localizations.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:admin/services/grpc_client_service.dart';
+import 'package:admin/services/auth_service.dart';
+import 'package:provider/provider.dart';
 
 class TranslationOrderListScreen extends StatefulWidget {
   const TranslationOrderListScreen({super.key});
@@ -379,30 +381,64 @@ class _TranslationOrderListScreenState
         textAlign: PlutoColumnTextAlign.center,
         renderer: (rendererContext) {
           final String orderIdStr = rendererContext.cell.value as String;
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.edit),
-                iconSize: 20.0,
-                padding: const EdgeInsets.all(4.0),
-                constraints: const BoxConstraints(
-                    minWidth: 30, minHeight: 30, maxWidth: 30, maxHeight: 30),
-                splashRadius: 18.0,
-                tooltip: localizations.translationOrderListScreenTooltipEdit,
-                onPressed: () => _navigateAndRefresh(orderId: orderIdStr),
-              ),
-              IconButton(
-                icon: const Icon(Icons.delete),
-                iconSize: 20.0,
-                padding: const EdgeInsets.all(4.0),
-                constraints: const BoxConstraints(
-                    minWidth: 30, minHeight: 30, maxWidth: 30, maxHeight: 30),
-                splashRadius: 18.0,
-                tooltip: localizations.translationOrderListScreenTooltipDelete,
-                onPressed: () => _deleteOrder(orderIdStr),
-              ),
-            ],
+          return Consumer<AuthService>(
+            builder: (context, authService, child) {
+              final List<Widget> actionButtons = [];
+
+              // Edit button - visible if user can manage translation orders
+              if (authService.canManageTranslationOrders()) {
+                actionButtons.add(
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    iconSize: 20.0,
+                    padding: const EdgeInsets.all(4.0),
+                    constraints: const BoxConstraints(
+                        minWidth: 30,
+                        minHeight: 30,
+                        maxWidth: 30,
+                        maxHeight: 30),
+                    splashRadius: 18.0,
+                    tooltip:
+                        localizations.translationOrderListScreenTooltipEdit,
+                    onPressed: () => _navigateAndRefresh(orderId: orderIdStr),
+                  ),
+                );
+              }
+
+              // Delete button - visible only if user can delete records (Directors only)
+              if (authService.canDeleteRecords()) {
+                actionButtons.add(
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    iconSize: 20.0,
+                    padding: const EdgeInsets.all(4.0),
+                    constraints: const BoxConstraints(
+                        minWidth: 30,
+                        minHeight: 30,
+                        maxWidth: 30,
+                        maxHeight: 30),
+                    splashRadius: 18.0,
+                    tooltip:
+                        localizations.translationOrderListScreenTooltipDelete,
+                    onPressed: () => _deleteOrder(orderIdStr),
+                  ),
+                );
+              }
+
+              // If no actions available, show view-only indicator
+              if (actionButtons.isEmpty) {
+                return const Text(
+                  'View Only',
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                  textAlign: TextAlign.center,
+                );
+              }
+
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: actionButtons,
+              );
+            },
           );
         },
       ),
@@ -561,10 +597,18 @@ class _TranslationOrderListScreenState
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _navigateAndRefresh(),
-        tooltip: localizations.translationOrderListScreenCreateNewOrderTooltip,
-        child: const Icon(Icons.add),
+      floatingActionButton: Consumer<AuthService>(
+        builder: (context, authService, child) {
+          if (!authService.canManageTranslationOrders()) {
+            return const SizedBox.shrink(); // Hide if no permission
+          }
+          return FloatingActionButton(
+            onPressed: () => _navigateAndRefresh(),
+            tooltip:
+                localizations.translationOrderListScreenCreateNewOrderTooltip,
+            child: const Icon(Icons.add),
+          );
+        },
       ),
     );
   }

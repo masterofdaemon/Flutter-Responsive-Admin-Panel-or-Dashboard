@@ -325,6 +325,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientFormScreenLabelLastName => 'Last Name';
 
   @override
+  String get clientFormScreenLabelMiddleName => 'Middle Name (Optional)';
+
+  @override
   String get clientFormScreenLabelEmail => 'Email';
 
   @override
@@ -375,6 +378,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get clientFormScreenValidationPhoneRequired =>
       'Please enter a phone number';
+
+  @override
+  String get clientFormScreenValidationPhoneInvalid =>
+      'Please enter a valid Russian phone number (+7 format)';
 
   @override
   String get clientFormScreenValidationSourceRequired =>
@@ -1578,6 +1585,60 @@ class AppLocalizationsEn extends AppLocalizations {
   String get documentTypeOther => 'Other';
 
   @override
+  String get documentTypePassportRf => 'Russian Passport';
+
+  @override
+  String get documentTypePassportForeign => 'Foreign Passport';
+
+  @override
+  String get documentTypePassportInternal => 'Internal Passport';
+
+  @override
+  String get documentTypeDriverLicense => 'Driver\'s License';
+
+  @override
+  String get documentTypeMarriageCertificate => 'Marriage Certificate';
+
+  @override
+  String get documentTypeDivorceCertificate => 'Divorce Certificate';
+
+  @override
+  String get documentTypeDeathCertificate => 'Death Certificate';
+
+  @override
+  String get documentTypeDiplomaHigher => 'Higher Education Diploma';
+
+  @override
+  String get documentTypeDiplomaSecondary => 'Secondary Education Diploma';
+
+  @override
+  String get documentTypeTranscript => 'Academic Transcript';
+
+  @override
+  String get documentTypeCertificateCourse => 'Course Certificate';
+
+  @override
+  String get documentTypeMedicalCertificate => 'Medical Certificate';
+
+  @override
+  String get documentTypeVaccinationRecord => 'Vaccination Record';
+
+  @override
+  String get documentTypePowerOfAttorney => 'Power of Attorney';
+
+  @override
+  String get documentTypeCourtDecision => 'Court Decision';
+
+  @override
+  String get documentTypeApostille => 'Apostille';
+
+  @override
+  String get documentTypeBankStatement => 'Bank Statement';
+
+  @override
+  String get documentTypeIncomeCertificate => 'Income Certificate';
+
+  @override
   String get employeeFormScreenTitleEdit => 'Edit Employee';
 
   @override
@@ -1690,4 +1751,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String employeeFormScreenFeedbackErrorLoadingDropdowns(String error) {
     return 'Error loading dropdown data: $error';
   }
+
+  @override
+  String get employeeFormScreenValidationWhatsappInvalid =>
+      'Please enter a valid Russian phone number (+7XXXXXXXXXX)';
+
+  @override
+  String get employeeFormScreenHintWhatsappNumber => '+7XXXXXXXXXX';
 }

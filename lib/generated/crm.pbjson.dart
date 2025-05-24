@@ -227,16 +227,18 @@ const Client$json = {
     {'1': 'client_id', '3': 1, '4': 1, '5': 13, '10': 'clientId'},
     {'1': 'first_name', '3': 2, '4': 1, '5': 9, '10': 'firstName'},
     {'1': 'last_name', '3': 3, '4': 1, '5': 9, '10': 'lastName'},
+    {'1': 'middle_name', '3': 8, '4': 1, '5': 9, '9': 0, '10': 'middleName', '17': true},
     {'1': 'phone', '3': 4, '4': 1, '5': 9, '10': 'phone'},
-    {'1': 'email', '3': 5, '4': 1, '5': 9, '9': 0, '10': 'email', '17': true},
-    {'1': 'telegram_id', '3': 6, '4': 1, '5': 3, '9': 1, '10': 'telegramId', '17': true},
-    {'1': 'whatsapp_number', '3': 7, '4': 1, '5': 9, '9': 2, '10': 'whatsappNumber', '17': true},
-    {'1': 'passport_data', '3': 9, '4': 1, '5': 11, '6': '.google.protobuf.Value', '9': 3, '10': 'passportData', '17': true},
-    {'1': 'notes', '3': 10, '4': 1, '5': 9, '9': 4, '10': 'notes', '17': true},
-    {'1': 'manager_id', '3': 11, '4': 1, '5': 13, '9': 5, '10': 'managerId', '17': true},
-    {'1': 'office_id', '3': 12, '4': 1, '5': 13, '9': 6, '10': 'officeId', '17': true},
+    {'1': 'email', '3': 5, '4': 1, '5': 9, '9': 1, '10': 'email', '17': true},
+    {'1': 'telegram_id', '3': 6, '4': 1, '5': 3, '9': 2, '10': 'telegramId', '17': true},
+    {'1': 'whatsapp_number', '3': 7, '4': 1, '5': 9, '9': 3, '10': 'whatsappNumber', '17': true},
+    {'1': 'passport_data', '3': 9, '4': 1, '5': 11, '6': '.google.protobuf.Value', '9': 4, '10': 'passportData', '17': true},
+    {'1': 'notes', '3': 10, '4': 1, '5': 9, '9': 5, '10': 'notes', '17': true},
+    {'1': 'manager_id', '3': 11, '4': 1, '5': 13, '9': 6, '10': 'managerId', '17': true},
+    {'1': 'office_id', '3': 12, '4': 1, '5': 13, '9': 7, '10': 'officeId', '17': true},
   ],
   '8': [
+    {'1': '_middle_name'},
     {'1': '_email'},
     {'1': '_telegram_id'},
     {'1': '_whatsapp_number'},
@@ -250,14 +252,15 @@ const Client$json = {
 /// Descriptor for `Client`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List clientDescriptor = $convert.base64Decode(
     'CgZDbGllbnQSGwoJY2xpZW50X2lkGAEgASgNUghjbGllbnRJZBIdCgpmaXJzdF9uYW1lGAIgAS'
-    'gJUglmaXJzdE5hbWUSGwoJbGFzdF9uYW1lGAMgASgJUghsYXN0TmFtZRIUCgVwaG9uZRgEIAEo'
-    'CVIFcGhvbmUSGQoFZW1haWwYBSABKAlIAFIFZW1haWyIAQESJAoLdGVsZWdyYW1faWQYBiABKA'
-    'NIAVIKdGVsZWdyYW1JZIgBARIsCg93aGF0c2FwcF9udW1iZXIYByABKAlIAlIOd2hhdHNhcHBO'
-    'dW1iZXKIAQESQAoNcGFzc3BvcnRfZGF0YRgJIAEoCzIWLmdvb2dsZS5wcm90b2J1Zi5WYWx1ZU'
-    'gDUgxwYXNzcG9ydERhdGGIAQESGQoFbm90ZXMYCiABKAlIBFIFbm90ZXOIAQESIgoKbWFuYWdl'
-    'cl9pZBgLIAEoDUgFUgltYW5hZ2VySWSIAQESIAoJb2ZmaWNlX2lkGAwgASgNSAZSCG9mZmljZU'
-    'lkiAEBQggKBl9lbWFpbEIOCgxfdGVsZWdyYW1faWRCEgoQX3doYXRzYXBwX251bWJlckIQCg5f'
-    'cGFzc3BvcnRfZGF0YUIICgZfbm90ZXNCDQoLX21hbmFnZXJfaWRCDAoKX29mZmljZV9pZA==');
+    'gJUglmaXJzdE5hbWUSGwoJbGFzdF9uYW1lGAMgASgJUghsYXN0TmFtZRIkCgttaWRkbGVfbmFt'
+    'ZRgIIAEoCUgAUgptaWRkbGVOYW1liAEBEhQKBXBob25lGAQgASgJUgVwaG9uZRIZCgVlbWFpbB'
+    'gFIAEoCUgBUgVlbWFpbIgBARIkCgt0ZWxlZ3JhbV9pZBgGIAEoA0gCUgp0ZWxlZ3JhbUlkiAEB'
+    'EiwKD3doYXRzYXBwX251bWJlchgHIAEoCUgDUg53aGF0c2FwcE51bWJlcogBARJACg1wYXNzcG'
+    '9ydF9kYXRhGAkgASgLMhYuZ29vZ2xlLnByb3RvYnVmLlZhbHVlSARSDHBhc3Nwb3J0RGF0YYgB'
+    'ARIZCgVub3RlcxgKIAEoCUgFUgVub3Rlc4gBARIiCgptYW5hZ2VyX2lkGAsgASgNSAZSCW1hbm'
+    'FnZXJJZIgBARIgCglvZmZpY2VfaWQYDCABKA1IB1IIb2ZmaWNlSWSIAQFCDgoMX21pZGRsZV9u'
+    'YW1lQggKBl9lbWFpbEIOCgxfdGVsZWdyYW1faWRCEgoQX3doYXRzYXBwX251bWJlckIQCg5fcG'
+    'Fzc3BvcnRfZGF0YUIICgZfbm90ZXNCDQoLX21hbmFnZXJfaWRCDAoKX29mZmljZV9pZA==');
 
 @$core.Deprecated('Use userDescriptor instead')
 const User$json = {

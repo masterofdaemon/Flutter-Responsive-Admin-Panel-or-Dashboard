@@ -10,6 +10,9 @@ import 'package:admin/widgets/loading_indicator.dart';
 import 'package:fixnum/fixnum.dart'; // For Int64
 import 'package:admin/utils/timestamp_helpers.dart';
 import 'package:admin/l10n/app_localizations.dart';
+import 'package:admin/widgets/document_type_search_field.dart';
+import 'package:admin/widgets/translation_pricing_widget.dart';
+import 'package:admin/widgets/blank_number_field.dart';
 
 // Helper function to convert Timestamp to DateTime (handle null)
 DateTime? timestampToDateTime($timestamp.Timestamp? ts) {
@@ -94,6 +97,10 @@ class _TranslationOrderFormScreenState
   bool _isUrgent = false;
   bool _isSemiUrgent = false;
   bool _clientNotified = false;
+
+  // Pricing calculation state
+  double _calculatedTranslationSum = 0.0;
+  double _calculatedTotalSum = 0.0;
 
   // Data for Dropdowns
   List<crm.Client> _clients = []; // Need to fetch clients for dropdown
@@ -626,17 +633,14 @@ class _TranslationOrderFormScreenState
                                                     .translationOrderFormScreenFieldOfficeLabel),
                                           ),
                                           const SizedBox(height: 16),
-                                          TextFormField(
+                                          BlankNumberField(
                                             controller: _blankNumberController,
-                                            decoration: const InputDecoration(
-                                              labelText: 'Blank Number',
-                                            ),
-                                            validator: (value) {
-                                              if (value == null ||
-                                                  value.trim().isEmpty) {
-                                                return 'Please enter the blank number';
-                                              }
-                                              return null;
+                                            labelText: 'Blank Number',
+                                            isRequired: true,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                // Update state if needed
+                                              });
                                             },
                                           ),
                                           const SizedBox(height: 16),
@@ -810,110 +814,19 @@ class _TranslationOrderFormScreenState
                                     Expanded(
                                       child: Column(
                                         children: [
-                                          // Document Type: read-only field with static choices and custom entry
-                                          TextFormField(
-                                            controller: _documentTypeController,
-                                            readOnly: true,
-                                            decoration: InputDecoration(
-                                              labelText: localizations
-                                                  .translationOrderFormScreenFieldDocumentTypeLabel,
-                                              hintText: localizations
-                                                  .translationOrderFormScreenFieldDocumentTypeHint,
-                                              suffixIcon: const Icon(
-                                                Icons.arrow_drop_down,
-                                              ),
-                                            ),
-                                            validator: (value) =>
-                                                (_selectedDocumentTypeKey ==
-                                                            null ||
-                                                        _selectedDocumentTypeKey!
-                                                            .trim()
-                                                            .isEmpty)
-                                                    ? localizations
-                                                        .translationOrderFormScreenFieldDocumentTypeHint
-                                                    : null,
-                                            onTap: () async {
-                                              // Show choice dialog
-                                              final choice =
-                                                  await showDialog<String>(
-                                                      context: context,
-                                                      builder: (context) {
-                                                        return SimpleDialog(
-                                                          title: Text(localizations
-                                                              .translationOrderFormScreenFieldDocumentTypeLabel),
-                                                          children:
-                                                              _documentTypeKeys
-                                                                  .map((key) =>
-                                                                      SimpleDialogOption(
-                                                                        onPressed: () => Navigator.pop(
-                                                                            context,
-                                                                            key),
-                                                                        child: Text(
-                                                                            _getDocumentTypeDisplayName(key)),
-                                                                      ))
-                                                                  .toList(),
-                                                        );
-                                                      });
-                                              if (choice != null) {
-                                                if (choice == 'other') {
-                                                  // Prompt custom input
-                                                  final custom =
-                                                      await showDialog<String>(
-                                                          context: context,
-                                                          builder: (context) {
-                                                            return AlertDialog(
-                                                              title: Text(
-                                                                  localizations
-                                                                      .translationOrderFormScreenFieldDocumentTypeLabel),
-                                                              content:
-                                                                  TextFormField(
-                                                                controller:
-                                                                    _documentTypeController,
-                                                                decoration: InputDecoration(
-                                                                    hintText:
-                                                                        localizations
-                                                                            .translationOrderFormScreenFieldDocumentTypeHint),
-                                                              ),
-                                                              actions: [
-                                                                TextButton(
-                                                                    onPressed: () =>
-                                                                        Navigator.pop(
-                                                                            context),
-                                                                    child: Text(
-                                                                        localizations
-                                                                            .translationOrderFormScreenDeleteDialogCancelButton)),
-                                                                TextButton(
-                                                                    onPressed: () => Navigator.pop(
-                                                                        context,
-                                                                        _documentTypeController
-                                                                            .text),
-                                                                    child: Text(
-                                                                        localizations
-                                                                            .translationOrderFormScreenDeleteDialogDeleteButton)),
-                                                              ],
-                                                            );
-                                                          });
-                                                  if (custom != null &&
-                                                      custom.isNotEmpty) {
-                                                    setState(() {
-                                                      _selectedDocumentTypeKey =
-                                                          custom;
-                                                      _documentTypeController
-                                                          .text = custom;
-                                                    });
-                                                  }
-                                                } else {
-                                                  setState(() {
-                                                    _selectedDocumentTypeKey =
-                                                        choice;
-                                                    _documentTypeController
-                                                            .text =
-                                                        _getDocumentTypeDisplayName(
-                                                            choice);
-                                                  });
-                                                }
-                                              }
+                                          // Document Type: searchable field with pricing
+                                          DocumentTypeSearchField(
+                                            selectedDocumentTypeKey:
+                                                _selectedDocumentTypeKey,
+                                            onChanged: (documentType) {
+                                              setState(() {
+                                                _selectedDocumentTypeKey =
+                                                    documentType;
+                                                _documentTypeController.text =
+                                                    documentType ?? '';
+                                              });
                                             },
+                                            isRequired: true,
                                           ),
                                           const SizedBox(height: 16),
                                           TextFormField(
@@ -926,6 +839,39 @@ class _TranslationOrderFormScreenState
                                               FilteringTextInputFormatter
                                                   .digitsOnly
                                             ],
+                                            onChanged: (value) {
+                                              setState(() {
+                                                // Trigger pricing recalculation
+                                              });
+                                            },
+                                          ),
+                                          const SizedBox(height: 16),
+                                          // Translation Pricing Widget
+                                          TranslationPricingWidget(
+                                            documentTypeKey:
+                                                _selectedDocumentTypeKey,
+                                            pageCount: int.tryParse(
+                                                    _pageCountController
+                                                        .text) ??
+                                                1,
+                                            priority: _selectedPriority ??
+                                                crm.Priority.NORMAL,
+                                            cityName: _selectedOffice?.city ??
+                                                'Moscow',
+                                            managerLevel:
+                                                'regular', // You can make this dynamic based on selected manager
+                                            notarialSum: double.tryParse(
+                                                    _notarialSumController
+                                                        .text) ??
+                                                0.0,
+                                            onPricingCalculated:
+                                                (translationSum, totalSum) {
+                                              setState(() {
+                                                _calculatedTranslationSum =
+                                                    translationSum;
+                                                _calculatedTotalSum = totalSum;
+                                              });
+                                            },
                                           ),
                                         ],
                                       ),
@@ -971,6 +917,11 @@ class _TranslationOrderFormScreenState
                                               FilteringTextInputFormatter.allow(
                                                   RegExp(r'^\d+\.?\d{0,2}')),
                                             ],
+                                            onChanged: (value) {
+                                              setState(() {
+                                                // Trigger pricing recalculation
+                                              });
+                                            },
                                             validator: (value) {
                                               if (value == null ||
                                                   value.isEmpty) {

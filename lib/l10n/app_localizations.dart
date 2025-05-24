@@ -656,6 +656,12 @@ abstract class AppLocalizations {
   /// **'Last Name'**
   String get clientFormScreenLabelLastName;
 
+  /// No description provided for @clientFormScreenLabelMiddleName.
+  ///
+  /// In en, this message translates to:
+  /// **'Middle Name (Optional)'**
+  String get clientFormScreenLabelMiddleName;
+
   /// No description provided for @clientFormScreenLabelEmail.
   ///
   /// In en, this message translates to:
@@ -745,6 +751,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please enter a phone number'**
   String get clientFormScreenValidationPhoneRequired;
+
+  /// No description provided for @clientFormScreenValidationPhoneInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid Russian phone number (+7 format)'**
+  String get clientFormScreenValidationPhoneInvalid;
 
   /// No description provided for @clientFormScreenValidationSourceRequired.
   ///
@@ -2808,6 +2820,114 @@ abstract class AppLocalizations {
   /// **'Other'**
   String get documentTypeOther;
 
+  /// No description provided for @documentTypePassportRf.
+  ///
+  /// In en, this message translates to:
+  /// **'Russian Passport'**
+  String get documentTypePassportRf;
+
+  /// No description provided for @documentTypePassportForeign.
+  ///
+  /// In en, this message translates to:
+  /// **'Foreign Passport'**
+  String get documentTypePassportForeign;
+
+  /// No description provided for @documentTypePassportInternal.
+  ///
+  /// In en, this message translates to:
+  /// **'Internal Passport'**
+  String get documentTypePassportInternal;
+
+  /// No description provided for @documentTypeDriverLicense.
+  ///
+  /// In en, this message translates to:
+  /// **'Driver\'s License'**
+  String get documentTypeDriverLicense;
+
+  /// No description provided for @documentTypeMarriageCertificate.
+  ///
+  /// In en, this message translates to:
+  /// **'Marriage Certificate'**
+  String get documentTypeMarriageCertificate;
+
+  /// No description provided for @documentTypeDivorceCertificate.
+  ///
+  /// In en, this message translates to:
+  /// **'Divorce Certificate'**
+  String get documentTypeDivorceCertificate;
+
+  /// No description provided for @documentTypeDeathCertificate.
+  ///
+  /// In en, this message translates to:
+  /// **'Death Certificate'**
+  String get documentTypeDeathCertificate;
+
+  /// No description provided for @documentTypeDiplomaHigher.
+  ///
+  /// In en, this message translates to:
+  /// **'Higher Education Diploma'**
+  String get documentTypeDiplomaHigher;
+
+  /// No description provided for @documentTypeDiplomaSecondary.
+  ///
+  /// In en, this message translates to:
+  /// **'Secondary Education Diploma'**
+  String get documentTypeDiplomaSecondary;
+
+  /// No description provided for @documentTypeTranscript.
+  ///
+  /// In en, this message translates to:
+  /// **'Academic Transcript'**
+  String get documentTypeTranscript;
+
+  /// No description provided for @documentTypeCertificateCourse.
+  ///
+  /// In en, this message translates to:
+  /// **'Course Certificate'**
+  String get documentTypeCertificateCourse;
+
+  /// No description provided for @documentTypeMedicalCertificate.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical Certificate'**
+  String get documentTypeMedicalCertificate;
+
+  /// No description provided for @documentTypeVaccinationRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'Vaccination Record'**
+  String get documentTypeVaccinationRecord;
+
+  /// No description provided for @documentTypePowerOfAttorney.
+  ///
+  /// In en, this message translates to:
+  /// **'Power of Attorney'**
+  String get documentTypePowerOfAttorney;
+
+  /// No description provided for @documentTypeCourtDecision.
+  ///
+  /// In en, this message translates to:
+  /// **'Court Decision'**
+  String get documentTypeCourtDecision;
+
+  /// No description provided for @documentTypeApostille.
+  ///
+  /// In en, this message translates to:
+  /// **'Apostille'**
+  String get documentTypeApostille;
+
+  /// No description provided for @documentTypeBankStatement.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank Statement'**
+  String get documentTypeBankStatement;
+
+  /// No description provided for @documentTypeIncomeCertificate.
+  ///
+  /// In en, this message translates to:
+  /// **'Income Certificate'**
+  String get documentTypeIncomeCertificate;
+
   /// No description provided for @employeeFormScreenTitleEdit.
   ///
   /// In en, this message translates to:
@@ -3005,6 +3125,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error loading dropdown data: {error}'**
   String employeeFormScreenFeedbackErrorLoadingDropdowns(String error);
+
+  /// No description provided for @employeeFormScreenValidationWhatsappInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid Russian phone number (+7XXXXXXXXXX)'**
+  String get employeeFormScreenValidationWhatsappInvalid;
+
+  /// No description provided for @employeeFormScreenHintWhatsappNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'+7XXXXXXXXXX'**
+  String get employeeFormScreenHintWhatsappNumber;
 }
 
 class _AppLocalizationsDelegate

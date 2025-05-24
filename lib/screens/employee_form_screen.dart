@@ -577,10 +577,22 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
                               decoration: InputDecoration(
                                 labelText: localizations
                                     .employeeFormScreenLabelWhatsappNumber,
+                                hintText: localizations
+                                    .employeeFormScreenHintWhatsappNumber,
                                 border: const OutlineInputBorder(),
                               ),
                               keyboardType: TextInputType.phone,
-                              // Add validator if E.164 format is strict
+                              validator: (value) {
+                                if (value != null && value.trim().isNotEmpty) {
+                                  // Russian phone validation: +7XXXXXXXXXX
+                                  if (!RegExp(r'^\+7\d{10}$')
+                                      .hasMatch(value.trim())) {
+                                    return localizations
+                                        .employeeFormScreenValidationWhatsappInvalid;
+                                  }
+                                }
+                                return null;
+                              },
                             ),
                             const SizedBox(height: 16.0),
 

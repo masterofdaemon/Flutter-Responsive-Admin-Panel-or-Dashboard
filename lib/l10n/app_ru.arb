@@ -111,6 +111,7 @@
   "clientFormScreenSaveTooltip": "Сохранить клиента",
   "clientFormScreenLabelFirstName": "Имя",
   "clientFormScreenLabelLastName": "Фамилия",
+  "clientFormScreenLabelMiddleName": "Отчество (необязательно)",
   "clientFormScreenLabelEmail": "Электронная почта",
   "clientFormScreenLabelPhone": "Телефон",
   "clientFormScreenLabelTelegramId": "Telegram ID",
@@ -126,6 +127,7 @@
   "clientFormScreenValidationEmailRequired": "Пожалуйста, введите адрес электронной почты",
   "clientFormScreenValidationEmailInvalid": "Пожалуйста, введите действительный адрес электронной почты",
   "clientFormScreenValidationPhoneRequired": "Пожалуйста, введите номер телефона",
+  "clientFormScreenValidationPhoneInvalid": "Пожалуйста, введите действительный российский номер телефона (формат +7)",
   "clientFormScreenValidationSourceRequired": "Пожалуйста, выберите источник",
   "clientFormScreenButtonUpdate": "Обновить клиента",
   "clientFormScreenButtonCreate": "Создать клиента",
@@ -789,6 +791,24 @@
   "documentTypeBirthCertificate": "Свидетельство о рождении",
   "documentTypeContract": "Договор",
   "documentTypeOther": "Другое",
+  "documentTypePassportRf": "Паспорт РФ",
+  "documentTypePassportForeign": "Заграничный паспорт",
+  "documentTypePassportInternal": "Внутренний паспорт",
+  "documentTypeDriverLicense": "Водительское удостоверение",
+  "documentTypeMarriageCertificate": "Свидетельство о браке",
+  "documentTypeDivorceCertificate": "Свидетельство о разводе",
+  "documentTypeDeathCertificate": "Свидетельство о смерти",
+  "documentTypeDiplomaHigher": "Диплом о высшем образовании",
+  "documentTypeDiplomaSecondary": "Аттестат о среднем образовании",
+  "documentTypeTranscript": "Академическая выписка",
+  "documentTypeCertificateCourse": "Сертификат о прохождении курса",
+  "documentTypeMedicalCertificate": "Медицинская справка",
+  "documentTypeVaccinationRecord": "Справка о вакцинации",
+  "documentTypePowerOfAttorney": "Доверенность",
+  "documentTypeCourtDecision": "Решение суда",
+  "documentTypeApostille": "Апостиль",
+  "documentTypeBankStatement": "Банковская справка",
+  "documentTypeIncomeCertificate": "Справка о доходах",
   "priorityNormal": "Обычный",
   "priorityUrgent": "Срочный",
   "prioritySemiUrgent": "Полу-срочный",
@@ -852,5 +872,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "employeeFormScreenValidationWhatsappInvalid": "Пожалуйста, введите действительный российский номер телефона (+7XXXXXXXXXX)",
+  "employeeFormScreenHintWhatsappNumber": "+7XXXXXXXXXX"
 }

@@ -105,6 +105,7 @@
   "clientFormScreenSaveTooltip": "Save Client",
   "clientFormScreenLabelFirstName": "First Name",
   "clientFormScreenLabelLastName": "Last Name",
+  "clientFormScreenLabelMiddleName": "Middle Name (Optional)",
   "clientFormScreenLabelEmail": "Email",
   "clientFormScreenLabelPhone": "Phone",
   "clientFormScreenLabelTelegramId": "Telegram ID",
@@ -120,6 +121,7 @@
   "clientFormScreenValidationEmailRequired": "Please enter an email address",
   "clientFormScreenValidationEmailInvalid": "Please enter a valid email address",
   "clientFormScreenValidationPhoneRequired": "Please enter a phone number",
+  "clientFormScreenValidationPhoneInvalid": "Please enter a valid Russian phone number (+7 format)",
   "clientFormScreenValidationSourceRequired": "Please select a source",
   "clientFormScreenButtonUpdate": "Update Client",
   "clientFormScreenButtonCreate": "Create Client",
@@ -840,6 +842,24 @@
   "documentTypeBirthCertificate": "Birth Certificate",
   "documentTypeContract": "Contract",
   "documentTypeOther": "Other",
+  "documentTypePassportRf": "Russian Passport",
+  "documentTypePassportForeign": "Foreign Passport",
+  "documentTypePassportInternal": "Internal Passport",
+  "documentTypeDriverLicense": "Driver's License",
+  "documentTypeMarriageCertificate": "Marriage Certificate",
+  "documentTypeDivorceCertificate": "Divorce Certificate",
+  "documentTypeDeathCertificate": "Death Certificate",
+  "documentTypeDiplomaHigher": "Higher Education Diploma",
+  "documentTypeDiplomaSecondary": "Secondary Education Diploma",
+  "documentTypeTranscript": "Academic Transcript",
+  "documentTypeCertificateCourse": "Course Certificate",
+  "documentTypeMedicalCertificate": "Medical Certificate",
+  "documentTypeVaccinationRecord": "Vaccination Record",
+  "documentTypePowerOfAttorney": "Power of Attorney",
+  "documentTypeCourtDecision": "Court Decision",
+  "documentTypeApostille": "Apostille",
+  "documentTypeBankStatement": "Bank Statement",
+  "documentTypeIncomeCertificate": "Income Certificate",
   "employeeFormScreenTitleEdit": "Edit Employee",
   "employeeFormScreenTitleAdd": "Add Employee",
   "employeeFormScreenLabelSelectUser": "Select User",
@@ -893,5 +913,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "employeeFormScreenValidationWhatsappInvalid": "Please enter a valid Russian phone number (+7XXXXXXXXXX)",
+  "employeeFormScreenHintWhatsappNumber": "+7XXXXXXXXXX"
 }

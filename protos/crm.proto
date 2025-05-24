@@ -134,6 +134,8 @@ message Client {
   string first_name = 2;
   // Client's last name (min 2 chars, max 255 chars)
   string last_name = 3;
+  // Client's middle name (отчество) - optional for Russian clients
+  optional string middle_name = 8;
   // Client's phone number (E.164 format)
   string phone = 4;
   // Client's email address (valid email format)

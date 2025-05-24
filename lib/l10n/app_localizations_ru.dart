@@ -327,6 +327,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get clientFormScreenLabelLastName => 'Фамилия';
 
   @override
+  String get clientFormScreenLabelMiddleName => 'Отчество (необязательно)';
+
+  @override
   String get clientFormScreenLabelEmail => 'Электронная почта';
 
   @override
@@ -377,6 +380,10 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get clientFormScreenValidationPhoneRequired =>
       'Пожалуйста, введите номер телефона';
+
+  @override
+  String get clientFormScreenValidationPhoneInvalid =>
+      'Пожалуйста, введите действительный российский номер телефона (формат +7)';
 
   @override
   String get clientFormScreenValidationSourceRequired =>
@@ -1589,6 +1596,60 @@ class AppLocalizationsRu extends AppLocalizations {
   String get documentTypeOther => 'Другое';
 
   @override
+  String get documentTypePassportRf => 'Паспорт РФ';
+
+  @override
+  String get documentTypePassportForeign => 'Заграничный паспорт';
+
+  @override
+  String get documentTypePassportInternal => 'Внутренний паспорт';
+
+  @override
+  String get documentTypeDriverLicense => 'Водительское удостоверение';
+
+  @override
+  String get documentTypeMarriageCertificate => 'Свидетельство о браке';
+
+  @override
+  String get documentTypeDivorceCertificate => 'Свидетельство о разводе';
+
+  @override
+  String get documentTypeDeathCertificate => 'Свидетельство о смерти';
+
+  @override
+  String get documentTypeDiplomaHigher => 'Диплом о высшем образовании';
+
+  @override
+  String get documentTypeDiplomaSecondary => 'Аттестат о среднем образовании';
+
+  @override
+  String get documentTypeTranscript => 'Академическая выписка';
+
+  @override
+  String get documentTypeCertificateCourse => 'Сертификат о прохождении курса';
+
+  @override
+  String get documentTypeMedicalCertificate => 'Медицинская справка';
+
+  @override
+  String get documentTypeVaccinationRecord => 'Справка о вакцинации';
+
+  @override
+  String get documentTypePowerOfAttorney => 'Доверенность';
+
+  @override
+  String get documentTypeCourtDecision => 'Решение суда';
+
+  @override
+  String get documentTypeApostille => 'Апостиль';
+
+  @override
+  String get documentTypeBankStatement => 'Банковская справка';
+
+  @override
+  String get documentTypeIncomeCertificate => 'Справка о доходах';
+
+  @override
   String get employeeFormScreenTitleEdit => 'Редактировать сотрудника';
 
   @override
@@ -1704,4 +1765,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String employeeFormScreenFeedbackErrorLoadingDropdowns(String error) {
     return 'Ошибка загрузки данных выпадающих списков: $error';
   }
+
+  @override
+  String get employeeFormScreenValidationWhatsappInvalid =>
+      'Пожалуйста, введите действительный российский номер телефона (+7XXXXXXXXXX)';
+
+  @override
+  String get employeeFormScreenHintWhatsappNumber => '+7XXXXXXXXXX';
 }

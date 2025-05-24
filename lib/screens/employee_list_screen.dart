@@ -2,10 +2,12 @@ import 'package:admin/constants.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
 import 'package:admin/screens/employee_form_screen.dart';
 import 'package:admin/services/grpc_client_service.dart';
+import 'package:admin/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:grpc/grpc.dart';
 import 'package:admin/l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class EmployeeListScreen extends StatefulWidget {
   const EmployeeListScreen({super.key});
@@ -219,24 +221,38 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
                   crm.Employee() // Return a default/empty employee if not found
               );
 
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.edit, color: primaryColor),
-                onPressed: () =>
-                    _showEmployeeFormModal(employeeId: employeeIdStr),
-                tooltip: localizations.employeeListScreenTooltipEdit,
-                splashRadius: 20,
-              ),
-              const SizedBox(width: 4),
-              IconButton(
-                icon: const Icon(Icons.delete, color: Colors.redAccent),
-                onPressed: () => _deleteEmployee(employee),
-                tooltip: localizations.employeeListScreenTooltipDelete,
-                splashRadius: 20,
-              ),
-            ],
+          return Consumer<AuthService>(
+            builder: (context, auth, _) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Edit button - only show if user can manage employees
+                  if (auth.canManageEmployees())
+                    IconButton(
+                      icon: const Icon(Icons.edit, color: primaryColor),
+                      onPressed: () =>
+                          _showEmployeeFormModal(employeeId: employeeIdStr),
+                      tooltip: localizations.employeeListScreenTooltipEdit,
+                      splashRadius: 20,
+                    ),
+                  // Delete button - only show if user can delete records (directors only)
+                  if (auth.canDeleteRecords())
+                    IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.redAccent),
+                      onPressed: () => _deleteEmployee(employee),
+                      tooltip: localizations.employeeListScreenTooltipDelete,
+                      splashRadius: 20,
+                    ),
+                  // View-only indicator for users who can only view
+                  if (!auth.canManageEmployees() && !auth.canDeleteRecords())
+                    Icon(
+                      Icons.visibility,
+                      color: Colors.grey,
+                      size: 20,
+                    ),
+                ],
+              );
+            },
           );
         },
       ),

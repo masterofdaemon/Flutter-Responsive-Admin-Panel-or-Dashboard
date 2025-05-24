@@ -1,8 +1,10 @@
 import 'package:admin/generated/crm.pb.dart';
 import 'package:admin/services/grpc_client_service.dart';
+import 'package:admin/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart'; // Import PlutoGrid
 import 'package:admin/l10n/app_localizations.dart'; // Added
+import 'package:provider/provider.dart';
 
 import 'package:admin/screens/client_form_screen.dart'; // Import the new form screen
 
@@ -254,32 +256,51 @@ class _ClientListScreenState extends State<ClientListScreen> {
                 ..lastName = '');
           final clientName = '${client.firstName} ${client.lastName}'.trim();
 
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.edit),
-                padding: EdgeInsets.zero, // Reduce padding
-                constraints: const BoxConstraints(), // Remove default min size
-                tooltip: localizations.clientListScreenTooltipEdit, // Changed
-                onPressed: () {
-                  _showClientFormModal(
-                      clientId: clientIdString); // Use String ID here
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.delete),
-                padding: EdgeInsets.zero, // Reduce padding
-                constraints: const BoxConstraints(), // Remove default min size
-                tooltip: localizations.clientListScreenTooltipDelete, // Changed
-                onPressed: () => _deleteClient(
-                    clientIdString, // Use String ID here
-                    clientName.isNotEmpty
-                        ? clientName
-                        : localizations
-                            .clientListScreenDefaultClientName), // Changed
-              ),
-            ],
+          return Consumer<AuthService>(
+            builder: (context, auth, _) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Edit button - only show if user can manage clients
+                  if (auth.canManageClients())
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      padding: EdgeInsets.zero, // Reduce padding
+                      constraints:
+                          const BoxConstraints(), // Remove default min size
+                      tooltip:
+                          localizations.clientListScreenTooltipEdit, // Changed
+                      onPressed: () {
+                        _showClientFormModal(
+                            clientId: clientIdString); // Use String ID here
+                      },
+                    ),
+                  // Delete button - only show if user can delete records
+                  if (auth.canDeleteRecords())
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      padding: EdgeInsets.zero, // Reduce padding
+                      constraints:
+                          const BoxConstraints(), // Remove default min size
+                      tooltip: localizations
+                          .clientListScreenTooltipDelete, // Changed
+                      onPressed: () => _deleteClient(
+                          clientIdString, // Use String ID here
+                          clientName.isNotEmpty
+                              ? clientName
+                              : localizations
+                                  .clientListScreenDefaultClientName), // Changed
+                    ),
+                  // View-only indicator for users who can only view
+                  if (!auth.canManageClients() && !auth.canDeleteRecords())
+                    Icon(
+                      Icons.visibility,
+                      color: Colors.grey,
+                      size: 20,
+                    ),
+                ],
+              );
+            },
           );
         },
       ),
@@ -306,12 +327,21 @@ class _ClientListScreenState extends State<ClientListScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    _showClientFormModal(); // No clientId for adding new client
+                // Add button - only show if user can manage clients
+                Consumer<AuthService>(
+                  builder: (context, auth, _) {
+                    if (auth.canManageClients()) {
+                      return ElevatedButton.icon(
+                        onPressed: () {
+                          _showClientFormModal(); // No clientId for adding new client
+                        },
+                        icon: const Icon(Icons.add),
+                        label: Text(localizations.clientListScreenTooltipAdd),
+                      );
+                    }
+                    return const SizedBox
+                        .shrink(); // Hide button for users without permission
                   },
-                  icon: const Icon(Icons.add),
-                  label: Text(localizations.clientListScreenTooltipAdd),
                 ),
               ],
             ),
