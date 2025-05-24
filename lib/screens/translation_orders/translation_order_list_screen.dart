@@ -142,6 +142,7 @@ class _TranslationOrderListScreenState
     if (_plutoGridStateManager == null) return;
     final stateManager = _plutoGridStateManager!;
     final rows = <PlutoRow>[];
+    final localizations = AppLocalizations.of(context);
 
     for (var order in _orders) {
       String customerNameValue = _getClientFullName(order.clientId.toString());
@@ -166,6 +167,15 @@ class _TranslationOrderListScreenState
           order.hasDocumentTypeKey() ? order.documentTypeKey : 'N/A';
       String totalSumValue =
           order.hasTotalSum() ? order.totalSum.toStringAsFixed(2) : 'N/A';
+      String pageCountValue =
+          order.hasPageCount() ? order.pageCount.toString() : 'N/A';
+      String notesValue =
+          order.hasNotes() && order.notes.isNotEmpty ? order.notes : 'N/A';
+      String notariallyCertifiedValue = order.hasTranslationProgress() &&
+              order.translationProgress ==
+                  crm.TranslationProgressStatus.DELIVERED
+          ? localizations.translationOrderListScreenValueYes
+          : localizations.translationOrderListScreenValueNo;
 
       rows.add(PlutoRow(cells: {
         'blankNumber': PlutoCell(value: blankNumberValue),
@@ -176,6 +186,9 @@ class _TranslationOrderListScreenState
         'clientPhoneNumber': PlutoCell(value: clientPhoneNumberValue),
         'clientSource': PlutoCell(value: clientSourceValue),
         'documentTypeKey': PlutoCell(value: documentTypeValue),
+        'pageCount': PlutoCell(value: pageCountValue),
+        'notes': PlutoCell(value: notesValue),
+        'notariallyCertified': PlutoCell(value: notariallyCertifiedValue),
         'totalSum': PlutoCell(value: totalSumValue),
         'status': PlutoCell(
             value: order.hasTranslationProgress()
@@ -219,7 +232,6 @@ class _TranslationOrderListScreenState
   List<PlutoColumn> _getPlutoColumns(AppLocalizations localizations) {
     return [
       PlutoColumn(
-        // TODO: Add to l10n: "translationOrderListScreenColumnBlank": "Blank"
         title: localizations.translationOrderListScreenColumnBlank,
         field: 'blankNumber',
         type: PlutoColumnType.text(),
@@ -228,7 +240,6 @@ class _TranslationOrderListScreenState
         readOnly: true,
       ),
       PlutoColumn(
-        // TODO: Add to l10n: "translationOrderListScreenColumnIncorrectBlank": "Incorrect Blank"
         title: localizations.translationOrderListScreenColumnIncorrectBlank,
         field: 'incorrectBlank',
         type: PlutoColumnType.text(),
@@ -253,7 +264,6 @@ class _TranslationOrderListScreenState
         readOnly: true,
       ),
       PlutoColumn(
-        // TODO: Add to l10n: "clientSourceColumnTitle": "Source"
         title: localizations.clientSourceColumnTitle,
         field: 'clientSource',
         type: PlutoColumnType.text(),
@@ -263,7 +273,7 @@ class _TranslationOrderListScreenState
       ),
       PlutoColumn(
         title: localizations
-            .translationOrderFormScreenFieldDocumentTypeLabel, // 'Document Type'
+            .translationOrderListScreenColumnDocumentType, // 'Document Type'
         field: 'documentTypeKey',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
@@ -271,7 +281,35 @@ class _TranslationOrderListScreenState
         readOnly: true,
       ),
       PlutoColumn(
-        // TODO: Add to l10n: "translationOrderListScreenColumnTotalSum": "Total Sum"
+        title: localizations
+            .translationOrderFormScreenFieldPageCountLabel, // 'Page Count'
+        field: 'pageCount',
+        type: PlutoColumnType.number(),
+        enableEditingMode: false,
+        width: 100,
+        readOnly: true,
+        textAlign: PlutoColumnTextAlign.right,
+      ),
+      PlutoColumn(
+        title:
+            localizations.translationOrderFormScreenFieldNotesLabel, // 'Notes'
+        field: 'notes',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 200,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations
+            .translationOrderListScreenColumnNotariallyCertified, // 'Notarially Certified'
+        field: 'notariallyCertified',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 120,
+        readOnly: true,
+        textAlign: PlutoColumnTextAlign.center,
+      ),
+      PlutoColumn(
         title: localizations.translationOrderListScreenColumnTotalSum,
         field: 'totalSum',
         type: PlutoColumnType.number(),
@@ -297,7 +335,6 @@ class _TranslationOrderListScreenState
         readOnly: true,
       ),
       PlutoColumn(
-        // TODO: Add to l10n: "translationOrderListScreenColumnCreatedAt": "Created At"
         title: localizations.translationOrderListScreenColumnCreatedAt,
         field: 'createdAt',
         type: PlutoColumnType.text(),
@@ -306,7 +343,6 @@ class _TranslationOrderListScreenState
         readOnly: true,
       ),
       PlutoColumn(
-        // TODO: Add to l10n: "translationOrderListScreenColumnDoneAt": "Done At"
         title: localizations.translationOrderListScreenColumnDoneAt,
         field: 'doneAt',
         type: PlutoColumnType.text(),

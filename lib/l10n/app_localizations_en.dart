@@ -1544,10 +1544,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translationOrderListScreenColumnTotalSum => 'Total Sum';
 
   @override
+  String get translationOrderListScreenColumnDocumentType => 'Document Type';
+
+  @override
   String get translationOrderListScreenColumnCreatedAt => 'Created At';
 
   @override
   String get translationOrderListScreenColumnDoneAt => 'Done At';
+
+  @override
+  String get translationOrderListScreenColumnNotariallyCertified =>
+      'Notarially Certified';
+
+  @override
+  String get translationOrderListScreenValueYes => 'Yes';
+
+  @override
+  String get translationOrderListScreenValueNo => 'No';
 
   @override
   String get employeeFormScreenTitleEdit => 'Edit Employee';

@@ -1555,10 +1555,23 @@ class AppLocalizationsRu extends AppLocalizations {
   String get translationOrderListScreenColumnTotalSum => 'Итоговая сумма';
 
   @override
+  String get translationOrderListScreenColumnDocumentType => 'Тип документа';
+
+  @override
   String get translationOrderListScreenColumnCreatedAt => 'Создано';
 
   @override
   String get translationOrderListScreenColumnDoneAt => 'Выполнено';
+
+  @override
+  String get translationOrderListScreenColumnNotariallyCertified =>
+      'Нотариально заверенно';
+
+  @override
+  String get translationOrderListScreenValueYes => 'Да';
+
+  @override
+  String get translationOrderListScreenValueNo => 'Нет';
 
   @override
   String get employeeFormScreenTitleEdit => 'Редактировать сотрудника';

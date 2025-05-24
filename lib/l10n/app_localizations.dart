@@ -2742,6 +2742,12 @@ abstract class AppLocalizations {
   /// **'Total Sum'**
   String get translationOrderListScreenColumnTotalSum;
 
+  /// No description provided for @translationOrderListScreenColumnDocumentType.
+  ///
+  /// In en, this message translates to:
+  /// **'Document Type'**
+  String get translationOrderListScreenColumnDocumentType;
+
   /// No description provided for @translationOrderListScreenColumnCreatedAt.
   ///
   /// In en, this message translates to:
@@ -2753,6 +2759,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Done At'**
   String get translationOrderListScreenColumnDoneAt;
+
+  /// No description provided for @translationOrderListScreenColumnNotariallyCertified.
+  ///
+  /// In en, this message translates to:
+  /// **'Notarially Certified'**
+  String get translationOrderListScreenColumnNotariallyCertified;
+
+  /// No description provided for @translationOrderListScreenValueYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get translationOrderListScreenValueYes;
+
+  /// No description provided for @translationOrderListScreenValueNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get translationOrderListScreenValueNo;
 
   /// No description provided for @employeeFormScreenTitleEdit.
   ///
