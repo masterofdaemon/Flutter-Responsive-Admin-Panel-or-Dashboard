@@ -195,7 +195,8 @@ class _TranslationOrderListScreenState
         'totalSum': PlutoCell(value: totalSumValue),
         'status': PlutoCell(
             value: order.hasTranslationProgress()
-                ? order.translationProgress.name
+                ? _getTranslationProgressStatusDisplayName(
+                    order.translationProgress)
                 : 'N/A'),
         'createdAt': PlutoCell(
             value:
@@ -247,6 +248,29 @@ class _TranslationOrderListScreenState
         return localizations.documentTypeOther;
       default:
         return documentTypeKey; // Return the original key if no match found
+    }
+  }
+
+  String _getTranslationProgressStatusDisplayName(
+      crm.TranslationProgressStatus? status) {
+    final localizations = AppLocalizations.of(context);
+    switch (status) {
+      case crm.TranslationProgressStatus.PENDING_ASSIGNMENT:
+        return localizations.translationProgressStatusPendingAssignment;
+      case crm.TranslationProgressStatus.IN_PROGRESS:
+        return localizations.translationProgressStatusInProgress;
+      case crm.TranslationProgressStatus.TRANSLATED:
+        return localizations.translationProgressStatusTranslated;
+      case crm.TranslationProgressStatus.CHECKED_BY_MANAGER:
+        return localizations.translationProgressStatusCheckedByManager;
+      case crm.TranslationProgressStatus.CLIENT_NOTIFIED:
+        return localizations.translationProgressStatusClientNotified;
+      case crm.TranslationProgressStatus.DELIVERED:
+        return localizations.translationProgressStatusDelivered;
+      case crm
+            .TranslationProgressStatus.TRANSLATION_PROGRESS_STATUS_UNSPECIFIED:
+      default:
+        return 'N/A';
     }
   }
 

@@ -915,5 +915,11 @@
   "translationOrderFormScreenFieldIncorrectBlankHint": "Введите номер неправильного бланка, если применимо",
   "translationOrderFormScreenFieldNotesHint": "Добавьте любые дополнительные заметки или специальные инструкции...",
   "translationOrderFormScreenStatusCurrentLabel": "Текущий статус",
-  "translationOrderFormScreenStatusUpdateLabel": "Обновить статус"
+  "translationOrderFormScreenStatusUpdateLabel": "Обновить статус",
+  "translationProgressStatusPendingAssignment": "Ожидает назначения",
+  "translationProgressStatusInProgress": "В процессе",
+  "translationProgressStatusTranslated": "Перевод завершен",
+  "translationProgressStatusCheckedByManager": "Проверено менеджером",
+  "translationProgressStatusClientNotified": "Клиент уведомлен",
+  "translationProgressStatusDelivered": "Доставлен"
 }

@@ -1904,4 +1904,23 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get translationOrderFormScreenStatusUpdateLabel => 'Обновить статус';
+
+  @override
+  String get translationProgressStatusPendingAssignment => 'Ожидает назначения';
+
+  @override
+  String get translationProgressStatusInProgress => 'В процессе';
+
+  @override
+  String get translationProgressStatusTranslated => 'Перевод завершен';
+
+  @override
+  String get translationProgressStatusCheckedByManager =>
+      'Проверено менеджером';
+
+  @override
+  String get translationProgressStatusClientNotified => 'Клиент уведомлен';
+
+  @override
+  String get translationProgressStatusDelivered => 'Доставлен';
 }

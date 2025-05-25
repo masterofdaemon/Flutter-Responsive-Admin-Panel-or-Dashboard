@@ -956,5 +956,11 @@
   "translationOrderFormScreenFieldIncorrectBlankHint": "Enter incorrect blank number if applicable",
   "translationOrderFormScreenFieldNotesHint": "Add any additional notes or special instructions...",
   "translationOrderFormScreenStatusCurrentLabel": "Current Status",
-  "translationOrderFormScreenStatusUpdateLabel": "Update Status"
+  "translationOrderFormScreenStatusUpdateLabel": "Update Status",
+  "translationProgressStatusPendingAssignment": "Pending Assignment",
+  "translationProgressStatusInProgress": "In Progress",
+  "translationProgressStatusTranslated": "Translation Complete",
+  "translationProgressStatusCheckedByManager": "Manager Approved",
+  "translationProgressStatusClientNotified": "Client Notified",
+  "translationProgressStatusDelivered": "Delivered"
 }

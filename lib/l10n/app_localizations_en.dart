@@ -1887,4 +1887,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get translationOrderFormScreenStatusUpdateLabel => 'Update Status';
+
+  @override
+  String get translationProgressStatusPendingAssignment => 'Pending Assignment';
+
+  @override
+  String get translationProgressStatusInProgress => 'In Progress';
+
+  @override
+  String get translationProgressStatusTranslated => 'Translation Complete';
+
+  @override
+  String get translationProgressStatusCheckedByManager => 'Manager Approved';
+
+  @override
+  String get translationProgressStatusClientNotified => 'Client Notified';
+
+  @override
+  String get translationProgressStatusDelivered => 'Delivered';
 }

@@ -427,20 +427,20 @@ class _TranslationOrderFormScreenState
   // Helper for ServiceType
   String _getTranslationProgressDisplayName(
       crm.TranslationProgressStatus? status) {
-    // For production, these strings should come from AppLocalizations
+    final localizations = AppLocalizations.of(context);
     switch (status) {
       case crm.TranslationProgressStatus.PENDING_ASSIGNMENT:
-        return "Pending Assignment";
+        return localizations.translationProgressStatusPendingAssignment;
       case crm.TranslationProgressStatus.IN_PROGRESS:
-        return "In Progress";
+        return localizations.translationProgressStatusInProgress;
       case crm.TranslationProgressStatus.TRANSLATED:
-        return "Translation Complete";
+        return localizations.translationProgressStatusTranslated;
       case crm.TranslationProgressStatus.CHECKED_BY_MANAGER:
-        return "Manager Approved";
+        return localizations.translationProgressStatusCheckedByManager;
       case crm.TranslationProgressStatus.CLIENT_NOTIFIED:
-        return "Client Notified";
+        return localizations.translationProgressStatusClientNotified;
       case crm.TranslationProgressStatus.DELIVERED:
-        return "Delivered";
+        return localizations.translationProgressStatusDelivered;
       case crm
             .TranslationProgressStatus.TRANSLATION_PROGRESS_STATUS_UNSPECIFIED:
       default: // Handles null or UNSPECIFIED

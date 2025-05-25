@@ -3353,6 +3353,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Update Status'**
   String get translationOrderFormScreenStatusUpdateLabel;
+
+  /// No description provided for @translationProgressStatusPendingAssignment.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Assignment'**
+  String get translationProgressStatusPendingAssignment;
+
+  /// No description provided for @translationProgressStatusInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'In Progress'**
+  String get translationProgressStatusInProgress;
+
+  /// No description provided for @translationProgressStatusTranslated.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation Complete'**
+  String get translationProgressStatusTranslated;
+
+  /// No description provided for @translationProgressStatusCheckedByManager.
+  ///
+  /// In en, this message translates to:
+  /// **'Manager Approved'**
+  String get translationProgressStatusCheckedByManager;
+
+  /// No description provided for @translationProgressStatusClientNotified.
+  ///
+  /// In en, this message translates to:
+  /// **'Client Notified'**
+  String get translationProgressStatusClientNotified;
+
+  /// No description provided for @translationProgressStatusDelivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get translationProgressStatusDelivered;
 }
 
 class _AppLocalizationsDelegate

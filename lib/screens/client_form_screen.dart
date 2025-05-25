@@ -322,15 +322,15 @@ class _ClientFormScreenState extends State<ClientFormScreen> {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 16),
-                            TextFormField(
-                              controller: _middleNameController,
-                              decoration: InputDecoration(
-                                labelText: localizations
-                                    .clientFormScreenLabelMiddleName,
-                              ),
-                              // Middle name is optional, so no validator required
-                            ),
+                            // const SizedBox(height: 16),
+                            // TextFormField(
+                            //   controller: _middleNameController,
+                            //   decoration: InputDecoration(
+                            //     labelText: localizations
+                            //         .clientFormScreenLabelMiddleName,
+                            //   ),
+                            //   // Middle name is optional, so no validator required
+                            // ),
                             const SizedBox(height: 16),
                             TextFormField(
                               controller: _emailController,
