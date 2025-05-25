@@ -1,4 +1,3 @@
-import 'package:admin/screens/main/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
 import 'package:admin/services/grpc_translation_order_service_mobile.dart';
@@ -7,7 +6,9 @@ import 'package:admin/widgets/loading_indicator.dart';
 import 'package:admin/utils/timestamp_helpers.dart';
 import 'package:admin/l10n/app_localizations.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import 'package:admin/services/grpc_client_service.dart'; // Added import
+import 'package:admin/services/grpc_client_service.dart';
+import 'package:admin/services/auth_service.dart';
+import 'package:provider/provider.dart';
 
 class TranslationOrderListScreen extends StatefulWidget {
   const TranslationOrderListScreen({super.key});
@@ -47,7 +48,9 @@ class _TranslationOrderListScreenState
 
       if (mounted) {
         _orders = orders;
-        _clientsMap = {for (var client in clients) client.clientId: client};
+        _clientsMap = {
+          for (var client in clients) client.clientId.toString(): client
+        };
         if (_plutoGridStateManager != null) {
           _updatePlutoGridRows();
         }
@@ -83,7 +86,9 @@ class _TranslationOrderListScreenState
 
         if (mounted) {
           _orders = orders;
-          _clientsMap = {for (var client in clients) client.clientId: client};
+          _clientsMap = {
+            for (var client in clients) client.clientId.toString(): client
+          };
           if (_plutoGridStateManager != null) {
             _updatePlutoGridRows();
           }
@@ -135,12 +140,18 @@ class _TranslationOrderListScreenState
     return 'N/A'; // Default if no client or name parts found
   }
 
-  void _updatePlutoGridRows() {
+  Future<void> _updatePlutoGridRows() async {
     if (_plutoGridStateManager == null) return;
-    final rows = _orders.map((order) {
-      String customerNameValue = _getClientFullName(order.clientId);
-      final client = _clientsMap[order.clientId];
+    final stateManager = _plutoGridStateManager!;
+    final rows = <PlutoRow>[];
+    final localizations = AppLocalizations.of(context);
+
+    for (var order in _orders) {
+      String customerNameValue = _getClientFullName(order.clientId.toString());
+      final client = await _fetchClient(
+          order.clientId.toString()); // Convert clientId to String
       String clientPhoneNumberValue = client?.phone ?? 'N/A';
+      String clientSourceValue = _getClientSourceDisplayName(order.source);
 
       String blankNumberValue = 'N/A';
       if (order.blanks.isNotEmpty) {
@@ -154,19 +165,33 @@ class _TranslationOrderListScreenState
             ? secondBlank.replacementBlankNumber
             : secondBlank.blankNumber;
       }
-      String documentTypeValue =
-          order.hasDocumentTypeKey() ? order.documentTypeKey : 'N/A';
+      String documentTypeValue = order.hasDocumentTypeKey()
+          ? _getDocumentTypeDisplayName(order.documentTypeKey)
+          : 'N/A';
       String totalSumValue =
           order.hasTotalSum() ? order.totalSum.toStringAsFixed(2) : 'N/A';
+      String pageCountValue =
+          order.hasPageCount() ? order.pageCount.toString() : 'N/A';
+      String notesValue =
+          order.hasNotes() && order.notes.isNotEmpty ? order.notes : 'N/A';
+      String notariallyCertifiedValue = order.hasTranslationProgress() &&
+              order.translationProgress ==
+                  crm.TranslationProgressStatus.DELIVERED
+          ? localizations.translationOrderListScreenValueYes
+          : localizations.translationOrderListScreenValueNo;
 
-      return PlutoRow(cells: {
+      rows.add(PlutoRow(cells: {
         'blankNumber': PlutoCell(value: blankNumberValue),
         'incorrectBlank': PlutoCell(value: incorrectBlankValue),
-        'orderId': PlutoCell(value: order.orderId),
+        'orderId': PlutoCell(value: order.orderId.toString()),
         'title': PlutoCell(value: order.title),
         'customerName': PlutoCell(value: customerNameValue),
         'clientPhoneNumber': PlutoCell(value: clientPhoneNumberValue),
+        'clientSource': PlutoCell(value: clientSourceValue),
         'documentTypeKey': PlutoCell(value: documentTypeValue),
+        'pageCount': PlutoCell(value: pageCountValue),
+        'notes': PlutoCell(value: notesValue),
+        'notariallyCertified': PlutoCell(value: notariallyCertifiedValue),
         'totalSum': PlutoCell(value: totalSumValue),
         'status': PlutoCell(
             value: order.hasTranslationProgress()
@@ -178,12 +203,257 @@ class _TranslationOrderListScreenState
         'doneAt': PlutoCell(
             value: formatTimestamp(order.hasDoneAt() ? order.doneAt : null)),
         'actions': PlutoCell(
-            value: order
-                .orderId), // Keep actions for now, or decide if it should be removed
-      });
-    }).toList();
-    _plutoGridStateManager!.removeAllRows();
-    _plutoGridStateManager!.appendRows(rows);
+            value: order.orderId
+                .toString()), // Keep actions for now, or decide if it should be removed
+      }));
+    }
+
+    stateManager.removeAllRows();
+    stateManager.appendRows(rows);
+  }
+
+  String _getClientSourceDisplayName(crm.ClientSource source) {
+    final localizations = AppLocalizations.of(context);
+    switch (source) {
+      case crm.ClientSource.CLIENT_SOURCE_REFERRAL:
+        return localizations.clientSourceReferral;
+      case crm.ClientSource.CLIENT_SOURCE_ONLINE:
+        return localizations.clientSourceOnline;
+      case crm.ClientSource.CLIENT_SOURCE_WALK_IN:
+        return localizations.clientSourceWalkIn;
+      case crm.ClientSource.CLIENT_SOURCE_PARTNER:
+        return localizations.clientSourcePartner;
+      case crm.ClientSource.CLIENT_SOURCE_OTHER:
+        return localizations.clientSourceOther;
+      case crm.ClientSource.CLIENT_SOURCE_UNSPECIFIED:
+        return localizations.clientSourceUnspecified;
+      default:
+        return localizations.clientSourceUnspecified;
+    }
+  }
+
+  String _getDocumentTypeDisplayName(String documentTypeKey) {
+    final localizations = AppLocalizations.of(context);
+    switch (documentTypeKey.toLowerCase()) {
+      case 'passport':
+        return localizations.documentTypePassport;
+      case 'diploma':
+        return localizations.documentTypeDiploma;
+      case 'birth_certificate':
+        return localizations.documentTypeBirthCertificate;
+      case 'contract':
+        return localizations.documentTypeContract;
+      case 'other':
+        return localizations.documentTypeOther;
+      default:
+        return documentTypeKey; // Return the original key if no match found
+    }
+  }
+
+  List<PlutoColumn> _getPlutoColumns(AppLocalizations localizations) {
+    return [
+      PlutoColumn(
+        title: localizations.translationOrderListScreenColumnBlank,
+        field: 'blankNumber',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 40,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.translationOrderListScreenColumnIncorrectBlank,
+        field: 'incorrectBlank',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 90,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.clientLabelText, // 'Client'
+        field: 'customerName',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 180,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.clientListScreenColumnPhone, // 'Phone'
+        field: 'clientPhoneNumber',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 150,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.clientSourceColumnTitle,
+        field: 'clientSource',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 120,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations
+            .translationOrderListScreenColumnDocumentType, // 'Document Type'
+        field: 'documentTypeKey',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 150,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations
+            .translationOrderFormScreenFieldPageCountLabel, // 'Page Count'
+        field: 'pageCount',
+        type: PlutoColumnType.number(),
+        enableEditingMode: false,
+        width: 100,
+        readOnly: true,
+        textAlign: PlutoColumnTextAlign.right,
+      ),
+      PlutoColumn(
+        title:
+            localizations.translationOrderFormScreenFieldNotesLabel, // 'Notes'
+        field: 'notes',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 200,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations
+            .translationOrderListScreenColumnNotariallyCertified, // 'Notarially Certified'
+        field: 'notariallyCertified',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 120,
+        readOnly: true,
+        textAlign: PlutoColumnTextAlign.center,
+      ),
+      PlutoColumn(
+        title: localizations.translationOrderListScreenColumnTotalSum,
+        field: 'totalSum',
+        type: PlutoColumnType.number(),
+        enableEditingMode: false,
+        width: 100,
+        readOnly: true,
+        textAlign: PlutoColumnTextAlign.right,
+        formatter: (dynamic value) {
+          if (value == 'N/A') return 'N/A';
+          try {
+            return double.parse(value.toString()).toStringAsFixed(2);
+          } catch (e) {
+            return 'N/A';
+          }
+        },
+      ),
+      PlutoColumn(
+        title: localizations.statusLabelText, // 'Status'
+        field: 'status',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 120,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.translationOrderListScreenColumnCreatedAt,
+        field: 'createdAt',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 140,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.translationOrderListScreenColumnDoneAt,
+        field: 'doneAt',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 80,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.translationOrderListScreenColumnActions,
+        field: 'actions',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 100,
+        readOnly: true,
+        textAlign: PlutoColumnTextAlign.center,
+        renderer: (rendererContext) {
+          final String orderIdStr = rendererContext.cell.value as String;
+          return Consumer<AuthService>(
+            builder: (context, authService, child) {
+              final List<Widget> actionButtons = [];
+
+              // Edit button - visible if user can manage translation orders
+              if (authService.canManageTranslationOrders()) {
+                actionButtons.add(
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    iconSize: 20.0,
+                    padding: const EdgeInsets.all(4.0),
+                    constraints: const BoxConstraints(
+                        minWidth: 30,
+                        minHeight: 30,
+                        maxWidth: 30,
+                        maxHeight: 30),
+                    splashRadius: 18.0,
+                    tooltip:
+                        localizations.translationOrderListScreenTooltipEdit,
+                    onPressed: () => _navigateAndRefresh(orderId: orderIdStr),
+                  ),
+                );
+              }
+
+              // Delete button - visible only if user can delete records (Directors only)
+              if (authService.canDeleteRecords()) {
+                actionButtons.add(
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    iconSize: 20.0,
+                    padding: const EdgeInsets.all(4.0),
+                    constraints: const BoxConstraints(
+                        minWidth: 30,
+                        minHeight: 30,
+                        maxWidth: 30,
+                        maxHeight: 30),
+                    splashRadius: 18.0,
+                    tooltip:
+                        localizations.translationOrderListScreenTooltipDelete,
+                    onPressed: () => _deleteOrder(orderIdStr),
+                  ),
+                );
+              }
+
+              // If no actions available, show view-only indicator
+              if (actionButtons.isEmpty) {
+                return const Text(
+                  'View Only',
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                  textAlign: TextAlign.center,
+                );
+              }
+
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: actionButtons,
+              );
+            },
+          );
+        },
+      ),
+    ];
+  }
+
+  Future<crm.Client?> _fetchClient(String clientId) async {
+    // Fetch client details by ID, handle errors, and return null if not found
+    try {
+      final client = await _clientService.getClient(clientId);
+      return client;
+    } catch (e) {
+      print('Error fetching client $clientId: $e');
+      return null;
+    }
   }
 
   Future<void> _navigateAndRefresh({String? orderId}) async {
@@ -257,222 +527,89 @@ class _TranslationOrderListScreenState
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(localizations.translationOrderListScreenTitle),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // Removed print statements
-            if (Navigator.canPop(context)) {
-              Navigator.pop(context);
-            } else {
-              // go to main page
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MainScreen(),
-                ),
-              );
-            }
-          },
-          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-        ),
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async => _loadOrders(),
-        child: FutureBuilder<List<crm.TranslationOrder>>(
-          future: _ordersFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting &&
-                _orders.isEmpty) {
-              return const LoadingIndicator();
-            } else if (snapshot.hasError && _orders.isEmpty) {
-              return Center(
-                child: Text(
-                    localizations.translationOrderListScreenErrorLoading(
-                        snapshot.error.toString())),
-              );
-            } else if (_orders.isEmpty &&
-                snapshot.connectionState != ConnectionState.waiting) {
-              return Center(
-                child:
-                    Text(localizations.translationOrderListScreenNoOrdersFound),
-              );
-            }
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: PlutoGrid(
-                columns: _getPlutoColumns(),
-                rows: [],
-                onLoaded: (PlutoGridOnLoadedEvent event) {
-                  _plutoGridStateManager = event.stateManager;
-                  _updatePlutoGridRows();
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header section
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              localizations.translationOrderListScreenTitle,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          // Content section
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () async => _loadOrders(),
+              child: FutureBuilder<List<crm.TranslationOrder>>(
+                future: _ordersFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting &&
+                      _orders.isEmpty) {
+                    return const LoadingIndicator();
+                  } else if (snapshot.hasError && _orders.isEmpty) {
+                    return Center(
+                      child: Text(
+                          localizations.translationOrderListScreenErrorLoading(
+                              snapshot.error.toString())),
+                    );
+                  } else if (_orders.isEmpty &&
+                      snapshot.connectionState != ConnectionState.waiting) {
+                    return Center(
+                      child: Text(localizations
+                          .translationOrderListScreenNoOrdersFound),
+                    );
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: PlutoGrid(
+                      columns: _getPlutoColumns(localizations),
+                      rows: [],
+                      onLoaded: (PlutoGridOnLoadedEvent event) {
+                        _plutoGridStateManager = event.stateManager;
+                        _updatePlutoGridRows();
+                      },
+                      configuration: const PlutoGridConfiguration(
+                        style: PlutoGridStyleConfig(
+                          gridBorderColor: Colors.grey,
+                          rowHeight: 45,
+                          columnHeight: 45,
+                          borderColor: Colors.black38,
+                          gridBackgroundColor: Colors.white,
+                        ),
+                        columnSize: PlutoGridColumnSizeConfig(
+                          autoSizeMode: PlutoAutoSizeMode.scale,
+                        ),
+                        scrollbar: PlutoGridScrollbarConfig(
+                          isAlwaysShown: true,
+                          draggableScrollbar: true,
+                        ),
+                      ),
+                    ),
+                  );
                 },
-                configuration: const PlutoGridConfiguration(
-                  style: PlutoGridStyleConfig(
-                    gridBorderColor: Colors.grey,
-                    rowHeight: 45,
-                    columnHeight: 45,
-                    borderColor: Colors.transparent,
-                    gridBackgroundColor: Colors.white,
-                  ),
-                  columnSize: PlutoGridColumnSizeConfig(
-                    autoSizeMode: PlutoAutoSizeMode.scale,
-                  ),
-                  scrollbar: PlutoGridScrollbarConfig(
-                    isAlwaysShown: true,
-                    draggableScrollbar: true,
-                  ),
-                ),
               ),
-            );
-          },
-        ),
+            ),
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _navigateAndRefresh(),
-        tooltip: localizations.translationOrderListScreenCreateNewOrderTooltip,
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-
-  List<PlutoColumn> _getPlutoColumns() {
-    final localizations = AppLocalizations.of(context);
-    return [
-      PlutoColumn(
-        // TODO: Add to l10n: "translationOrderListScreenColumnBlank": "Blank"
-        title: localizations is dynamic && localizations.translationOrderListScreenColumnBlank != null
-            ? localizations.translationOrderListScreenColumnBlank
-            : 'Blank',
-        field: 'blankNumber',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 40,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        // TODO: Add to l10n: "translationOrderListScreenColumnIncorrectBlank": "Incorrect Blank"
-        title: localizations is dynamic && localizations.translationOrderListScreenColumnIncorrectBlank != null
-            ? localizations.translationOrderListScreenColumnIncorrectBlank
-            : 'Incorrect Blank',
-        field: 'incorrectBlank',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 90,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        title: localizations.clientLabelText, // 'Client'
-        field: 'customerName',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 180,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        title: localizations.clientListScreenColumnPhone, // 'Phone'
-        field: 'clientPhoneNumber',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 150,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        title: localizations.translationOrderFormScreenFieldDocumentTypeLabel, // 'Document Type'
-        field: 'documentTypeKey',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 150,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        // TODO: Add to l10n: "translationOrderListScreenColumnTotalSum": "Total Sum"
-        title: localizations is dynamic && localizations.translationOrderListScreenColumnTotalSum != null
-            ? localizations.translationOrderListScreenColumnTotalSum
-            : 'Total Sum',
-        field: 'totalSum',
-        type: PlutoColumnType.number(),
-        enableEditingMode: false,
-        width: 100,
-        readOnly: true,
-        textAlign: PlutoColumnTextAlign.right,
-        formatter: (dynamic value) {
-          if (value == 'N/A') return 'N/A';
-          try {
-            return double.parse(value.toString()).toStringAsFixed(2);
-          } catch (e) {
-            return 'N/A';
+      floatingActionButton: Consumer<AuthService>(
+        builder: (context, authService, child) {
+          if (!authService.canManageTranslationOrders()) {
+            return const SizedBox.shrink(); // Hide if no permission
           }
-        },
-      ),
-      PlutoColumn(
-        title: localizations.statusLabelText, // 'Status'
-        field: 'status',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 120,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        // TODO: Add to l10n: "translationOrderListScreenColumnCreatedAt": "Created At"
-        title: localizations is dynamic && localizations.translationOrderListScreenColumnCreatedAt != null
-            ? localizations.translationOrderListScreenColumnCreatedAt
-            : 'Created At',
-        field: 'createdAt',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 140,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        // TODO: Add to l10n: "translationOrderListScreenColumnDoneAt": "Done At"
-        title: localizations is dynamic && localizations.translationOrderListScreenColumnDoneAt != null
-            ? localizations.translationOrderListScreenColumnDoneAt
-            : 'Done At',
-        field: 'doneAt',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 80,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        title: localizations.translationOrderListScreenColumnActions,
-        field: 'actions',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 100,
-        readOnly: true,
-        textAlign: PlutoColumnTextAlign.center,
-        renderer: (rendererContext) {
-          final String orderId = rendererContext.cell.value as String;
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.edit),
-                iconSize: 20.0,
-                padding: const EdgeInsets.all(4.0),
-                constraints: const BoxConstraints(
-                    minWidth: 30, minHeight: 30, maxWidth: 30, maxHeight: 30),
-                splashRadius: 18.0,
-                tooltip: localizations.translationOrderListScreenTooltipEdit,
-                onPressed: () => _navigateAndRefresh(orderId: orderId),
-              ),
-              IconButton(
-                icon: const Icon(Icons.delete),
-                iconSize: 20.0,
-                padding: const EdgeInsets.all(4.0),
-                constraints: const BoxConstraints(
-                    minWidth: 30, minHeight: 30, maxWidth: 30, maxHeight: 30),
-                splashRadius: 18.0,
-                tooltip: localizations.translationOrderListScreenTooltipDelete,
-                onPressed: () => _deleteOrder(orderId),
-              ),
-            ],
+          return FloatingActionButton(
+            onPressed: () => _navigateAndRefresh(),
+            tooltip:
+                localizations.translationOrderListScreenCreateNewOrderTooltip,
+            child: const Icon(Icons.add),
           );
         },
       ),
-    ];
+    );
   }
 }

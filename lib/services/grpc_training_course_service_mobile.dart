@@ -25,11 +25,12 @@ class GrpcTrainingCourseService {
     final request = crm.CreateTrainingCourseRequest(trainingCourse: course);
     final response = await _client.createTrainingCourse(request,
         options: GrpcClient().getCallOptions());
-    return await getTrainingCourse(response.courseId);
+    return await getTrainingCourse(response.courseId.toString());
   }
 
   Future<crm.TrainingCourse> getTrainingCourse(String courseId) async {
-    final request = crm.GetTrainingCourseRequest(courseId: courseId);
+    final request =
+        crm.GetTrainingCourseRequest(courseId: int.tryParse(courseId) ?? 0);
     final response = await _client.getTrainingCourse(request,
         options: GrpcClient().getCallOptions());
     return response.trainingCourse;
@@ -37,15 +38,16 @@ class GrpcTrainingCourseService {
 
   Future<crm.TrainingCourse> updateTrainingCourse(
       String courseId, crm.TrainingCourse data) async {
-    final request =
-        crm.UpdateTrainingCourseRequest(courseId: courseId, courseData: data);
+    final request = crm.UpdateTrainingCourseRequest(
+        courseId: int.tryParse(courseId) ?? 0, courseData: data);
     final response = await _client.updateTrainingCourse(request,
         options: GrpcClient().getCallOptions());
     return response.trainingCourse;
   }
 
   Future<void> deleteTrainingCourse(String courseId) async {
-    final request = crm.DeleteTrainingCourseRequest(courseId: courseId);
+    final request =
+        crm.DeleteTrainingCourseRequest(courseId: int.tryParse(courseId) ?? 0);
     await _client.deleteTrainingCourse(request,
         options: GrpcClient().getCallOptions());
   }

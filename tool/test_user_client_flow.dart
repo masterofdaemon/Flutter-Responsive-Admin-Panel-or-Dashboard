@@ -10,7 +10,7 @@ import '../lib/generated/crm.pbgrpc.dart';
 // --- gRPC Client Setup ---
 // Replace with your actual client setup if different
 AuthServiceClient getAuthClient() {
-  final channel = ClientChannel('185.245.106.139',
+  final channel = ClientChannel('31.41.13.175',
       port: 50051,
       options:
           const ChannelOptions(credentials: ChannelCredentials.insecure()));
@@ -18,7 +18,7 @@ AuthServiceClient getAuthClient() {
 }
 
 CrmServiceClient getCrmClient() {
-  final channel = ClientChannel('185.245.106.139',
+  final channel = ClientChannel('31.41.13.175',
       port: 50051,
       options:
           const ChannelOptions(credentials: ChannelCredentials.insecure()));
@@ -32,8 +32,8 @@ Future<void> testUserClientFlow() async {
   final crmClient = getCrmClient();
   const uuid = Uuid();
   String? managerToken; // To store the token after login
-  String? newClientId; // To store the created client ID
-  String? newUserId;
+  int? newClientId; // To store the created client ID
+  int? newUserId;
 
   debugPrint('--- Starting User-Client Flow Test ---');
 
@@ -49,7 +49,7 @@ Future<void> testUserClientFlow() async {
     );
     final createUserRes = await crmClient.createUser(createUserReq);
     newUserId = createUserRes.userId;
-    if (newUserId.isEmpty) {
+    if (newUserId == 0) {
       throw Exception("Received empty user ID");
     }
     debugPrint('   User created successfully! User ID: $newUserId');
@@ -70,7 +70,7 @@ Future<void> testUserClientFlow() async {
     );
     final createEmployeeRes = await crmClient.createEmployee(createEmployeeReq);
     final newEmployeeId = createEmployeeRes.employeeId;
-    if (newEmployeeId.isEmpty) {
+    if (newEmployeeId == 0) {
       throw Exception("Received empty employee ID");
     }
     debugPrint('   Employee created successfully! Employee ID: $newEmployeeId');
@@ -103,8 +103,6 @@ Future<void> testUserClientFlow() async {
   try {
     debugPrint('3. Creating Client using Manager token...');
     final clientFirstName = 'FlutterClient_${uuid.v4()}';
-    // Use the 'crm' prefix for protobuf enums
-    const clientSource = crm.ClientSource.CLIENT_SOURCE_ONLINE; // Enum value
 
     // Use the 'crm' prefix for protobuf messages
     final createClientReq = crm.CreateClientRequest(
@@ -112,7 +110,7 @@ Future<void> testUserClientFlow() async {
         firstName: clientFirstName,
         lastName: 'TestFlutter',
         phone: '+98765432109', // Example valid E.164
-        source: clientSource, // Assign enum value directly
+        // source: clientSource, // Assign enum value directly
       ),
     );
 
@@ -123,8 +121,7 @@ Future<void> testUserClientFlow() async {
     final createClientRes =
         await crmClient.createClient(createClientReq, options: options);
     newClientId = createClientRes.clientId;
-    // Simplify null check - clientId from proto is non-nullable string
-    if (newClientId.isEmpty) {
+    if (newClientId == 0) {
       throw Exception("Received empty client ID");
     }
     debugPrint('   Client created successfully! Client ID: $newClientId');

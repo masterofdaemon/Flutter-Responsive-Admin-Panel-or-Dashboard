@@ -25,7 +25,7 @@ const placeholderOfficeId =
 
 Future<void> main() async {
   String? bootstrapToken;
-  String? newUserId;
+  int? newUserId;
 
   print('Initializing gRPC client...');
   // Initialize the gRPC client (ensure server address/port are correct in GrpcClient)
@@ -66,7 +66,7 @@ Future<void> main() async {
       options: bootstrapCallOptions, // Use token
     );
     // Check if userId is empty (non-nullable string in proto)
-    if (createUserResp.userId.isEmpty) {
+    if (createUserResp.userId == 0) {
       throw Exception('CreateUser response did not contain userId');
     }
     newUserId = createUserResp.userId;
@@ -79,8 +79,8 @@ Future<void> main() async {
       name: newDirectorName,
       email: newDirectorLogin,
       role: crm.EmployeeRole.DIRECTOR, // Assign DIRECTOR role
-      officeId:
-          placeholderOfficeId, // Ensure this office exists in your backend
+      officeId: int.tryParse(placeholderOfficeId) ??
+          0, // Ensure this office exists in your backend
       isActive: true,
     );
     final createEmployeeReq = crm.CreateEmployeeRequest(employee: employeeData);
@@ -90,7 +90,7 @@ Future<void> main() async {
       options: bootstrapCallOptions, // Use token
     );
     // Check if employeeId is empty (non-nullable string in proto)
-    if (createEmployeeResp.employeeId.isEmpty) {
+    if (createEmployeeResp.employeeId == 0) {
       throw Exception('CreateEmployee response did not contain employeeId');
     }
     print(

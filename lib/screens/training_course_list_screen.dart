@@ -149,14 +149,13 @@ class _TrainingCourseListScreenState extends State<TrainingCourseListScreen> {
                           icon: const Icon(Icons.edit),
                           tooltip:
                               localizations.trainingCourseListScreenTooltipEdit,
-                          onPressed: () =>
-                              _navigateToForm(courseId: course.courseId),
+                          onPressed: () => _navigateToForm(
+                              courseId: course.courseId.toString()),
                         ),
                         IconButton(
                           icon: const Icon(Icons.delete),
-                          tooltip: localizations
-                              .trainingCourseListScreenTooltipDelete,
-                          onPressed: () => _deleteCourse(course.courseId),
+                          tooltip: localizations.trainingCourseListScreenTooltipDelete,
+                          onPressed: () => _deleteCourse(course.courseId.toString()),
                         ),
                       ],
                     ),

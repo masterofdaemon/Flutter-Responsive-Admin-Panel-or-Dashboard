@@ -24,25 +24,26 @@ class GrpcBankService {
     final request = crm.CreateBankRequest(bank: bank);
     final response = await _client.createBank(request,
         options: GrpcClient().getCallOptions());
-    return await getBank(response.bankId);
+    return await getBank(response.bankId.toString());
   }
 
   Future<crm.Bank> getBank(String bankId) async {
-    final request = crm.GetBankRequest(bankId: bankId);
+    final request = crm.GetBankRequest(bankId: int.tryParse(bankId) ?? 0);
     final response =
         await _client.getBank(request, options: GrpcClient().getCallOptions());
     return response.bank;
   }
 
   Future<crm.Bank> updateBank(String bankId, crm.Bank data) async {
-    final request = crm.UpdateBankRequest(bankId: bankId, bankData: data);
+    final request = crm.UpdateBankRequest(
+        bankId: int.tryParse(bankId) ?? 0, bankData: data);
     final response = await _client.updateBank(request,
         options: GrpcClient().getCallOptions());
     return response.bank;
   }
 
   Future<void> deleteBank(String bankId) async {
-    final request = crm.DeleteBankRequest(bankId: bankId);
+    final request = crm.DeleteBankRequest(bankId: int.tryParse(bankId) ?? 0);
     await _client.deleteBank(request, options: GrpcClient().getCallOptions());
   }
 }

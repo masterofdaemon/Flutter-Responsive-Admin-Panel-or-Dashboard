@@ -23,35 +23,31 @@ class GrpcInteractionService {
 
   Future<crm.Interaction> createInteraction(crm.Interaction interaction) async {
     final request = crm.CreateInteractionRequest(interaction: interaction);
-    // Use shared call options
     final response = await _client.createInteraction(request,
         options: GrpcClient().getCallOptions());
     return await getInteraction(response.interactionId);
   }
 
-  Future<crm.Interaction> getInteraction(String interactionId) async {
+  Future<crm.Interaction> getInteraction(int interactionId) async {
     final request = crm.GetInteractionRequest(interactionId: interactionId);
-    // Use shared call options
     final response = await _client.getInteraction(request,
         options: GrpcClient().getCallOptions());
     return response.interaction;
   }
 
   Future<crm.Interaction> updateInteraction(
-      String interactionId, crm.Interaction data) async {
+      int interactionId, crm.Interaction data) async {
     final request = crm.UpdateInteractionRequest(
       interactionId: interactionId,
-      interactionData: data, // Keep existing field name
+      interactionData: data,
     );
-    // Use shared call options
     final response = await _client.updateInteraction(request,
         options: GrpcClient().getCallOptions());
     return response.interaction;
   }
 
-  Future<void> deleteInteraction(String interactionId) async {
+  Future<void> deleteInteraction(int interactionId) async {
     final request = crm.DeleteInteractionRequest(interactionId: interactionId);
-    // Use shared call options
     await _client.deleteInteraction(request,
         options: GrpcClient().getCallOptions());
   }

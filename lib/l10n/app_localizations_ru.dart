@@ -327,6 +327,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get clientFormScreenLabelLastName => 'Фамилия';
 
   @override
+  String get clientFormScreenLabelMiddleName => 'Отчество (необязательно)';
+
+  @override
   String get clientFormScreenLabelEmail => 'Электронная почта';
 
   @override
@@ -377,6 +380,10 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get clientFormScreenValidationPhoneRequired =>
       'Пожалуйста, введите номер телефона';
+
+  @override
+  String get clientFormScreenValidationPhoneInvalid =>
+      'Пожалуйста, введите действительный российский номер телефона (формат +7)';
 
   @override
   String get clientFormScreenValidationSourceRequired =>
@@ -430,7 +437,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get translationOrderListScreenColumnActions => 'Действия';
 
   @override
-  String get translationOrderListScreenTooltipEdit => 'Редактировать заказ';
+  String get translationOrderListScreenTooltipEdit =>
+      'Редактировать заказ на перевод';
 
   @override
   String get translationOrderListScreenTooltipDelete => 'Удалить заказ';
@@ -916,7 +924,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get translationOrderFormScreenFieldManagerLabel => 'Менеджер *';
 
   @override
-  String get translationOrderFormScreenFieldManagerHint => 'Выберите менеджера';
+  String get translationOrderFormScreenFieldManagerHint =>
+      'Назначить менеджера';
 
   @override
   String get translationOrderFormScreenFieldManagerValidation =>
@@ -954,15 +963,45 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get translationOrderFormScreenFieldNotarialSumLabel =>
-      'Нотариальная сумма *';
+      'Нотариальная сумма';
 
   @override
   String get translationOrderFormScreenFieldNotarialSumValidationRequired =>
-      'Пожалуйста, введите нотариальную сумму';
+      'Сумма нотариального заверения обязательна.';
 
   @override
   String get translationOrderFormScreenFieldNotarialSumValidationNumber =>
-      'Пожалуйста, введите действительное число';
+      'Пожалуйста, введите действительное число для нотариальной суммы';
+
+  @override
+  String get priorityNormal => 'Обычный';
+
+  @override
+  String get priorityUrgent => 'Срочный';
+
+  @override
+  String get prioritySemiUrgent => 'Полу-срочный';
+
+  @override
+  String get clientSourceReferral => 'Рекомендация';
+
+  @override
+  String get clientSourceOnline => 'Онлайн';
+
+  @override
+  String get clientSourceWalkIn => 'Самообращение';
+
+  @override
+  String get clientSourcePartner => 'Партнер';
+
+  @override
+  String get clientSourceOther => 'Другое';
+
+  @override
+  String get clientSourceUnspecified => 'Не указан';
+
+  @override
+  String get clientSourceColumnTitle => 'Источник';
 
   @override
   String get translationOrderFormScreenFieldPriorityLabel => 'Приоритет *';
@@ -1044,6 +1083,58 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get translationOrderFormScreenStatusNotAvailable => 'Н/Д';
+
+  @override
+  String get translationOrderFormScreenFieldCompletionDateLabel =>
+      'Дата завершения';
+
+  @override
+  String get translationOrderFormScreenFieldCompletionDateHint =>
+      'Выберите дату завершения';
+
+  @override
+  String get translationOrderFormScreenFieldNotarialSumHint =>
+      'Введите нотариальную сумму';
+
+  @override
+  String get translationOrderFormScreenFieldPaymentIdHint =>
+      'Введите идентификатор платежа';
+
+  @override
+  String get translationOrderFormScreenSectionTitleActions => 'Действия';
+
+  @override
+  String get translationOrderFormScreenSectionTitlePricingPayment =>
+      'Цены и оплата';
+
+  @override
+  String get translationOrderFormScreenButtonSaving => 'Сохранение...';
+
+  @override
+  String get translationOrderFormScreenButtonSaveOrder => 'Сохранить заказ';
+
+  @override
+  String get translationOrderFormScreenDialogConfirmDeleteTitle =>
+      'Подтвердить удаление';
+
+  @override
+  String get translationOrderFormScreenDialogConfirmDeleteMessage =>
+      'Вы уверены, что хотите удалить этот заказ? Это действие нельзя отменить.';
+
+  @override
+  String get translationOrderFormScreenDialogButtonCancel => 'Отмена';
+
+  @override
+  String get translationOrderFormScreenDialogButtonDelete => 'Удалить';
+
+  @override
+  String get translationOrderFormScreenButtonDeleteOrder => 'Удалить заказ';
+
+  @override
+  String get translationOrderFormScreenAppBarTitleCreate => 'Создать заказ';
+
+  @override
+  String get translationOrderFormScreenAppBarTitleUpdate => 'Обновить заказ';
 
   @override
   String get insurancePolicyListScreenTitle => 'Страховые полисы';
@@ -1524,8 +1615,293 @@ class AppLocalizationsRu extends AppLocalizations {
   String get translationOrderListScreenColumnTotalSum => 'Итоговая сумма';
 
   @override
+  String get translationOrderListScreenColumnDocumentType => 'Тип документа';
+
+  @override
   String get translationOrderListScreenColumnCreatedAt => 'Создано';
 
   @override
   String get translationOrderListScreenColumnDoneAt => 'Выполнено';
+
+  @override
+  String get translationOrderListScreenColumnNotariallyCertified =>
+      'Нотариально заверенно';
+
+  @override
+  String get translationOrderListScreenValueYes => 'Да';
+
+  @override
+  String get translationOrderListScreenValueNo => 'Нет';
+
+  @override
+  String get documentTypePassport => 'Паспорт';
+
+  @override
+  String get documentTypeDiploma => 'Диплом';
+
+  @override
+  String get documentTypeBirthCertificate => 'Свидетельство о рождении';
+
+  @override
+  String get documentTypeContract => 'Договор';
+
+  @override
+  String get documentTypeOther => 'Другое';
+
+  @override
+  String get documentTypePassportRf => 'Паспорт РФ';
+
+  @override
+  String get documentTypePassportForeign => 'Заграничный паспорт';
+
+  @override
+  String get documentTypePassportInternal => 'Внутренний паспорт';
+
+  @override
+  String get documentTypeDriverLicense => 'Водительское удостоверение';
+
+  @override
+  String get documentTypeMarriageCertificate => 'Свидетельство о браке';
+
+  @override
+  String get documentTypeDivorceCertificate => 'Свидетельство о разводе';
+
+  @override
+  String get documentTypeDeathCertificate => 'Свидетельство о смерти';
+
+  @override
+  String get documentTypeDiplomaHigher => 'Диплом о высшем образовании';
+
+  @override
+  String get documentTypeDiplomaSecondary => 'Аттестат о среднем образовании';
+
+  @override
+  String get documentTypeTranscript => 'Академическая выписка';
+
+  @override
+  String get documentTypeCertificateCourse => 'Сертификат о прохождении курса';
+
+  @override
+  String get documentTypeMedicalCertificate => 'Медицинская справка';
+
+  @override
+  String get documentTypeVaccinationRecord => 'Справка о вакцинации';
+
+  @override
+  String get documentTypePowerOfAttorney => 'Доверенность';
+
+  @override
+  String get documentTypeCourtDecision => 'Решение суда';
+
+  @override
+  String get documentTypeApostille => 'Апостиль';
+
+  @override
+  String get documentTypeBankStatement => 'Банковская справка';
+
+  @override
+  String get documentTypeIncomeCertificate => 'Справка о доходах';
+
+  @override
+  String get employeeFormScreenTitleEdit => 'Редактировать сотрудника';
+
+  @override
+  String get employeeFormScreenTitleAdd => 'Добавить сотрудника';
+
+  @override
+  String get employeeFormScreenLabelSelectUser => 'Выберите пользователя';
+
+  @override
+  String get employeeFormScreenValidationUserRequired =>
+      'Требуется выбрать пользователя';
+
+  @override
+  String get employeeFormScreenLabelUserAccount => 'Аккаунт пользователя';
+
+  @override
+  String get employeeFormScreenErrorCannotChangeUser =>
+      'Нельзя изменить пользователя для существующего сотрудника.';
+
+  @override
+  String get employeeFormScreenLabelEmployeeLogin => 'Логин сотрудника';
+
+  @override
+  String get employeeFormScreenValidationLoginRequired =>
+      'Пожалуйста, введите логин сотрудника';
+
+  @override
+  String get employeeFormScreenLabelEmployeePassword => 'Пароль сотрудника';
+
+  @override
+  String get employeeFormScreenValidationPasswordRequired =>
+      'Пожалуйста, введите пароль';
+
+  @override
+  String get employeeFormScreenValidationPasswordMinLength =>
+      'Пароль должен содержать не менее 6 символов';
+
+  @override
+  String get employeeFormScreenLabelFullName => 'Полное имя';
+
+  @override
+  String get employeeFormScreenValidationNameRequired =>
+      'Пожалуйста, введите имя сотрудника';
+
+  @override
+  String get employeeFormScreenLabelEmail => 'Email';
+
+  @override
+  String get employeeFormScreenValidationEmailRequired =>
+      'Пожалуйста, введите email';
+
+  @override
+  String get employeeFormScreenValidationEmailInvalid =>
+      'Пожалуйста, введите действительный email';
+
+  @override
+  String get employeeFormScreenLabelSelectRole => 'Выберите роль';
+
+  @override
+  String get employeeFormScreenValidationRoleRequired =>
+      'Требуется выбрать роль';
+
+  @override
+  String get employeeFormScreenLabelRole => 'Роль';
+
+  @override
+  String get employeeFormScreenLabelSelectOffice => 'Выберите офис';
+
+  @override
+  String get employeeFormScreenValidationOfficeRequired =>
+      'Требуется выбрать офис';
+
+  @override
+  String get employeeFormScreenLabelOffice => 'Офис';
+
+  @override
+  String get employeeFormScreenLabelTelegramId => 'ID Telegram';
+
+  @override
+  String get employeeFormScreenLabelWhatsappNumber => 'Номер WhatsApp';
+
+  @override
+  String get employeeFormScreenLabelNotes => 'Примечания';
+
+  @override
+  String get employeeFormScreenLabelActive => 'Активен';
+
+  @override
+  String get employeeFormScreenButtonUpdate => 'Обновить сотрудника';
+
+  @override
+  String get employeeFormScreenButtonCreate => 'Создать сотрудника';
+
+  @override
+  String employeeFormScreenFeedbackErrorLoading(String error) {
+    return 'Ошибка загрузки сотрудника: $error';
+  }
+
+  @override
+  String get employeeFormScreenFeedbackSuccessUpdate =>
+      'Сотрудник успешно обновлён';
+
+  @override
+  String get employeeFormScreenFeedbackSuccessCreate =>
+      'Сотрудник успешно создан';
+
+  @override
+  String employeeFormScreenFeedbackErrorSaving(String error) {
+    return 'Ошибка сохранения сотрудника: $error';
+  }
+
+  @override
+  String employeeFormScreenFeedbackErrorLoadingDropdowns(String error) {
+    return 'Ошибка загрузки данных выпадающих списков: $error';
+  }
+
+  @override
+  String get employeeFormScreenValidationWhatsappInvalid =>
+      'Пожалуйста, введите действительный российский номер телефона (+7XXXXXXXXXX)';
+
+  @override
+  String get employeeFormScreenHintWhatsappNumber => '+7XXXXXXXXXX';
+
+  @override
+  String get translationOrderFormScreenCreateNewTitle =>
+      'Создать новый заказ на перевод';
+
+  @override
+  String get translationOrderFormScreenEditTitleFull =>
+      'Редактировать заказ на перевод';
+
+  @override
+  String get translationOrderFormScreenCreateDescription =>
+      'Заполните детали для создания нового заказа на перевод';
+
+  @override
+  String get translationOrderFormScreenEditDescription =>
+      'Обновите детали заказа и статус';
+
+  @override
+  String get translationOrderFormScreenFieldTitleHint =>
+      'Введите описательное название для этого заказа';
+
+  @override
+  String get translationOrderFormScreenFieldTranslatorHintSelect =>
+      'Назначить переводчика';
+
+  @override
+  String get translationOrderFormScreenFieldBlankNumberLabel => 'Номер бланка';
+
+  @override
+  String get translationOrderFormScreenSectionTitleTranslation =>
+      'Детали перевода';
+
+  @override
+  String get translationOrderFormScreenFieldSourceLanguageHint =>
+      'например, Английский';
+
+  @override
+  String get translationOrderFormScreenFieldSourceLanguageValidationRequired =>
+      'Исходный язык обязателен';
+
+  @override
+  String get translationOrderFormScreenFieldTargetLanguageHint =>
+      'например, Русский';
+
+  @override
+  String get translationOrderFormScreenFieldTargetLanguageValidationRequired =>
+      'Целевой язык обязателен';
+
+  @override
+  String get translationOrderFormScreenFieldPageCountHint => '1';
+
+  @override
+  String get translationOrderFormScreenSectionTitleNotes => 'Примечания';
+
+  @override
+  String get translationOrderFormScreenSectionTitleStatus =>
+      'Статус и прогресс';
+
+  @override
+  String get translationOrderFormScreenSectionTitlePricing =>
+      'Расчет стоимости';
+
+  @override
+  String get translationOrderFormScreenFieldIncorrectBlankLabel =>
+      'Номер неправильного бланка';
+
+  @override
+  String get translationOrderFormScreenFieldIncorrectBlankHint =>
+      'Введите номер неправильного бланка, если применимо';
+
+  @override
+  String get translationOrderFormScreenFieldNotesHint =>
+      'Добавьте любые дополнительные заметки или специальные инструкции...';
+
+  @override
+  String get translationOrderFormScreenStatusCurrentLabel => 'Текущий статус';
+
+  @override
+  String get translationOrderFormScreenStatusUpdateLabel => 'Обновить статус';
 }

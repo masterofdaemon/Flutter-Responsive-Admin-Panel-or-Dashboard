@@ -142,9 +142,10 @@ class AuthService with ChangeNotifier {
           String? cachedProfileToken =
               await _storage.read(key: _cachedEmployeeProfileTokenKey);
 
-          if (cachedProfileData != null &&
-              cachedProfileToken != null &&
-              cachedProfileToken == _token) {
+          if (cachedProfileToken != null &&
+              cachedProfileToken == _token &&
+              cachedProfileData != null) {
+            // Added null check for cachedProfileData
             try {
               _employeeProfile =
                   pb.Employee.fromBuffer(base64Decode(cachedProfileData));
@@ -323,6 +324,8 @@ class AuthService with ChangeNotifier {
       final request =
           pb.LoginEmployeeRequest(login: loginVal, password: password);
       final response = await client.loginEmployee(request);
+      // log all response fields
+      print('AuthService: Employee login response: ${response.toString()}');
 
       if (response.token.isNotEmpty) {
         _token = response.token;
@@ -390,5 +393,199 @@ class AuthService with ChangeNotifier {
     // } catch (e) {
     //   print('AuthService: Failed to notify backend of logout: $e');
     // }
+  }
+
+  // === ROLE-BASED ACCESS CONTROL METHODS ===
+
+  /// Get the current user's role, returns null if not authenticated or not an employee
+  pb.EmployeeRole? get currentUserRole {
+    if (!_isAuthenticated || _employeeProfile == null) {
+      return null;
+    }
+    return _employeeProfile!.role;
+  }
+
+  /// Check if the current user has any of the specified roles
+  bool hasAnyRole(List<pb.EmployeeRole> allowedRoles) {
+    final currentRole = currentUserRole;
+    if (currentRole == null) return false;
+    return allowedRoles.contains(currentRole);
+  }
+
+  /// Check if the current user has a specific role
+  bool hasRole(pb.EmployeeRole role) {
+    return currentUserRole == role;
+  }
+
+  /// Check if the current user can view clients (all roles except unspecified)
+  bool canViewClients() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, check specific roles
+    return hasAnyRole([
+      pb.EmployeeRole.DIRECTOR,
+      pb.EmployeeRole.CHIEF_MANAGER,
+      pb.EmployeeRole.MANAGER,
+      pb.EmployeeRole.ACCOUNTANT,
+      pb.EmployeeRole.TRANSLATOR
+    ]);
+  }
+
+  /// Check if the current user can create/edit clients
+  bool canManageClients() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, check specific roles
+    return hasAnyRole([pb.EmployeeRole.DIRECTOR, pb.EmployeeRole.MANAGER]);
+  }
+
+  /// Check if the current user can view employees
+  bool canViewEmployees() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, check specific roles
+    return hasAnyRole([
+      pb.EmployeeRole.DIRECTOR,
+      pb.EmployeeRole.CHIEF_MANAGER,
+      pb.EmployeeRole.MANAGER
+    ]);
+  }
+
+  /// Check if the current user can create/edit employees
+  bool canManageEmployees() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, only DIRECTOR can manage employees
+    return hasRole(pb.EmployeeRole.DIRECTOR);
+  }
+
+  /// Check if the current user can view translation orders
+  bool canViewTranslationOrders() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, check specific roles
+    return hasAnyRole([
+      pb.EmployeeRole.DIRECTOR,
+      pb.EmployeeRole.CHIEF_MANAGER,
+      pb.EmployeeRole.MANAGER,
+      pb.EmployeeRole.TRANSLATOR
+    ]);
+  }
+
+  /// Check if the current user can create/edit translation orders
+  bool canManageTranslationOrders() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, directors and managers can manage translation orders
+    return hasAnyRole([pb.EmployeeRole.DIRECTOR, pb.EmployeeRole.MANAGER]);
+  }
+
+  /// Check if the current user can assign translators to orders
+  bool canAssignTranslators() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, directors, chief managers, and managers can assign translators
+    return hasAnyRole([
+      pb.EmployeeRole.DIRECTOR,
+      pb.EmployeeRole.CHIEF_MANAGER,
+      pb.EmployeeRole.MANAGER
+    ]);
+  }
+
+  /// Check if the current user can view financial information
+  bool canViewFinancials() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, directors, chief managers, and accountants can view financials
+    return hasAnyRole([
+      pb.EmployeeRole.DIRECTOR,
+      pb.EmployeeRole.CHIEF_MANAGER,
+      pb.EmployeeRole.ACCOUNTANT
+    ]);
+  }
+
+  /// Check if the current user can edit financial information
+  bool canManageFinancials() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, directors and accountants can manage financials
+    return hasAnyRole([pb.EmployeeRole.DIRECTOR, pb.EmployeeRole.ACCOUNTANT]);
+  }
+
+  /// Check if the current user can delete records
+  bool canDeleteRecords() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, only DIRECTOR can delete records
+    return hasRole(pb.EmployeeRole.DIRECTOR);
+  }
+
+  /// Check if the current user can view admin tools
+  bool canViewAdminTools() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, only directors can access
+    return hasRole(pb.EmployeeRole.DIRECTOR);
+  }
+
+  /// Check if the current user can only view their own assignments (translators)
+  bool isTranslatorRole() {
+    return hasRole(pb.EmployeeRole.TRANSLATOR);
+  }
+
+  /// Check if the current user has chief manager privileges (view-only for most operations)
+  bool isChiefManagerRole() {
+    return hasRole(pb.EmployeeRole.CHIEF_MANAGER);
+  }
+
+  /// Get the current employee ID for ownership checks
+  int? get currentEmployeeId {
+    if (!_isAuthenticated || _employeeProfile == null) {
+      return null;
+    }
+    return _employeeProfile!.employeeId;
+  }
+
+  /// Get a human-readable role name for display
+  String getRoleDisplayName() {
+    final role = currentUserRole;
+    if (role == null) return 'No Role';
+
+    switch (role) {
+      case pb.EmployeeRole.DIRECTOR:
+        return 'Director';
+      case pb.EmployeeRole.CHIEF_MANAGER:
+        return 'Chief Manager';
+      case pb.EmployeeRole.MANAGER:
+        return 'Manager';
+      case pb.EmployeeRole.TRANSLATOR:
+        return 'Translator';
+      case pb.EmployeeRole.ACCOUNTANT:
+        return 'Accountant';
+      default:
+        return 'Unspecified';
+    }
   }
 }

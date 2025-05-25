@@ -1,17 +1,17 @@
 import 'package:admin/l10n/app_localizations.dart';
 import 'package:admin/screens/client_list_screen.dart';
-// Import EmployeeFormScreen
 import 'package:admin/screens/employee_list_screen.dart';
 import 'package:admin/screens/login_screen.dart';
-import 'package:admin/screens/main/main_screen.dart';
-import 'package:admin/screens/translation_orders/translation_order_list_screen.dart'; // Import TranslationOrderListScreen
+import 'package:admin/screens/dashboard/dashboard_screen.dart';
+import 'package:admin/screens/translation_orders/translation_order_list_screen.dart';
 import 'package:admin/screens/insurance_policy_list_screen.dart';
 import 'package:admin/screens/user_form_screen.dart';
 import 'package:admin/screens/training_course_list_screen.dart';
 import 'package:admin/screens/business_registration_list_screen.dart';
 import 'package:admin/screens/lending_application_list_screen.dart';
 import 'package:admin/services/auth_service.dart';
-import 'package:admin/generated/crm.pb.dart' as crm;
+import 'package:admin/constants.dart';
+import 'package:admin/controllers/menu_app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -22,206 +22,193 @@ class SideMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
-    // Return ListView directly, not wrapped in a Drawer
-    return ListView(
-      children: [
-        DrawerHeader(
-          child: Image.asset("assets/images/logo.png"),
-        ),
-        DrawerListTile(
-          title: localizations.sideMenuDashboard,
-          svgSrc: "assets/icons/menu_dashboard.svg",
-          press: () {
-            Navigator.pop(context); // Close drawer
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => MainScreen()),
-              (Route<dynamic> route) => false, 
-            );
-          },
-        ),
-        DrawerListTile(
-          title: localizations.sideMenuClients,
-          svgSrc: "assets/icons/menu_tran.svg",
-          press: () {
-            Navigator.pop(context); // Close drawer
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ClientListScreen()),
-            );
-          },
-        ),
-        DrawerListTile(
-          title: localizations.sideMenuEmployees,
-          svgSrc: "assets/icons/menu_profile.svg",
-          press: () {
-            Navigator.pop(context); // Close drawer
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const EmployeeListScreen()),
-            );
-          },
-        ),
-        DrawerListTile(
-          title: localizations.sideMenuTranslations,
-          svgSrc: "assets/icons/menu_doc.svg", // Example icon
-          press: () {
-            Navigator.pop(context); // Close drawer
-            // Revert to Navigator.push to isolate the black screen issue
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const TranslationOrderListScreen()),
-            );
-            // Provider.of<MenuAppController>(context, listen: false)
-            //     .setSelectedScreen(const TranslationOrderListScreen());
-          },
-        ),
-        DrawerListTile(
-          title: localizations.sideMenuInsurancePolicies,
-          svgSrc:
-              "assets/icons/menu_store.svg", // Use a relevant icon or replace
-          press: () {
-            Navigator.pop(context); // Close drawer
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const InsurancePolicyListScreen()),
-            );
-          },
-        ),
-        DrawerListTile(
-          title: localizations.sideMenuTrainingCourses,
-          svgSrc: "assets/icons/menu_doc.svg", // Use a relevant icon or replace
-          press: () {
-            Navigator.pop(context); // Close drawer
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const TrainingCourseListScreen()),
-            );
-          },
-        ),
-        DrawerListTile(
-          title: localizations.sideMenuBusinessRegistrations,
-          svgSrc:
-              "assets/icons/menu_store.svg", // Use a relevant icon or replace
-          press: () {
-            Navigator.pop(context); // Close drawer
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const BusinessRegistrationListScreen()),
-            );
-          },
-        ),
-        DrawerListTile(
-          title: localizations.sideMenuLendingApplications,
-          svgSrc:
-              "assets/icons/menu_store.svg", // Use a relevant icon or replace
-          press: () {
-            Navigator.pop(context); // Close drawer
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const LendingApplicationListScreen()),
-            );
-          },
-        ),
-        // --- Admin Section ---
-        // Use Consumer to check role for admin-only items
-        Consumer<AuthService>(
-          builder: (context, auth, _) {
-            // Show admin items only if logged in and role is DIRECTOR
-            if (auth.isAuthenticated &&
-                auth.employeeProfile?.role == crm.EmployeeRole.DIRECTOR) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Divider(), // Separator for admin section
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    child: Text(localizations.sideMenuAdminTools,
-                        style: TextStyle(
-                            color: Colors.white54,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                  DrawerListTile(
-                    title: localizations.sideMenuCreateUser,
-                    svgSrc: "assets/icons/menu_profile.svg", // Placeholder icon
-                    press: () {
-                      Navigator.pop(context); // Close drawer
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const UserFormScreen()),
+    return Container(
+      color: secondaryColor,
+      child: Consumer<AuthService>(
+        builder: (context, auth, _) {
+          return ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              const SizedBox(height: defaultPadding),
+              // Dashboard - always accessible
+              DrawerListTile(
+                title: localizations.sideMenuDashboard,
+                svgSrc: "assets/icons/menu_dashboard.svg",
+                press: () {
+                  context.read<MenuAppController>().setSelectedScreen(
+                        DashboardScreen(),
                       );
-                    },
+                },
+              ),
+              // Clients - accessible to managers and above
+              if (auth.canViewClients())
+                DrawerListTile(
+                  title: localizations.sideMenuClients,
+                  svgSrc: "assets/icons/menu_tran.svg",
+                  press: () {
+                    context.read<MenuAppController>().setSelectedScreen(
+                          const ClientListScreen(),
+                        );
+                  },
+                ),
+              // Employees - accessible to chief managers and directors
+              if (auth.canViewEmployees())
+                DrawerListTile(
+                  title: localizations.sideMenuEmployees,
+                  svgSrc: "assets/icons/menu_profile.svg",
+                  press: () {
+                    context.read<MenuAppController>().setSelectedScreen(
+                          const EmployeeListScreen(),
+                        );
+                  },
+                ),
+              // Translation Orders - accessible to translators and above
+              if (auth.canViewTranslationOrders())
+                DrawerListTile(
+                  title: localizations.sideMenuTranslations,
+                  svgSrc: "assets/icons/menu_doc.svg",
+                  press: () {
+                    context.read<MenuAppController>().setSelectedScreen(
+                          const TranslationOrderListScreen(),
+                        );
+                  },
+                ),
+              // Business services - accessible to managers and above
+              if (auth.canViewClients())
+                DrawerListTile(
+                  title: localizations.sideMenuInsurancePolicies,
+                  svgSrc: "assets/icons/menu_store.svg",
+                  press: () {
+                    context.read<MenuAppController>().setSelectedScreen(
+                          const InsurancePolicyListScreen(),
+                        );
+                  },
+                ),
+              if (auth.canViewClients())
+                DrawerListTile(
+                  title: localizations.sideMenuTrainingCourses,
+                  svgSrc: "assets/icons/menu_doc.svg",
+                  press: () {
+                    context.read<MenuAppController>().setSelectedScreen(
+                          const TrainingCourseListScreen(),
+                        );
+                  },
+                ),
+              if (auth.canViewClients())
+                DrawerListTile(
+                  title: localizations.sideMenuBusinessRegistrations,
+                  svgSrc: "assets/icons/menu_store.svg",
+                  press: () {
+                    context.read<MenuAppController>().setSelectedScreen(
+                          const BusinessRegistrationListScreen(),
+                        );
+                  },
+                ),
+              if (auth.canViewClients())
+                DrawerListTile(
+                  title: localizations.sideMenuLendingApplications,
+                  svgSrc: "assets/icons/menu_store.svg",
+                  press: () {
+                    context.read<MenuAppController>().setSelectedScreen(
+                          const LendingApplicationListScreen(),
+                        );
+                  },
+                ),
+              // Admin Section - only directors can access
+              if (auth.canViewAdminTools())
+                Column(
+                  children: [
+                    const Divider(color: Colors.white24),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: Text(
+                        'Admin Section', // Use localization key if available
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    DrawerListTile(
+                      title:
+                          'User Management', // Use localization key if available
+                      svgSrc: "assets/icons/menu_profile.svg",
+                      press: () {
+                        context.read<MenuAppController>().setSelectedScreen(
+                              const UserFormScreen(),
+                            );
+                      },
+                    ),
+                  ],
+                ),
+              const Divider(color: Colors.white24),
+              DrawerListTile(
+                title: localizations.sideMenuTask,
+                svgSrc: "assets/icons/menu_task.svg",
+                press: () {},
+              ),
+              DrawerListTile(
+                title: localizations.sideMenuStore,
+                svgSrc: "assets/icons/menu_store.svg",
+                press: () {},
+              ),
+              DrawerListTile(
+                title: localizations.sideMenuNotification,
+                svgSrc: "assets/icons/menu_notification.svg",
+                press: () {},
+              ),
+              DrawerListTile(
+                title: localizations.sideMenuProfile,
+                svgSrc: "assets/icons/menu_profile.svg",
+                press: () {},
+              ),
+              DrawerListTile(
+                title: localizations.sideMenuSettings,
+                svgSrc: "assets/icons/menu_setting.svg",
+                press: () {},
+              ),
+              const SizedBox(height: defaultPadding),
+              // Logout Tile
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                child: ListTile(
+                  onTap: () async {
+                    await Provider.of<AuthService>(context, listen: false)
+                        .logout();
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()),
+                      (Route<dynamic> route) => false,
+                    );
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  // Add "Create Employee" tile here later
-                ],
-              );
-            } else {
-              // Return an empty container if not an admin
-              return Container();
-            }
-          },
-        ),
-        const Divider(), // Separator after potential admin section
-        // --- End Admin Section ---
-        DrawerListTile(
-          title: localizations.sideMenuTask,
-          svgSrc: "assets/icons/menu_task.svg",
-          press: () {},
-        ),
-        DrawerListTile(
-          title: localizations.sideMenuStore,
-          svgSrc: "assets/icons/menu_store.svg",
-          press: () {},
-        ),
-        DrawerListTile(
-          title: localizations.sideMenuNotification,
-          svgSrc: "assets/icons/menu_notification.svg",
-          press: () {},
-        ),
-        DrawerListTile(
-          title: localizations.sideMenuProfile,
-          svgSrc: "assets/icons/menu_profile.svg",
-          press: () {},
-        ),
-        DrawerListTile(
-          title: localizations.sideMenuSettings,
-          svgSrc: "assets/icons/menu_setting.svg",
-          press: () {},
-        ),
-        // Logout Tile
-        ListTile(
-          onTap: () async {
-            Navigator.pop(context); // Close drawer
-            final authService =
-                Provider.of<AuthService>(context, listen: false);
-            await authService.logout();
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
-              (Route<dynamic> route) => false,
-            );
-          },
-          horizontalTitleGap: 0.0,
-          leading: SvgPicture.asset(
-            "assets/icons/menu_setting.svg",
-            colorFilter:
-                const ColorFilter.mode(Colors.white54, BlendMode.srcIn),
-            height: 16,
-          ),
-          title: Text(
-            localizations.sideMenuLogout,
-            style: TextStyle(color: Colors.white54),
-          ),
-        ),
-      ],
+                  tileColor: Colors.red.withOpacity(0.1),
+                  horizontalTitleGap: 12.0,
+                  leading: SvgPicture.asset(
+                    "assets/icons/menu_setting.svg",
+                    colorFilter:
+                        const ColorFilter.mode(Colors.red, BlendMode.srcIn),
+                    height: 16,
+                  ),
+                  title: Text(
+                    'Logout', // Use localization key if available
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: defaultPadding),
+            ],
+          );
+        },
+      ),
     );
   }
 }
@@ -229,7 +216,6 @@ class SideMenu extends StatelessWidget {
 class DrawerListTile extends StatelessWidget {
   const DrawerListTile({
     super.key,
-    // For selecting those three line once press
     required this.title,
     required this.svgSrc,
     required this.press,
@@ -240,17 +226,28 @@ class DrawerListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: press,
-      horizontalTitleGap: 0.0,
-      leading: SvgPicture.asset(
-        svgSrc,
-        colorFilter: const ColorFilter.mode(Colors.white54, BlendMode.srcIn),
-        height: 16,
-      ),
-      title: Text(
-        title,
-        style: const TextStyle(color: Colors.white54),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
+      child: ListTile(
+        onTap: press,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        hoverColor: primaryColor.withOpacity(0.1),
+        horizontalTitleGap: 12.0,
+        leading: SvgPicture.asset(
+          svgSrc,
+          colorFilter: const ColorFilter.mode(Colors.white70, BlendMode.srcIn),
+          height: 18,
+        ),
+        title: Text(
+          title,
+          style: const TextStyle(
+            color: Colors.white70,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ),
     );
   }

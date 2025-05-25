@@ -61,7 +61,8 @@ class _TrainingCourseFormScreenState extends State<TrainingCourseFormScreen> {
     setState(() => _isLoading = true);
     try {
       final course = crm.TrainingCourse(
-        courseId: widget.courseId ?? '',
+        courseId:
+            widget.courseId != null ? int.tryParse(widget.courseId!) ?? 0 : 0,
         name: _nameController.text.trim(),
         price: double.tryParse(_priceController.text.trim()) ?? 0.0,
         commissionPercent:

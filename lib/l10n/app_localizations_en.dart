@@ -325,6 +325,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientFormScreenLabelLastName => 'Last Name';
 
   @override
+  String get clientFormScreenLabelMiddleName => 'Middle Name (Optional)';
+
+  @override
   String get clientFormScreenLabelEmail => 'Email';
 
   @override
@@ -375,6 +378,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get clientFormScreenValidationPhoneRequired =>
       'Please enter a phone number';
+
+  @override
+  String get clientFormScreenValidationPhoneInvalid =>
+      'Please enter a valid Russian phone number (+7 format)';
 
   @override
   String get clientFormScreenValidationSourceRequired =>
@@ -430,7 +437,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translationOrderListScreenColumnActions => 'Actions';
 
   @override
-  String get translationOrderListScreenTooltipEdit => 'Edit Order';
+  String get translationOrderListScreenTooltipEdit => 'Edit Translation Order';
 
   @override
   String get translationOrderListScreenTooltipDelete => 'Delete Order';
@@ -916,7 +923,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translationOrderFormScreenFieldManagerLabel => 'Manager *';
 
   @override
-  String get translationOrderFormScreenFieldManagerHint => 'Select Manager';
+  String get translationOrderFormScreenFieldManagerHint => 'Assign manager';
 
   @override
   String get translationOrderFormScreenFieldManagerValidation =>
@@ -952,16 +959,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translationOrderFormScreenFieldPageCountLabel => 'Page Count';
 
   @override
-  String get translationOrderFormScreenFieldNotarialSumLabel =>
-      'Notarial Sum *';
+  String get translationOrderFormScreenFieldNotarialSumLabel => 'Notarial Sum';
 
   @override
   String get translationOrderFormScreenFieldNotarialSumValidationRequired =>
-      'Please enter notarial sum';
+      'Notarial sum is required.';
 
   @override
   String get translationOrderFormScreenFieldNotarialSumValidationNumber =>
-      'Please enter a valid number';
+      'Please enter a valid number for the notarial sum';
+
+  @override
+  String get priorityNormal => 'Normal';
+
+  @override
+  String get priorityUrgent => 'Urgent';
+
+  @override
+  String get prioritySemiUrgent => 'Semi-Urgent';
+
+  @override
+  String get clientSourceReferral => 'Referral';
+
+  @override
+  String get clientSourceOnline => 'Online';
+
+  @override
+  String get clientSourceWalkIn => 'Walk-In';
+
+  @override
+  String get clientSourcePartner => 'Partner';
+
+  @override
+  String get clientSourceOther => 'Other';
+
+  @override
+  String get clientSourceUnspecified => 'Unspecified';
+
+  @override
+  String get clientSourceColumnTitle => 'Source';
 
   @override
   String get translationOrderFormScreenFieldPriorityLabel => 'Priority *';
@@ -1041,6 +1077,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get translationOrderFormScreenStatusNotAvailable => 'N/A';
+
+  @override
+  String get translationOrderFormScreenFieldCompletionDateLabel =>
+      'Completion Date';
+
+  @override
+  String get translationOrderFormScreenFieldCompletionDateHint =>
+      'Select completion date';
+
+  @override
+  String get translationOrderFormScreenFieldNotarialSumHint =>
+      'Enter notarial sum';
+
+  @override
+  String get translationOrderFormScreenFieldPaymentIdHint =>
+      'Enter payment reference';
+
+  @override
+  String get translationOrderFormScreenSectionTitleActions => 'Actions';
+
+  @override
+  String get translationOrderFormScreenSectionTitlePricingPayment =>
+      'Pricing & Payment';
+
+  @override
+  String get translationOrderFormScreenButtonSaving => 'Saving...';
+
+  @override
+  String get translationOrderFormScreenButtonSaveOrder => 'Save Order';
+
+  @override
+  String get translationOrderFormScreenDialogConfirmDeleteTitle =>
+      'Confirm Deletion';
+
+  @override
+  String get translationOrderFormScreenDialogConfirmDeleteMessage =>
+      'Are you sure you want to delete this order? This action cannot be undone.';
+
+  @override
+  String get translationOrderFormScreenDialogButtonCancel => 'Cancel';
+
+  @override
+  String get translationOrderFormScreenDialogButtonDelete => 'Delete';
+
+  @override
+  String get translationOrderFormScreenButtonDeleteOrder => 'Delete Order';
+
+  @override
+  String get translationOrderFormScreenAppBarTitleCreate => 'Create Order';
+
+  @override
+  String get translationOrderFormScreenAppBarTitleUpdate => 'Update Order';
 
   @override
   String get insurancePolicyListScreenTitle => 'Insurance Policies';
@@ -1514,8 +1602,289 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translationOrderListScreenColumnTotalSum => 'Total Sum';
 
   @override
+  String get translationOrderListScreenColumnDocumentType => 'Document Type';
+
+  @override
   String get translationOrderListScreenColumnCreatedAt => 'Created At';
 
   @override
   String get translationOrderListScreenColumnDoneAt => 'Done At';
+
+  @override
+  String get translationOrderListScreenColumnNotariallyCertified =>
+      'Notarially Certified';
+
+  @override
+  String get translationOrderListScreenValueYes => 'Yes';
+
+  @override
+  String get translationOrderListScreenValueNo => 'No';
+
+  @override
+  String get documentTypePassport => 'Passport';
+
+  @override
+  String get documentTypeDiploma => 'Diploma';
+
+  @override
+  String get documentTypeBirthCertificate => 'Birth Certificate';
+
+  @override
+  String get documentTypeContract => 'Contract';
+
+  @override
+  String get documentTypeOther => 'Other';
+
+  @override
+  String get documentTypePassportRf => 'Russian Passport';
+
+  @override
+  String get documentTypePassportForeign => 'Foreign Passport';
+
+  @override
+  String get documentTypePassportInternal => 'Internal Passport';
+
+  @override
+  String get documentTypeDriverLicense => 'Driver\'s License';
+
+  @override
+  String get documentTypeMarriageCertificate => 'Marriage Certificate';
+
+  @override
+  String get documentTypeDivorceCertificate => 'Divorce Certificate';
+
+  @override
+  String get documentTypeDeathCertificate => 'Death Certificate';
+
+  @override
+  String get documentTypeDiplomaHigher => 'Higher Education Diploma';
+
+  @override
+  String get documentTypeDiplomaSecondary => 'Secondary Education Diploma';
+
+  @override
+  String get documentTypeTranscript => 'Academic Transcript';
+
+  @override
+  String get documentTypeCertificateCourse => 'Course Certificate';
+
+  @override
+  String get documentTypeMedicalCertificate => 'Medical Certificate';
+
+  @override
+  String get documentTypeVaccinationRecord => 'Vaccination Record';
+
+  @override
+  String get documentTypePowerOfAttorney => 'Power of Attorney';
+
+  @override
+  String get documentTypeCourtDecision => 'Court Decision';
+
+  @override
+  String get documentTypeApostille => 'Apostille';
+
+  @override
+  String get documentTypeBankStatement => 'Bank Statement';
+
+  @override
+  String get documentTypeIncomeCertificate => 'Income Certificate';
+
+  @override
+  String get employeeFormScreenTitleEdit => 'Edit Employee';
+
+  @override
+  String get employeeFormScreenTitleAdd => 'Add Employee';
+
+  @override
+  String get employeeFormScreenLabelSelectUser => 'Select User';
+
+  @override
+  String get employeeFormScreenValidationUserRequired => 'User is required';
+
+  @override
+  String get employeeFormScreenLabelUserAccount => 'User Account';
+
+  @override
+  String get employeeFormScreenErrorCannotChangeUser =>
+      'Cannot change user for existing employee.';
+
+  @override
+  String get employeeFormScreenLabelEmployeeLogin => 'Employee Login';
+
+  @override
+  String get employeeFormScreenValidationLoginRequired =>
+      'Please enter an employee login';
+
+  @override
+  String get employeeFormScreenLabelEmployeePassword => 'Employee Password';
+
+  @override
+  String get employeeFormScreenValidationPasswordRequired =>
+      'Please enter a password';
+
+  @override
+  String get employeeFormScreenValidationPasswordMinLength =>
+      'Password must be at least 6 characters';
+
+  @override
+  String get employeeFormScreenLabelFullName => 'Full Name';
+
+  @override
+  String get employeeFormScreenValidationNameRequired =>
+      'Please enter employee name';
+
+  @override
+  String get employeeFormScreenLabelEmail => 'Email';
+
+  @override
+  String get employeeFormScreenValidationEmailRequired =>
+      'Please enter an email';
+
+  @override
+  String get employeeFormScreenValidationEmailInvalid =>
+      'Please enter a valid email';
+
+  @override
+  String get employeeFormScreenLabelSelectRole => 'Select Role';
+
+  @override
+  String get employeeFormScreenValidationRoleRequired => 'Role is required';
+
+  @override
+  String get employeeFormScreenLabelRole => 'Role';
+
+  @override
+  String get employeeFormScreenLabelSelectOffice => 'Select Office';
+
+  @override
+  String get employeeFormScreenValidationOfficeRequired => 'Office is required';
+
+  @override
+  String get employeeFormScreenLabelOffice => 'Office';
+
+  @override
+  String get employeeFormScreenLabelTelegramId => 'Telegram ID';
+
+  @override
+  String get employeeFormScreenLabelWhatsappNumber => 'WhatsApp Number';
+
+  @override
+  String get employeeFormScreenLabelNotes => 'Notes';
+
+  @override
+  String get employeeFormScreenLabelActive => 'Active';
+
+  @override
+  String get employeeFormScreenButtonUpdate => 'Update Employee';
+
+  @override
+  String get employeeFormScreenButtonCreate => 'Create Employee';
+
+  @override
+  String employeeFormScreenFeedbackErrorLoading(String error) {
+    return 'Error loading employee: $error';
+  }
+
+  @override
+  String get employeeFormScreenFeedbackSuccessUpdate =>
+      'Employee updated successfully';
+
+  @override
+  String get employeeFormScreenFeedbackSuccessCreate =>
+      'Employee created successfully';
+
+  @override
+  String employeeFormScreenFeedbackErrorSaving(String error) {
+    return 'Error saving employee: $error';
+  }
+
+  @override
+  String employeeFormScreenFeedbackErrorLoadingDropdowns(String error) {
+    return 'Error loading dropdown data: $error';
+  }
+
+  @override
+  String get employeeFormScreenValidationWhatsappInvalid =>
+      'Please enter a valid Russian phone number (+7XXXXXXXXXX)';
+
+  @override
+  String get employeeFormScreenHintWhatsappNumber => '+7XXXXXXXXXX';
+
+  @override
+  String get translationOrderFormScreenCreateNewTitle =>
+      'Create New Translation Order';
+
+  @override
+  String get translationOrderFormScreenEditTitleFull =>
+      'Edit Translation Order';
+
+  @override
+  String get translationOrderFormScreenCreateDescription =>
+      'Fill in the details to create a new translation order';
+
+  @override
+  String get translationOrderFormScreenEditDescription =>
+      'Update the order details and status';
+
+  @override
+  String get translationOrderFormScreenFieldTitleHint =>
+      'Enter a descriptive title for this order';
+
+  @override
+  String get translationOrderFormScreenFieldTranslatorHintSelect =>
+      'Assign translator';
+
+  @override
+  String get translationOrderFormScreenFieldBlankNumberLabel => 'Blank Number';
+
+  @override
+  String get translationOrderFormScreenSectionTitleTranslation =>
+      'Translation Details';
+
+  @override
+  String get translationOrderFormScreenFieldSourceLanguageHint =>
+      'e.g., English';
+
+  @override
+  String get translationOrderFormScreenFieldSourceLanguageValidationRequired =>
+      'Source language is required';
+
+  @override
+  String get translationOrderFormScreenFieldTargetLanguageHint =>
+      'e.g., Russian';
+
+  @override
+  String get translationOrderFormScreenFieldTargetLanguageValidationRequired =>
+      'Target language is required';
+
+  @override
+  String get translationOrderFormScreenFieldPageCountHint => '1';
+
+  @override
+  String get translationOrderFormScreenSectionTitleNotes => 'Notes';
+
+  @override
+  String get translationOrderFormScreenSectionTitleStatus =>
+      'Status & Progress';
+
+  @override
+  String get translationOrderFormScreenSectionTitlePricing => 'Pricing';
+
+  @override
+  String get translationOrderFormScreenFieldIncorrectBlankLabel =>
+      'Incorrect Blank Number';
+
+  @override
+  String get translationOrderFormScreenFieldIncorrectBlankHint =>
+      'Enter incorrect blank number if applicable';
+
+  @override
+  String get translationOrderFormScreenFieldNotesHint =>
+      'Add any additional notes or special instructions...';
+
+  @override
+  String get translationOrderFormScreenStatusCurrentLabel => 'Current Status';
+
+  @override
+  String get translationOrderFormScreenStatusUpdateLabel => 'Update Status';
 }

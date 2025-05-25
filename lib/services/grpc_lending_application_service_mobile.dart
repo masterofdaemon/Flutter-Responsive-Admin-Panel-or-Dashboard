@@ -26,11 +26,12 @@ class GrpcLendingApplicationService {
         crm.CreateLendingApplicationRequest(lendingApplication: application);
     final response = await _client.createLendingApplication(request,
         options: GrpcClient().getCallOptions());
-    return await getLendingApplication(response.requestId);
+    return await getLendingApplication(response.requestId.toString());
   }
 
   Future<crm.LendingApplication> getLendingApplication(String requestId) async {
-    final request = crm.GetLendingApplicationRequest(requestId: requestId);
+    final request = crm.GetLendingApplicationRequest(
+        requestId: int.tryParse(requestId) ?? 0);
     final response = await _client.getLendingApplication(request,
         options: GrpcClient().getCallOptions());
     return response.lendingApplication;
@@ -39,14 +40,15 @@ class GrpcLendingApplicationService {
   Future<crm.LendingApplication> updateLendingApplication(
       String requestId, crm.LendingApplication data) async {
     final request = crm.UpdateLendingApplicationRequest(
-        requestId: requestId, applicationData: data);
+        requestId: int.tryParse(requestId) ?? 0, applicationData: data);
     final response = await _client.updateLendingApplication(request,
         options: GrpcClient().getCallOptions());
     return response.lendingApplication;
   }
 
   Future<void> deleteLendingApplication(String requestId) async {
-    final request = crm.DeleteLendingApplicationRequest(requestId: requestId);
+    final request = crm.DeleteLendingApplicationRequest(
+        requestId: int.tryParse(requestId) ?? 0);
     await _client.deleteLendingApplication(request,
         options: GrpcClient().getCallOptions());
   }

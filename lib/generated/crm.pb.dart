@@ -27,18 +27,18 @@ export 'crm.pbenum.dart';
 /// All fields are required unless marked as optional.
 class Client extends $pb.GeneratedMessage {
   factory Client({
-    $core.String? clientId,
+    $core.int? clientId,
     $core.String? firstName,
     $core.String? lastName,
     $core.String? phone,
     $core.String? email,
     $fixnum.Int64? telegramId,
     $core.String? whatsappNumber,
-    ClientSource? source,
+    $core.String? middleName,
     $1.Value? passportData,
     $core.String? notes,
-    $core.String? managerId,
-    $core.String? officeId,
+    $core.int? managerId,
+    $core.int? officeId,
   }) {
     final $result = create();
     if (clientId != null) {
@@ -62,8 +62,8 @@ class Client extends $pb.GeneratedMessage {
     if (whatsappNumber != null) {
       $result.whatsappNumber = whatsappNumber;
     }
-    if (source != null) {
-      $result.source = source;
+    if (middleName != null) {
+      $result.middleName = middleName;
     }
     if (passportData != null) {
       $result.passportData = passportData;
@@ -84,18 +84,18 @@ class Client extends $pb.GeneratedMessage {
   factory Client.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Client', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'clientId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'clientId', $pb.PbFieldType.OU3)
     ..aOS(2, _omitFieldNames ? '' : 'firstName')
     ..aOS(3, _omitFieldNames ? '' : 'lastName')
     ..aOS(4, _omitFieldNames ? '' : 'phone')
     ..aOS(5, _omitFieldNames ? '' : 'email')
     ..aInt64(6, _omitFieldNames ? '' : 'telegramId')
     ..aOS(7, _omitFieldNames ? '' : 'whatsappNumber')
-    ..e<ClientSource>(8, _omitFieldNames ? '' : 'source', $pb.PbFieldType.OE, defaultOrMaker: ClientSource.CLIENT_SOURCE_UNSPECIFIED, valueOf: ClientSource.valueOf, enumValues: ClientSource.values)
+    ..aOS(8, _omitFieldNames ? '' : 'middleName')
     ..aOM<$1.Value>(9, _omitFieldNames ? '' : 'passportData', subBuilder: $1.Value.create)
     ..aOS(10, _omitFieldNames ? '' : 'notes')
-    ..aOS(11, _omitFieldNames ? '' : 'managerId')
-    ..aOS(12, _omitFieldNames ? '' : 'officeId')
+    ..a<$core.int>(11, _omitFieldNames ? '' : 'managerId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(12, _omitFieldNames ? '' : 'officeId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -120,11 +120,11 @@ class Client extends $pb.GeneratedMessage {
   static Client getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Client>(create);
   static Client? _defaultInstance;
 
-  /// Unique identifier for the client (UUID format)
+  /// Unique identifier for the client (auto-incremented number)
   @$pb.TagNumber(1)
-  $core.String get clientId => $_getSZ(0);
+  $core.int get clientId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set clientId($core.String v) { $_setString(0, v); }
+  set clientId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasClientId() => $_has(0);
   @$pb.TagNumber(1)
@@ -190,15 +190,15 @@ class Client extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   void clearWhatsappNumber() => $_clearField(7);
 
-  /// Source of the client
+  /// Client's middle name (отчество) - optional for Russian clients
   @$pb.TagNumber(8)
-  ClientSource get source => $_getN(7);
+  $core.String get middleName => $_getSZ(7);
   @$pb.TagNumber(8)
-  set source(ClientSource v) { $_setField(8, v); }
+  set middleName($core.String v) { $_setString(7, v); }
   @$pb.TagNumber(8)
-  $core.bool hasSource() => $_has(7);
+  $core.bool hasMiddleName() => $_has(7);
   @$pb.TagNumber(8)
-  void clearSource() => $_clearField(8);
+  void clearMiddleName() => $_clearField(8);
 
   /// Client's passport data (stored as JSON)
   @$pb.TagNumber(9)
@@ -224,18 +224,18 @@ class Client extends $pb.GeneratedMessage {
 
   /// Linking client to manager and office as per TS
   @$pb.TagNumber(11)
-  $core.String get managerId => $_getSZ(10);
+  $core.int get managerId => $_getIZ(10);
   @$pb.TagNumber(11)
-  set managerId($core.String v) { $_setString(10, v); }
+  set managerId($core.int v) { $_setUnsignedInt32(10, v); }
   @$pb.TagNumber(11)
   $core.bool hasManagerId() => $_has(10);
   @$pb.TagNumber(11)
   void clearManagerId() => $_clearField(11);
 
   @$pb.TagNumber(12)
-  $core.String get officeId => $_getSZ(11);
+  $core.int get officeId => $_getIZ(11);
   @$pb.TagNumber(12)
-  set officeId($core.String v) { $_setString(11, v); }
+  set officeId($core.int v) { $_setUnsignedInt32(11, v); }
   @$pb.TagNumber(12)
   $core.bool hasOfficeId() => $_has(11);
   @$pb.TagNumber(12)
@@ -246,7 +246,7 @@ class Client extends $pb.GeneratedMessage {
 /// All fields are required unless marked as optional.
 class User extends $pb.GeneratedMessage {
   factory User({
-    $core.String? userId,
+    $core.int? userId,
     $core.String? login,
     $2.Timestamp? lastLogin,
     $core.String? notes,
@@ -275,7 +275,7 @@ class User extends $pb.GeneratedMessage {
   factory User.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'User', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'userId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'userId', $pb.PbFieldType.OU3)
     ..aOS(2, _omitFieldNames ? '' : 'login')
     ..aOM<$2.Timestamp>(3, _omitFieldNames ? '' : 'lastLogin', subBuilder: $2.Timestamp.create)
     ..aOS(4, _omitFieldNames ? '' : 'notes')
@@ -304,11 +304,11 @@ class User extends $pb.GeneratedMessage {
   static User getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<User>(create);
   static User? _defaultInstance;
 
-  /// Unique identifier for the user (UUID format)
+  /// Unique identifier for the user (auto-incremented number)
   @$pb.TagNumber(1)
-  $core.String get userId => $_getSZ(0);
+  $core.int get userId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set userId($core.String v) { $_setString(0, v); }
+  set userId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasUserId() => $_has(0);
   @$pb.TagNumber(1)
@@ -358,12 +358,12 @@ class User extends $pb.GeneratedMessage {
 
 class Employee extends $pb.GeneratedMessage {
   factory Employee({
-    $core.String? employeeId,
-    $core.String? userId,
+    $core.int? employeeId,
+    $core.int? userId,
     $core.String? login,
     $core.String? name,
     EmployeeRole? role,
-    $core.String? officeId,
+    $core.int? officeId,
     $fixnum.Int64? telegramId,
     $core.String? whatsappNumber,
     $core.String? email,
@@ -411,12 +411,12 @@ class Employee extends $pb.GeneratedMessage {
   factory Employee.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Employee', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'employeeId')
-    ..aOS(2, _omitFieldNames ? '' : 'userId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'employeeId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'userId', $pb.PbFieldType.OU3)
     ..aOS(3, _omitFieldNames ? '' : 'login')
     ..aOS(4, _omitFieldNames ? '' : 'name')
     ..e<EmployeeRole>(5, _omitFieldNames ? '' : 'role', $pb.PbFieldType.OE, defaultOrMaker: EmployeeRole.EMPLOYEE_ROLE_UNSPECIFIED, valueOf: EmployeeRole.valueOf, enumValues: EmployeeRole.values)
-    ..aOS(6, _omitFieldNames ? '' : 'officeId')
+    ..a<$core.int>(6, _omitFieldNames ? '' : 'officeId', $pb.PbFieldType.OU3)
     ..aInt64(7, _omitFieldNames ? '' : 'telegramId')
     ..aOS(8, _omitFieldNames ? '' : 'whatsappNumber')
     ..aOS(9, _omitFieldNames ? '' : 'email')
@@ -447,18 +447,18 @@ class Employee extends $pb.GeneratedMessage {
   static Employee? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get employeeId => $_getSZ(0);
+  $core.int get employeeId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set employeeId($core.String v) { $_setString(0, v); }
+  set employeeId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasEmployeeId() => $_has(0);
   @$pb.TagNumber(1)
   void clearEmployeeId() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get userId => $_getSZ(1);
+  $core.int get userId => $_getIZ(1);
   @$pb.TagNumber(2)
-  set userId($core.String v) { $_setString(1, v); }
+  set userId($core.int v) { $_setUnsignedInt32(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasUserId() => $_has(1);
   @$pb.TagNumber(2)
@@ -492,9 +492,9 @@ class Employee extends $pb.GeneratedMessage {
   void clearRole() => $_clearField(5);
 
   @$pb.TagNumber(6)
-  $core.String get officeId => $_getSZ(5);
+  $core.int get officeId => $_getIZ(5);
   @$pb.TagNumber(6)
-  set officeId($core.String v) { $_setString(5, v); }
+  set officeId($core.int v) { $_setUnsignedInt32(5, v); }
   @$pb.TagNumber(6)
   $core.bool hasOfficeId() => $_has(5);
   @$pb.TagNumber(6)
@@ -549,7 +549,7 @@ class Employee extends $pb.GeneratedMessage {
 
 class Office extends $pb.GeneratedMessage {
   factory Office({
-    $core.String? officeId,
+    $core.int? officeId,
     $core.String? city,
     $core.String? address,
     $core.String? phone,
@@ -578,7 +578,7 @@ class Office extends $pb.GeneratedMessage {
   factory Office.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Office', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'officeId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'officeId', $pb.PbFieldType.OU3)
     ..aOS(2, _omitFieldNames ? '' : 'city')
     ..aOS(3, _omitFieldNames ? '' : 'address')
     ..aOS(4, _omitFieldNames ? '' : 'phone')
@@ -608,9 +608,9 @@ class Office extends $pb.GeneratedMessage {
   static Office? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get officeId => $_getSZ(0);
+  $core.int get officeId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set officeId($core.String v) { $_setString(0, v); }
+  set officeId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasOfficeId() => $_has(0);
   @$pb.TagNumber(1)
@@ -656,17 +656,17 @@ class Office extends $pb.GeneratedMessage {
 
 class LegalCase extends $pb.GeneratedMessage {
   factory LegalCase({
-    $core.String? caseId,
-    $core.String? clientId,
-    $core.String? managerId,
-    $core.String? issueTypeId,
-    $core.String? partnerId,
+    $core.int? caseId,
+    $core.int? clientId,
+    $core.int? managerId,
+    $core.int? issueTypeId,
+    $core.int? partnerId,
     $2.Timestamp? consultationDate,
     $2.Timestamp? contractDate,
     $core.double? contractAmount,
     $core.double? expectedCommission,
     Status? status,
-    $core.String? paymentId,
+    $core.int? paymentId,
     $core.String? notes,
     $2.Timestamp? consultationScheduledDate,
     $core.String? consultationNotes,
@@ -725,17 +725,17 @@ class LegalCase extends $pb.GeneratedMessage {
   factory LegalCase.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LegalCase', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'caseId')
-    ..aOS(2, _omitFieldNames ? '' : 'clientId')
-    ..aOS(3, _omitFieldNames ? '' : 'managerId')
-    ..aOS(4, _omitFieldNames ? '' : 'issueTypeId')
-    ..aOS(5, _omitFieldNames ? '' : 'partnerId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'caseId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'clientId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'managerId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(4, _omitFieldNames ? '' : 'issueTypeId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(5, _omitFieldNames ? '' : 'partnerId', $pb.PbFieldType.OU3)
     ..aOM<$2.Timestamp>(6, _omitFieldNames ? '' : 'consultationDate', subBuilder: $2.Timestamp.create)
     ..aOM<$2.Timestamp>(7, _omitFieldNames ? '' : 'contractDate', subBuilder: $2.Timestamp.create)
     ..a<$core.double>(8, _omitFieldNames ? '' : 'contractAmount', $pb.PbFieldType.OD)
     ..a<$core.double>(9, _omitFieldNames ? '' : 'expectedCommission', $pb.PbFieldType.OD)
     ..e<Status>(10, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
-    ..aOS(11, _omitFieldNames ? '' : 'paymentId')
+    ..a<$core.int>(11, _omitFieldNames ? '' : 'paymentId', $pb.PbFieldType.OU3)
     ..aOS(12, _omitFieldNames ? '' : 'notes')
     ..aOM<$2.Timestamp>(13, _omitFieldNames ? '' : 'consultationScheduledDate', subBuilder: $2.Timestamp.create)
     ..aOS(14, _omitFieldNames ? '' : 'consultationNotes')
@@ -765,45 +765,45 @@ class LegalCase extends $pb.GeneratedMessage {
   static LegalCase? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get caseId => $_getSZ(0);
+  $core.int get caseId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set caseId($core.String v) { $_setString(0, v); }
+  set caseId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasCaseId() => $_has(0);
   @$pb.TagNumber(1)
   void clearCaseId() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get clientId => $_getSZ(1);
+  $core.int get clientId => $_getIZ(1);
   @$pb.TagNumber(2)
-  set clientId($core.String v) { $_setString(1, v); }
+  set clientId($core.int v) { $_setUnsignedInt32(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasClientId() => $_has(1);
   @$pb.TagNumber(2)
   void clearClientId() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get managerId => $_getSZ(2);
+  $core.int get managerId => $_getIZ(2);
   @$pb.TagNumber(3)
-  set managerId($core.String v) { $_setString(2, v); }
+  set managerId($core.int v) { $_setUnsignedInt32(2, v); }
   @$pb.TagNumber(3)
   $core.bool hasManagerId() => $_has(2);
   @$pb.TagNumber(3)
   void clearManagerId() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get issueTypeId => $_getSZ(3);
+  $core.int get issueTypeId => $_getIZ(3);
   @$pb.TagNumber(4)
-  set issueTypeId($core.String v) { $_setString(3, v); }
+  set issueTypeId($core.int v) { $_setUnsignedInt32(3, v); }
   @$pb.TagNumber(4)
   $core.bool hasIssueTypeId() => $_has(3);
   @$pb.TagNumber(4)
   void clearIssueTypeId() => $_clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get partnerId => $_getSZ(4);
+  $core.int get partnerId => $_getIZ(4);
   @$pb.TagNumber(5)
-  set partnerId($core.String v) { $_setString(4, v); }
+  set partnerId($core.int v) { $_setUnsignedInt32(4, v); }
   @$pb.TagNumber(5)
   $core.bool hasPartnerId() => $_has(4);
   @$pb.TagNumber(5)
@@ -859,9 +859,9 @@ class LegalCase extends $pb.GeneratedMessage {
   void clearStatus() => $_clearField(10);
 
   @$pb.TagNumber(11)
-  $core.String get paymentId => $_getSZ(10);
+  $core.int get paymentId => $_getIZ(10);
   @$pb.TagNumber(11)
-  set paymentId($core.String v) { $_setString(10, v); }
+  set paymentId($core.int v) { $_setUnsignedInt32(10, v); }
   @$pb.TagNumber(11)
   $core.bool hasPaymentId() => $_has(10);
   @$pb.TagNumber(11)
@@ -990,12 +990,12 @@ class TranslationOrder_BlankInfo extends $pb.GeneratedMessage {
 
 class TranslationOrder extends $pb.GeneratedMessage {
   factory TranslationOrder({
-    $core.String? orderId,
+    $core.int? orderId,
     $core.String? title,
-    $core.String? clientId,
-    $core.String? managerId,
-    $core.String? translatorId,
-    $core.String? officeId,
+    $core.int? clientId,
+    $core.int? managerId,
+    $core.int? translatorId,
+    $core.int? officeId,
     $core.String? documentTypeKey,
     $core.String? sourceLanguage,
     $core.String? targetLanguage,
@@ -1005,9 +1005,10 @@ class TranslationOrder extends $pb.GeneratedMessage {
     $core.double? totalSum,
     Priority? priority,
     TranslationProgressStatus? translationProgress,
-    $core.String? paymentId,
+    $core.int? paymentId,
     $core.Iterable<TranslationOrder_BlankInfo>? blanks,
     $core.String? notes,
+    ClientSource? source,
     $2.Timestamp? createdAt,
     $2.Timestamp? doneAt,
   }) {
@@ -1066,6 +1067,9 @@ class TranslationOrder extends $pb.GeneratedMessage {
     if (notes != null) {
       $result.notes = notes;
     }
+    if (source != null) {
+      $result.source = source;
+    }
     if (createdAt != null) {
       $result.createdAt = createdAt;
     }
@@ -1079,12 +1083,12 @@ class TranslationOrder extends $pb.GeneratedMessage {
   factory TranslationOrder.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TranslationOrder', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'orderId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'orderId', $pb.PbFieldType.OU3)
     ..aOS(2, _omitFieldNames ? '' : 'title')
-    ..aOS(3, _omitFieldNames ? '' : 'clientId')
-    ..aOS(4, _omitFieldNames ? '' : 'managerId')
-    ..aOS(5, _omitFieldNames ? '' : 'translatorId')
-    ..aOS(6, _omitFieldNames ? '' : 'officeId')
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'clientId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(4, _omitFieldNames ? '' : 'managerId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(5, _omitFieldNames ? '' : 'translatorId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(6, _omitFieldNames ? '' : 'officeId', $pb.PbFieldType.OU3)
     ..aOS(7, _omitFieldNames ? '' : 'documentTypeKey')
     ..aOS(8, _omitFieldNames ? '' : 'sourceLanguage')
     ..aOS(9, _omitFieldNames ? '' : 'targetLanguage')
@@ -1094,9 +1098,10 @@ class TranslationOrder extends $pb.GeneratedMessage {
     ..a<$core.double>(13, _omitFieldNames ? '' : 'totalSum', $pb.PbFieldType.OD)
     ..e<Priority>(14, _omitFieldNames ? '' : 'priority', $pb.PbFieldType.OE, defaultOrMaker: Priority.PRIORITY_UNSPECIFIED, valueOf: Priority.valueOf, enumValues: Priority.values)
     ..e<TranslationProgressStatus>(15, _omitFieldNames ? '' : 'translationProgress', $pb.PbFieldType.OE, defaultOrMaker: TranslationProgressStatus.TRANSLATION_PROGRESS_STATUS_UNSPECIFIED, valueOf: TranslationProgressStatus.valueOf, enumValues: TranslationProgressStatus.values)
-    ..aOS(16, _omitFieldNames ? '' : 'paymentId')
+    ..a<$core.int>(16, _omitFieldNames ? '' : 'paymentId', $pb.PbFieldType.OU3)
     ..pc<TranslationOrder_BlankInfo>(17, _omitFieldNames ? '' : 'blanks', $pb.PbFieldType.PM, subBuilder: TranslationOrder_BlankInfo.create)
     ..aOS(18, _omitFieldNames ? '' : 'notes')
+    ..e<ClientSource>(19, _omitFieldNames ? '' : 'source', $pb.PbFieldType.OE, defaultOrMaker: ClientSource.CLIENT_SOURCE_UNSPECIFIED, valueOf: ClientSource.valueOf, enumValues: ClientSource.values)
     ..aOM<$2.Timestamp>(22, _omitFieldNames ? '' : 'createdAt', subBuilder: $2.Timestamp.create)
     ..aOM<$2.Timestamp>(23, _omitFieldNames ? '' : 'doneAt', subBuilder: $2.Timestamp.create)
     ..hasRequiredFields = false
@@ -1124,9 +1129,9 @@ class TranslationOrder extends $pb.GeneratedMessage {
   static TranslationOrder? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get orderId => $_getSZ(0);
+  $core.int get orderId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set orderId($core.String v) { $_setString(0, v); }
+  set orderId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasOrderId() => $_has(0);
   @$pb.TagNumber(1)
@@ -1142,36 +1147,36 @@ class TranslationOrder extends $pb.GeneratedMessage {
   void clearTitle() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get clientId => $_getSZ(2);
+  $core.int get clientId => $_getIZ(2);
   @$pb.TagNumber(3)
-  set clientId($core.String v) { $_setString(2, v); }
+  set clientId($core.int v) { $_setUnsignedInt32(2, v); }
   @$pb.TagNumber(3)
   $core.bool hasClientId() => $_has(2);
   @$pb.TagNumber(3)
   void clearClientId() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get managerId => $_getSZ(3);
+  $core.int get managerId => $_getIZ(3);
   @$pb.TagNumber(4)
-  set managerId($core.String v) { $_setString(3, v); }
+  set managerId($core.int v) { $_setUnsignedInt32(3, v); }
   @$pb.TagNumber(4)
   $core.bool hasManagerId() => $_has(3);
   @$pb.TagNumber(4)
   void clearManagerId() => $_clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get translatorId => $_getSZ(4);
+  $core.int get translatorId => $_getIZ(4);
   @$pb.TagNumber(5)
-  set translatorId($core.String v) { $_setString(4, v); }
+  set translatorId($core.int v) { $_setUnsignedInt32(4, v); }
   @$pb.TagNumber(5)
   $core.bool hasTranslatorId() => $_has(4);
   @$pb.TagNumber(5)
   void clearTranslatorId() => $_clearField(5);
 
   @$pb.TagNumber(6)
-  $core.String get officeId => $_getSZ(5);
+  $core.int get officeId => $_getIZ(5);
   @$pb.TagNumber(6)
-  set officeId($core.String v) { $_setString(5, v); }
+  set officeId($core.int v) { $_setUnsignedInt32(5, v); }
   @$pb.TagNumber(6)
   $core.bool hasOfficeId() => $_has(5);
   @$pb.TagNumber(6)
@@ -1260,9 +1265,9 @@ class TranslationOrder extends $pb.GeneratedMessage {
   void clearTranslationProgress() => $_clearField(15);
 
   @$pb.TagNumber(16)
-  $core.String get paymentId => $_getSZ(15);
+  $core.int get paymentId => $_getIZ(15);
   @$pb.TagNumber(16)
-  set paymentId($core.String v) { $_setString(15, v); }
+  set paymentId($core.int v) { $_setUnsignedInt32(15, v); }
   @$pb.TagNumber(16)
   $core.bool hasPaymentId() => $_has(15);
   @$pb.TagNumber(16)
@@ -1281,37 +1286,46 @@ class TranslationOrder extends $pb.GeneratedMessage {
   @$pb.TagNumber(18)
   void clearNotes() => $_clearField(18);
 
+  @$pb.TagNumber(19)
+  ClientSource get source => $_getN(18);
+  @$pb.TagNumber(19)
+  set source(ClientSource v) { $_setField(19, v); }
+  @$pb.TagNumber(19)
+  $core.bool hasSource() => $_has(18);
+  @$pb.TagNumber(19)
+  void clearSource() => $_clearField(19);
+
   /// bool is_urgent = 19; // REMOVED - Redundant with Priority enum
   /// bool is_semi_urgent = 20; // REMOVED - Redundant with Priority enum
   /// client_notified field was here, now covered by TranslationProgressStatus.CLIENT_NOTIFIED
   @$pb.TagNumber(22)
-  $2.Timestamp get createdAt => $_getN(18);
+  $2.Timestamp get createdAt => $_getN(19);
   @$pb.TagNumber(22)
   set createdAt($2.Timestamp v) { $_setField(22, v); }
   @$pb.TagNumber(22)
-  $core.bool hasCreatedAt() => $_has(18);
+  $core.bool hasCreatedAt() => $_has(19);
   @$pb.TagNumber(22)
   void clearCreatedAt() => $_clearField(22);
   @$pb.TagNumber(22)
-  $2.Timestamp ensureCreatedAt() => $_ensure(18);
+  $2.Timestamp ensureCreatedAt() => $_ensure(19);
 
   @$pb.TagNumber(23)
-  $2.Timestamp get doneAt => $_getN(19);
+  $2.Timestamp get doneAt => $_getN(20);
   @$pb.TagNumber(23)
   set doneAt($2.Timestamp v) { $_setField(23, v); }
   @$pb.TagNumber(23)
-  $core.bool hasDoneAt() => $_has(19);
+  $core.bool hasDoneAt() => $_has(20);
   @$pb.TagNumber(23)
   void clearDoneAt() => $_clearField(23);
   @$pb.TagNumber(23)
-  $2.Timestamp ensureDoneAt() => $_ensure(19);
+  $2.Timestamp ensureDoneAt() => $_ensure(20);
 }
 
 class InsurancePolicy extends $pb.GeneratedMessage {
   factory InsurancePolicy({
-    $core.String? policyId,
-    $core.String? clientId,
-    $core.String? managerId,
+    $core.int? policyId,
+    $core.int? clientId,
+    $core.int? managerId,
     $core.String? policyNumber,
     $core.String? insuranceCompanyName,
     $core.String? insuranceLine,
@@ -1370,9 +1384,9 @@ class InsurancePolicy extends $pb.GeneratedMessage {
   factory InsurancePolicy.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'InsurancePolicy', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'policyId')
-    ..aOS(2, _omitFieldNames ? '' : 'clientId')
-    ..aOS(3, _omitFieldNames ? '' : 'managerId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'policyId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'clientId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'managerId', $pb.PbFieldType.OU3)
     ..aOS(4, _omitFieldNames ? '' : 'policyNumber')
     ..aOS(5, _omitFieldNames ? '' : 'insuranceCompanyName')
     ..aOS(6, _omitFieldNames ? '' : 'insuranceLine')
@@ -1408,27 +1422,27 @@ class InsurancePolicy extends $pb.GeneratedMessage {
   static InsurancePolicy? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get policyId => $_getSZ(0);
+  $core.int get policyId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set policyId($core.String v) { $_setString(0, v); }
+  set policyId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasPolicyId() => $_has(0);
   @$pb.TagNumber(1)
   void clearPolicyId() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get clientId => $_getSZ(1);
+  $core.int get clientId => $_getIZ(1);
   @$pb.TagNumber(2)
-  set clientId($core.String v) { $_setString(1, v); }
+  set clientId($core.int v) { $_setUnsignedInt32(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasClientId() => $_has(1);
   @$pb.TagNumber(2)
   void clearClientId() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get managerId => $_getSZ(2);
+  $core.int get managerId => $_getIZ(2);
   @$pb.TagNumber(3)
-  set managerId($core.String v) { $_setString(2, v); }
+  set managerId($core.int v) { $_setUnsignedInt32(2, v); }
   @$pb.TagNumber(3)
   $core.bool hasManagerId() => $_has(2);
   @$pb.TagNumber(3)
@@ -1532,13 +1546,13 @@ class InsurancePolicy extends $pb.GeneratedMessage {
 
 class TrainingEnrollment extends $pb.GeneratedMessage {
   factory TrainingEnrollment({
-    $core.String? enrollmentId,
-    $core.String? clientId,
-    $core.String? managerId,
-    $core.String? courseId,
+    $core.int? enrollmentId,
+    $core.int? clientId,
+    $core.int? managerId,
+    $core.int? courseId,
     $2.Timestamp? contractDate,
     Status? status,
-    $core.String? paymentId,
+    $core.int? paymentId,
     $core.String? notes,
     $core.bool? paid,
     $core.bool? accountantVerified,
@@ -1593,13 +1607,13 @@ class TrainingEnrollment extends $pb.GeneratedMessage {
   factory TrainingEnrollment.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TrainingEnrollment', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'enrollmentId')
-    ..aOS(2, _omitFieldNames ? '' : 'clientId')
-    ..aOS(3, _omitFieldNames ? '' : 'managerId')
-    ..aOS(4, _omitFieldNames ? '' : 'courseId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'enrollmentId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'clientId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'managerId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(4, _omitFieldNames ? '' : 'courseId', $pb.PbFieldType.OU3)
     ..aOM<$2.Timestamp>(5, _omitFieldNames ? '' : 'contractDate', subBuilder: $2.Timestamp.create)
     ..e<Status>(6, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
-    ..aOS(7, _omitFieldNames ? '' : 'paymentId')
+    ..a<$core.int>(7, _omitFieldNames ? '' : 'paymentId', $pb.PbFieldType.OU3)
     ..aOS(8, _omitFieldNames ? '' : 'notes')
     ..aOB(9, _omitFieldNames ? '' : 'paid')
     ..aOB(10, _omitFieldNames ? '' : 'accountantVerified')
@@ -1631,36 +1645,36 @@ class TrainingEnrollment extends $pb.GeneratedMessage {
   static TrainingEnrollment? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get enrollmentId => $_getSZ(0);
+  $core.int get enrollmentId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set enrollmentId($core.String v) { $_setString(0, v); }
+  set enrollmentId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasEnrollmentId() => $_has(0);
   @$pb.TagNumber(1)
   void clearEnrollmentId() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get clientId => $_getSZ(1);
+  $core.int get clientId => $_getIZ(1);
   @$pb.TagNumber(2)
-  set clientId($core.String v) { $_setString(1, v); }
+  set clientId($core.int v) { $_setUnsignedInt32(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasClientId() => $_has(1);
   @$pb.TagNumber(2)
   void clearClientId() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get managerId => $_getSZ(2);
+  $core.int get managerId => $_getIZ(2);
   @$pb.TagNumber(3)
-  set managerId($core.String v) { $_setString(2, v); }
+  set managerId($core.int v) { $_setUnsignedInt32(2, v); }
   @$pb.TagNumber(3)
   $core.bool hasManagerId() => $_has(2);
   @$pb.TagNumber(3)
   void clearManagerId() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get courseId => $_getSZ(3);
+  $core.int get courseId => $_getIZ(3);
   @$pb.TagNumber(4)
-  set courseId($core.String v) { $_setString(3, v); }
+  set courseId($core.int v) { $_setUnsignedInt32(3, v); }
   @$pb.TagNumber(4)
   $core.bool hasCourseId() => $_has(3);
   @$pb.TagNumber(4)
@@ -1687,9 +1701,9 @@ class TrainingEnrollment extends $pb.GeneratedMessage {
   void clearStatus() => $_clearField(6);
 
   @$pb.TagNumber(7)
-  $core.String get paymentId => $_getSZ(6);
+  $core.int get paymentId => $_getIZ(6);
   @$pb.TagNumber(7)
-  set paymentId($core.String v) { $_setString(6, v); }
+  set paymentId($core.int v) { $_setUnsignedInt32(6, v); }
   @$pb.TagNumber(7)
   $core.bool hasPaymentId() => $_has(6);
   @$pb.TagNumber(7)
@@ -1752,14 +1766,14 @@ class TrainingEnrollment extends $pb.GeneratedMessage {
 
 class AccountOpeningRequest extends $pb.GeneratedMessage {
   factory AccountOpeningRequest({
-    $core.String? requestId,
-    $core.String? clientId,
-    $core.String? managerId,
-    $core.String? bankId,
+    $core.int? requestId,
+    $core.int? clientId,
+    $core.int? managerId,
+    $core.int? bankId,
     Status? status,
     $2.Timestamp? applicationDate,
     $2.Timestamp? openedDate,
-    $core.String? paymentId,
+    $core.int? paymentId,
     $core.String? notes,
     $core.bool? agentCommissionReceived,
     $core.double? agencyCommissionAmountAtRequest,
@@ -1805,14 +1819,14 @@ class AccountOpeningRequest extends $pb.GeneratedMessage {
   factory AccountOpeningRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'AccountOpeningRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'requestId')
-    ..aOS(2, _omitFieldNames ? '' : 'clientId')
-    ..aOS(3, _omitFieldNames ? '' : 'managerId')
-    ..aOS(4, _omitFieldNames ? '' : 'bankId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'requestId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'clientId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'managerId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(4, _omitFieldNames ? '' : 'bankId', $pb.PbFieldType.OU3)
     ..e<Status>(5, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
     ..aOM<$2.Timestamp>(6, _omitFieldNames ? '' : 'applicationDate', subBuilder: $2.Timestamp.create)
     ..aOM<$2.Timestamp>(7, _omitFieldNames ? '' : 'openedDate', subBuilder: $2.Timestamp.create)
-    ..aOS(8, _omitFieldNames ? '' : 'paymentId')
+    ..a<$core.int>(8, _omitFieldNames ? '' : 'paymentId', $pb.PbFieldType.OU3)
     ..aOS(9, _omitFieldNames ? '' : 'notes')
     ..aOB(10, _omitFieldNames ? '' : 'agentCommissionReceived')
     ..a<$core.double>(11, _omitFieldNames ? '' : 'agencyCommissionAmountAtRequest', $pb.PbFieldType.OD)
@@ -1841,36 +1855,36 @@ class AccountOpeningRequest extends $pb.GeneratedMessage {
   static AccountOpeningRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get requestId => $_getSZ(0);
+  $core.int get requestId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set requestId($core.String v) { $_setString(0, v); }
+  set requestId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasRequestId() => $_has(0);
   @$pb.TagNumber(1)
   void clearRequestId() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get clientId => $_getSZ(1);
+  $core.int get clientId => $_getIZ(1);
   @$pb.TagNumber(2)
-  set clientId($core.String v) { $_setString(1, v); }
+  set clientId($core.int v) { $_setUnsignedInt32(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasClientId() => $_has(1);
   @$pb.TagNumber(2)
   void clearClientId() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get managerId => $_getSZ(2);
+  $core.int get managerId => $_getIZ(2);
   @$pb.TagNumber(3)
-  set managerId($core.String v) { $_setString(2, v); }
+  set managerId($core.int v) { $_setUnsignedInt32(2, v); }
   @$pb.TagNumber(3)
   $core.bool hasManagerId() => $_has(2);
   @$pb.TagNumber(3)
   void clearManagerId() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get bankId => $_getSZ(3);
+  $core.int get bankId => $_getIZ(3);
   @$pb.TagNumber(4)
-  set bankId($core.String v) { $_setString(3, v); }
+  set bankId($core.int v) { $_setUnsignedInt32(3, v); }
   @$pb.TagNumber(4)
   $core.bool hasBankId() => $_has(3);
   @$pb.TagNumber(4)
@@ -1908,9 +1922,9 @@ class AccountOpeningRequest extends $pb.GeneratedMessage {
   $2.Timestamp ensureOpenedDate() => $_ensure(6);
 
   @$pb.TagNumber(8)
-  $core.String get paymentId => $_getSZ(7);
+  $core.int get paymentId => $_getIZ(7);
   @$pb.TagNumber(8)
-  set paymentId($core.String v) { $_setString(7, v); }
+  set paymentId($core.int v) { $_setUnsignedInt32(7, v); }
   @$pb.TagNumber(8)
   $core.bool hasPaymentId() => $_has(7);
   @$pb.TagNumber(8)
@@ -1946,15 +1960,15 @@ class AccountOpeningRequest extends $pb.GeneratedMessage {
 
 class BusinessRegistration extends $pb.GeneratedMessage {
   factory BusinessRegistration({
-    $core.String? requestId,
-    $core.String? clientId,
-    $core.String? managerId,
-    $core.String? bankId,
+    $core.int? requestId,
+    $core.int? clientId,
+    $core.int? managerId,
+    $core.int? bankId,
     RegistrationType? registrationType,
     Status? status,
     $2.Timestamp? applicationDate,
     $2.Timestamp? registrationDate,
-    $core.String? paymentId,
+    $core.int? paymentId,
     $core.String? notes,
     $core.bool? agentCommissionReceived,
     $core.double? agencyCommissionAmountAtRequest,
@@ -2003,15 +2017,15 @@ class BusinessRegistration extends $pb.GeneratedMessage {
   factory BusinessRegistration.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'BusinessRegistration', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'requestId')
-    ..aOS(2, _omitFieldNames ? '' : 'clientId')
-    ..aOS(3, _omitFieldNames ? '' : 'managerId')
-    ..aOS(4, _omitFieldNames ? '' : 'bankId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'requestId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'clientId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'managerId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(4, _omitFieldNames ? '' : 'bankId', $pb.PbFieldType.OU3)
     ..e<RegistrationType>(5, _omitFieldNames ? '' : 'registrationType', $pb.PbFieldType.OE, defaultOrMaker: RegistrationType.REGISTRATION_TYPE_UNSPECIFIED, valueOf: RegistrationType.valueOf, enumValues: RegistrationType.values)
     ..e<Status>(6, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
     ..aOM<$2.Timestamp>(7, _omitFieldNames ? '' : 'applicationDate', subBuilder: $2.Timestamp.create)
     ..aOM<$2.Timestamp>(8, _omitFieldNames ? '' : 'registrationDate', subBuilder: $2.Timestamp.create)
-    ..aOS(9, _omitFieldNames ? '' : 'paymentId')
+    ..a<$core.int>(9, _omitFieldNames ? '' : 'paymentId', $pb.PbFieldType.OU3)
     ..aOS(10, _omitFieldNames ? '' : 'notes')
     ..aOB(11, _omitFieldNames ? '' : 'agentCommissionReceived')
     ..a<$core.double>(12, _omitFieldNames ? '' : 'agencyCommissionAmountAtRequest', $pb.PbFieldType.OD)
@@ -2040,36 +2054,36 @@ class BusinessRegistration extends $pb.GeneratedMessage {
   static BusinessRegistration? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get requestId => $_getSZ(0);
+  $core.int get requestId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set requestId($core.String v) { $_setString(0, v); }
+  set requestId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasRequestId() => $_has(0);
   @$pb.TagNumber(1)
   void clearRequestId() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get clientId => $_getSZ(1);
+  $core.int get clientId => $_getIZ(1);
   @$pb.TagNumber(2)
-  set clientId($core.String v) { $_setString(1, v); }
+  set clientId($core.int v) { $_setUnsignedInt32(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasClientId() => $_has(1);
   @$pb.TagNumber(2)
   void clearClientId() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get managerId => $_getSZ(2);
+  $core.int get managerId => $_getIZ(2);
   @$pb.TagNumber(3)
-  set managerId($core.String v) { $_setString(2, v); }
+  set managerId($core.int v) { $_setUnsignedInt32(2, v); }
   @$pb.TagNumber(3)
   $core.bool hasManagerId() => $_has(2);
   @$pb.TagNumber(3)
   void clearManagerId() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get bankId => $_getSZ(3);
+  $core.int get bankId => $_getIZ(3);
   @$pb.TagNumber(4)
-  set bankId($core.String v) { $_setString(3, v); }
+  set bankId($core.int v) { $_setUnsignedInt32(3, v); }
   @$pb.TagNumber(4)
   $core.bool hasBankId() => $_has(3);
   @$pb.TagNumber(4)
@@ -2116,9 +2130,9 @@ class BusinessRegistration extends $pb.GeneratedMessage {
   $2.Timestamp ensureRegistrationDate() => $_ensure(7);
 
   @$pb.TagNumber(9)
-  $core.String get paymentId => $_getSZ(8);
+  $core.int get paymentId => $_getIZ(8);
   @$pb.TagNumber(9)
-  set paymentId($core.String v) { $_setString(8, v); }
+  set paymentId($core.int v) { $_setUnsignedInt32(8, v); }
   @$pb.TagNumber(9)
   $core.bool hasPaymentId() => $_has(8);
   @$pb.TagNumber(9)
@@ -2154,10 +2168,10 @@ class BusinessRegistration extends $pb.GeneratedMessage {
 
 class LendingApplication extends $pb.GeneratedMessage {
   factory LendingApplication({
-    $core.String? requestId,
-    $core.String? clientId,
-    $core.String? managerId,
-    $core.String? bankId,
+    $core.int? requestId,
+    $core.int? clientId,
+    $core.int? managerId,
+    $core.int? bankId,
     $core.double? requestedAmount,
     $core.double? approvedAmount,
     $2.Timestamp? applicationDate,
@@ -2165,7 +2179,7 @@ class LendingApplication extends $pb.GeneratedMessage {
     $2.Timestamp? fundsReceivedDate,
     $2.Timestamp? companyContractDate,
     Status? status,
-    $core.String? paymentId,
+    $core.int? paymentId,
     $core.String? notes,
     $core.double? companyCommissionPercent,
     $core.double? calculatedCommissionAmount,
@@ -2231,10 +2245,10 @@ class LendingApplication extends $pb.GeneratedMessage {
   factory LendingApplication.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LendingApplication', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'requestId')
-    ..aOS(2, _omitFieldNames ? '' : 'clientId')
-    ..aOS(3, _omitFieldNames ? '' : 'managerId')
-    ..aOS(4, _omitFieldNames ? '' : 'bankId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'requestId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'clientId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'managerId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(4, _omitFieldNames ? '' : 'bankId', $pb.PbFieldType.OU3)
     ..a<$core.double>(5, _omitFieldNames ? '' : 'requestedAmount', $pb.PbFieldType.OD)
     ..a<$core.double>(6, _omitFieldNames ? '' : 'approvedAmount', $pb.PbFieldType.OD)
     ..aOM<$2.Timestamp>(7, _omitFieldNames ? '' : 'applicationDate', subBuilder: $2.Timestamp.create)
@@ -2242,7 +2256,7 @@ class LendingApplication extends $pb.GeneratedMessage {
     ..aOM<$2.Timestamp>(9, _omitFieldNames ? '' : 'fundsReceivedDate', subBuilder: $2.Timestamp.create)
     ..aOM<$2.Timestamp>(10, _omitFieldNames ? '' : 'companyContractDate', subBuilder: $2.Timestamp.create)
     ..e<Status>(11, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OE, defaultOrMaker: Status.STATUS_UNSPECIFIED, valueOf: Status.valueOf, enumValues: Status.values)
-    ..aOS(12, _omitFieldNames ? '' : 'paymentId')
+    ..a<$core.int>(12, _omitFieldNames ? '' : 'paymentId', $pb.PbFieldType.OU3)
     ..aOS(13, _omitFieldNames ? '' : 'notes')
     ..a<$core.double>(14, _omitFieldNames ? '' : 'companyCommissionPercent', $pb.PbFieldType.OD)
     ..a<$core.double>(15, _omitFieldNames ? '' : 'calculatedCommissionAmount', $pb.PbFieldType.OD)
@@ -2273,36 +2287,36 @@ class LendingApplication extends $pb.GeneratedMessage {
   static LendingApplication? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get requestId => $_getSZ(0);
+  $core.int get requestId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set requestId($core.String v) { $_setString(0, v); }
+  set requestId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasRequestId() => $_has(0);
   @$pb.TagNumber(1)
   void clearRequestId() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get clientId => $_getSZ(1);
+  $core.int get clientId => $_getIZ(1);
   @$pb.TagNumber(2)
-  set clientId($core.String v) { $_setString(1, v); }
+  set clientId($core.int v) { $_setUnsignedInt32(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasClientId() => $_has(1);
   @$pb.TagNumber(2)
   void clearClientId() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get managerId => $_getSZ(2);
+  $core.int get managerId => $_getIZ(2);
   @$pb.TagNumber(3)
-  set managerId($core.String v) { $_setString(2, v); }
+  set managerId($core.int v) { $_setUnsignedInt32(2, v); }
   @$pb.TagNumber(3)
   $core.bool hasManagerId() => $_has(2);
   @$pb.TagNumber(3)
   void clearManagerId() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get bankId => $_getSZ(3);
+  $core.int get bankId => $_getIZ(3);
   @$pb.TagNumber(4)
-  set bankId($core.String v) { $_setString(3, v); }
+  set bankId($core.int v) { $_setUnsignedInt32(3, v); }
   @$pb.TagNumber(4)
   $core.bool hasBankId() => $_has(3);
   @$pb.TagNumber(4)
@@ -2380,9 +2394,9 @@ class LendingApplication extends $pb.GeneratedMessage {
   void clearStatus() => $_clearField(11);
 
   @$pb.TagNumber(12)
-  $core.String get paymentId => $_getSZ(11);
+  $core.int get paymentId => $_getIZ(11);
   @$pb.TagNumber(12)
-  set paymentId($core.String v) { $_setString(11, v); }
+  set paymentId($core.int v) { $_setUnsignedInt32(11, v); }
   @$pb.TagNumber(12)
   $core.bool hasPaymentId() => $_has(11);
   @$pb.TagNumber(12)
@@ -2436,7 +2450,7 @@ class LendingApplication extends $pb.GeneratedMessage {
 
 class Partner extends $pb.GeneratedMessage {
   factory Partner({
-    $core.String? partnerId,
+    $core.int? partnerId,
     $core.String? name,
     $core.String? cityOfResidence,
     $core.String? contactInfo,
@@ -2477,7 +2491,7 @@ class Partner extends $pb.GeneratedMessage {
   factory Partner.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Partner', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'partnerId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'partnerId', $pb.PbFieldType.OU3)
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'cityOfResidence')
     ..aOS(4, _omitFieldNames ? '' : 'contactInfo')
@@ -2510,9 +2524,9 @@ class Partner extends $pb.GeneratedMessage {
   static Partner? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get partnerId => $_getSZ(0);
+  $core.int get partnerId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set partnerId($core.String v) { $_setString(0, v); }
+  set partnerId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasPartnerId() => $_has(0);
   @$pb.TagNumber(1)
@@ -2573,7 +2587,7 @@ class Partner extends $pb.GeneratedMessage {
 
 class LegalIssueType extends $pb.GeneratedMessage {
   factory LegalIssueType({
-    $core.String? issueTypeId,
+    $core.int? issueTypeId,
     $core.String? name,
     $core.String? description,
     $core.String? notes,
@@ -2598,7 +2612,7 @@ class LegalIssueType extends $pb.GeneratedMessage {
   factory LegalIssueType.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LegalIssueType', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'issueTypeId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'issueTypeId', $pb.PbFieldType.OU3)
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'description')
     ..aOS(4, _omitFieldNames ? '' : 'notes')
@@ -2627,9 +2641,9 @@ class LegalIssueType extends $pb.GeneratedMessage {
   static LegalIssueType? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get issueTypeId => $_getSZ(0);
+  $core.int get issueTypeId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set issueTypeId($core.String v) { $_setString(0, v); }
+  set issueTypeId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasIssueTypeId() => $_has(0);
   @$pb.TagNumber(1)
@@ -2666,13 +2680,13 @@ class LegalIssueType extends $pb.GeneratedMessage {
 
 class TrainingCourse extends $pb.GeneratedMessage {
   factory TrainingCourse({
-    $core.String? courseId,
+    $core.int? courseId,
     $core.String? name,
     $core.double? price,
     $core.double? commissionPercent,
     $core.String? description,
     $core.String? notes,
-    $core.String? parentCourseId,
+    $core.int? parentCourseId,
   }) {
     final $result = create();
     if (courseId != null) {
@@ -2703,13 +2717,13 @@ class TrainingCourse extends $pb.GeneratedMessage {
   factory TrainingCourse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TrainingCourse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'courseId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'courseId', $pb.PbFieldType.OU3)
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..a<$core.double>(3, _omitFieldNames ? '' : 'price', $pb.PbFieldType.OD)
     ..a<$core.double>(4, _omitFieldNames ? '' : 'commissionPercent', $pb.PbFieldType.OD)
     ..aOS(5, _omitFieldNames ? '' : 'description')
     ..aOS(6, _omitFieldNames ? '' : 'notes')
-    ..aOS(7, _omitFieldNames ? '' : 'parentCourseId')
+    ..a<$core.int>(7, _omitFieldNames ? '' : 'parentCourseId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -2735,9 +2749,9 @@ class TrainingCourse extends $pb.GeneratedMessage {
   static TrainingCourse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get courseId => $_getSZ(0);
+  $core.int get courseId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set courseId($core.String v) { $_setString(0, v); }
+  set courseId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasCourseId() => $_has(0);
   @$pb.TagNumber(1)
@@ -2790,9 +2804,9 @@ class TrainingCourse extends $pb.GeneratedMessage {
   void clearNotes() => $_clearField(6);
 
   @$pb.TagNumber(7)
-  $core.String get parentCourseId => $_getSZ(6);
+  $core.int get parentCourseId => $_getIZ(6);
   @$pb.TagNumber(7)
-  set parentCourseId($core.String v) { $_setString(6, v); }
+  set parentCourseId($core.int v) { $_setUnsignedInt32(6, v); }
   @$pb.TagNumber(7)
   $core.bool hasParentCourseId() => $_has(6);
   @$pb.TagNumber(7)
@@ -2803,8 +2817,8 @@ class TrainingCourse extends $pb.GeneratedMessage {
 /// Service methods would be needed to manage (CRUD) these price lists.
 class TranslationPriceListItem extends $pb.GeneratedMessage {
   factory TranslationPriceListItem({
-    $core.String? itemId,
-    $core.String? officeId,
+    $core.int? itemId,
+    $core.int? officeId,
     $core.String? documentTypeKey,
     $core.double? pricePerPage,
     $core.String? currencyCode,
@@ -2840,8 +2854,8 @@ class TranslationPriceListItem extends $pb.GeneratedMessage {
   factory TranslationPriceListItem.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'TranslationPriceListItem', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'itemId')
-    ..aOS(2, _omitFieldNames ? '' : 'officeId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'itemId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'officeId', $pb.PbFieldType.OU3)
     ..aOS(3, _omitFieldNames ? '' : 'documentTypeKey')
     ..a<$core.double>(4, _omitFieldNames ? '' : 'pricePerPage', $pb.PbFieldType.OD)
     ..aOS(6, _omitFieldNames ? '' : 'currencyCode')
@@ -2872,18 +2886,18 @@ class TranslationPriceListItem extends $pb.GeneratedMessage {
   static TranslationPriceListItem? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get itemId => $_getSZ(0);
+  $core.int get itemId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set itemId($core.String v) { $_setString(0, v); }
+  set itemId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasItemId() => $_has(0);
   @$pb.TagNumber(1)
   void clearItemId() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get officeId => $_getSZ(1);
+  $core.int get officeId => $_getIZ(1);
   @$pb.TagNumber(2)
-  set officeId($core.String v) { $_setString(1, v); }
+  set officeId($core.int v) { $_setUnsignedInt32(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasOfficeId() => $_has(1);
   @$pb.TagNumber(2)
@@ -2943,7 +2957,7 @@ class TranslationPriceListItem extends $pb.GeneratedMessage {
 /// Bank message
 class Bank extends $pb.GeneratedMessage {
   factory Bank({
-    $core.String? bankId,
+    $core.int? bankId,
     $core.String? name,
     $core.String? address,
     $core.String? contactPerson,
@@ -2976,7 +2990,7 @@ class Bank extends $pb.GeneratedMessage {
   factory Bank.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Bank', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'bankId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'bankId', $pb.PbFieldType.OU3)
     ..aOS(2, _omitFieldNames ? '' : 'name')
     ..aOS(3, _omitFieldNames ? '' : 'address')
     ..aOS(4, _omitFieldNames ? '' : 'contactPerson')
@@ -3007,9 +3021,9 @@ class Bank extends $pb.GeneratedMessage {
   static Bank? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get bankId => $_getSZ(0);
+  $core.int get bankId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set bankId($core.String v) { $_setString(0, v); }
+  set bankId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasBankId() => $_has(0);
   @$pb.TagNumber(1)
@@ -3064,9 +3078,9 @@ class Bank extends $pb.GeneratedMessage {
 /// Interaction message
 class Interaction extends $pb.GeneratedMessage {
   factory Interaction({
-    $core.String? interactionId,
-    $core.String? clientId,
-    $core.String? managerId,
+    $core.int? interactionId,
+    $core.int? clientId,
+    $core.int? managerId,
     InteractionType? type,
     $2.Timestamp? interactionDate,
     $core.String? summary,
@@ -3101,9 +3115,9 @@ class Interaction extends $pb.GeneratedMessage {
   factory Interaction.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Interaction', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'interactionId')
-    ..aOS(2, _omitFieldNames ? '' : 'clientId')
-    ..aOS(3, _omitFieldNames ? '' : 'managerId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'interactionId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'clientId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'managerId', $pb.PbFieldType.OU3)
     ..e<InteractionType>(4, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: InteractionType.INTERACTION_TYPE_UNSPECIFIED, valueOf: InteractionType.valueOf, enumValues: InteractionType.values)
     ..aOM<$2.Timestamp>(5, _omitFieldNames ? '' : 'interactionDate', subBuilder: $2.Timestamp.create)
     ..aOS(6, _omitFieldNames ? '' : 'summary')
@@ -3133,27 +3147,27 @@ class Interaction extends $pb.GeneratedMessage {
   static Interaction? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get interactionId => $_getSZ(0);
+  $core.int get interactionId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set interactionId($core.String v) { $_setString(0, v); }
+  set interactionId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasInteractionId() => $_has(0);
   @$pb.TagNumber(1)
   void clearInteractionId() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get clientId => $_getSZ(1);
+  $core.int get clientId => $_getIZ(1);
   @$pb.TagNumber(2)
-  set clientId($core.String v) { $_setString(1, v); }
+  set clientId($core.int v) { $_setUnsignedInt32(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasClientId() => $_has(1);
   @$pb.TagNumber(2)
   void clearClientId() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get managerId => $_getSZ(2);
+  $core.int get managerId => $_getIZ(2);
   @$pb.TagNumber(3)
-  set managerId($core.String v) { $_setString(2, v); }
+  set managerId($core.int v) { $_setUnsignedInt32(2, v); }
   @$pb.TagNumber(3)
   $core.bool hasManagerId() => $_has(2);
   @$pb.TagNumber(3)
@@ -3201,9 +3215,9 @@ class Interaction extends $pb.GeneratedMessage {
 /// Payment message
 class Payment extends $pb.GeneratedMessage {
   factory Payment({
-    $core.String? paymentId,
-    $core.String? clientId,
-    $core.String? relatedEntityId,
+    $core.int? paymentId,
+    $core.int? clientId,
+    $core.int? relatedEntityId,
     ServiceCategory? serviceCategory,
     $core.double? amount,
     $core.String? currencyCode,
@@ -3254,9 +3268,9 @@ class Payment extends $pb.GeneratedMessage {
   factory Payment.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Payment', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'paymentId')
-    ..aOS(2, _omitFieldNames ? '' : 'clientId')
-    ..aOS(3, _omitFieldNames ? '' : 'relatedEntityId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'paymentId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'clientId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(3, _omitFieldNames ? '' : 'relatedEntityId', $pb.PbFieldType.OU3)
     ..e<ServiceCategory>(4, _omitFieldNames ? '' : 'serviceCategory', $pb.PbFieldType.OE, defaultOrMaker: ServiceCategory.SERVICE_CATEGORY_UNSPECIFIED, valueOf: ServiceCategory.valueOf, enumValues: ServiceCategory.values)
     ..a<$core.double>(5, _omitFieldNames ? '' : 'amount', $pb.PbFieldType.OD)
     ..aOS(6, _omitFieldNames ? '' : 'currencyCode')
@@ -3290,27 +3304,27 @@ class Payment extends $pb.GeneratedMessage {
   static Payment? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get paymentId => $_getSZ(0);
+  $core.int get paymentId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set paymentId($core.String v) { $_setString(0, v); }
+  set paymentId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasPaymentId() => $_has(0);
   @$pb.TagNumber(1)
   void clearPaymentId() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get clientId => $_getSZ(1);
+  $core.int get clientId => $_getIZ(1);
   @$pb.TagNumber(2)
-  set clientId($core.String v) { $_setString(1, v); }
+  set clientId($core.int v) { $_setUnsignedInt32(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasClientId() => $_has(1);
   @$pb.TagNumber(2)
   void clearClientId() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get relatedEntityId => $_getSZ(2);
+  $core.int get relatedEntityId => $_getIZ(2);
   @$pb.TagNumber(3)
-  set relatedEntityId($core.String v) { $_setString(2, v); }
+  set relatedEntityId($core.int v) { $_setUnsignedInt32(2, v); }
   @$pb.TagNumber(3)
   $core.bool hasRelatedEntityId() => $_has(2);
   @$pb.TagNumber(3)
@@ -3393,12 +3407,12 @@ class Payment extends $pb.GeneratedMessage {
 
 class FinancialReportItem extends $pb.GeneratedMessage {
   factory FinancialReportItem({
-    $core.String? itemId,
+    $core.int? itemId,
     ServiceCategory? serviceCategory,
     $core.String? itemDescription,
-    $core.String? clientId,
+    $core.int? clientId,
     $core.String? clientName,
-    $core.String? managerId,
+    $core.int? managerId,
     $core.String? managerName,
     $2.Timestamp? itemDate,
     $2.Timestamp? dueDate,
@@ -3462,12 +3476,12 @@ class FinancialReportItem extends $pb.GeneratedMessage {
   factory FinancialReportItem.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'FinancialReportItem', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'itemId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'itemId', $pb.PbFieldType.OU3)
     ..e<ServiceCategory>(2, _omitFieldNames ? '' : 'serviceCategory', $pb.PbFieldType.OE, defaultOrMaker: ServiceCategory.SERVICE_CATEGORY_UNSPECIFIED, valueOf: ServiceCategory.valueOf, enumValues: ServiceCategory.values)
     ..aOS(3, _omitFieldNames ? '' : 'itemDescription')
-    ..aOS(4, _omitFieldNames ? '' : 'clientId')
+    ..a<$core.int>(4, _omitFieldNames ? '' : 'clientId', $pb.PbFieldType.OU3)
     ..aOS(5, _omitFieldNames ? '' : 'clientName')
-    ..aOS(6, _omitFieldNames ? '' : 'managerId')
+    ..a<$core.int>(6, _omitFieldNames ? '' : 'managerId', $pb.PbFieldType.OU3)
     ..aOS(7, _omitFieldNames ? '' : 'managerName')
     ..aOM<$2.Timestamp>(8, _omitFieldNames ? '' : 'itemDate', subBuilder: $2.Timestamp.create)
     ..aOM<$2.Timestamp>(9, _omitFieldNames ? '' : 'dueDate', subBuilder: $2.Timestamp.create)
@@ -3502,9 +3516,9 @@ class FinancialReportItem extends $pb.GeneratedMessage {
   static FinancialReportItem? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get itemId => $_getSZ(0);
+  $core.int get itemId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set itemId($core.String v) { $_setString(0, v); }
+  set itemId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasItemId() => $_has(0);
   @$pb.TagNumber(1)
@@ -3529,9 +3543,9 @@ class FinancialReportItem extends $pb.GeneratedMessage {
   void clearItemDescription() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get clientId => $_getSZ(3);
+  $core.int get clientId => $_getIZ(3);
   @$pb.TagNumber(4)
-  set clientId($core.String v) { $_setString(3, v); }
+  set clientId($core.int v) { $_setUnsignedInt32(3, v); }
   @$pb.TagNumber(4)
   $core.bool hasClientId() => $_has(3);
   @$pb.TagNumber(4)
@@ -3547,9 +3561,9 @@ class FinancialReportItem extends $pb.GeneratedMessage {
   void clearClientName() => $_clearField(5);
 
   @$pb.TagNumber(6)
-  $core.String get managerId => $_getSZ(5);
+  $core.int get managerId => $_getIZ(5);
   @$pb.TagNumber(6)
-  set managerId($core.String v) { $_setString(5, v); }
+  set managerId($core.int v) { $_setUnsignedInt32(5, v); }
   @$pb.TagNumber(6)
   $core.bool hasManagerId() => $_has(5);
   @$pb.TagNumber(6)
@@ -3648,8 +3662,8 @@ class GetFinancialReportRequest extends $pb.GeneratedMessage {
     $2.Timestamp? startDate,
     $2.Timestamp? endDate,
     $core.Iterable<ServiceCategory>? serviceCategories,
-    $core.String? managerIdFilter,
-    $core.String? clientIdFilter,
+    $core.int? managerIdFilter,
+    $core.int? clientIdFilter,
     $core.int? pageSize,
     $core.String? pageToken,
   }) {
@@ -3685,8 +3699,8 @@ class GetFinancialReportRequest extends $pb.GeneratedMessage {
     ..aOM<$2.Timestamp>(1, _omitFieldNames ? '' : 'startDate', subBuilder: $2.Timestamp.create)
     ..aOM<$2.Timestamp>(2, _omitFieldNames ? '' : 'endDate', subBuilder: $2.Timestamp.create)
     ..pc<ServiceCategory>(3, _omitFieldNames ? '' : 'serviceCategories', $pb.PbFieldType.KE, valueOf: ServiceCategory.valueOf, enumValues: ServiceCategory.values, defaultEnumValue: ServiceCategory.SERVICE_CATEGORY_UNSPECIFIED)
-    ..aOS(4, _omitFieldNames ? '' : 'managerIdFilter')
-    ..aOS(5, _omitFieldNames ? '' : 'clientIdFilter')
+    ..a<$core.int>(4, _omitFieldNames ? '' : 'managerIdFilter', $pb.PbFieldType.OU3)
+    ..a<$core.int>(5, _omitFieldNames ? '' : 'clientIdFilter', $pb.PbFieldType.OU3)
     ..a<$core.int>(6, _omitFieldNames ? '' : 'pageSize', $pb.PbFieldType.O3)
     ..aOS(7, _omitFieldNames ? '' : 'pageToken')
     ..hasRequiredFields = false
@@ -3739,18 +3753,18 @@ class GetFinancialReportRequest extends $pb.GeneratedMessage {
   $pb.PbList<ServiceCategory> get serviceCategories => $_getList(2);
 
   @$pb.TagNumber(4)
-  $core.String get managerIdFilter => $_getSZ(3);
+  $core.int get managerIdFilter => $_getIZ(3);
   @$pb.TagNumber(4)
-  set managerIdFilter($core.String v) { $_setString(3, v); }
+  set managerIdFilter($core.int v) { $_setUnsignedInt32(3, v); }
   @$pb.TagNumber(4)
   $core.bool hasManagerIdFilter() => $_has(3);
   @$pb.TagNumber(4)
   void clearManagerIdFilter() => $_clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get clientIdFilter => $_getSZ(4);
+  $core.int get clientIdFilter => $_getIZ(4);
   @$pb.TagNumber(5)
-  set clientIdFilter($core.String v) { $_setString(4, v); }
+  set clientIdFilter($core.int v) { $_setUnsignedInt32(4, v); }
   @$pb.TagNumber(5)
   $core.bool hasClientIdFilter() => $_has(4);
   @$pb.TagNumber(5)
@@ -3958,7 +3972,7 @@ class CreateClientRequest extends $pb.GeneratedMessage {
 
 class CreateClientResponse extends $pb.GeneratedMessage {
   factory CreateClientResponse({
-    $core.String? clientId,
+    $core.int? clientId,
   }) {
     final $result = create();
     if (clientId != null) {
@@ -3971,7 +3985,7 @@ class CreateClientResponse extends $pb.GeneratedMessage {
   factory CreateClientResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateClientResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'clientId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'clientId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -3997,9 +4011,9 @@ class CreateClientResponse extends $pb.GeneratedMessage {
   static CreateClientResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get clientId => $_getSZ(0);
+  $core.int get clientId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set clientId($core.String v) { $_setString(0, v); }
+  set clientId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasClientId() => $_has(0);
   @$pb.TagNumber(1)
@@ -4008,7 +4022,7 @@ class CreateClientResponse extends $pb.GeneratedMessage {
 
 class GetClientRequest extends $pb.GeneratedMessage {
   factory GetClientRequest({
-    $core.String? clientId,
+    $core.int? clientId,
   }) {
     final $result = create();
     if (clientId != null) {
@@ -4021,7 +4035,7 @@ class GetClientRequest extends $pb.GeneratedMessage {
   factory GetClientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetClientRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'clientId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'clientId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -4047,9 +4061,9 @@ class GetClientRequest extends $pb.GeneratedMessage {
   static GetClientRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get clientId => $_getSZ(0);
+  $core.int get clientId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set clientId($core.String v) { $_setString(0, v); }
+  set clientId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasClientId() => $_has(0);
   @$pb.TagNumber(1)
@@ -4110,7 +4124,7 @@ class GetClientResponse extends $pb.GeneratedMessage {
 
 class UpdateClientRequest extends $pb.GeneratedMessage {
   factory UpdateClientRequest({
-    $core.String? clientId,
+    $core.int? clientId,
     Client? clientData,
     $fixnum.Int64? telegramId,
   }) {
@@ -4131,7 +4145,7 @@ class UpdateClientRequest extends $pb.GeneratedMessage {
   factory UpdateClientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateClientRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'clientId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'clientId', $pb.PbFieldType.OU3)
     ..aOM<Client>(2, _omitFieldNames ? '' : 'clientData', subBuilder: Client.create)
     ..aInt64(3, _omitFieldNames ? '' : 'telegramId')
     ..hasRequiredFields = false
@@ -4159,9 +4173,9 @@ class UpdateClientRequest extends $pb.GeneratedMessage {
   static UpdateClientRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get clientId => $_getSZ(0);
+  $core.int get clientId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set clientId($core.String v) { $_setString(0, v); }
+  set clientId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasClientId() => $_has(0);
   @$pb.TagNumber(1)
@@ -4243,7 +4257,7 @@ class UpdateClientResponse extends $pb.GeneratedMessage {
 
 class DeleteClientRequest extends $pb.GeneratedMessage {
   factory DeleteClientRequest({
-    $core.String? clientId,
+    $core.int? clientId,
   }) {
     final $result = create();
     if (clientId != null) {
@@ -4256,7 +4270,7 @@ class DeleteClientRequest extends $pb.GeneratedMessage {
   factory DeleteClientRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteClientRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'clientId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'clientId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -4282,9 +4296,9 @@ class DeleteClientRequest extends $pb.GeneratedMessage {
   static DeleteClientRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get clientId => $_getSZ(0);
+  $core.int get clientId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set clientId($core.String v) { $_setString(0, v); }
+  set clientId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasClientId() => $_has(0);
   @$pb.TagNumber(1)
@@ -4565,8 +4579,8 @@ class CreateEmployeeRequest extends $pb.GeneratedMessage {
 
 class CreateEmployeeResponse extends $pb.GeneratedMessage {
   factory CreateEmployeeResponse({
-    $core.String? employeeId,
-    $core.String? userId,
+    $core.int? employeeId,
+    $core.int? userId,
   }) {
     final $result = create();
     if (employeeId != null) {
@@ -4582,8 +4596,8 @@ class CreateEmployeeResponse extends $pb.GeneratedMessage {
   factory CreateEmployeeResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateEmployeeResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'employeeId')
-    ..aOS(2, _omitFieldNames ? '' : 'userId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'employeeId', $pb.PbFieldType.OU3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'userId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -4609,18 +4623,18 @@ class CreateEmployeeResponse extends $pb.GeneratedMessage {
   static CreateEmployeeResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get employeeId => $_getSZ(0);
+  $core.int get employeeId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set employeeId($core.String v) { $_setString(0, v); }
+  set employeeId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasEmployeeId() => $_has(0);
   @$pb.TagNumber(1)
   void clearEmployeeId() => $_clearField(1);
 
   @$pb.TagNumber(2)
-  $core.String get userId => $_getSZ(1);
+  $core.int get userId => $_getIZ(1);
   @$pb.TagNumber(2)
-  set userId($core.String v) { $_setString(1, v); }
+  set userId($core.int v) { $_setUnsignedInt32(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasUserId() => $_has(1);
   @$pb.TagNumber(2)
@@ -4629,7 +4643,7 @@ class CreateEmployeeResponse extends $pb.GeneratedMessage {
 
 class GetEmployeeRequest extends $pb.GeneratedMessage {
   factory GetEmployeeRequest({
-    $core.String? employeeId,
+    $core.int? employeeId,
   }) {
     final $result = create();
     if (employeeId != null) {
@@ -4642,7 +4656,7 @@ class GetEmployeeRequest extends $pb.GeneratedMessage {
   factory GetEmployeeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetEmployeeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'employeeId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'employeeId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -4668,9 +4682,9 @@ class GetEmployeeRequest extends $pb.GeneratedMessage {
   static GetEmployeeRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get employeeId => $_getSZ(0);
+  $core.int get employeeId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set employeeId($core.String v) { $_setString(0, v); }
+  set employeeId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasEmployeeId() => $_has(0);
   @$pb.TagNumber(1)
@@ -4731,7 +4745,7 @@ class GetEmployeeResponse extends $pb.GeneratedMessage {
 
 class UpdateEmployeeRequest extends $pb.GeneratedMessage {
   factory UpdateEmployeeRequest({
-    $core.String? employeeId,
+    $core.int? employeeId,
     Employee? employeeData,
     $fixnum.Int64? telegramId,
     $core.String? password,
@@ -4756,7 +4770,7 @@ class UpdateEmployeeRequest extends $pb.GeneratedMessage {
   factory UpdateEmployeeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateEmployeeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'employeeId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'employeeId', $pb.PbFieldType.OU3)
     ..aOM<Employee>(2, _omitFieldNames ? '' : 'employeeData', subBuilder: Employee.create)
     ..aInt64(3, _omitFieldNames ? '' : 'telegramId')
     ..aOS(4, _omitFieldNames ? '' : 'password')
@@ -4785,9 +4799,9 @@ class UpdateEmployeeRequest extends $pb.GeneratedMessage {
   static UpdateEmployeeRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get employeeId => $_getSZ(0);
+  $core.int get employeeId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set employeeId($core.String v) { $_setString(0, v); }
+  set employeeId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasEmployeeId() => $_has(0);
   @$pb.TagNumber(1)
@@ -4878,7 +4892,7 @@ class UpdateEmployeeResponse extends $pb.GeneratedMessage {
 
 class DeleteEmployeeRequest extends $pb.GeneratedMessage {
   factory DeleteEmployeeRequest({
-    $core.String? employeeId,
+    $core.int? employeeId,
   }) {
     final $result = create();
     if (employeeId != null) {
@@ -4891,7 +4905,7 @@ class DeleteEmployeeRequest extends $pb.GeneratedMessage {
   factory DeleteEmployeeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteEmployeeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'employeeId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'employeeId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -4917,9 +4931,9 @@ class DeleteEmployeeRequest extends $pb.GeneratedMessage {
   static DeleteEmployeeRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get employeeId => $_getSZ(0);
+  $core.int get employeeId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set employeeId($core.String v) { $_setString(0, v); }
+  set employeeId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasEmployeeId() => $_has(0);
   @$pb.TagNumber(1)
@@ -5270,7 +5284,7 @@ class CreateUserRequest extends $pb.GeneratedMessage {
 
 class CreateUserResponse extends $pb.GeneratedMessage {
   factory CreateUserResponse({
-    $core.String? userId,
+    $core.int? userId,
   }) {
     final $result = create();
     if (userId != null) {
@@ -5283,7 +5297,7 @@ class CreateUserResponse extends $pb.GeneratedMessage {
   factory CreateUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateUserResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'userId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'userId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -5309,9 +5323,9 @@ class CreateUserResponse extends $pb.GeneratedMessage {
   static CreateUserResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get userId => $_getSZ(0);
+  $core.int get userId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set userId($core.String v) { $_setString(0, v); }
+  set userId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasUserId() => $_has(0);
   @$pb.TagNumber(1)
@@ -5320,7 +5334,7 @@ class CreateUserResponse extends $pb.GeneratedMessage {
 
 class GetUserRequest extends $pb.GeneratedMessage {
   factory GetUserRequest({
-    $core.String? userId,
+    $core.int? userId,
   }) {
     final $result = create();
     if (userId != null) {
@@ -5333,7 +5347,7 @@ class GetUserRequest extends $pb.GeneratedMessage {
   factory GetUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetUserRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'userId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'userId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -5359,9 +5373,9 @@ class GetUserRequest extends $pb.GeneratedMessage {
   static GetUserRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get userId => $_getSZ(0);
+  $core.int get userId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set userId($core.String v) { $_setString(0, v); }
+  set userId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasUserId() => $_has(0);
   @$pb.TagNumber(1)
@@ -5422,7 +5436,7 @@ class GetUserResponse extends $pb.GeneratedMessage {
 
 class UpdateUserRequest extends $pb.GeneratedMessage {
   factory UpdateUserRequest({
-    $core.String? userId,
+    $core.int? userId,
     User? userData,
   }) {
     final $result = create();
@@ -5439,7 +5453,7 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
   factory UpdateUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateUserRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'userId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'userId', $pb.PbFieldType.OU3)
     ..aOM<User>(2, _omitFieldNames ? '' : 'userData', subBuilder: User.create)
     ..hasRequiredFields = false
   ;
@@ -5466,9 +5480,9 @@ class UpdateUserRequest extends $pb.GeneratedMessage {
   static UpdateUserRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get userId => $_getSZ(0);
+  $core.int get userId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set userId($core.String v) { $_setString(0, v); }
+  set userId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasUserId() => $_has(0);
   @$pb.TagNumber(1)
@@ -5540,7 +5554,7 @@ class UpdateUserResponse extends $pb.GeneratedMessage {
 
 class DeleteUserRequest extends $pb.GeneratedMessage {
   factory DeleteUserRequest({
-    $core.String? userId,
+    $core.int? userId,
   }) {
     final $result = create();
     if (userId != null) {
@@ -5553,7 +5567,7 @@ class DeleteUserRequest extends $pb.GeneratedMessage {
   factory DeleteUserRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteUserRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'userId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'userId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -5579,9 +5593,9 @@ class DeleteUserRequest extends $pb.GeneratedMessage {
   static DeleteUserRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get userId => $_getSZ(0);
+  $core.int get userId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set userId($core.String v) { $_setString(0, v); }
+  set userId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasUserId() => $_has(0);
   @$pb.TagNumber(1)
@@ -5817,7 +5831,7 @@ class CreateOfficeRequest extends $pb.GeneratedMessage {
 
 class CreateOfficeResponse extends $pb.GeneratedMessage {
   factory CreateOfficeResponse({
-    $core.String? officeId,
+    $core.int? officeId,
   }) {
     final $result = create();
     if (officeId != null) {
@@ -5830,7 +5844,7 @@ class CreateOfficeResponse extends $pb.GeneratedMessage {
   factory CreateOfficeResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateOfficeResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'officeId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'officeId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -5856,9 +5870,9 @@ class CreateOfficeResponse extends $pb.GeneratedMessage {
   static CreateOfficeResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get officeId => $_getSZ(0);
+  $core.int get officeId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set officeId($core.String v) { $_setString(0, v); }
+  set officeId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasOfficeId() => $_has(0);
   @$pb.TagNumber(1)
@@ -5867,7 +5881,7 @@ class CreateOfficeResponse extends $pb.GeneratedMessage {
 
 class GetOfficeRequest extends $pb.GeneratedMessage {
   factory GetOfficeRequest({
-    $core.String? officeId,
+    $core.int? officeId,
   }) {
     final $result = create();
     if (officeId != null) {
@@ -5880,7 +5894,7 @@ class GetOfficeRequest extends $pb.GeneratedMessage {
   factory GetOfficeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetOfficeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'officeId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'officeId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -5906,9 +5920,9 @@ class GetOfficeRequest extends $pb.GeneratedMessage {
   static GetOfficeRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get officeId => $_getSZ(0);
+  $core.int get officeId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set officeId($core.String v) { $_setString(0, v); }
+  set officeId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasOfficeId() => $_has(0);
   @$pb.TagNumber(1)
@@ -5969,7 +5983,7 @@ class GetOfficeResponse extends $pb.GeneratedMessage {
 
 class UpdateOfficeRequest extends $pb.GeneratedMessage {
   factory UpdateOfficeRequest({
-    $core.String? officeId,
+    $core.int? officeId,
     Office? officeData,
   }) {
     final $result = create();
@@ -5986,7 +6000,7 @@ class UpdateOfficeRequest extends $pb.GeneratedMessage {
   factory UpdateOfficeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateOfficeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'officeId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'officeId', $pb.PbFieldType.OU3)
     ..aOM<Office>(2, _omitFieldNames ? '' : 'officeData', subBuilder: Office.create)
     ..hasRequiredFields = false
   ;
@@ -6013,9 +6027,9 @@ class UpdateOfficeRequest extends $pb.GeneratedMessage {
   static UpdateOfficeRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get officeId => $_getSZ(0);
+  $core.int get officeId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set officeId($core.String v) { $_setString(0, v); }
+  set officeId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasOfficeId() => $_has(0);
   @$pb.TagNumber(1)
@@ -6087,7 +6101,7 @@ class UpdateOfficeResponse extends $pb.GeneratedMessage {
 
 class DeleteOfficeRequest extends $pb.GeneratedMessage {
   factory DeleteOfficeRequest({
-    $core.String? officeId,
+    $core.int? officeId,
   }) {
     final $result = create();
     if (officeId != null) {
@@ -6100,7 +6114,7 @@ class DeleteOfficeRequest extends $pb.GeneratedMessage {
   factory DeleteOfficeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteOfficeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'officeId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'officeId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -6126,9 +6140,9 @@ class DeleteOfficeRequest extends $pb.GeneratedMessage {
   static DeleteOfficeRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get officeId => $_getSZ(0);
+  $core.int get officeId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set officeId($core.String v) { $_setString(0, v); }
+  set officeId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasOfficeId() => $_has(0);
   @$pb.TagNumber(1)
@@ -6364,7 +6378,7 @@ class CreateLegalCaseRequest extends $pb.GeneratedMessage {
 
 class CreateLegalCaseResponse extends $pb.GeneratedMessage {
   factory CreateLegalCaseResponse({
-    $core.String? caseId,
+    $core.int? caseId,
   }) {
     final $result = create();
     if (caseId != null) {
@@ -6377,7 +6391,7 @@ class CreateLegalCaseResponse extends $pb.GeneratedMessage {
   factory CreateLegalCaseResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateLegalCaseResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'caseId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'caseId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -6403,9 +6417,9 @@ class CreateLegalCaseResponse extends $pb.GeneratedMessage {
   static CreateLegalCaseResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get caseId => $_getSZ(0);
+  $core.int get caseId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set caseId($core.String v) { $_setString(0, v); }
+  set caseId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasCaseId() => $_has(0);
   @$pb.TagNumber(1)
@@ -6414,7 +6428,7 @@ class CreateLegalCaseResponse extends $pb.GeneratedMessage {
 
 class GetLegalCaseRequest extends $pb.GeneratedMessage {
   factory GetLegalCaseRequest({
-    $core.String? caseId,
+    $core.int? caseId,
   }) {
     final $result = create();
     if (caseId != null) {
@@ -6427,7 +6441,7 @@ class GetLegalCaseRequest extends $pb.GeneratedMessage {
   factory GetLegalCaseRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetLegalCaseRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'caseId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'caseId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -6453,9 +6467,9 @@ class GetLegalCaseRequest extends $pb.GeneratedMessage {
   static GetLegalCaseRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get caseId => $_getSZ(0);
+  $core.int get caseId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set caseId($core.String v) { $_setString(0, v); }
+  set caseId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasCaseId() => $_has(0);
   @$pb.TagNumber(1)
@@ -6516,7 +6530,7 @@ class GetLegalCaseResponse extends $pb.GeneratedMessage {
 
 class UpdateLegalCaseRequest extends $pb.GeneratedMessage {
   factory UpdateLegalCaseRequest({
-    $core.String? caseId,
+    $core.int? caseId,
     LegalCase? caseData,
   }) {
     final $result = create();
@@ -6533,7 +6547,7 @@ class UpdateLegalCaseRequest extends $pb.GeneratedMessage {
   factory UpdateLegalCaseRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateLegalCaseRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'caseId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'caseId', $pb.PbFieldType.OU3)
     ..aOM<LegalCase>(2, _omitFieldNames ? '' : 'caseData', subBuilder: LegalCase.create)
     ..hasRequiredFields = false
   ;
@@ -6560,9 +6574,9 @@ class UpdateLegalCaseRequest extends $pb.GeneratedMessage {
   static UpdateLegalCaseRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get caseId => $_getSZ(0);
+  $core.int get caseId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set caseId($core.String v) { $_setString(0, v); }
+  set caseId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasCaseId() => $_has(0);
   @$pb.TagNumber(1)
@@ -6634,7 +6648,7 @@ class UpdateLegalCaseResponse extends $pb.GeneratedMessage {
 
 class DeleteLegalCaseRequest extends $pb.GeneratedMessage {
   factory DeleteLegalCaseRequest({
-    $core.String? caseId,
+    $core.int? caseId,
   }) {
     final $result = create();
     if (caseId != null) {
@@ -6647,7 +6661,7 @@ class DeleteLegalCaseRequest extends $pb.GeneratedMessage {
   factory DeleteLegalCaseRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteLegalCaseRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'caseId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'caseId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -6673,9 +6687,9 @@ class DeleteLegalCaseRequest extends $pb.GeneratedMessage {
   static DeleteLegalCaseRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get caseId => $_getSZ(0);
+  $core.int get caseId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set caseId($core.String v) { $_setString(0, v); }
+  set caseId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasCaseId() => $_has(0);
   @$pb.TagNumber(1)
@@ -6911,7 +6925,7 @@ class CreateTranslationOrderRequest extends $pb.GeneratedMessage {
 
 class CreateTranslationOrderResponse extends $pb.GeneratedMessage {
   factory CreateTranslationOrderResponse({
-    $core.String? orderId,
+    $core.int? orderId,
   }) {
     final $result = create();
     if (orderId != null) {
@@ -6924,7 +6938,7 @@ class CreateTranslationOrderResponse extends $pb.GeneratedMessage {
   factory CreateTranslationOrderResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateTranslationOrderResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'orderId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'orderId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -6950,9 +6964,9 @@ class CreateTranslationOrderResponse extends $pb.GeneratedMessage {
   static CreateTranslationOrderResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get orderId => $_getSZ(0);
+  $core.int get orderId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set orderId($core.String v) { $_setString(0, v); }
+  set orderId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasOrderId() => $_has(0);
   @$pb.TagNumber(1)
@@ -6961,7 +6975,7 @@ class CreateTranslationOrderResponse extends $pb.GeneratedMessage {
 
 class GetTranslationOrderRequest extends $pb.GeneratedMessage {
   factory GetTranslationOrderRequest({
-    $core.String? orderId,
+    $core.int? orderId,
   }) {
     final $result = create();
     if (orderId != null) {
@@ -6974,7 +6988,7 @@ class GetTranslationOrderRequest extends $pb.GeneratedMessage {
   factory GetTranslationOrderRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetTranslationOrderRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'orderId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'orderId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -7000,9 +7014,9 @@ class GetTranslationOrderRequest extends $pb.GeneratedMessage {
   static GetTranslationOrderRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get orderId => $_getSZ(0);
+  $core.int get orderId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set orderId($core.String v) { $_setString(0, v); }
+  set orderId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasOrderId() => $_has(0);
   @$pb.TagNumber(1)
@@ -7063,7 +7077,7 @@ class GetTranslationOrderResponse extends $pb.GeneratedMessage {
 
 class UpdateTranslationOrderRequest extends $pb.GeneratedMessage {
   factory UpdateTranslationOrderRequest({
-    $core.String? orderId,
+    $core.int? orderId,
     TranslationOrder? orderData,
   }) {
     final $result = create();
@@ -7080,7 +7094,7 @@ class UpdateTranslationOrderRequest extends $pb.GeneratedMessage {
   factory UpdateTranslationOrderRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateTranslationOrderRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'orderId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'orderId', $pb.PbFieldType.OU3)
     ..aOM<TranslationOrder>(2, _omitFieldNames ? '' : 'orderData', subBuilder: TranslationOrder.create)
     ..hasRequiredFields = false
   ;
@@ -7107,9 +7121,9 @@ class UpdateTranslationOrderRequest extends $pb.GeneratedMessage {
   static UpdateTranslationOrderRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get orderId => $_getSZ(0);
+  $core.int get orderId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set orderId($core.String v) { $_setString(0, v); }
+  set orderId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasOrderId() => $_has(0);
   @$pb.TagNumber(1)
@@ -7181,7 +7195,7 @@ class UpdateTranslationOrderResponse extends $pb.GeneratedMessage {
 
 class DeleteTranslationOrderRequest extends $pb.GeneratedMessage {
   factory DeleteTranslationOrderRequest({
-    $core.String? orderId,
+    $core.int? orderId,
   }) {
     final $result = create();
     if (orderId != null) {
@@ -7194,7 +7208,7 @@ class DeleteTranslationOrderRequest extends $pb.GeneratedMessage {
   factory DeleteTranslationOrderRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteTranslationOrderRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'orderId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'orderId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -7220,9 +7234,9 @@ class DeleteTranslationOrderRequest extends $pb.GeneratedMessage {
   static DeleteTranslationOrderRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get orderId => $_getSZ(0);
+  $core.int get orderId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set orderId($core.String v) { $_setString(0, v); }
+  set orderId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasOrderId() => $_has(0);
   @$pb.TagNumber(1)
@@ -7458,7 +7472,7 @@ class CreateInsurancePolicyRequest extends $pb.GeneratedMessage {
 
 class CreateInsurancePolicyResponse extends $pb.GeneratedMessage {
   factory CreateInsurancePolicyResponse({
-    $core.String? policyId,
+    $core.int? policyId,
   }) {
     final $result = create();
     if (policyId != null) {
@@ -7471,7 +7485,7 @@ class CreateInsurancePolicyResponse extends $pb.GeneratedMessage {
   factory CreateInsurancePolicyResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateInsurancePolicyResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'policyId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'policyId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -7497,9 +7511,9 @@ class CreateInsurancePolicyResponse extends $pb.GeneratedMessage {
   static CreateInsurancePolicyResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get policyId => $_getSZ(0);
+  $core.int get policyId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set policyId($core.String v) { $_setString(0, v); }
+  set policyId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasPolicyId() => $_has(0);
   @$pb.TagNumber(1)
@@ -7508,7 +7522,7 @@ class CreateInsurancePolicyResponse extends $pb.GeneratedMessage {
 
 class GetInsurancePolicyRequest extends $pb.GeneratedMessage {
   factory GetInsurancePolicyRequest({
-    $core.String? policyId,
+    $core.int? policyId,
   }) {
     final $result = create();
     if (policyId != null) {
@@ -7521,7 +7535,7 @@ class GetInsurancePolicyRequest extends $pb.GeneratedMessage {
   factory GetInsurancePolicyRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetInsurancePolicyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'policyId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'policyId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -7547,9 +7561,9 @@ class GetInsurancePolicyRequest extends $pb.GeneratedMessage {
   static GetInsurancePolicyRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get policyId => $_getSZ(0);
+  $core.int get policyId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set policyId($core.String v) { $_setString(0, v); }
+  set policyId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasPolicyId() => $_has(0);
   @$pb.TagNumber(1)
@@ -7610,7 +7624,7 @@ class GetInsurancePolicyResponse extends $pb.GeneratedMessage {
 
 class UpdateInsurancePolicyRequest extends $pb.GeneratedMessage {
   factory UpdateInsurancePolicyRequest({
-    $core.String? policyId,
+    $core.int? policyId,
     InsurancePolicy? policyData,
   }) {
     final $result = create();
@@ -7627,7 +7641,7 @@ class UpdateInsurancePolicyRequest extends $pb.GeneratedMessage {
   factory UpdateInsurancePolicyRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateInsurancePolicyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'policyId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'policyId', $pb.PbFieldType.OU3)
     ..aOM<InsurancePolicy>(2, _omitFieldNames ? '' : 'policyData', subBuilder: InsurancePolicy.create)
     ..hasRequiredFields = false
   ;
@@ -7654,9 +7668,9 @@ class UpdateInsurancePolicyRequest extends $pb.GeneratedMessage {
   static UpdateInsurancePolicyRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get policyId => $_getSZ(0);
+  $core.int get policyId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set policyId($core.String v) { $_setString(0, v); }
+  set policyId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasPolicyId() => $_has(0);
   @$pb.TagNumber(1)
@@ -7728,7 +7742,7 @@ class UpdateInsurancePolicyResponse extends $pb.GeneratedMessage {
 
 class DeleteInsurancePolicyRequest extends $pb.GeneratedMessage {
   factory DeleteInsurancePolicyRequest({
-    $core.String? policyId,
+    $core.int? policyId,
   }) {
     final $result = create();
     if (policyId != null) {
@@ -7741,7 +7755,7 @@ class DeleteInsurancePolicyRequest extends $pb.GeneratedMessage {
   factory DeleteInsurancePolicyRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteInsurancePolicyRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'policyId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'policyId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -7767,9 +7781,9 @@ class DeleteInsurancePolicyRequest extends $pb.GeneratedMessage {
   static DeleteInsurancePolicyRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get policyId => $_getSZ(0);
+  $core.int get policyId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set policyId($core.String v) { $_setString(0, v); }
+  set policyId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasPolicyId() => $_has(0);
   @$pb.TagNumber(1)
@@ -8005,7 +8019,7 @@ class CreateTrainingEnrollmentRequest extends $pb.GeneratedMessage {
 
 class CreateTrainingEnrollmentResponse extends $pb.GeneratedMessage {
   factory CreateTrainingEnrollmentResponse({
-    $core.String? enrollmentId,
+    $core.int? enrollmentId,
   }) {
     final $result = create();
     if (enrollmentId != null) {
@@ -8018,7 +8032,7 @@ class CreateTrainingEnrollmentResponse extends $pb.GeneratedMessage {
   factory CreateTrainingEnrollmentResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateTrainingEnrollmentResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'enrollmentId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'enrollmentId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -8044,9 +8058,9 @@ class CreateTrainingEnrollmentResponse extends $pb.GeneratedMessage {
   static CreateTrainingEnrollmentResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get enrollmentId => $_getSZ(0);
+  $core.int get enrollmentId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set enrollmentId($core.String v) { $_setString(0, v); }
+  set enrollmentId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasEnrollmentId() => $_has(0);
   @$pb.TagNumber(1)
@@ -8055,7 +8069,7 @@ class CreateTrainingEnrollmentResponse extends $pb.GeneratedMessage {
 
 class GetTrainingEnrollmentRequest extends $pb.GeneratedMessage {
   factory GetTrainingEnrollmentRequest({
-    $core.String? enrollmentId,
+    $core.int? enrollmentId,
   }) {
     final $result = create();
     if (enrollmentId != null) {
@@ -8068,7 +8082,7 @@ class GetTrainingEnrollmentRequest extends $pb.GeneratedMessage {
   factory GetTrainingEnrollmentRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetTrainingEnrollmentRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'enrollmentId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'enrollmentId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -8094,9 +8108,9 @@ class GetTrainingEnrollmentRequest extends $pb.GeneratedMessage {
   static GetTrainingEnrollmentRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get enrollmentId => $_getSZ(0);
+  $core.int get enrollmentId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set enrollmentId($core.String v) { $_setString(0, v); }
+  set enrollmentId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasEnrollmentId() => $_has(0);
   @$pb.TagNumber(1)
@@ -8157,7 +8171,7 @@ class GetTrainingEnrollmentResponse extends $pb.GeneratedMessage {
 
 class UpdateTrainingEnrollmentRequest extends $pb.GeneratedMessage {
   factory UpdateTrainingEnrollmentRequest({
-    $core.String? enrollmentId,
+    $core.int? enrollmentId,
     TrainingEnrollment? enrollmentData,
   }) {
     final $result = create();
@@ -8174,7 +8188,7 @@ class UpdateTrainingEnrollmentRequest extends $pb.GeneratedMessage {
   factory UpdateTrainingEnrollmentRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateTrainingEnrollmentRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'enrollmentId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'enrollmentId', $pb.PbFieldType.OU3)
     ..aOM<TrainingEnrollment>(2, _omitFieldNames ? '' : 'enrollmentData', subBuilder: TrainingEnrollment.create)
     ..hasRequiredFields = false
   ;
@@ -8201,9 +8215,9 @@ class UpdateTrainingEnrollmentRequest extends $pb.GeneratedMessage {
   static UpdateTrainingEnrollmentRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get enrollmentId => $_getSZ(0);
+  $core.int get enrollmentId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set enrollmentId($core.String v) { $_setString(0, v); }
+  set enrollmentId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasEnrollmentId() => $_has(0);
   @$pb.TagNumber(1)
@@ -8275,7 +8289,7 @@ class UpdateTrainingEnrollmentResponse extends $pb.GeneratedMessage {
 
 class DeleteTrainingEnrollmentRequest extends $pb.GeneratedMessage {
   factory DeleteTrainingEnrollmentRequest({
-    $core.String? enrollmentId,
+    $core.int? enrollmentId,
   }) {
     final $result = create();
     if (enrollmentId != null) {
@@ -8288,7 +8302,7 @@ class DeleteTrainingEnrollmentRequest extends $pb.GeneratedMessage {
   factory DeleteTrainingEnrollmentRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteTrainingEnrollmentRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'enrollmentId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'enrollmentId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -8314,9 +8328,9 @@ class DeleteTrainingEnrollmentRequest extends $pb.GeneratedMessage {
   static DeleteTrainingEnrollmentRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get enrollmentId => $_getSZ(0);
+  $core.int get enrollmentId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set enrollmentId($core.String v) { $_setString(0, v); }
+  set enrollmentId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasEnrollmentId() => $_has(0);
   @$pb.TagNumber(1)
@@ -8552,7 +8566,7 @@ class CreateAccountOpeningRequestRequest extends $pb.GeneratedMessage {
 
 class CreateAccountOpeningRequestResponse extends $pb.GeneratedMessage {
   factory CreateAccountOpeningRequestResponse({
-    $core.String? requestId,
+    $core.int? requestId,
   }) {
     final $result = create();
     if (requestId != null) {
@@ -8565,7 +8579,7 @@ class CreateAccountOpeningRequestResponse extends $pb.GeneratedMessage {
   factory CreateAccountOpeningRequestResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateAccountOpeningRequestResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'requestId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'requestId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -8591,9 +8605,9 @@ class CreateAccountOpeningRequestResponse extends $pb.GeneratedMessage {
   static CreateAccountOpeningRequestResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get requestId => $_getSZ(0);
+  $core.int get requestId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set requestId($core.String v) { $_setString(0, v); }
+  set requestId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasRequestId() => $_has(0);
   @$pb.TagNumber(1)
@@ -8602,7 +8616,7 @@ class CreateAccountOpeningRequestResponse extends $pb.GeneratedMessage {
 
 class GetAccountOpeningRequestRequest extends $pb.GeneratedMessage {
   factory GetAccountOpeningRequestRequest({
-    $core.String? requestId,
+    $core.int? requestId,
   }) {
     final $result = create();
     if (requestId != null) {
@@ -8615,7 +8629,7 @@ class GetAccountOpeningRequestRequest extends $pb.GeneratedMessage {
   factory GetAccountOpeningRequestRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetAccountOpeningRequestRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'requestId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'requestId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -8641,9 +8655,9 @@ class GetAccountOpeningRequestRequest extends $pb.GeneratedMessage {
   static GetAccountOpeningRequestRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get requestId => $_getSZ(0);
+  $core.int get requestId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set requestId($core.String v) { $_setString(0, v); }
+  set requestId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasRequestId() => $_has(0);
   @$pb.TagNumber(1)
@@ -8704,7 +8718,7 @@ class GetAccountOpeningRequestResponse extends $pb.GeneratedMessage {
 
 class UpdateAccountOpeningRequestRequest extends $pb.GeneratedMessage {
   factory UpdateAccountOpeningRequestRequest({
-    $core.String? requestId,
+    $core.int? requestId,
     AccountOpeningRequest? requestData,
   }) {
     final $result = create();
@@ -8721,7 +8735,7 @@ class UpdateAccountOpeningRequestRequest extends $pb.GeneratedMessage {
   factory UpdateAccountOpeningRequestRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateAccountOpeningRequestRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'requestId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'requestId', $pb.PbFieldType.OU3)
     ..aOM<AccountOpeningRequest>(2, _omitFieldNames ? '' : 'requestData', subBuilder: AccountOpeningRequest.create)
     ..hasRequiredFields = false
   ;
@@ -8748,9 +8762,9 @@ class UpdateAccountOpeningRequestRequest extends $pb.GeneratedMessage {
   static UpdateAccountOpeningRequestRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get requestId => $_getSZ(0);
+  $core.int get requestId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set requestId($core.String v) { $_setString(0, v); }
+  set requestId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasRequestId() => $_has(0);
   @$pb.TagNumber(1)
@@ -8822,7 +8836,7 @@ class UpdateAccountOpeningRequestResponse extends $pb.GeneratedMessage {
 
 class DeleteAccountOpeningRequestRequest extends $pb.GeneratedMessage {
   factory DeleteAccountOpeningRequestRequest({
-    $core.String? requestId,
+    $core.int? requestId,
   }) {
     final $result = create();
     if (requestId != null) {
@@ -8835,7 +8849,7 @@ class DeleteAccountOpeningRequestRequest extends $pb.GeneratedMessage {
   factory DeleteAccountOpeningRequestRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteAccountOpeningRequestRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'requestId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'requestId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -8861,9 +8875,9 @@ class DeleteAccountOpeningRequestRequest extends $pb.GeneratedMessage {
   static DeleteAccountOpeningRequestRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get requestId => $_getSZ(0);
+  $core.int get requestId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set requestId($core.String v) { $_setString(0, v); }
+  set requestId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasRequestId() => $_has(0);
   @$pb.TagNumber(1)
@@ -9099,7 +9113,7 @@ class CreateBusinessRegistrationRequest extends $pb.GeneratedMessage {
 
 class CreateBusinessRegistrationResponse extends $pb.GeneratedMessage {
   factory CreateBusinessRegistrationResponse({
-    $core.String? requestId,
+    $core.int? requestId,
   }) {
     final $result = create();
     if (requestId != null) {
@@ -9112,7 +9126,7 @@ class CreateBusinessRegistrationResponse extends $pb.GeneratedMessage {
   factory CreateBusinessRegistrationResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateBusinessRegistrationResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'requestId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'requestId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -9138,9 +9152,9 @@ class CreateBusinessRegistrationResponse extends $pb.GeneratedMessage {
   static CreateBusinessRegistrationResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get requestId => $_getSZ(0);
+  $core.int get requestId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set requestId($core.String v) { $_setString(0, v); }
+  set requestId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasRequestId() => $_has(0);
   @$pb.TagNumber(1)
@@ -9149,7 +9163,7 @@ class CreateBusinessRegistrationResponse extends $pb.GeneratedMessage {
 
 class GetBusinessRegistrationRequest extends $pb.GeneratedMessage {
   factory GetBusinessRegistrationRequest({
-    $core.String? requestId,
+    $core.int? requestId,
   }) {
     final $result = create();
     if (requestId != null) {
@@ -9162,7 +9176,7 @@ class GetBusinessRegistrationRequest extends $pb.GeneratedMessage {
   factory GetBusinessRegistrationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBusinessRegistrationRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'requestId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'requestId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -9188,9 +9202,9 @@ class GetBusinessRegistrationRequest extends $pb.GeneratedMessage {
   static GetBusinessRegistrationRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get requestId => $_getSZ(0);
+  $core.int get requestId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set requestId($core.String v) { $_setString(0, v); }
+  set requestId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasRequestId() => $_has(0);
   @$pb.TagNumber(1)
@@ -9251,7 +9265,7 @@ class GetBusinessRegistrationResponse extends $pb.GeneratedMessage {
 
 class UpdateBusinessRegistrationRequest extends $pb.GeneratedMessage {
   factory UpdateBusinessRegistrationRequest({
-    $core.String? requestId,
+    $core.int? requestId,
     BusinessRegistration? registrationData,
   }) {
     final $result = create();
@@ -9268,7 +9282,7 @@ class UpdateBusinessRegistrationRequest extends $pb.GeneratedMessage {
   factory UpdateBusinessRegistrationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateBusinessRegistrationRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'requestId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'requestId', $pb.PbFieldType.OU3)
     ..aOM<BusinessRegistration>(2, _omitFieldNames ? '' : 'registrationData', subBuilder: BusinessRegistration.create)
     ..hasRequiredFields = false
   ;
@@ -9295,9 +9309,9 @@ class UpdateBusinessRegistrationRequest extends $pb.GeneratedMessage {
   static UpdateBusinessRegistrationRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get requestId => $_getSZ(0);
+  $core.int get requestId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set requestId($core.String v) { $_setString(0, v); }
+  set requestId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasRequestId() => $_has(0);
   @$pb.TagNumber(1)
@@ -9369,7 +9383,7 @@ class UpdateBusinessRegistrationResponse extends $pb.GeneratedMessage {
 
 class DeleteBusinessRegistrationRequest extends $pb.GeneratedMessage {
   factory DeleteBusinessRegistrationRequest({
-    $core.String? requestId,
+    $core.int? requestId,
   }) {
     final $result = create();
     if (requestId != null) {
@@ -9382,7 +9396,7 @@ class DeleteBusinessRegistrationRequest extends $pb.GeneratedMessage {
   factory DeleteBusinessRegistrationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteBusinessRegistrationRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'requestId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'requestId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -9408,9 +9422,9 @@ class DeleteBusinessRegistrationRequest extends $pb.GeneratedMessage {
   static DeleteBusinessRegistrationRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get requestId => $_getSZ(0);
+  $core.int get requestId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set requestId($core.String v) { $_setString(0, v); }
+  set requestId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasRequestId() => $_has(0);
   @$pb.TagNumber(1)
@@ -9646,7 +9660,7 @@ class CreateLendingApplicationRequest extends $pb.GeneratedMessage {
 
 class CreateLendingApplicationResponse extends $pb.GeneratedMessage {
   factory CreateLendingApplicationResponse({
-    $core.String? requestId,
+    $core.int? requestId,
   }) {
     final $result = create();
     if (requestId != null) {
@@ -9659,7 +9673,7 @@ class CreateLendingApplicationResponse extends $pb.GeneratedMessage {
   factory CreateLendingApplicationResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateLendingApplicationResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'requestId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'requestId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -9685,9 +9699,9 @@ class CreateLendingApplicationResponse extends $pb.GeneratedMessage {
   static CreateLendingApplicationResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get requestId => $_getSZ(0);
+  $core.int get requestId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set requestId($core.String v) { $_setString(0, v); }
+  set requestId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasRequestId() => $_has(0);
   @$pb.TagNumber(1)
@@ -9696,7 +9710,7 @@ class CreateLendingApplicationResponse extends $pb.GeneratedMessage {
 
 class GetLendingApplicationRequest extends $pb.GeneratedMessage {
   factory GetLendingApplicationRequest({
-    $core.String? requestId,
+    $core.int? requestId,
   }) {
     final $result = create();
     if (requestId != null) {
@@ -9709,7 +9723,7 @@ class GetLendingApplicationRequest extends $pb.GeneratedMessage {
   factory GetLendingApplicationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetLendingApplicationRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'requestId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'requestId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -9735,9 +9749,9 @@ class GetLendingApplicationRequest extends $pb.GeneratedMessage {
   static GetLendingApplicationRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get requestId => $_getSZ(0);
+  $core.int get requestId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set requestId($core.String v) { $_setString(0, v); }
+  set requestId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasRequestId() => $_has(0);
   @$pb.TagNumber(1)
@@ -9798,7 +9812,7 @@ class GetLendingApplicationResponse extends $pb.GeneratedMessage {
 
 class UpdateLendingApplicationRequest extends $pb.GeneratedMessage {
   factory UpdateLendingApplicationRequest({
-    $core.String? requestId,
+    $core.int? requestId,
     LendingApplication? applicationData,
   }) {
     final $result = create();
@@ -9815,7 +9829,7 @@ class UpdateLendingApplicationRequest extends $pb.GeneratedMessage {
   factory UpdateLendingApplicationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateLendingApplicationRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'requestId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'requestId', $pb.PbFieldType.OU3)
     ..aOM<LendingApplication>(2, _omitFieldNames ? '' : 'applicationData', subBuilder: LendingApplication.create)
     ..hasRequiredFields = false
   ;
@@ -9842,9 +9856,9 @@ class UpdateLendingApplicationRequest extends $pb.GeneratedMessage {
   static UpdateLendingApplicationRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get requestId => $_getSZ(0);
+  $core.int get requestId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set requestId($core.String v) { $_setString(0, v); }
+  set requestId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasRequestId() => $_has(0);
   @$pb.TagNumber(1)
@@ -9916,7 +9930,7 @@ class UpdateLendingApplicationResponse extends $pb.GeneratedMessage {
 
 class DeleteLendingApplicationRequest extends $pb.GeneratedMessage {
   factory DeleteLendingApplicationRequest({
-    $core.String? requestId,
+    $core.int? requestId,
   }) {
     final $result = create();
     if (requestId != null) {
@@ -9929,7 +9943,7 @@ class DeleteLendingApplicationRequest extends $pb.GeneratedMessage {
   factory DeleteLendingApplicationRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteLendingApplicationRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'requestId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'requestId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -9955,9 +9969,9 @@ class DeleteLendingApplicationRequest extends $pb.GeneratedMessage {
   static DeleteLendingApplicationRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get requestId => $_getSZ(0);
+  $core.int get requestId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set requestId($core.String v) { $_setString(0, v); }
+  set requestId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasRequestId() => $_has(0);
   @$pb.TagNumber(1)
@@ -10193,7 +10207,7 @@ class CreatePartnerRequest extends $pb.GeneratedMessage {
 
 class CreatePartnerResponse extends $pb.GeneratedMessage {
   factory CreatePartnerResponse({
-    $core.String? partnerId,
+    $core.int? partnerId,
   }) {
     final $result = create();
     if (partnerId != null) {
@@ -10206,7 +10220,7 @@ class CreatePartnerResponse extends $pb.GeneratedMessage {
   factory CreatePartnerResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePartnerResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'partnerId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'partnerId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -10232,9 +10246,9 @@ class CreatePartnerResponse extends $pb.GeneratedMessage {
   static CreatePartnerResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get partnerId => $_getSZ(0);
+  $core.int get partnerId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set partnerId($core.String v) { $_setString(0, v); }
+  set partnerId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasPartnerId() => $_has(0);
   @$pb.TagNumber(1)
@@ -10243,7 +10257,7 @@ class CreatePartnerResponse extends $pb.GeneratedMessage {
 
 class GetPartnerRequest extends $pb.GeneratedMessage {
   factory GetPartnerRequest({
-    $core.String? partnerId,
+    $core.int? partnerId,
   }) {
     final $result = create();
     if (partnerId != null) {
@@ -10256,7 +10270,7 @@ class GetPartnerRequest extends $pb.GeneratedMessage {
   factory GetPartnerRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPartnerRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'partnerId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'partnerId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -10282,9 +10296,9 @@ class GetPartnerRequest extends $pb.GeneratedMessage {
   static GetPartnerRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get partnerId => $_getSZ(0);
+  $core.int get partnerId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set partnerId($core.String v) { $_setString(0, v); }
+  set partnerId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasPartnerId() => $_has(0);
   @$pb.TagNumber(1)
@@ -10345,7 +10359,7 @@ class GetPartnerResponse extends $pb.GeneratedMessage {
 
 class UpdatePartnerRequest extends $pb.GeneratedMessage {
   factory UpdatePartnerRequest({
-    $core.String? partnerId,
+    $core.int? partnerId,
     Partner? partnerData,
   }) {
     final $result = create();
@@ -10362,7 +10376,7 @@ class UpdatePartnerRequest extends $pb.GeneratedMessage {
   factory UpdatePartnerRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdatePartnerRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'partnerId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'partnerId', $pb.PbFieldType.OU3)
     ..aOM<Partner>(2, _omitFieldNames ? '' : 'partnerData', subBuilder: Partner.create)
     ..hasRequiredFields = false
   ;
@@ -10389,9 +10403,9 @@ class UpdatePartnerRequest extends $pb.GeneratedMessage {
   static UpdatePartnerRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get partnerId => $_getSZ(0);
+  $core.int get partnerId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set partnerId($core.String v) { $_setString(0, v); }
+  set partnerId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasPartnerId() => $_has(0);
   @$pb.TagNumber(1)
@@ -10463,7 +10477,7 @@ class UpdatePartnerResponse extends $pb.GeneratedMessage {
 
 class DeletePartnerRequest extends $pb.GeneratedMessage {
   factory DeletePartnerRequest({
-    $core.String? partnerId,
+    $core.int? partnerId,
   }) {
     final $result = create();
     if (partnerId != null) {
@@ -10476,7 +10490,7 @@ class DeletePartnerRequest extends $pb.GeneratedMessage {
   factory DeletePartnerRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeletePartnerRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'partnerId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'partnerId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -10502,9 +10516,9 @@ class DeletePartnerRequest extends $pb.GeneratedMessage {
   static DeletePartnerRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get partnerId => $_getSZ(0);
+  $core.int get partnerId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set partnerId($core.String v) { $_setString(0, v); }
+  set partnerId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasPartnerId() => $_has(0);
   @$pb.TagNumber(1)
@@ -10740,7 +10754,7 @@ class CreateLegalIssueTypeRequest extends $pb.GeneratedMessage {
 
 class CreateLegalIssueTypeResponse extends $pb.GeneratedMessage {
   factory CreateLegalIssueTypeResponse({
-    $core.String? issueTypeId,
+    $core.int? issueTypeId,
   }) {
     final $result = create();
     if (issueTypeId != null) {
@@ -10753,7 +10767,7 @@ class CreateLegalIssueTypeResponse extends $pb.GeneratedMessage {
   factory CreateLegalIssueTypeResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateLegalIssueTypeResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'issueTypeId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'issueTypeId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -10779,9 +10793,9 @@ class CreateLegalIssueTypeResponse extends $pb.GeneratedMessage {
   static CreateLegalIssueTypeResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get issueTypeId => $_getSZ(0);
+  $core.int get issueTypeId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set issueTypeId($core.String v) { $_setString(0, v); }
+  set issueTypeId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasIssueTypeId() => $_has(0);
   @$pb.TagNumber(1)
@@ -10790,7 +10804,7 @@ class CreateLegalIssueTypeResponse extends $pb.GeneratedMessage {
 
 class GetLegalIssueTypeRequest extends $pb.GeneratedMessage {
   factory GetLegalIssueTypeRequest({
-    $core.String? issueTypeId,
+    $core.int? issueTypeId,
   }) {
     final $result = create();
     if (issueTypeId != null) {
@@ -10803,7 +10817,7 @@ class GetLegalIssueTypeRequest extends $pb.GeneratedMessage {
   factory GetLegalIssueTypeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetLegalIssueTypeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'issueTypeId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'issueTypeId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -10829,9 +10843,9 @@ class GetLegalIssueTypeRequest extends $pb.GeneratedMessage {
   static GetLegalIssueTypeRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get issueTypeId => $_getSZ(0);
+  $core.int get issueTypeId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set issueTypeId($core.String v) { $_setString(0, v); }
+  set issueTypeId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasIssueTypeId() => $_has(0);
   @$pb.TagNumber(1)
@@ -10892,7 +10906,7 @@ class GetLegalIssueTypeResponse extends $pb.GeneratedMessage {
 
 class UpdateLegalIssueTypeRequest extends $pb.GeneratedMessage {
   factory UpdateLegalIssueTypeRequest({
-    $core.String? issueTypeId,
+    $core.int? issueTypeId,
     LegalIssueType? issueTypeData,
   }) {
     final $result = create();
@@ -10909,7 +10923,7 @@ class UpdateLegalIssueTypeRequest extends $pb.GeneratedMessage {
   factory UpdateLegalIssueTypeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateLegalIssueTypeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'issueTypeId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'issueTypeId', $pb.PbFieldType.OU3)
     ..aOM<LegalIssueType>(2, _omitFieldNames ? '' : 'issueTypeData', subBuilder: LegalIssueType.create)
     ..hasRequiredFields = false
   ;
@@ -10936,9 +10950,9 @@ class UpdateLegalIssueTypeRequest extends $pb.GeneratedMessage {
   static UpdateLegalIssueTypeRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get issueTypeId => $_getSZ(0);
+  $core.int get issueTypeId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set issueTypeId($core.String v) { $_setString(0, v); }
+  set issueTypeId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasIssueTypeId() => $_has(0);
   @$pb.TagNumber(1)
@@ -11010,7 +11024,7 @@ class UpdateLegalIssueTypeResponse extends $pb.GeneratedMessage {
 
 class DeleteLegalIssueTypeRequest extends $pb.GeneratedMessage {
   factory DeleteLegalIssueTypeRequest({
-    $core.String? issueTypeId,
+    $core.int? issueTypeId,
   }) {
     final $result = create();
     if (issueTypeId != null) {
@@ -11023,7 +11037,7 @@ class DeleteLegalIssueTypeRequest extends $pb.GeneratedMessage {
   factory DeleteLegalIssueTypeRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteLegalIssueTypeRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'issueTypeId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'issueTypeId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -11049,9 +11063,9 @@ class DeleteLegalIssueTypeRequest extends $pb.GeneratedMessage {
   static DeleteLegalIssueTypeRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get issueTypeId => $_getSZ(0);
+  $core.int get issueTypeId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set issueTypeId($core.String v) { $_setString(0, v); }
+  set issueTypeId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasIssueTypeId() => $_has(0);
   @$pb.TagNumber(1)
@@ -11287,7 +11301,7 @@ class CreateTrainingCourseRequest extends $pb.GeneratedMessage {
 
 class CreateTrainingCourseResponse extends $pb.GeneratedMessage {
   factory CreateTrainingCourseResponse({
-    $core.String? courseId,
+    $core.int? courseId,
   }) {
     final $result = create();
     if (courseId != null) {
@@ -11300,7 +11314,7 @@ class CreateTrainingCourseResponse extends $pb.GeneratedMessage {
   factory CreateTrainingCourseResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateTrainingCourseResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'courseId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'courseId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -11326,9 +11340,9 @@ class CreateTrainingCourseResponse extends $pb.GeneratedMessage {
   static CreateTrainingCourseResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get courseId => $_getSZ(0);
+  $core.int get courseId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set courseId($core.String v) { $_setString(0, v); }
+  set courseId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasCourseId() => $_has(0);
   @$pb.TagNumber(1)
@@ -11337,7 +11351,7 @@ class CreateTrainingCourseResponse extends $pb.GeneratedMessage {
 
 class GetTrainingCourseRequest extends $pb.GeneratedMessage {
   factory GetTrainingCourseRequest({
-    $core.String? courseId,
+    $core.int? courseId,
   }) {
     final $result = create();
     if (courseId != null) {
@@ -11350,7 +11364,7 @@ class GetTrainingCourseRequest extends $pb.GeneratedMessage {
   factory GetTrainingCourseRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetTrainingCourseRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'courseId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'courseId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -11376,9 +11390,9 @@ class GetTrainingCourseRequest extends $pb.GeneratedMessage {
   static GetTrainingCourseRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get courseId => $_getSZ(0);
+  $core.int get courseId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set courseId($core.String v) { $_setString(0, v); }
+  set courseId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasCourseId() => $_has(0);
   @$pb.TagNumber(1)
@@ -11439,7 +11453,7 @@ class GetTrainingCourseResponse extends $pb.GeneratedMessage {
 
 class UpdateTrainingCourseRequest extends $pb.GeneratedMessage {
   factory UpdateTrainingCourseRequest({
-    $core.String? courseId,
+    $core.int? courseId,
     TrainingCourse? courseData,
   }) {
     final $result = create();
@@ -11456,7 +11470,7 @@ class UpdateTrainingCourseRequest extends $pb.GeneratedMessage {
   factory UpdateTrainingCourseRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateTrainingCourseRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'courseId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'courseId', $pb.PbFieldType.OU3)
     ..aOM<TrainingCourse>(2, _omitFieldNames ? '' : 'courseData', subBuilder: TrainingCourse.create)
     ..hasRequiredFields = false
   ;
@@ -11483,9 +11497,9 @@ class UpdateTrainingCourseRequest extends $pb.GeneratedMessage {
   static UpdateTrainingCourseRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get courseId => $_getSZ(0);
+  $core.int get courseId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set courseId($core.String v) { $_setString(0, v); }
+  set courseId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasCourseId() => $_has(0);
   @$pb.TagNumber(1)
@@ -11557,7 +11571,7 @@ class UpdateTrainingCourseResponse extends $pb.GeneratedMessage {
 
 class DeleteTrainingCourseRequest extends $pb.GeneratedMessage {
   factory DeleteTrainingCourseRequest({
-    $core.String? courseId,
+    $core.int? courseId,
   }) {
     final $result = create();
     if (courseId != null) {
@@ -11570,7 +11584,7 @@ class DeleteTrainingCourseRequest extends $pb.GeneratedMessage {
   factory DeleteTrainingCourseRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteTrainingCourseRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'courseId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'courseId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -11596,9 +11610,9 @@ class DeleteTrainingCourseRequest extends $pb.GeneratedMessage {
   static DeleteTrainingCourseRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get courseId => $_getSZ(0);
+  $core.int get courseId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set courseId($core.String v) { $_setString(0, v); }
+  set courseId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasCourseId() => $_has(0);
   @$pb.TagNumber(1)
@@ -11834,7 +11848,7 @@ class CreateBankRequest extends $pb.GeneratedMessage {
 
 class CreateBankResponse extends $pb.GeneratedMessage {
   factory CreateBankResponse({
-    $core.String? bankId,
+    $core.int? bankId,
   }) {
     final $result = create();
     if (bankId != null) {
@@ -11847,7 +11861,7 @@ class CreateBankResponse extends $pb.GeneratedMessage {
   factory CreateBankResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateBankResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'bankId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'bankId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -11873,9 +11887,9 @@ class CreateBankResponse extends $pb.GeneratedMessage {
   static CreateBankResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get bankId => $_getSZ(0);
+  $core.int get bankId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set bankId($core.String v) { $_setString(0, v); }
+  set bankId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasBankId() => $_has(0);
   @$pb.TagNumber(1)
@@ -11884,7 +11898,7 @@ class CreateBankResponse extends $pb.GeneratedMessage {
 
 class GetBankRequest extends $pb.GeneratedMessage {
   factory GetBankRequest({
-    $core.String? bankId,
+    $core.int? bankId,
   }) {
     final $result = create();
     if (bankId != null) {
@@ -11897,7 +11911,7 @@ class GetBankRequest extends $pb.GeneratedMessage {
   factory GetBankRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetBankRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'bankId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'bankId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -11923,9 +11937,9 @@ class GetBankRequest extends $pb.GeneratedMessage {
   static GetBankRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get bankId => $_getSZ(0);
+  $core.int get bankId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set bankId($core.String v) { $_setString(0, v); }
+  set bankId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasBankId() => $_has(0);
   @$pb.TagNumber(1)
@@ -11986,7 +12000,7 @@ class GetBankResponse extends $pb.GeneratedMessage {
 
 class UpdateBankRequest extends $pb.GeneratedMessage {
   factory UpdateBankRequest({
-    $core.String? bankId,
+    $core.int? bankId,
     Bank? bankData,
   }) {
     final $result = create();
@@ -12003,7 +12017,7 @@ class UpdateBankRequest extends $pb.GeneratedMessage {
   factory UpdateBankRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateBankRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'bankId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'bankId', $pb.PbFieldType.OU3)
     ..aOM<Bank>(2, _omitFieldNames ? '' : 'bankData', subBuilder: Bank.create)
     ..hasRequiredFields = false
   ;
@@ -12030,9 +12044,9 @@ class UpdateBankRequest extends $pb.GeneratedMessage {
   static UpdateBankRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get bankId => $_getSZ(0);
+  $core.int get bankId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set bankId($core.String v) { $_setString(0, v); }
+  set bankId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasBankId() => $_has(0);
   @$pb.TagNumber(1)
@@ -12104,7 +12118,7 @@ class UpdateBankResponse extends $pb.GeneratedMessage {
 
 class DeleteBankRequest extends $pb.GeneratedMessage {
   factory DeleteBankRequest({
-    $core.String? bankId,
+    $core.int? bankId,
   }) {
     final $result = create();
     if (bankId != null) {
@@ -12117,7 +12131,7 @@ class DeleteBankRequest extends $pb.GeneratedMessage {
   factory DeleteBankRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteBankRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'bankId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'bankId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -12143,9 +12157,9 @@ class DeleteBankRequest extends $pb.GeneratedMessage {
   static DeleteBankRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get bankId => $_getSZ(0);
+  $core.int get bankId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set bankId($core.String v) { $_setString(0, v); }
+  set bankId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasBankId() => $_has(0);
   @$pb.TagNumber(1)
@@ -12381,7 +12395,7 @@ class CreateInteractionRequest extends $pb.GeneratedMessage {
 
 class CreateInteractionResponse extends $pb.GeneratedMessage {
   factory CreateInteractionResponse({
-    $core.String? interactionId,
+    $core.int? interactionId,
   }) {
     final $result = create();
     if (interactionId != null) {
@@ -12394,7 +12408,7 @@ class CreateInteractionResponse extends $pb.GeneratedMessage {
   factory CreateInteractionResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreateInteractionResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'interactionId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'interactionId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -12420,9 +12434,9 @@ class CreateInteractionResponse extends $pb.GeneratedMessage {
   static CreateInteractionResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get interactionId => $_getSZ(0);
+  $core.int get interactionId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set interactionId($core.String v) { $_setString(0, v); }
+  set interactionId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasInteractionId() => $_has(0);
   @$pb.TagNumber(1)
@@ -12431,7 +12445,7 @@ class CreateInteractionResponse extends $pb.GeneratedMessage {
 
 class GetInteractionRequest extends $pb.GeneratedMessage {
   factory GetInteractionRequest({
-    $core.String? interactionId,
+    $core.int? interactionId,
   }) {
     final $result = create();
     if (interactionId != null) {
@@ -12444,7 +12458,7 @@ class GetInteractionRequest extends $pb.GeneratedMessage {
   factory GetInteractionRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetInteractionRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'interactionId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'interactionId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -12470,9 +12484,9 @@ class GetInteractionRequest extends $pb.GeneratedMessage {
   static GetInteractionRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get interactionId => $_getSZ(0);
+  $core.int get interactionId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set interactionId($core.String v) { $_setString(0, v); }
+  set interactionId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasInteractionId() => $_has(0);
   @$pb.TagNumber(1)
@@ -12533,7 +12547,7 @@ class GetInteractionResponse extends $pb.GeneratedMessage {
 
 class UpdateInteractionRequest extends $pb.GeneratedMessage {
   factory UpdateInteractionRequest({
-    $core.String? interactionId,
+    $core.int? interactionId,
     Interaction? interactionData,
   }) {
     final $result = create();
@@ -12550,7 +12564,7 @@ class UpdateInteractionRequest extends $pb.GeneratedMessage {
   factory UpdateInteractionRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdateInteractionRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'interactionId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'interactionId', $pb.PbFieldType.OU3)
     ..aOM<Interaction>(2, _omitFieldNames ? '' : 'interactionData', subBuilder: Interaction.create)
     ..hasRequiredFields = false
   ;
@@ -12577,9 +12591,9 @@ class UpdateInteractionRequest extends $pb.GeneratedMessage {
   static UpdateInteractionRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get interactionId => $_getSZ(0);
+  $core.int get interactionId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set interactionId($core.String v) { $_setString(0, v); }
+  set interactionId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasInteractionId() => $_has(0);
   @$pb.TagNumber(1)
@@ -12651,7 +12665,7 @@ class UpdateInteractionResponse extends $pb.GeneratedMessage {
 
 class DeleteInteractionRequest extends $pb.GeneratedMessage {
   factory DeleteInteractionRequest({
-    $core.String? interactionId,
+    $core.int? interactionId,
   }) {
     final $result = create();
     if (interactionId != null) {
@@ -12664,7 +12678,7 @@ class DeleteInteractionRequest extends $pb.GeneratedMessage {
   factory DeleteInteractionRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeleteInteractionRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'interactionId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'interactionId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -12690,9 +12704,9 @@ class DeleteInteractionRequest extends $pb.GeneratedMessage {
   static DeleteInteractionRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get interactionId => $_getSZ(0);
+  $core.int get interactionId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set interactionId($core.String v) { $_setString(0, v); }
+  set interactionId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasInteractionId() => $_has(0);
   @$pb.TagNumber(1)
@@ -12928,7 +12942,7 @@ class CreatePaymentRequest extends $pb.GeneratedMessage {
 
 class CreatePaymentResponse extends $pb.GeneratedMessage {
   factory CreatePaymentResponse({
-    $core.String? paymentId,
+    $core.int? paymentId,
   }) {
     final $result = create();
     if (paymentId != null) {
@@ -12941,7 +12955,7 @@ class CreatePaymentResponse extends $pb.GeneratedMessage {
   factory CreatePaymentResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'CreatePaymentResponse', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'paymentId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'paymentId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -12967,9 +12981,9 @@ class CreatePaymentResponse extends $pb.GeneratedMessage {
   static CreatePaymentResponse? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get paymentId => $_getSZ(0);
+  $core.int get paymentId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set paymentId($core.String v) { $_setString(0, v); }
+  set paymentId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasPaymentId() => $_has(0);
   @$pb.TagNumber(1)
@@ -12978,7 +12992,7 @@ class CreatePaymentResponse extends $pb.GeneratedMessage {
 
 class GetPaymentRequest extends $pb.GeneratedMessage {
   factory GetPaymentRequest({
-    $core.String? paymentId,
+    $core.int? paymentId,
   }) {
     final $result = create();
     if (paymentId != null) {
@@ -12991,7 +13005,7 @@ class GetPaymentRequest extends $pb.GeneratedMessage {
   factory GetPaymentRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'GetPaymentRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'paymentId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'paymentId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -13017,9 +13031,9 @@ class GetPaymentRequest extends $pb.GeneratedMessage {
   static GetPaymentRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get paymentId => $_getSZ(0);
+  $core.int get paymentId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set paymentId($core.String v) { $_setString(0, v); }
+  set paymentId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasPaymentId() => $_has(0);
   @$pb.TagNumber(1)
@@ -13080,7 +13094,7 @@ class GetPaymentResponse extends $pb.GeneratedMessage {
 
 class UpdatePaymentRequest extends $pb.GeneratedMessage {
   factory UpdatePaymentRequest({
-    $core.String? paymentId,
+    $core.int? paymentId,
     Payment? paymentData,
   }) {
     final $result = create();
@@ -13097,7 +13111,7 @@ class UpdatePaymentRequest extends $pb.GeneratedMessage {
   factory UpdatePaymentRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UpdatePaymentRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'paymentId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'paymentId', $pb.PbFieldType.OU3)
     ..aOM<Payment>(2, _omitFieldNames ? '' : 'paymentData', subBuilder: Payment.create)
     ..hasRequiredFields = false
   ;
@@ -13124,9 +13138,9 @@ class UpdatePaymentRequest extends $pb.GeneratedMessage {
   static UpdatePaymentRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get paymentId => $_getSZ(0);
+  $core.int get paymentId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set paymentId($core.String v) { $_setString(0, v); }
+  set paymentId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasPaymentId() => $_has(0);
   @$pb.TagNumber(1)
@@ -13198,7 +13212,7 @@ class UpdatePaymentResponse extends $pb.GeneratedMessage {
 
 class DeletePaymentRequest extends $pb.GeneratedMessage {
   factory DeletePaymentRequest({
-    $core.String? paymentId,
+    $core.int? paymentId,
   }) {
     final $result = create();
     if (paymentId != null) {
@@ -13211,7 +13225,7 @@ class DeletePaymentRequest extends $pb.GeneratedMessage {
   factory DeletePaymentRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'DeletePaymentRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
-    ..aOS(1, _omitFieldNames ? '' : 'paymentId')
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'paymentId', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false
   ;
 
@@ -13237,9 +13251,9 @@ class DeletePaymentRequest extends $pb.GeneratedMessage {
   static DeletePaymentRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get paymentId => $_getSZ(0);
+  $core.int get paymentId => $_getIZ(0);
   @$pb.TagNumber(1)
-  set paymentId($core.String v) { $_setString(0, v); }
+  set paymentId($core.int v) { $_setUnsignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasPaymentId() => $_has(0);
   @$pb.TagNumber(1)

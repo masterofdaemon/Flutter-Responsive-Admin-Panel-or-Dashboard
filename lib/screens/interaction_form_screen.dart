@@ -4,8 +4,7 @@ import 'package:admin/services/grpc_interaction_service_mobile.dart';
 import 'package:admin/services/grpc_client_service_mobile.dart';
 import 'package:admin/services/grpc_employee_service_mobile.dart';
 import 'package:grpc/grpc.dart';
-import 'package:admin/generated/google/protobuf/timestamp.pb.dart'
-    as $2;
+import 'package:admin/generated/google/protobuf/timestamp.pb.dart' as $2;
 import 'package:intl/intl.dart';
 import 'package:admin/screens/main/main_screen.dart';
 import 'package:admin/l10n/app_localizations.dart';
@@ -45,8 +44,8 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
         TextEditingController(text: widget.interaction?.summary ?? '');
     _notesController =
         TextEditingController(text: widget.interaction?.notes ?? '');
-    _selectedClientId = widget.interaction?.clientId;
-    _selectedManagerId = widget.interaction?.managerId;
+    _selectedClientId = widget.interaction?.clientId.toString();
+    _selectedManagerId = widget.interaction?.managerId.toString();
     _selectedInteractionType = widget.interaction?.type ??
         crm.InteractionType.INTERACTION_TYPE_UNSPECIFIED;
 
@@ -72,7 +71,8 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
     // final localizations = AppLocalizations.of(context); // Get localizations if needed for error messages
     try {
       final clientsFuture = _clientService.listClients(pageSize: 1000);
-      final managersFuture = _employeeService.listEmployees(pageSize: 1000); // Assuming employees are managers
+      final managersFuture = _employeeService.listEmployees(
+          pageSize: 1000); // Assuming employees are managers
 
       final results = await Future.wait([clientsFuture, managersFuture]);
       _clients = results[0] as List<crm.Client>;
@@ -99,9 +99,14 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
     final localizations = AppLocalizations.of(context);
 
     final interactionData = crm.Interaction(
-      interactionId: widget.interaction?.interactionId ?? '',
-      clientId: _selectedClientId ?? '',
-      managerId: _selectedManagerId ?? '',
+      interactionId: widget.interaction?.interactionId ??
+          0, // Keep as int for crm.Interaction
+      clientId: _selectedClientId != null && _selectedClientId!.isNotEmpty
+          ? int.tryParse(_selectedClientId!) ?? 0
+          : 0,
+      managerId: _selectedManagerId != null && _selectedManagerId!.isNotEmpty
+          ? int.tryParse(_selectedManagerId!) ?? 0
+          : 0,
       type: _selectedInteractionType,
       summary: _summaryController.text,
       notes: _notesController.text,
@@ -115,16 +120,17 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
         await _interactionService.createInteraction(interactionData);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text(localizations
-                  .interactionFormScreenFeedbackSuccessCreate)),
+              content: Text(
+                  localizations.interactionFormScreenFeedbackSuccessCreate)),
         );
       } else {
         await _interactionService.updateInteraction(
-            interactionData.interactionId, interactionData);
+            widget.interaction!.interactionId,
+            interactionData);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text(localizations
-                  .interactionFormScreenFeedbackSuccessUpdate)),
+              content: Text(
+                  localizations.interactionFormScreenFeedbackSuccessUpdate)),
         );
       }
       Navigator.of(context).pop(true);
@@ -138,9 +144,8 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text(
-                localizations.interactionFormScreenFeedbackErrorUnexpected(
-                    e.toString()))),
+            content: Text(localizations
+                .interactionFormScreenFeedbackErrorUnexpected(e.toString()))),
       );
     } finally {
       setState(() {
@@ -204,11 +209,11 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
                     DropdownButtonFormField<String>(
                       value: _selectedClientId,
                       decoration: InputDecoration(
-                          labelText: localizations
-                              .interactionFormScreenLabelClient),
+                          labelText:
+                              localizations.interactionFormScreenLabelClient),
                       items: _clients.map((crm.Client client) {
                         return DropdownMenuItem<String>(
-                          value: client.clientId,
+                          value: client.clientId.toString(),
                           child: Text('${client.firstName} ${client.lastName}'),
                         );
                       }).toList(),
@@ -226,13 +231,14 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
                     DropdownButtonFormField<String>(
                       value: _selectedManagerId,
                       decoration: InputDecoration(
-                          labelText: localizations.interactionFormScreenLabelEmployee), // Reusing Employee label
+                          labelText: localizations
+                              .interactionFormScreenLabelEmployee), // Reusing Employee label
                       items: _employees.map((crm.Employee employee) {
                         return DropdownMenuItem<String>(
-                          value: employee.employeeId,
+                          value: employee.employeeId.toString(),
                           child: Text(employee.name.isNotEmpty
                               ? employee.name
-                              : employee.employeeId),
+                              : employee.employeeId.toString()),
                         );
                       }).toList(),
                       onChanged: (String? newValue) {
@@ -241,7 +247,8 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
                         });
                       },
                       validator: (value) => value == null || value.isEmpty
-                          ? localizations.interactionFormScreenValidationSelectEmployee // Reusing Employee validation
+                          ? localizations
+                              .interactionFormScreenValidationSelectEmployee // Reusing Employee validation
                           : null,
                     ),
                     const SizedBox(height: 16),
@@ -253,8 +260,7 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
                       items: crm.InteractionType.values
                           .where((type) =>
                               type !=
-                              crm.InteractionType
-                                  .INTERACTION_TYPE_UNSPECIFIED)
+                              crm.InteractionType.INTERACTION_TYPE_UNSPECIFIED)
                           .map((crm.InteractionType type) {
                         return DropdownMenuItem<crm.InteractionType>(
                           value: type,
@@ -278,13 +284,15 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
                     ),
                     const SizedBox(height: 16),
                     ListTile(
-                      title: Text(localizations
-                          .interactionFormScreenLabelInteractionDate(
-                              _selectedInteractionDate == null
-                                  ? localizations
-                                      .interactionFormScreenLabelDateNotSet
-                                  : DateFormat('yyyy-MM-dd')
-                                      .format(_selectedInteractionDate!))),
+                      title: Text(
+                          localizations
+                              .interactionFormScreenLabelInteractionDate(
+                                  _selectedInteractionDate ==
+                                          null
+                                      ? localizations
+                                          .interactionFormScreenLabelDateNotSet
+                                      : DateFormat('yyyy-MM-dd')
+                                          .format(_selectedInteractionDate!))),
                       trailing: const Icon(Icons.calendar_today),
                       onTap: () => _selectDate(context),
                     ),
@@ -304,7 +312,8 @@ class _InteractionFormScreenState extends State<InteractionFormScreen> {
                     TextFormField(
                       controller: _notesController,
                       decoration: InputDecoration(
-                          labelText: localizations.interactionFormScreenLabelNotes),
+                          labelText:
+                              localizations.interactionFormScreenLabelNotes),
                       maxLines: 3,
                     ),
                     const SizedBox(height: 16),
