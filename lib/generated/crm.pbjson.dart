@@ -797,10 +797,11 @@ const Bank$json = {
   '2': [
     {'1': 'bank_id', '3': 1, '4': 1, '5': 13, '10': 'bankId'},
     {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
-    {'1': 'address', '3': 3, '4': 1, '5': 9, '9': 0, '10': 'address', '17': true},
-    {'1': 'contact_person', '3': 4, '4': 1, '5': 9, '9': 1, '10': 'contactPerson', '17': true},
-    {'1': 'account_opening_commission', '3': 5, '4': 1, '5': 1, '9': 2, '10': 'accountOpeningCommission', '17': true},
-    {'1': 'notes', '3': 6, '4': 1, '5': 9, '9': 3, '10': 'notes', '17': true},
+    {'1': 'bic', '3': 3, '4': 1, '5': 9, '10': 'bic'},
+    {'1': 'address', '3': 4, '4': 1, '5': 9, '9': 0, '10': 'address', '17': true},
+    {'1': 'contact_person', '3': 5, '4': 1, '5': 9, '9': 1, '10': 'contactPerson', '17': true},
+    {'1': 'account_opening_commission', '3': 6, '4': 1, '5': 1, '9': 2, '10': 'accountOpeningCommission', '17': true},
+    {'1': 'notes', '3': 7, '4': 1, '5': 9, '9': 3, '10': 'notes', '17': true},
   ],
   '8': [
     {'1': '_address'},
@@ -812,12 +813,12 @@ const Bank$json = {
 
 /// Descriptor for `Bank`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List bankDescriptor = $convert.base64Decode(
-    'CgRCYW5rEhcKB2JhbmtfaWQYASABKA1SBmJhbmtJZBISCgRuYW1lGAIgASgJUgRuYW1lEh0KB2'
-    'FkZHJlc3MYAyABKAlIAFIHYWRkcmVzc4gBARIqCg5jb250YWN0X3BlcnNvbhgEIAEoCUgBUg1j'
-    'b250YWN0UGVyc29uiAEBEkEKGmFjY291bnRfb3BlbmluZ19jb21taXNzaW9uGAUgASgBSAJSGG'
-    'FjY291bnRPcGVuaW5nQ29tbWlzc2lvbogBARIZCgVub3RlcxgGIAEoCUgDUgVub3Rlc4gBAUIK'
-    'CghfYWRkcmVzc0IRCg9fY29udGFjdF9wZXJzb25CHQobX2FjY291bnRfb3BlbmluZ19jb21taX'
-    'NzaW9uQggKBl9ub3Rlcw==');
+    'CgRCYW5rEhcKB2JhbmtfaWQYASABKA1SBmJhbmtJZBISCgRuYW1lGAIgASgJUgRuYW1lEhAKA2'
+    'JpYxgDIAEoCVIDYmljEh0KB2FkZHJlc3MYBCABKAlIAFIHYWRkcmVzc4gBARIqCg5jb250YWN0'
+    'X3BlcnNvbhgFIAEoCUgBUg1jb250YWN0UGVyc29uiAEBEkEKGmFjY291bnRfb3BlbmluZ19jb2'
+    '1taXNzaW9uGAYgASgBSAJSGGFjY291bnRPcGVuaW5nQ29tbWlzc2lvbogBARIZCgVub3RlcxgH'
+    'IAEoCUgDUgVub3Rlc4gBAUIKCghfYWRkcmVzc0IRCg9fY29udGFjdF9wZXJzb25CHQobX2FjY2'
+    '91bnRfb3BlbmluZ19jb21taXNzaW9uQggKBl9ub3Rlcw==');
 
 @$core.Deprecated('Use interactionDescriptor instead')
 const Interaction$json = {

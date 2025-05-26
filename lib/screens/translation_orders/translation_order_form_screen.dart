@@ -10,7 +10,7 @@ import 'package:admin/widgets/loading_indicator.dart';
 import 'package:fixnum/fixnum.dart'; // For Int64
 import 'package:admin/utils/timestamp_helpers.dart';
 import 'package:admin/l10n/app_localizations.dart';
-import 'package:admin/widgets/document_type_search_field.dart';
+import 'package:admin/widgets/simple_document_type_dropdown.dart';
 import 'package:admin/widgets/translation_pricing_widget.dart';
 import 'package:admin/widgets/blank_number_field.dart';
 
@@ -80,14 +80,6 @@ class _TranslationOrderFormScreenState
   crm.Employee? _selectedTranslator;
   crm.Office? _selectedOffice;
   String? _selectedDocumentTypeKey; // Document type key (string)
-  // Available document types
-  List<String> _documentTypeKeys = [
-    'passport',
-    'diploma',
-    'birth_certificate',
-    'contract',
-    'other'
-  ];
   crm.Priority? _selectedPriority;
   // TranslationProgress is read-only, store fetched value if editing
   crm.TranslationProgressStatus? _currentTranslationProgress;
@@ -265,18 +257,7 @@ class _TranslationOrderFormScreenState
         order.hasDocumentTypeKey() && order.documentTypeKey.isNotEmpty
             ? order.documentTypeKey
             : null;
-    // Initialize document type controller display text
-    if (_selectedDocumentTypeKey != null) {
-      if (_selectedDocumentTypeKey == 'other' ||
-          !_documentTypeKeys.contains(_selectedDocumentTypeKey)) {
-        _documentTypeController.text = _selectedDocumentTypeKey!;
-      } else {
-        _documentTypeController.text =
-            _getDocumentTypeDisplayName(_selectedDocumentTypeKey!);
-      }
-    } else {
-      _documentTypeController.clear();
-    }
+    // No need to set _documentTypeController or display text, handled by dropdown widget
 
     _selectedPriority = (order.priority == crm.Priority.PRIORITY_UNSPECIFIED)
         ? null
@@ -450,25 +431,7 @@ class _TranslationOrderFormScreenState
     }
   }
 
-  // Helper method to get localized document type display name
-  String _getDocumentTypeDisplayName(String documentTypeKey) {
-    final localizations = AppLocalizations.of(context);
-    switch (documentTypeKey) {
-      case 'passport':
-        return localizations.documentTypePassport;
-      case 'diploma':
-        return localizations.documentTypeDiploma;
-      case 'birth_certificate':
-        return localizations.documentTypeBirthCertificate;
-      case 'contract':
-        return localizations.documentTypeContract;
-      case 'other':
-        return localizations.documentTypeOther;
-      default:
-        // For custom document types, return as is
-        return documentTypeKey;
-    }
-  }
+  // (Removed unused _getDocumentTypeDisplayName)
 
   // Header Section with breadcrumb-style navigation
   Widget _buildHeaderSection(BuildContext context, ThemeData theme,
@@ -955,13 +918,13 @@ class _TranslationOrderFormScreenState
 
             const SizedBox(height: 20),
 
-            // Document Type Search Field
-            DocumentTypeSearchField(
+            // Document Type Dropdown
+            SimpleDocumentTypeDropdown(
               selectedDocumentTypeKey: _selectedDocumentTypeKey,
               onChanged: (documentType) {
+                print('Document type selected: $documentType'); // Debug
                 setState(() {
                   _selectedDocumentTypeKey = documentType;
-                  _documentTypeController.text = documentType ?? '';
                 });
               },
               isRequired: true,

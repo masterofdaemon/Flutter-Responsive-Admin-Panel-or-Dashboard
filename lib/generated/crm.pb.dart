@@ -2959,6 +2959,7 @@ class Bank extends $pb.GeneratedMessage {
   factory Bank({
     $core.int? bankId,
     $core.String? name,
+    $core.String? bic,
     $core.String? address,
     $core.String? contactPerson,
     $core.double? accountOpeningCommission,
@@ -2970,6 +2971,9 @@ class Bank extends $pb.GeneratedMessage {
     }
     if (name != null) {
       $result.name = name;
+    }
+    if (bic != null) {
+      $result.bic = bic;
     }
     if (address != null) {
       $result.address = address;
@@ -2992,10 +2996,11 @@ class Bank extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Bank', package: const $pb.PackageName(_omitMessageNames ? '' : 'proto'), createEmptyInstance: create)
     ..a<$core.int>(1, _omitFieldNames ? '' : 'bankId', $pb.PbFieldType.OU3)
     ..aOS(2, _omitFieldNames ? '' : 'name')
-    ..aOS(3, _omitFieldNames ? '' : 'address')
-    ..aOS(4, _omitFieldNames ? '' : 'contactPerson')
-    ..a<$core.double>(5, _omitFieldNames ? '' : 'accountOpeningCommission', $pb.PbFieldType.OD)
-    ..aOS(6, _omitFieldNames ? '' : 'notes')
+    ..aOS(3, _omitFieldNames ? '' : 'bic')
+    ..aOS(4, _omitFieldNames ? '' : 'address')
+    ..aOS(5, _omitFieldNames ? '' : 'contactPerson')
+    ..a<$core.double>(6, _omitFieldNames ? '' : 'accountOpeningCommission', $pb.PbFieldType.OD)
+    ..aOS(7, _omitFieldNames ? '' : 'notes')
     ..hasRequiredFields = false
   ;
 
@@ -3039,40 +3044,49 @@ class Bank extends $pb.GeneratedMessage {
   void clearName() => $_clearField(2);
 
   @$pb.TagNumber(3)
-  $core.String get address => $_getSZ(2);
+  $core.String get bic => $_getSZ(2);
   @$pb.TagNumber(3)
-  set address($core.String v) { $_setString(2, v); }
+  set bic($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
-  $core.bool hasAddress() => $_has(2);
+  $core.bool hasBic() => $_has(2);
   @$pb.TagNumber(3)
-  void clearAddress() => $_clearField(3);
+  void clearBic() => $_clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get contactPerson => $_getSZ(3);
+  $core.String get address => $_getSZ(3);
   @$pb.TagNumber(4)
-  set contactPerson($core.String v) { $_setString(3, v); }
+  set address($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
-  $core.bool hasContactPerson() => $_has(3);
+  $core.bool hasAddress() => $_has(3);
   @$pb.TagNumber(4)
-  void clearContactPerson() => $_clearField(4);
+  void clearAddress() => $_clearField(4);
 
   @$pb.TagNumber(5)
-  $core.double get accountOpeningCommission => $_getN(4);
+  $core.String get contactPerson => $_getSZ(4);
   @$pb.TagNumber(5)
-  set accountOpeningCommission($core.double v) { $_setDouble(4, v); }
+  set contactPerson($core.String v) { $_setString(4, v); }
   @$pb.TagNumber(5)
-  $core.bool hasAccountOpeningCommission() => $_has(4);
+  $core.bool hasContactPerson() => $_has(4);
   @$pb.TagNumber(5)
-  void clearAccountOpeningCommission() => $_clearField(5);
+  void clearContactPerson() => $_clearField(5);
 
   @$pb.TagNumber(6)
-  $core.String get notes => $_getSZ(5);
+  $core.double get accountOpeningCommission => $_getN(5);
   @$pb.TagNumber(6)
-  set notes($core.String v) { $_setString(5, v); }
+  set accountOpeningCommission($core.double v) { $_setDouble(5, v); }
   @$pb.TagNumber(6)
-  $core.bool hasNotes() => $_has(5);
+  $core.bool hasAccountOpeningCommission() => $_has(5);
   @$pb.TagNumber(6)
-  void clearNotes() => $_clearField(6);
+  void clearAccountOpeningCommission() => $_clearField(6);
+
+  @$pb.TagNumber(7)
+  $core.String get notes => $_getSZ(6);
+  @$pb.TagNumber(7)
+  set notes($core.String v) { $_setString(6, v); }
+  @$pb.TagNumber(7)
+  $core.bool hasNotes() => $_has(6);
+  @$pb.TagNumber(7)
+  void clearNotes() => $_clearField(7);
 }
 
 /// Interaction message

@@ -389,10 +389,11 @@ message TranslationPriceListItem {
 message Bank {
   uint32 bank_id = 1;
   string name = 2;
-  optional string address = 3;
-  optional string contact_person = 4;
-  optional double account_opening_commission = 5; // Fixed commission amount for opening an account via this bank
-  optional string notes = 6;
+  string bic = 3;
+  optional string address = 4;
+  optional string contact_person = 5;
+  optional double account_opening_commission = 6; // Fixed commission amount for opening an account via this bank
+  optional string notes = 7;
 }
 
 // Interaction message
