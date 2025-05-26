@@ -143,6 +143,7 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
         // _employeeIdInt = employee.employeeId; // Removed, not needed
         _nameController.text = employee.name;
         _emailController.text = employee.email;
+        _loginController.text = employee.login; // <-- Add this line
 
         // Store original telegramId and set controller
         _originalTelegramId = employee.telegramId;
