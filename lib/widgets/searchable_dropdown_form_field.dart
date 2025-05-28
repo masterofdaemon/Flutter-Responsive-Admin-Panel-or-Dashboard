@@ -20,6 +20,7 @@ class SearchableDropdownFormField<T> extends StatefulWidget {
   final EdgeInsetsGeometry? contentPadding;
   final InputDecoration? decoration;
   final bool isRequired;
+  final bool autofocus;
 
   const SearchableDropdownFormField({
     super.key,
@@ -39,6 +40,7 @@ class SearchableDropdownFormField<T> extends StatefulWidget {
     this.contentPadding,
     this.decoration,
     this.isRequired = false,
+    this.autofocus = false,
   });
 
   @override
@@ -157,7 +159,7 @@ class _SearchableDropdownFormFieldState<T>
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
-                      autofocus: true,
+                      autofocus: widget.autofocus,
                       decoration: InputDecoration(
                         hintText: localizations.searchableDropdownSearchHint,
                         prefixIcon: const Icon(Icons.search, size: 20),

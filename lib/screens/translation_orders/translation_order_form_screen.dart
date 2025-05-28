@@ -16,6 +16,27 @@ import 'package:admin/widgets/translation_pricing_widget.dart';
 import 'package:admin/widgets/blank_number_field.dart';
 import 'package:admin/widgets/searchable_dropdown_form_field.dart';
 
+// Language option class for dropdown
+class LanguageOption {
+  final String code;
+  final String name;
+
+  const LanguageOption({required this.code, required this.name});
+
+  @override
+  String toString() => name;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LanguageOption &&
+          runtimeType == other.runtimeType &&
+          code == other.code;
+
+  @override
+  int get hashCode => code.hashCode;
+}
+
 // Helper function to convert Timestamp to DateTime (handle null)
 DateTime? timestampToDateTime($timestamp.Timestamp? ts) {
   // Use imported Timestamp
@@ -65,8 +86,6 @@ class _TranslationOrderFormScreenState
   final _clientNameController =
       TextEditingController(); // Add client name controller
   DateTime? _doneAt;
-  final _sourceLangController = TextEditingController();
-  final _targetLangController = TextEditingController();
   final _pageCountController = TextEditingController();
   final _notarialSumController = TextEditingController();
   final _totalSumController = TextEditingController();
@@ -85,6 +104,8 @@ class _TranslationOrderFormScreenState
   crm.Employee? _selectedTranslator;
   crm.Office? _selectedOffice;
   String? _selectedDocumentTypeKey; // Document type key (string)
+  String? _selectedSourceLanguage; // Selected source language code
+  String? _selectedTargetLanguage; // Selected target language code
   crm.Priority? _selectedPriority;
   // TranslationProgress is read-only, store fetched value if editing
   crm.TranslationProgressStatus? _currentTranslationProgress;
@@ -95,6 +116,20 @@ class _TranslationOrderFormScreenState
   List<crm.Employee> _managers = [];
   List<crm.Employee> _translators = [];
   List<crm.Office> _offices = [];
+
+  // Language options for dropdowns
+  final List<LanguageOption> _languageOptions = [
+    LanguageOption(code: 'ua', name: 'Ukrainian (Українська)'),
+    LanguageOption(code: 'ru', name: 'Russian (Русский)'),
+    LanguageOption(code: 'en', name: 'English'),
+    LanguageOption(code: 'de', name: 'German (Deutsch)'),
+    LanguageOption(code: 'fr', name: 'French (Français)'),
+    LanguageOption(code: 'es', name: 'Spanish (Español)'),
+    LanguageOption(code: 'it', name: 'Italian (Italiano)'),
+    LanguageOption(code: 'pl', name: 'Polish (Polski)'),
+    LanguageOption(code: 'cs', name: 'Czech (Čeština)'),
+    LanguageOption(code: 'sk', name: 'Slovak (Slovenčina)'),
+  ];
   // _documentTypeKeys will be populated in _loadInitialData
   final List<crm.Priority> _priorities = crm.Priority.values
       .where((p) => p != crm.Priority.PRIORITY_UNSPECIFIED)
@@ -123,8 +158,6 @@ class _TranslationOrderFormScreenState
     // Dispose all controllers
     _clientIdController.dispose();
     _clientNameController.dispose(); // Add disposal for client name controller
-    _sourceLangController.dispose();
-    _targetLangController.dispose();
     _pageCountController.dispose();
     _notarialSumController.dispose();
     _totalSumController.dispose();
@@ -236,10 +269,10 @@ class _TranslationOrderFormScreenState
   void _setDefaultValues() {
     setState(() {
       // Set default source language to Ukrainian
-      _sourceLangController.text = 'ua';
+      _selectedSourceLanguage = 'ua';
 
       // Set default target language to Russian
-      _targetLangController.text = 'ru';
+      _selectedTargetLanguage = 'ru';
 
       // Set default priority to NORMAL
       _selectedPriority = crm.Priority.NORMAL;
@@ -293,8 +326,10 @@ class _TranslationOrderFormScreenState
         ? order.clientName
         : ''; // Add client name population
     _doneAt = order.hasDoneAt() ? timestampToDateTime(order.doneAt) : null;
-    _sourceLangController.text = order.sourceLanguage;
-    _targetLangController.text = order.targetLanguage;
+    _selectedSourceLanguage =
+        order.sourceLanguage.isNotEmpty ? order.sourceLanguage : null;
+    _selectedTargetLanguage =
+        order.targetLanguage.isNotEmpty ? order.targetLanguage : null;
     _pageCountController.text =
         order.hasPageCount() ? order.pageCount.toString() : '';
     _notarialSumController.text =
@@ -379,12 +414,8 @@ class _TranslationOrderFormScreenState
         officeId: _selectedOffice?.officeId ?? 0,
         translatorId: _selectedTranslator?.employeeId,
         documentTypeKey: _selectedDocumentTypeKey ?? '',
-        sourceLanguage: _sourceLangController.text.isNotEmpty
-            ? _sourceLangController.text
-            : null,
-        targetLanguage: _targetLangController.text.isNotEmpty
-            ? _targetLangController.text
-            : null,
+        sourceLanguage: _selectedSourceLanguage ?? '',
+        targetLanguage: _selectedTargetLanguage ?? '',
         clientName: _clientNameController.text.isNotEmpty
             ? _clientNameController.text
             : null, // Add client name to save logic
@@ -878,31 +909,32 @@ class _TranslationOrderFormScreenState
             Row(
               children: [
                 Expanded(
-                  child: TextFormField(
-                    controller: _sourceLangController,
-                    decoration: InputDecoration(
-                      labelText: localizations
-                          .translationOrderFormScreenFieldSourceLanguageLabel,
-                      hintText: localizations
-                          .translationOrderFormScreenFieldSourceLanguageHint,
-                      prefixIcon: Icon(Icons.input_outlined,
-                          color: colorScheme.primary),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                            color: colorScheme.outline.withOpacity(0.3)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide:
-                            BorderSide(color: colorScheme.primary, width: 2),
-                      ),
+                  child: SearchableDropdownFormField<LanguageOption>(
+                    value: _selectedSourceLanguage != null
+                        ? _languageOptions.firstWhere(
+                            (lang) => lang.code == _selectedSourceLanguage,
+                            orElse: () => _languageOptions.first)
+                        : null,
+                    items: _languageOptions,
+                    itemAsString: (languageOption) => languageOption.name,
+                    itemBuilder: (languageOption) => Text(
+                      languageOption.name,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
+                    onChanged: (LanguageOption? value) {
+                      setState(() {
+                        _selectedSourceLanguage = value?.code;
+                      });
+                    },
+                    labelText: localizations
+                        .translationOrderFormScreenFieldSourceLanguageLabel,
+                    hintText: localizations
+                        .translationOrderFormScreenFieldSourceLanguageHint,
+                    prefixIcon:
+                        Icon(Icons.input_outlined, color: colorScheme.primary),
+                    autofocus: false,
+                    validator: (LanguageOption? value) {
+                      if (value == null) {
                         return localizations
                             .translationOrderFormScreenFieldSourceLanguageValidationRequired;
                       }
@@ -918,31 +950,32 @@ class _TranslationOrderFormScreenState
                   ),
                 ),
                 Expanded(
-                  child: TextFormField(
-                    controller: _targetLangController,
-                    decoration: InputDecoration(
-                      labelText: localizations
-                          .translationOrderFormScreenFieldTargetLanguageLabel,
-                      hintText: localizations
-                          .translationOrderFormScreenFieldTargetLanguageHint,
-                      prefixIcon: Icon(Icons.output_outlined,
-                          color: colorScheme.primary),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                            color: colorScheme.outline.withOpacity(0.3)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide:
-                            BorderSide(color: colorScheme.primary, width: 2),
-                      ),
+                  child: SearchableDropdownFormField<LanguageOption>(
+                    value: _selectedTargetLanguage != null
+                        ? _languageOptions.firstWhere(
+                            (lang) => lang.code == _selectedTargetLanguage,
+                            orElse: () => _languageOptions.first)
+                        : null,
+                    items: _languageOptions,
+                    itemAsString: (languageOption) => languageOption.name,
+                    itemBuilder: (languageOption) => Text(
+                      languageOption.name,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
+                    onChanged: (LanguageOption? value) {
+                      setState(() {
+                        _selectedTargetLanguage = value?.code;
+                      });
+                    },
+                    labelText: localizations
+                        .translationOrderFormScreenFieldTargetLanguageLabel,
+                    hintText: localizations
+                        .translationOrderFormScreenFieldTargetLanguageHint,
+                    prefixIcon:
+                        Icon(Icons.output_outlined, color: colorScheme.primary),
+                    autofocus: false,
+                    validator: (LanguageOption? value) {
+                      if (value == null) {
                         return localizations
                             .translationOrderFormScreenFieldTargetLanguageValidationRequired;
                       }
