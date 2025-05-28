@@ -1,5 +1,5 @@
 import 'package:admin/generated/crm.pb.dart' as crm;
-import 'package:intl/intl.dart'; // For date formatting if needed
+// For date formatting if needed
 
 class OfficeViewModel {
   final crm.Office _office;

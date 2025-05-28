@@ -71,7 +71,10 @@ class _SearchableDropdownFormFieldState<T>
       _filterItems('');
     }
     if (oldWidget.value != widget.value) {
-      _updateDisplayText();
+      // Defer the text update to avoid setState during build
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _updateDisplayText();
+      });
     }
   }
 

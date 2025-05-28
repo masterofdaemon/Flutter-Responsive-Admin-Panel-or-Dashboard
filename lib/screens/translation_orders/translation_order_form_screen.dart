@@ -6,6 +6,7 @@ import 'package:admin/generated/google/protobuf/timestamp.pb.dart'
     as $timestamp; // Import Timestamp
 import 'package:admin/services/grpc_translation_order_service_mobile.dart';
 import 'package:admin/services/grpc_client_service.dart'; // Assuming this service fetches Employees/Offices
+import 'package:admin/services/auth_service.dart';
 import 'package:admin/widgets/loading_indicator.dart';
 import 'package:fixnum/fixnum.dart'; // For Int64
 import 'package:admin/utils/timestamp_helpers.dart';
@@ -52,6 +53,7 @@ class _TranslationOrderFormScreenState
       GrpcTranslationOrderService();
   // Assuming a service to fetch related data like employees/offices
   final GrpcClientService _clientService = GrpcClientService();
+  final AuthService _authService = AuthService();
 
   bool _isLoading = false;
   bool _isFetchingInitialData = false; // Separate flag for initial load
@@ -178,6 +180,9 @@ class _TranslationOrderFormScreenState
             await _orderService.getTranslationOrder(widget.orderId!);
         if (!mounted) return;
         _populateFormFields();
+      } else {
+        // Auto-select current employee as manager for new orders
+        _autoSelectCurrentEmployee();
       }
     } catch (e) {
       if (mounted) {
@@ -191,6 +196,37 @@ class _TranslationOrderFormScreenState
       if (mounted) {
         setState(() => _isFetchingInitialData = false);
       }
+    }
+  }
+
+  void _autoSelectCurrentEmployee() {
+    final currentEmployee = _authService.employeeProfile;
+    if (currentEmployee == null) return;
+
+    // Try to find and select current employee as manager
+    try {
+      final currentAsManager = _managers.firstWhere(
+        (m) => m.employeeId == currentEmployee.employeeId,
+      );
+      setState(() {
+        _selectedManager = currentAsManager;
+
+        // Auto-select office based on manager's office
+        if (currentAsManager.hasOfficeId()) {
+          try {
+            _selectedOffice = _offices.firstWhere(
+              (o) => o.officeId == currentAsManager.officeId,
+            );
+          } catch (e) {
+            // Office not found, leave null
+            print(
+                'Warning: Manager office ID ${currentAsManager.officeId} not found in loaded offices.');
+          }
+        }
+      });
+    } catch (e) {
+      // Current employee is not in managers list (might be translator, etc.)
+      print('Current employee not found in managers list or is not a manager.');
     }
   }
 
@@ -603,38 +639,20 @@ class _TranslationOrderFormScreenState
             Row(
               children: [
                 Expanded(
-                  child: DropdownButtonFormField<crm.Client>(
+                  child: SearchableDropdownFormField<crm.Client>(
                     value: _selectedClient,
-                    decoration: InputDecoration(
-                      labelText: localizations
-                          .translationOrderFormScreenFieldClientLabel,
-                      hintText: localizations
-                          .translationOrderFormScreenFieldClientHint,
-                      prefixIcon: Icon(Icons.person_outline,
-                          color: colorScheme.primary),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                            color: colorScheme.outline.withOpacity(0.3)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide:
-                            BorderSide(color: colorScheme.primary, width: 2),
-                      ),
+                    items: _clients,
+                    itemAsString: (client) => _getClientDisplayName(client),
+                    itemBuilder: (client) => Text(
+                      _getClientDisplayName(client),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    items: _clients.map((client) {
-                      return DropdownMenuItem<crm.Client>(
-                        value: client,
-                        child: Text(
-                          _getClientDisplayName(client),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      );
-                    }).toList(),
+                    labelText: localizations
+                        .translationOrderFormScreenFieldClientLabel,
+                    hintText:
+                        localizations.translationOrderFormScreenFieldClientHint,
+                    prefixIcon:
+                        Icon(Icons.person_outline, color: colorScheme.primary),
                     onChanged: (crm.Client? newValue) {
                       setState(() {
                         _selectedClient = newValue;
@@ -650,38 +668,20 @@ class _TranslationOrderFormScreenState
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: DropdownButtonFormField<crm.Office>(
+                  child: SearchableDropdownFormField<crm.Office>(
                     value: _selectedOffice,
-                    decoration: InputDecoration(
-                      labelText: localizations
-                          .translationOrderFormScreenFieldOfficeLabel,
-                      hintText: localizations
-                          .translationOrderFormScreenFieldOfficeHint,
-                      prefixIcon: Icon(Icons.business_outlined,
-                          color: colorScheme.primary),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(
-                            color: colorScheme.outline.withOpacity(0.3)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide:
-                            BorderSide(color: colorScheme.primary, width: 2),
-                      ),
+                    items: _offices,
+                    itemAsString: (office) => _getOfficeDisplayName(office),
+                    itemBuilder: (office) => Text(
+                      _getOfficeDisplayName(office),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    items: _offices.map((office) {
-                      return DropdownMenuItem<crm.Office>(
-                        value: office,
-                        child: Text(
-                          _getOfficeDisplayName(office),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      );
-                    }).toList(),
+                    labelText: localizations
+                        .translationOrderFormScreenFieldOfficeLabel,
+                    hintText:
+                        localizations.translationOrderFormScreenFieldOfficeHint,
+                    prefixIcon: Icon(Icons.business_outlined,
+                        color: colorScheme.primary),
                     onChanged: (crm.Office? newValue) {
                       setState(() {
                         _selectedOffice = newValue;
@@ -1041,31 +1041,25 @@ class _TranslationOrderFormScreenState
       elevation: 2,
       shadowColor: colorScheme.shadow.withOpacity(0.1),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.note_alt_outlined,
-                  color: colorScheme.primary,
-                  size: 24,
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  localizations
-                      .translationOrderFormScreenSectionTitleAdditionalInformation,
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: colorScheme.onSurface,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            TextFormField(
+      child: ExpansionTile(
+        initiallyExpanded: false,
+        leading: Icon(
+          Icons.note_alt_outlined,
+          color: colorScheme.primary,
+          size: 24,
+        ),
+        title: Text(
+          localizations
+              .translationOrderFormScreenSectionTitleAdditionalInformation,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: colorScheme.onSurface,
+          ),
+        ),
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: TextFormField(
               controller: _notesController,
               maxLines: 4,
               decoration: InputDecoration(
@@ -1091,8 +1085,8 @@ class _TranslationOrderFormScreenState
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -1104,142 +1098,79 @@ class _TranslationOrderFormScreenState
       elevation: 2,
       shadowColor: colorScheme.shadow.withOpacity(0.1),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+      child: ExpansionTile(
+        initiallyExpanded: false,
+        leading: Icon(
+          Icons.track_changes_outlined,
+          color: colorScheme.primary,
+          size: 24,
+        ),
+        title: Text(
+          localizations.translationOrderFormScreenSectionTitleStatus,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: colorScheme.onSurface,
+          ),
+        ),
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  Icons.track_changes_outlined,
-                  color: colorScheme.primary,
-                  size: 24,
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  localizations.translationOrderFormScreenSectionTitleStatus,
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: colorScheme.onSurface,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            if (widget.orderId != null) ...[
-              // Translation Progress
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: colorScheme.surfaceVariant.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(12),
-                  border:
-                      Border.all(color: colorScheme.outline.withOpacity(0.2)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      localizations
-                          .translationOrderFormScreenStatusCurrentLabel,
-                      style: theme.textTheme.labelLarge?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w600,
-                      ),
+                if (widget.orderId != null) ...[
+                  // Translation Progress
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color:
+                          colorScheme.surfaceContainerHighest.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                          color: colorScheme.outline.withOpacity(0.2)),
                     ),
-                    const SizedBox(height: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        _getTranslationProgressDisplayName(
-                            _currentTranslationProgress),
-                        style: theme.textTheme.labelMedium?.copyWith(
-                          color: colorScheme.onPrimaryContainer,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 16),
-
-              // Status Change Dropdown
-              DropdownButtonFormField<crm.TranslationProgressStatus>(
-                value: _currentTranslationProgress,
-                decoration: InputDecoration(
-                  labelText:
-                      localizations.translationOrderFormScreenStatusUpdateLabel,
-                  prefixIcon: Icon(Icons.update, color: colorScheme.primary),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide:
-                        BorderSide(color: colorScheme.outline.withOpacity(0.3)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide:
-                        BorderSide(color: colorScheme.primary, width: 2),
-                  ),
-                ),
-                items: crm.TranslationProgressStatus.values
-                    .where((status) =>
-                        status !=
-                        crm.TranslationProgressStatus
-                            .TRANSLATION_PROGRESS_STATUS_UNSPECIFIED)
-                    .map((status) => DropdownMenuItem(
-                          value: status,
-                          child: Text(
-                            _getTranslationProgressDisplayName(status),
-                            overflow: TextOverflow.ellipsis,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          localizations
+                              .translationOrderFormScreenStatusCurrentLabel,
+                          style: theme.textTheme.labelLarge?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                            fontWeight: FontWeight.w600,
                           ),
-                        ))
-                    .toList(),
-                onChanged: (newStatus) {
-                  setState(() {
-                    _currentTranslationProgress = newStatus;
-                  });
-                },
-              ),
+                        ),
+                        const SizedBox(height: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: colorScheme.primaryContainer,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            _getTranslationProgressDisplayName(
+                                _currentTranslationProgress),
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: colorScheme.onPrimaryContainer,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
 
-              const SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
-              // Done At Date
-              GestureDetector(
-                onTap: () async {
-                  final picked = await showDatePicker(
-                    context: context,
-                    initialDate: _doneAt ?? DateTime.now(),
-                    firstDate: DateTime(2000),
-                    lastDate: DateTime(2100),
-                  );
-                  if (picked != null) {
-                    setState(() {
-                      _doneAt = picked;
-                    });
-                  }
-                },
-                child: AbsorbPointer(
-                  child: TextFormField(
+                  // Status Change Dropdown
+                  DropdownButtonFormField<crm.TranslationProgressStatus>(
+                    value: _currentTranslationProgress,
                     decoration: InputDecoration(
                       labelText: localizations
-                          .translationOrderFormScreenFieldCompletionDateLabel,
-                      hintText: localizations
-                          .translationOrderFormScreenFieldCompletionDateHint,
-                      prefixIcon: Icon(Icons.calendar_today,
-                          color: colorScheme.primary),
-                      suffixIcon:
-                          Icon(Icons.edit_calendar, color: colorScheme.primary),
+                          .translationOrderFormScreenStatusUpdateLabel,
+                      prefixIcon:
+                          Icon(Icons.update, color: colorScheme.primary),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -1254,47 +1185,111 @@ class _TranslationOrderFormScreenState
                             BorderSide(color: colorScheme.primary, width: 2),
                       ),
                     ),
-                    controller: TextEditingController(
-                      text: _doneAt != null
-                          ? formatTimestamp(dateTimeToTimestamp(_doneAt))
-                          : '',
-                    ),
-                    readOnly: true,
+                    items: crm.TranslationProgressStatus.values
+                        .where((status) =>
+                            status !=
+                            crm.TranslationProgressStatus
+                                .TRANSLATION_PROGRESS_STATUS_UNSPECIFIED)
+                        .map((status) => DropdownMenuItem(
+                              value: status,
+                              child: Text(
+                                _getTranslationProgressDisplayName(status),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ))
+                        .toList(),
+                    onChanged: (newStatus) {
+                      setState(() {
+                        _currentTranslationProgress = newStatus;
+                      });
+                    },
                   ),
-                ),
-              ),
-            ] else ...[
-              // For new orders, show creation info
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: colorScheme.primaryContainer.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(12),
-                  border:
-                      Border.all(color: colorScheme.primary.withOpacity(0.2)),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.info_outline,
-                      color: colorScheme.primary,
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        localizations
-                            .translationOrderFormScreenNewOrderStatusInfo,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: colorScheme.onPrimaryContainer,
+
+                  const SizedBox(height: 16),
+
+                  // Done At Date
+                  GestureDetector(
+                    onTap: () async {
+                      final picked = await showDatePicker(
+                        context: context,
+                        initialDate: _doneAt ?? DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2100),
+                      );
+                      if (picked != null) {
+                        setState(() {
+                          _doneAt = picked;
+                        });
+                      }
+                    },
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          labelText: localizations
+                              .translationOrderFormScreenFieldCompletionDateLabel,
+                          hintText: localizations
+                              .translationOrderFormScreenFieldCompletionDateHint,
+                          prefixIcon: Icon(Icons.calendar_today,
+                              color: colorScheme.primary),
+                          suffixIcon: Icon(Icons.edit_calendar,
+                              color: colorScheme.primary),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                                color: colorScheme.outline.withOpacity(0.3)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide(
+                                color: colorScheme.primary, width: 2),
+                          ),
                         ),
+                        controller: TextEditingController(
+                          text: _doneAt != null
+                              ? formatTimestamp(dateTimeToTimestamp(_doneAt))
+                              : '',
+                        ),
+                        readOnly: true,
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ],
-          ],
-        ),
+                  ),
+                ] else ...[
+                  // For new orders, show creation info
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: colorScheme.primaryContainer.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                          color: colorScheme.primary.withOpacity(0.2)),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.info_outline,
+                          color: colorScheme.primary,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            localizations
+                                .translationOrderFormScreenNewOrderStatusInfo,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: colorScheme.onPrimaryContainer,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -1412,7 +1407,7 @@ class _TranslationOrderFormScreenState
                   borderSide: BorderSide(color: colorScheme.primary, width: 2),
                 ),
                 filled: true,
-                fillColor: colorScheme.surfaceVariant.withOpacity(0.3),
+                fillColor: colorScheme.surfaceContainerHighest.withOpacity(0.3),
               ),
               readOnly: true,
               style: TextStyle(
@@ -1703,7 +1698,7 @@ class _TranslationOrderFormScreenState
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    colorScheme.surfaceVariant.withOpacity(0.3),
+                    colorScheme.surfaceContainerHighest.withOpacity(0.3),
                     colorScheme.surface,
                   ],
                   begin: Alignment.topCenter,
