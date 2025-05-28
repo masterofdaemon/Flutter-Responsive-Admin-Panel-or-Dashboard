@@ -1712,50 +1712,52 @@ class _TranslationOrderFormScreenState
               ),
               child: Form(
                 key: _formKey,
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 1200),
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Header Section
-                        _buildHeaderSection(
-                            context, theme, colorScheme, localizations),
-                        const SizedBox(height: 24),
-
-                        // Order Details Section
-                        _buildOrderDetailsSection(
-                            context, theme, colorScheme, localizations),
-                        const SizedBox(height: 24),
-
-                        // Language and Document Section
-                        _buildLanguageAndDocumentSection(
-                            context, theme, colorScheme, localizations),
-                        const SizedBox(height: 24),
-
-                        // Pricing Section
-                        _buildPricingSection(
-                            context, theme, colorScheme, localizations),
-                        const SizedBox(height: 24),
-
-                        // Notes Section
-                        _buildNotesSection(
-                            context, theme, colorScheme, localizations),
-                        const SizedBox(height: 24),
-
-                        // Status Section (only show when editing)
-                        if (widget.orderId != null) ...[
-                          _buildStatusSection(
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 1200),
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Header Section
+                          _buildHeaderSection(
                               context, theme, colorScheme, localizations),
                           const SizedBox(height: 24),
-                        ],
 
-                        // Actions Section
-                        _buildActionsSection(
-                            context, theme, colorScheme, localizations),
-                        const SizedBox(height: 32),
-                      ],
+                          // Order Details Section
+                          _buildOrderDetailsSection(
+                              context, theme, colorScheme, localizations),
+                          const SizedBox(height: 24),
+
+                          // Language and Document Section
+                          _buildLanguageAndDocumentSection(
+                              context, theme, colorScheme, localizations),
+                          const SizedBox(height: 24),
+
+                          // Pricing Section
+                          _buildPricingSection(
+                              context, theme, colorScheme, localizations),
+                          const SizedBox(height: 24),
+
+                          // Notes Section
+                          _buildNotesSection(
+                              context, theme, colorScheme, localizations),
+                          const SizedBox(height: 24),
+
+                          // Status Section (only show when editing)
+                          if (widget.orderId != null) ...[
+                            _buildStatusSection(
+                                context, theme, colorScheme, localizations),
+                            const SizedBox(height: 24),
+                          ],
+
+                          // Actions Section
+                          _buildActionsSection(
+                              context, theme, colorScheme, localizations),
+                          const SizedBox(height: 32),
+                        ],
+                      ),
                     ),
                   ),
                 ),
