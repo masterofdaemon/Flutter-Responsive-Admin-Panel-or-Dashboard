@@ -153,6 +153,12 @@ class _TranslationOrderListScreenState
       String clientPhoneNumberValue = client?.phone ?? 'N/A';
       String clientSourceValue = _getClientSourceDisplayName(order.source);
 
+      // Get client name from order
+      String clientNameValue =
+          order.hasClientName() && order.clientName.isNotEmpty
+              ? order.clientName
+              : 'N/A';
+
       String blankNumberValue = 'N/A';
       if (order.blanks.isNotEmpty) {
         blankNumberValue = order.blanks[0].blankNumber;
@@ -174,11 +180,10 @@ class _TranslationOrderListScreenState
           order.hasPageCount() ? order.pageCount.toString() : 'N/A';
       String notesValue =
           order.hasNotes() && order.notes.isNotEmpty ? order.notes : 'N/A';
-      String notariallyCertifiedValue = order.hasTranslationProgress() &&
-              order.translationProgress ==
-                  crm.TranslationProgressStatus.DELIVERED
-          ? localizations.translationOrderListScreenValueYes
-          : localizations.translationOrderListScreenValueNo;
+      String notariallyCertifiedValue =
+          order.hasTranslationProgress() && order.notarialSum > 0
+              ? localizations.translationOrderListScreenValueYes
+              : localizations.translationOrderListScreenValueNo;
 
       rows.add(PlutoRow(cells: {
         'blankNumber': PlutoCell(value: blankNumberValue),
@@ -186,6 +191,7 @@ class _TranslationOrderListScreenState
         'orderId': PlutoCell(value: order.orderId.toString()),
         'title': PlutoCell(value: order.title),
         'customerName': PlutoCell(value: customerNameValue),
+        'clientName': PlutoCell(value: clientNameValue),
         'clientPhoneNumber': PlutoCell(value: clientPhoneNumberValue),
         'clientSource': PlutoCell(value: clientSourceValue),
         'documentTypeKey': PlutoCell(value: documentTypeValue),
@@ -274,8 +280,92 @@ class _TranslationOrderListScreenState
     }
   }
 
+  // Helper function to create multiline TextSpan for column headers
+  TextSpan _createMultilineTextSpan(String text) {
+    print('DEBUG _createMultilineTextSpan: Input text = "$text"');
+    print('DEBUG _createMultilineTextSpan: Text length = ${text.length}');
+    print(
+        'DEBUG _createMultilineTextSpan: Text contains \\\\n: ${text.contains('\\n')}');
+    print(
+        'DEBUG _createMultilineTextSpan: Text contains actual newline: ${text.contains('\n')}');
+
+    // Split on actual newline characters since that's what's in the ARB file
+    final lines = text.split('\n');
+    print('DEBUG _createMultilineTextSpan: Split result = $lines');
+    print('DEBUG _createMultilineTextSpan: Number of lines = ${lines.length}');
+
+    if (lines.length == 1) {
+      print(
+          'DEBUG _createMultilineTextSpan: Single line, returning simple TextSpan');
+      return TextSpan(text: text);
+    }
+
+    List<TextSpan> spans = [];
+    for (int i = 0; i < lines.length; i++) {
+      print('DEBUG _createMultilineTextSpan: Adding line $i: "${lines[i]}"');
+      spans.add(TextSpan(text: lines[i]));
+      if (i < lines.length - 1) {
+        print('DEBUG _createMultilineTextSpan: Adding newline after line $i');
+        spans.add(const TextSpan(text: '\n'));
+      }
+    }
+
+    print(
+        'DEBUG _createMultilineTextSpan: Final spans count = ${spans.length}');
+    return TextSpan(children: spans);
+  }
+
   List<PlutoColumn> _getPlutoColumns(AppLocalizations localizations) {
     return [
+      PlutoColumn(
+        title: localizations.translationOrderListScreenColumnCreatedAt,
+        field: 'createdAt',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 60,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.translationOrderListScreenColumnDoneAt,
+        field: 'doneAt',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 60,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.clientLabelText, // 'Client'
+        field: 'customerName',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 100,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.clientListScreenColumnPhone, // 'Phone'
+        field: 'clientPhoneNumber',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 70,
+        readOnly: true,
+      ),
+      PlutoColumn(
+        title: localizations.translationOrderListScreenColumnTotalSum,
+        field: 'totalSum',
+        type: PlutoColumnType.number(),
+        enableEditingMode: false,
+        width: 50,
+        readOnly: true,
+        textAlign: PlutoColumnTextAlign.right,
+        formatter: (dynamic value) {
+          if (value == 'N/A') return 'N/A';
+          try {
+            return double.parse(value.toString()).toStringAsFixed(2);
+          } catch (e) {
+            return 'N/A';
+          }
+        },
+      ),
       PlutoColumn(
         title: localizations.translationOrderListScreenColumnBlank,
         field: 'blankNumber',
@@ -293,27 +383,13 @@ class _TranslationOrderListScreenState
         readOnly: true,
       ),
       PlutoColumn(
-        title: localizations.clientLabelText, // 'Client'
-        field: 'customerName',
+        title: '', // Required parameter, but will be overridden by titleSpan
+        titleSpan: _createMultilineTextSpan(localizations
+            .translationOrderFormScreenFieldClientNameLabel), // 'Client Name' with line breaks
+        field: 'clientName',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
-        width: 180,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        title: localizations.clientListScreenColumnPhone, // 'Phone'
-        field: 'clientPhoneNumber',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 150,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        title: localizations.clientSourceColumnTitle,
-        field: 'clientSource',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 120,
+        width: 100,
         readOnly: true,
       ),
       PlutoColumn(
@@ -322,27 +398,19 @@ class _TranslationOrderListScreenState
         field: 'documentTypeKey',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
-        width: 150,
+        width: 100,
         readOnly: true,
       ),
       PlutoColumn(
-        title: localizations
-            .translationOrderFormScreenFieldPageCountLabel, // 'Page Count'
+        title: '', // Required parameter, but will be overridden by titleSpan
+        titleSpan: _createMultilineTextSpan(localizations
+            .translationOrderFormScreenFieldPageCountLabel), // 'Page Count' with line breaks
         field: 'pageCount',
         type: PlutoColumnType.number(),
         enableEditingMode: false,
-        width: 100,
+        width: 60,
         readOnly: true,
         textAlign: PlutoColumnTextAlign.right,
-      ),
-      PlutoColumn(
-        title:
-            localizations.translationOrderFormScreenFieldNotesLabel, // 'Notes'
-        field: 'notes',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 200,
-        readOnly: true,
       ),
       PlutoColumn(
         title: localizations
@@ -350,49 +418,33 @@ class _TranslationOrderListScreenState
         field: 'notariallyCertified',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
-        width: 120,
+        width: 40,
         readOnly: true,
         textAlign: PlutoColumnTextAlign.center,
       ),
       PlutoColumn(
-        title: localizations.translationOrderListScreenColumnTotalSum,
-        field: 'totalSum',
-        type: PlutoColumnType.number(),
+        title: localizations.clientSourceColumnTitle,
+        field: 'clientSource',
+        type: PlutoColumnType.text(),
         enableEditingMode: false,
-        width: 100,
+        width: 70,
         readOnly: true,
-        textAlign: PlutoColumnTextAlign.right,
-        formatter: (dynamic value) {
-          if (value == 'N/A') return 'N/A';
-          try {
-            return double.parse(value.toString()).toStringAsFixed(2);
-          } catch (e) {
-            return 'N/A';
-          }
-        },
+      ),
+      PlutoColumn(
+        title:
+            localizations.translationOrderFormScreenFieldNotesLabel, // 'Notes'
+        field: 'notes',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false,
+        width: 70,
+        readOnly: true,
       ),
       PlutoColumn(
         title: localizations.statusLabelText, // 'Status'
         field: 'status',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
-        width: 120,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        title: localizations.translationOrderListScreenColumnCreatedAt,
-        field: 'createdAt',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 140,
-        readOnly: true,
-      ),
-      PlutoColumn(
-        title: localizations.translationOrderListScreenColumnDoneAt,
-        field: 'doneAt',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        width: 80,
+        width: 60,
         readOnly: true,
       ),
       PlutoColumn(
@@ -400,7 +452,7 @@ class _TranslationOrderListScreenState
         field: 'actions',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
-        width: 100,
+        width: 40,
         readOnly: true,
         textAlign: PlutoColumnTextAlign.center,
         renderer: (rendererContext) {
@@ -601,7 +653,7 @@ class _TranslationOrderListScreenState
                         style: PlutoGridStyleConfig(
                           gridBorderColor: Colors.grey,
                           rowHeight: 45,
-                          columnHeight: 45,
+                          columnHeight: 90,
                           borderColor: Colors.black38,
                           gridBackgroundColor: Colors.white,
                         ),

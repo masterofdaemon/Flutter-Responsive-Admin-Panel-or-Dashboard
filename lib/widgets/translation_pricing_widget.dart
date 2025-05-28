@@ -3,7 +3,7 @@ import 'package:admin/services/translation_pricing_service.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
 
 /// Widget that displays and calculates translation pricing in real-time
-class TranslationPricingWidget extends StatelessWidget {
+class TranslationPricingWidget extends StatefulWidget {
   final String? documentTypeKey;
   final int pageCount;
   final crm.Priority priority;
@@ -24,12 +24,63 @@ class TranslationPricingWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  State<TranslationPricingWidget> createState() => _TranslationPricingWidgetState();
+}
+
+class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
+  TranslationPricing? _lastPricing;
+
+  @override
+  void initState() {
+    super.initState();
+    _calculateAndNotify();
+  }
+
+  @override
+  void didUpdateWidget(TranslationPricingWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Check if any pricing-relevant parameters changed
+    if (oldWidget.documentTypeKey != widget.documentTypeKey ||
+        oldWidget.pageCount != widget.pageCount ||
+        oldWidget.priority != widget.priority ||
+        oldWidget.notarialSum != widget.notarialSum ||
+        oldWidget.cityName != widget.cityName ||
+        oldWidget.managerLevel != widget.managerLevel) {
+      _calculateAndNotify();
+    }
+  }
+
+  void _calculateAndNotify() {
+    if (widget.documentTypeKey == null || widget.documentTypeKey!.isEmpty) {
+      return;
+    }
+
     final pricingService = TranslationPricingService();
+    final pricing = pricingService.calculatePricing(
+      documentTypeKey: widget.documentTypeKey!,
+      pageCount: widget.pageCount,
+      priority: widget.priority,
+      notarialSum: widget.notarialSum,
+      cityName: widget.cityName,
+      managerLevel: widget.managerLevel,
+    );
+
+    _lastPricing = pricing;
+
+    // Notify parent about calculated pricing
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        widget.onPricingCalculated?.call(pricing.urgentTranslationSum, pricing.totalSum);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    if (documentTypeKey == null || documentTypeKey!.isEmpty) {
+    if (widget.documentTypeKey == null || widget.documentTypeKey!.isEmpty) {
       return Card(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -60,19 +111,37 @@ class TranslationPricingWidget extends StatelessWidget {
       );
     }
 
-    final pricing = pricingService.calculatePricing(
-      documentTypeKey: documentTypeKey!,
-      pageCount: pageCount,
-      priority: priority,
-      notarialSum: notarialSum,
-      cityName: cityName,
-      managerLevel: managerLevel,
-    );
-
-    // Notify parent about calculated pricing
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      onPricingCalculated?.call(pricing.urgentTranslationSum, pricing.totalSum);
-    });
+    final pricing = _lastPricing;
+    if (pricing == null) {
+      return Card(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.calculate, color: colorScheme.primary),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Pricing Calculation',
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.onSurface,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Calculating pricing...',
+                style: TextStyle(color: colorScheme.onSurface.withOpacity(0.6)),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
     return Card(
       child: Padding(

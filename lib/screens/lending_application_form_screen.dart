@@ -54,6 +54,13 @@ class _LendingApplicationFormScreenState
   void initState() {
     super.initState();
     _isEditMode = widget.requestId != null;
+    // No need to call _loadDropdownData here, it will be called in didChangeDependencies
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Moved _loadDropdownData here to ensure context is available
     _loadDropdownData().then((_) {
       if (_isEditMode) {
         _loadApplication();
@@ -151,7 +158,9 @@ class _LendingApplicationFormScreenState
     final localizations = AppLocalizations.of(context);
     try {
       final app = crm.LendingApplication(
-        requestId: widget.requestId != null ? int.tryParse(widget.requestId!) ?? 0 : 0, // Convert requestId to int for proto
+        requestId: widget.requestId != null
+            ? int.tryParse(widget.requestId!) ?? 0
+            : 0, // Convert requestId to int for proto
         clientId: _selectedClient?.clientId ?? 0,
         managerId: _selectedManager?.employeeId ?? 0,
         bankId: _selectedBank?.bankId ?? 0,

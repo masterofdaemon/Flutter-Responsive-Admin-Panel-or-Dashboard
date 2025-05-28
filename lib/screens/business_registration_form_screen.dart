@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
 import 'package:admin/services/grpc_business_registration_service_mobile.dart';
+import 'package:admin/services/grpc_client_service.dart';
+import 'package:admin/services/grpc_employee_service.dart';
+import 'package:admin/services/grpc_bank_service.dart';
 import 'package:admin/utils/timestamp_helpers.dart';
 import 'package:admin/screens/main/main_screen.dart';
 
@@ -18,27 +21,68 @@ class _BusinessRegistrationFormScreenState
   final _formKey = GlobalKey<FormState>();
   final GrpcBusinessRegistrationService _service =
       GrpcBusinessRegistrationService();
+  final GrpcClientService _clientService = GrpcClientService();
+  final GrpcEmployeeService _employeeService = GrpcEmployeeService();
+  final GrpcBankService _bankService = GrpcBankService();
   bool _isLoading = false;
   bool _isEditMode = false;
 
-  final _clientIdController = TextEditingController();
-  final _managerIdController = TextEditingController();
-  final _bankIdController = TextEditingController();
   final _paymentIdController = TextEditingController();
   final _notesController = TextEditingController();
 
+  crm.Client? _selectedClient;
+  crm.Employee? _selectedManager;
+  crm.Bank? _selectedBank;
   crm.RegistrationType? _registrationType;
   crm.Status? _status;
   DateTime? _applicationDate;
   DateTime? _registrationDate;
   bool _agentCommissionReceived = false;
 
+  List<crm.Client> _clients = [];
+  List<crm.Employee> _managers = [];
+  List<crm.Bank> _banks = [];
+
   @override
   void initState() {
     super.initState();
     _isEditMode = widget.requestId != null;
+    // Don't load dropdown data here, wait for didChangeDependencies
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadDropdownData();
     if (_isEditMode) {
       _loadRegistration();
+    }
+  }
+
+  Future<void> _loadDropdownData() async {
+    try {
+      final results = await Future.wait([
+        _clientService.listClients(pageSize: 100),
+        _employeeService.listEmployees(pageSize: 100),
+        _bankService.listBanks(pageSize: 100),
+      ]);
+
+      setState(() {
+        _clients = results[0] as List<crm.Client>;
+        _managers = (results[1] as List<crm.Employee>)
+            .where((e) =>
+                e.role == crm.EmployeeRole.MANAGER ||
+                e.role == crm.EmployeeRole.CHIEF_MANAGER ||
+                e.role == crm.EmployeeRole.DIRECTOR)
+            .toList();
+        _banks = results[2] as List<crm.Bank>;
+      });
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error loading dropdown data: $e')),
+        );
+      }
     }
   }
 
@@ -46,9 +90,21 @@ class _BusinessRegistrationFormScreenState
     setState(() => _isLoading = true);
     try {
       final reg = await _service.getBusinessRegistration(widget.requestId!);
-      _clientIdController.text = reg.clientId.toString();
-      _managerIdController.text = reg.managerId.toString();
-      _bankIdController.text = reg.bankId.toString();
+
+      // Find matching objects for dropdowns
+      _selectedClient = _clients.firstWhere(
+        (c) => c.clientId == reg.clientId,
+        orElse: () => crm.Client()..clientId = reg.clientId,
+      );
+      _selectedManager = _managers.firstWhere(
+        (m) => m.employeeId == reg.managerId,
+        orElse: () => crm.Employee()..employeeId = reg.managerId,
+      );
+      _selectedBank = _banks.firstWhere(
+        (b) => b.bankId == reg.bankId,
+        orElse: () => crm.Bank()..bankId = reg.bankId,
+      );
+
       _paymentIdController.text = reg.paymentId.toString();
       _notesController.text = reg.notes;
       _registrationType = reg.registrationType;
@@ -74,9 +130,9 @@ class _BusinessRegistrationFormScreenState
       final reg = crm.BusinessRegistration(
         requestId:
             widget.requestId != null ? int.tryParse(widget.requestId!) ?? 0 : 0,
-        clientId: int.tryParse(_clientIdController.text.trim()) ?? 0,
-        managerId: int.tryParse(_managerIdController.text.trim()) ?? 0,
-        bankId: int.tryParse(_bankIdController.text.trim()) ?? 0,
+        clientId: _selectedClient?.clientId ?? 0,
+        managerId: _selectedManager?.employeeId ?? 0,
+        bankId: _selectedBank?.bankId ?? 0,
         paymentId: int.tryParse(_paymentIdController.text.trim()) ?? 0,
         notes: _notesController.text.trim(),
         registrationType: _registrationType ??
@@ -134,9 +190,6 @@ class _BusinessRegistrationFormScreenState
 
   @override
   void dispose() {
-    _clientIdController.dispose();
-    _managerIdController.dispose();
-    _bankIdController.dispose();
     _paymentIdController.dispose();
     _notesController.dispose();
     super.dispose();
@@ -171,26 +224,82 @@ class _BusinessRegistrationFormScreenState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextFormField(
-                      controller: _clientIdController,
-                      decoration: const InputDecoration(labelText: 'Client ID'),
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'Required' : null,
+                    // Client Dropdown
+                    DropdownButtonFormField<crm.Client>(
+                      value: _selectedClient,
+                      hint: const Text('Select Client'),
+                      isExpanded: true,
+                      items: _clients.map((crm.Client client) {
+                        return DropdownMenuItem<crm.Client>(
+                          value: client,
+                          child: Text(
+                            '${client.firstName} ${client.lastName}',
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (crm.Client? newValue) {
+                        setState(() {
+                          _selectedClient = newValue;
+                        });
+                      },
+                      validator: (value) => value == null ? 'Required' : null,
+                      decoration: const InputDecoration(
+                        labelText: 'Client',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
                     const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _managerIdController,
-                      decoration:
-                          const InputDecoration(labelText: 'Manager ID'),
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'Required' : null,
+                    // Manager Dropdown
+                    DropdownButtonFormField<crm.Employee>(
+                      value: _selectedManager,
+                      hint: const Text('Select Manager'),
+                      isExpanded: true,
+                      items: _managers.map((crm.Employee manager) {
+                        return DropdownMenuItem<crm.Employee>(
+                          value: manager,
+                          child: Text(
+                            manager.name,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (crm.Employee? newValue) {
+                        setState(() {
+                          _selectedManager = newValue;
+                        });
+                      },
+                      validator: (value) => value == null ? 'Required' : null,
+                      decoration: const InputDecoration(
+                        labelText: 'Manager',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
                     const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _bankIdController,
-                      decoration: const InputDecoration(labelText: 'Bank ID'),
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'Required' : null,
+                    // Bank Dropdown
+                    DropdownButtonFormField<crm.Bank>(
+                      value: _selectedBank,
+                      hint: const Text('Select Bank'),
+                      isExpanded: true,
+                      items: _banks.map((crm.Bank bank) {
+                        return DropdownMenuItem<crm.Bank>(
+                          value: bank,
+                          child: Text(
+                            bank.name,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (crm.Bank? newValue) {
+                        setState(() {
+                          _selectedBank = newValue;
+                        });
+                      },
+                      validator: (value) => value == null ? 'Required' : null,
+                      decoration: const InputDecoration(
+                        labelText: 'Bank',
+                        border: OutlineInputBorder(),
+                      ),
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<crm.RegistrationType>(
@@ -254,8 +363,22 @@ class _BusinessRegistrationFormScreenState
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _paymentIdController,
-                      decoration:
-                          const InputDecoration(labelText: 'Payment ID'),
+                      decoration: const InputDecoration(
+                          labelText: 'Payment ID'), // No longer "Optional"
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Payment ID is required.'; // Make it required
+                        }
+                        final n = int.tryParse(value.trim());
+                        if (n == null) {
+                          return 'Please enter a valid number.';
+                        }
+                        if (n <= 0) {
+                          return 'Payment ID must be a positive number.';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 16),
                     TextFormField(

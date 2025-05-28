@@ -197,7 +197,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get saveApplicationTooltip => 'Сохранить заявку';
 
   @override
-  String get clientLabelText => 'Клиент';
+  String get clientLabelText => 'Ф.И.О клиента полностью';
 
   @override
   String get pleaseSelectClientError => 'Пожалуйста, выберите клиента';
@@ -568,7 +568,7 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String lendingApplicationListScreenListItemSubtitle(
       String clientId, String managerId, String bankId) {
-    return 'Клиент: $clientId\nМенеджер: $managerId\nБанк: $bankId';
+    return 'Клиент: $clientId Менеджер: $managerId Банк: $bankId';
   }
 
   @override
@@ -668,7 +668,7 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String trainingCourseListScreenListItemSubtitle(
       String price, String commission) {
-    return 'Цена: $price\nКомиссия: $commission%';
+    return 'Цена: $price Комиссия: $commission%';
   }
 
   @override
@@ -692,6 +692,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get sideMenuEmployees => 'Сотрудники';
 
   @override
+  String get sideMenuOffices => 'Офисы';
+
+  @override
   String get sideMenuTranslations => 'Переводы';
 
   @override
@@ -705,6 +708,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get sideMenuLendingApplications => 'Заявки на кредит';
+
+  @override
+  String get sideMenuBanks => 'Банки';
 
   @override
   String get sideMenuAdminTools => 'Инструменты администратора';
@@ -921,6 +927,14 @@ class AppLocalizationsRu extends AppLocalizations {
       'Пожалуйста, выберите клиента';
 
   @override
+  String get translationOrderFormScreenFieldClientNameLabel =>
+      'ФИО клиента из документа (сокр.)';
+
+  @override
+  String get translationOrderFormScreenFieldClientNameHint =>
+      'Введите имя клиента в документе (необязательно)';
+
+  @override
   String get translationOrderFormScreenFieldManagerLabel => 'Менеджер *';
 
   @override
@@ -1101,6 +1115,13 @@ class AppLocalizationsRu extends AppLocalizations {
       'Введите идентификатор платежа';
 
   @override
+  String get translationOrderFormScreenFieldTotalSumLabel => 'Итоговая сумма';
+
+  @override
+  String get translationOrderFormScreenFieldTotalSumHint =>
+      'Рассчитывается автоматически на основе ценообразования';
+
+  @override
   String get translationOrderFormScreenSectionTitleActions => 'Действия';
 
   @override
@@ -1179,7 +1200,7 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String insurancePolicyListScreenListItemSubtitle(
       String clientId, String managerId, String amount) {
-    return 'Клиент: $clientId\nМенеджер: $managerId\nСумма: $amount';
+    return 'Клиент: $clientId Менеджер: $managerId Сумма: $amount';
   }
 
   @override
@@ -1608,11 +1629,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get translationOrderListScreenColumnBlank => 'Бланк';
 
   @override
-  String get translationOrderListScreenColumnIncorrectBlank =>
-      'Некорректный бланк';
+  String get translationOrderListScreenColumnIncorrectBlank => 'Испорчен';
 
   @override
-  String get translationOrderListScreenColumnTotalSum => 'Итоговая сумма';
+  String get translationOrderListScreenColumnTotalSum => 'Сумма оплаты';
 
   @override
   String get translationOrderListScreenColumnDocumentType => 'Тип документа';
@@ -1624,14 +1644,17 @@ class AppLocalizationsRu extends AppLocalizations {
   String get translationOrderListScreenColumnDoneAt => 'Выполнено';
 
   @override
-  String get translationOrderListScreenColumnNotariallyCertified =>
-      'Нотариально заверенно';
+  String get translationOrderListScreenColumnNotariallyCertified => 'заверенно';
 
   @override
   String get translationOrderListScreenValueYes => 'Да';
 
   @override
   String get translationOrderListScreenValueNo => 'Нет';
+
+  @override
+  String get translationOrderListScreenTooltipAdd =>
+      'Добавить новый заказ на перевод';
 
   @override
   String get documentTypePassport => 'Паспорт';
@@ -1923,4 +1946,136 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get translationProgressStatusDelivered => 'Доставлен';
+
+  @override
+  String get officesScreenTitle => 'Управление офисами';
+
+  @override
+  String get officesScreenSearchHint => 'Поиск офисов (Город, Адрес, Телефон)';
+
+  @override
+  String get officesScreenTooltipAdd => 'Добавить новый офис';
+
+  @override
+  String get officesScreenTooltipEdit => 'Редактировать офис';
+
+  @override
+  String get officesScreenTooltipDelete => 'Удалить офис';
+
+  @override
+  String officesScreenErrorLoading(String error) {
+    return 'Ошибка загрузки офисов: $error';
+  }
+
+  @override
+  String officesScreenErrorDeleting(String error) {
+    return 'Ошибка удаления офиса: $error';
+  }
+
+  @override
+  String officesScreenSuccessDeleted(String city) {
+    return 'Офис \"$city\" успешно удален';
+  }
+
+  @override
+  String get officesScreenConfirmDeleteTitle => 'Удаление офиса';
+
+  @override
+  String officesScreenConfirmDeleteMessage(String city) {
+    return 'Вы уверены, что хотите удалить офис в \"$city\"?';
+  }
+
+  @override
+  String get officesScreenConfirmDeleteCancel => 'Отмена';
+
+  @override
+  String get officesScreenConfirmDeleteConfirm => 'Удалить';
+
+  @override
+  String get officeFormScreenTitleAdd => 'Добавить новый офис';
+
+  @override
+  String get officeFormScreenTitleEdit => 'Редактировать офис';
+
+  @override
+  String get officeFormScreenLabelCity => 'Город';
+
+  @override
+  String get officeFormScreenLabelAddress => 'Адрес (необязательно)';
+
+  @override
+  String get officeFormScreenLabelPhone => 'Телефон (необязательно)';
+
+  @override
+  String get officeFormScreenLabelNotes => 'Заметки (необязательно)';
+
+  @override
+  String get officeFormScreenValidationCityRequired => 'Город обязателен';
+
+  @override
+  String get officeFormScreenButtonCreate => 'Создать офис';
+
+  @override
+  String get officeFormScreenButtonUpdate => 'Обновить офис';
+
+  @override
+  String officeFormScreenErrorLoading(String error) {
+    return 'Ошибка загрузки офиса: $error';
+  }
+
+  @override
+  String officeFormScreenErrorSaving(String error) {
+    return 'Ошибка сохранения офиса: $error';
+  }
+
+  @override
+  String get officeFormScreenSuccessCreated => 'Офис успешно создан';
+
+  @override
+  String get officeFormScreenSuccessUpdated => 'Офис успешно обновлен';
+
+  @override
+  String get plutoGridFilterAllColumns => 'All Columns';
+
+  @override
+  String get plutoGridFilterContains => 'Contains';
+
+  @override
+  String get plutoGridFilterEquals => 'Equals';
+
+  @override
+  String get plutoGridFilterStartsWith => 'Starts with';
+
+  @override
+  String get plutoGridFilterEndsWith => 'Ends with';
+
+  @override
+  String get plutoGridFilterGreaterThan => 'Greater than';
+
+  @override
+  String get plutoGridFilterGreaterThanOrEqualTo => 'Greater than or equal to';
+
+  @override
+  String get plutoGridFilterLessThan => 'Less than';
+
+  @override
+  String get plutoGridFilterLessThanOrEqualTo => 'Less than or equal to';
+
+  @override
+  String get plutoGridFilterApply => 'Apply';
+
+  @override
+  String get plutoGridFilterClear => 'Clear';
+
+  @override
+  String get plutoGridFilterPopupTitle => 'Filter';
+
+  @override
+  String get plutoGridFilterColumn => 'Column';
+
+  @override
+  String get plutoGridFilterType => 'Type';
+
+  @override
+  String get plutoGridFilterValue => 'Value';
 }

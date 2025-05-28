@@ -73,7 +73,7 @@
   "editLendingApplicationTitle": "Редактировать заявку на кредит",
   "addLendingApplicationTitle": "Добавить заявку на кредит",
   "saveApplicationTooltip": "Сохранить заявку",
-  "clientLabelText": "Клиент",
+  "clientLabelText": "Ф.И.О клиента полностью",
   "pleaseSelectClientError": "Пожалуйста, выберите клиента",
   "managerLabelText": "Менеджер",
   "pleaseSelectManagerError": "Пожалуйста, выберите менеджера",
@@ -244,7 +244,7 @@
   },
   "lendingApplicationListScreenNoApplicationsFound": "Заявок на кредит не найдено.",
   "lendingApplicationListScreenListItemNoId": "Нет ID",
-  "lendingApplicationListScreenListItemSubtitle": "Клиент: {clientId}\nМенеджер: {managerId}\nБанк: {bankId}",
+  "lendingApplicationListScreenListItemSubtitle": "Клиент: {clientId} Менеджер: {managerId} Банк: {bankId}",
 
   "trainingCourseFormScreenTitleEdit": "Редактировать курс",
   "trainingCourseFormScreenTitleAdd": "Добавить курс",
@@ -295,7 +295,7 @@
   },
   "trainingCourseListScreenNoCoursesFound": "Учебные курсы не найдены.",
   "trainingCourseListScreenListItemNoName": "Без названия",
-  "trainingCourseListScreenListItemSubtitle": "Цена: {price}\nКомиссия: {commission}%",
+  "trainingCourseListScreenListItemSubtitle": "Цена: {price} Комиссия: {commission}%",
   "@trainingCourseListScreenListItemSubtitle": {
       "placeholders": {
           "price": {
@@ -321,11 +321,13 @@
   "sideMenuDashboard": "Панель управления",
   "sideMenuClients": "Клиенты",
   "sideMenuEmployees": "Сотрудники",
+  "sideMenuOffices": "Офисы",
   "sideMenuTranslations": "Переводы",
   "sideMenuInsurancePolicies": "Страховые полисы",
   "sideMenuTrainingCourses": "Учебные курсы",
   "sideMenuBusinessRegistrations": "Регистрация бизнеса",
   "sideMenuLendingApplications": "Заявки на кредит",
+  "sideMenuBanks": "Банки",
   "sideMenuAdminTools": "Инструменты администратора",
   "sideMenuCreateUser": "Создать пользователя",
   "sideMenuTask": "Задача",
@@ -365,6 +367,10 @@
   "translationOrderListScreenTooltipDelete": "Удалить заказ",
   "@translationOrderListScreenTooltipDelete": {
     "description": "Подсказка для кнопки-иконки удаления заказа на перевод"
+  },
+  "translationOrderListScreenTooltipAdd": "Добавить новый заказ на перевод",
+  "@translationOrderListScreenTooltipAdd": {
+    "description": "Подсказка для кнопки добавления нового заказа на перевод"
   },
 "translationOrderFormScreenSectionTitleOrderDetails": "Детали заказа",
 "translationOrderFormScreenSectionTitleDocumentDetails": "Детали документа",
@@ -472,6 +478,8 @@
   "translationOrderFormScreenFieldClientLabel": "Клиент *",
   "translationOrderFormScreenFieldClientHint": "Выберите клиента",
   "translationOrderFormScreenFieldClientValidation": "Пожалуйста, выберите клиента",
+  "translationOrderFormScreenFieldClientNameLabel": "ФИО клиента из документа (сокр.)",
+  "translationOrderFormScreenFieldClientNameHint": "Введите имя клиента в документе (необязательно)",
   "translationOrderFormScreenFieldManagerLabel": "Менеджер *",
   "translationOrderFormScreenFieldManagerHint": "Выберите менеджера",
   "translationOrderFormScreenFieldManagerValidation": "Пожалуйста, выберите менеджера",
@@ -533,6 +541,8 @@
   "translationOrderFormScreenFieldNotarialSumHint": "Введите нотариальную сумму",
   "translationOrderFormScreenFieldPaymentIdLabel": "ID платежа",
   "translationOrderFormScreenFieldPaymentIdHint": "Введите идентификатор платежа",
+  "translationOrderFormScreenFieldTotalSumLabel": "Итоговая сумма",
+  "translationOrderFormScreenFieldTotalSumHint": "Рассчитывается автоматически на основе ценообразования",
   "translationOrderFormScreenSectionTitleActions": "Действия",
   "translationOrderFormScreenSectionTitlePricingPayment": "Цены и оплата",
   "translationOrderFormScreenButtonSaving": "Сохранение...",
@@ -570,7 +580,7 @@
   },
   "insurancePolicyListScreenNoPoliciesFound": "Страховые полисы не найдены.",
   "insurancePolicyListScreenNoPolicyNumber": "Нет номера полиса",
-  "insurancePolicyListScreenListItemSubtitle": "Клиент: {clientId}\nМенеджер: {managerId}\nСумма: {amount}",
+  "insurancePolicyListScreenListItemSubtitle": "Клиент: {clientId} Менеджер: {managerId} Сумма: {amount}",
   "@insurancePolicyListScreenListItemSubtitle": {
       "placeholders": {
           "clientId": {"type": "String"},
@@ -793,12 +803,12 @@
   "translationOrderFormScreenDocumentTypeDialogNotFound": "Типы документов не найдены.",
   "translationOrderFormScreenDocumentTypeDialogCustomEntry": "Другое...",
   "translationOrderListScreenColumnBlank": "Бланк",
-  "translationOrderListScreenColumnIncorrectBlank": "Некорректный бланк",
-  "translationOrderListScreenColumnTotalSum": "Итоговая сумма",
+  "translationOrderListScreenColumnIncorrectBlank": "Испорчен",
+  "translationOrderListScreenColumnTotalSum": "Сумма оплаты",
   "translationOrderListScreenColumnDocumentType": "Тип документа",
   "translationOrderListScreenColumnCreatedAt": "Создано",
   "translationOrderListScreenColumnDoneAt": "Выполнено",
-  "translationOrderListScreenColumnNotariallyCertified": "Нотариально заверенно",
+  "translationOrderListScreenColumnNotariallyCertified": "заверенно",
   "translationOrderListScreenValueYes": "Да",
   "translationOrderListScreenValueNo": "Нет",
   "translationOrderListScreenColumnActions": "Действия",
@@ -921,5 +931,32 @@
   "translationProgressStatusTranslated": "Перевод завершен",
   "translationProgressStatusCheckedByManager": "Проверено менеджером",
   "translationProgressStatusClientNotified": "Клиент уведомлен",
-  "translationProgressStatusDelivered": "Доставлен"
+  "translationProgressStatusDelivered": "Доставлен",
+
+  "officesScreenTitle": "Управление офисами",
+  "officesScreenSearchHint": "Поиск офисов (Город, Адрес, Телефон)",
+  "officesScreenTooltipAdd": "Добавить новый офис",
+  "officesScreenTooltipEdit": "Редактировать офис",
+  "officesScreenTooltipDelete": "Удалить офис",
+  "officesScreenErrorLoading": "Ошибка загрузки офисов: {error}",
+  "officesScreenErrorDeleting": "Ошибка удаления офиса: {error}",
+  "officesScreenSuccessDeleted": "Офис \"{city}\" успешно удален",
+  "officesScreenConfirmDeleteTitle": "Удаление офиса",
+  "officesScreenConfirmDeleteMessage": "Вы уверены, что хотите удалить офис в \"{city}\"?",
+  "officesScreenConfirmDeleteCancel": "Отмена",
+  "officesScreenConfirmDeleteConfirm": "Удалить",
+
+  "officeFormScreenTitleAdd": "Добавить новый офис",
+  "officeFormScreenTitleEdit": "Редактировать офис",
+  "officeFormScreenLabelCity": "Город",
+  "officeFormScreenLabelAddress": "Адрес (необязательно)",
+  "officeFormScreenLabelPhone": "Телефон (необязательно)",
+  "officeFormScreenLabelNotes": "Заметки (необязательно)",
+  "officeFormScreenValidationCityRequired": "Город обязателен",
+  "officeFormScreenButtonCreate": "Создать офис",
+  "officeFormScreenButtonUpdate": "Обновить офис",
+  "officeFormScreenErrorLoading": "Ошибка загрузки офиса: {error}",
+  "officeFormScreenErrorSaving": "Ошибка сохранения офиса: {error}",
+  "officeFormScreenSuccessCreated": "Офис успешно создан",
+  "officeFormScreenSuccessUpdated": "Офис успешно обновлен"
 }

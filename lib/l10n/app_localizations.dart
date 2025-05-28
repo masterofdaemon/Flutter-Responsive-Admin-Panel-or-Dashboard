@@ -1276,6 +1276,12 @@ abstract class AppLocalizations {
   /// **'Employees'**
   String get sideMenuEmployees;
 
+  /// No description provided for @sideMenuOffices.
+  ///
+  /// In en, this message translates to:
+  /// **'Offices'**
+  String get sideMenuOffices;
+
   /// No description provided for @sideMenuTranslations.
   ///
   /// In en, this message translates to:
@@ -1305,6 +1311,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Lending Applications'**
   String get sideMenuLendingApplications;
+
+  /// No description provided for @sideMenuBanks.
+  ///
+  /// In en, this message translates to:
+  /// **'Banks'**
+  String get sideMenuBanks;
 
   /// No description provided for @sideMenuAdminTools.
   ///
@@ -1660,6 +1672,18 @@ abstract class AppLocalizations {
   /// **'Please select a client'**
   String get translationOrderFormScreenFieldClientValidation;
 
+  /// No description provided for @translationOrderFormScreenFieldClientNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Client Name'**
+  String get translationOrderFormScreenFieldClientNameLabel;
+
+  /// No description provided for @translationOrderFormScreenFieldClientNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter client name (optional)'**
+  String get translationOrderFormScreenFieldClientNameHint;
+
   /// No description provided for @translationOrderFormScreenFieldManagerLabel.
   ///
   /// In en, this message translates to:
@@ -1960,6 +1984,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter payment reference'**
   String get translationOrderFormScreenFieldPaymentIdHint;
+
+  /// No description provided for @translationOrderFormScreenFieldTotalSumLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Sum'**
+  String get translationOrderFormScreenFieldTotalSumLabel;
+
+  /// No description provided for @translationOrderFormScreenFieldTotalSumHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculated automatically from pricing'**
+  String get translationOrderFormScreenFieldTotalSumHint;
 
   /// No description provided for @translationOrderFormScreenSectionTitleActions.
   ///
@@ -2880,6 +2916,12 @@ abstract class AppLocalizations {
   /// **'No'**
   String get translationOrderListScreenValueNo;
 
+  /// Tooltip for the add new translation order button
+  ///
+  /// In en, this message translates to:
+  /// **'Add new translation order'**
+  String get translationOrderListScreenTooltipAdd;
+
   /// No description provided for @documentTypePassport.
   ///
   /// In en, this message translates to:
@@ -3389,6 +3431,246 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delivered'**
   String get translationProgressStatusDelivered;
+
+  /// No description provided for @officesScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Offices Management'**
+  String get officesScreenTitle;
+
+  /// No description provided for @officesScreenSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Offices (City, Address, Phone)'**
+  String get officesScreenSearchHint;
+
+  /// No description provided for @officesScreenTooltipAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New Office'**
+  String get officesScreenTooltipAdd;
+
+  /// No description provided for @officesScreenTooltipEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Office'**
+  String get officesScreenTooltipEdit;
+
+  /// No description provided for @officesScreenTooltipDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Office'**
+  String get officesScreenTooltipDelete;
+
+  /// No description provided for @officesScreenErrorLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load offices: {error}'**
+  String officesScreenErrorLoading(String error);
+
+  /// No description provided for @officesScreenErrorDeleting.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete office: {error}'**
+  String officesScreenErrorDeleting(String error);
+
+  /// No description provided for @officesScreenSuccessDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Office \"{city}\" deleted successfully'**
+  String officesScreenSuccessDeleted(String city);
+
+  /// No description provided for @officesScreenConfirmDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Office'**
+  String get officesScreenConfirmDeleteTitle;
+
+  /// No description provided for @officesScreenConfirmDeleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete the office in \"{city}\"?'**
+  String officesScreenConfirmDeleteMessage(String city);
+
+  /// No description provided for @officesScreenConfirmDeleteCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get officesScreenConfirmDeleteCancel;
+
+  /// No description provided for @officesScreenConfirmDeleteConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get officesScreenConfirmDeleteConfirm;
+
+  /// No description provided for @officeFormScreenTitleAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New Office'**
+  String get officeFormScreenTitleAdd;
+
+  /// No description provided for @officeFormScreenTitleEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Office'**
+  String get officeFormScreenTitleEdit;
+
+  /// No description provided for @officeFormScreenLabelCity.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get officeFormScreenLabelCity;
+
+  /// No description provided for @officeFormScreenLabelAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Address (Optional)'**
+  String get officeFormScreenLabelAddress;
+
+  /// No description provided for @officeFormScreenLabelPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone (Optional)'**
+  String get officeFormScreenLabelPhone;
+
+  /// No description provided for @officeFormScreenLabelNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes (Optional)'**
+  String get officeFormScreenLabelNotes;
+
+  /// No description provided for @officeFormScreenValidationCityRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'City is required'**
+  String get officeFormScreenValidationCityRequired;
+
+  /// No description provided for @officeFormScreenButtonCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Office'**
+  String get officeFormScreenButtonCreate;
+
+  /// No description provided for @officeFormScreenButtonUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Office'**
+  String get officeFormScreenButtonUpdate;
+
+  /// No description provided for @officeFormScreenErrorLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading office: {error}'**
+  String officeFormScreenErrorLoading(String error);
+
+  /// No description provided for @officeFormScreenErrorSaving.
+  ///
+  /// In en, this message translates to:
+  /// **'Error saving office: {error}'**
+  String officeFormScreenErrorSaving(String error);
+
+  /// No description provided for @officeFormScreenSuccessCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Office created successfully'**
+  String get officeFormScreenSuccessCreated;
+
+  /// No description provided for @officeFormScreenSuccessUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Office updated successfully'**
+  String get officeFormScreenSuccessUpdated;
+
+  /// No description provided for @plutoGridFilterAllColumns.
+  ///
+  /// In en, this message translates to:
+  /// **'All Columns'**
+  String get plutoGridFilterAllColumns;
+
+  /// No description provided for @plutoGridFilterContains.
+  ///
+  /// In en, this message translates to:
+  /// **'Contains'**
+  String get plutoGridFilterContains;
+
+  /// No description provided for @plutoGridFilterEquals.
+  ///
+  /// In en, this message translates to:
+  /// **'Equals'**
+  String get plutoGridFilterEquals;
+
+  /// No description provided for @plutoGridFilterStartsWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Starts with'**
+  String get plutoGridFilterStartsWith;
+
+  /// No description provided for @plutoGridFilterEndsWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Ends with'**
+  String get plutoGridFilterEndsWith;
+
+  /// No description provided for @plutoGridFilterGreaterThan.
+  ///
+  /// In en, this message translates to:
+  /// **'Greater than'**
+  String get plutoGridFilterGreaterThan;
+
+  /// No description provided for @plutoGridFilterGreaterThanOrEqualTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Greater than or equal to'**
+  String get plutoGridFilterGreaterThanOrEqualTo;
+
+  /// No description provided for @plutoGridFilterLessThan.
+  ///
+  /// In en, this message translates to:
+  /// **'Less than'**
+  String get plutoGridFilterLessThan;
+
+  /// No description provided for @plutoGridFilterLessThanOrEqualTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Less than or equal to'**
+  String get plutoGridFilterLessThanOrEqualTo;
+
+  /// No description provided for @plutoGridFilterApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get plutoGridFilterApply;
+
+  /// No description provided for @plutoGridFilterClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get plutoGridFilterClear;
+
+  /// No description provided for @plutoGridFilterPopupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get plutoGridFilterPopupTitle;
+
+  /// No description provided for @plutoGridFilterColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Column'**
+  String get plutoGridFilterColumn;
+
+  /// No description provided for @plutoGridFilterType.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get plutoGridFilterType;
+
+  /// No description provided for @plutoGridFilterValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Value'**
+  String get plutoGridFilterValue;
 }
 
 class _AppLocalizationsDelegate

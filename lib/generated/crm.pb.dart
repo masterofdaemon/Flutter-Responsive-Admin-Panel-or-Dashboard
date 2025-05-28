@@ -999,6 +999,7 @@ class TranslationOrder extends $pb.GeneratedMessage {
     $core.String? documentTypeKey,
     $core.String? sourceLanguage,
     $core.String? targetLanguage,
+    $core.String? clientName,
     $core.int? pageCount,
     $core.double? translationSum,
     $core.double? notarialSum,
@@ -1039,6 +1040,9 @@ class TranslationOrder extends $pb.GeneratedMessage {
     }
     if (targetLanguage != null) {
       $result.targetLanguage = targetLanguage;
+    }
+    if (clientName != null) {
+      $result.clientName = clientName;
     }
     if (pageCount != null) {
       $result.pageCount = pageCount;
@@ -1092,18 +1096,19 @@ class TranslationOrder extends $pb.GeneratedMessage {
     ..aOS(7, _omitFieldNames ? '' : 'documentTypeKey')
     ..aOS(8, _omitFieldNames ? '' : 'sourceLanguage')
     ..aOS(9, _omitFieldNames ? '' : 'targetLanguage')
-    ..a<$core.int>(10, _omitFieldNames ? '' : 'pageCount', $pb.PbFieldType.O3)
-    ..a<$core.double>(11, _omitFieldNames ? '' : 'translationSum', $pb.PbFieldType.OD)
-    ..a<$core.double>(12, _omitFieldNames ? '' : 'notarialSum', $pb.PbFieldType.OD)
-    ..a<$core.double>(13, _omitFieldNames ? '' : 'totalSum', $pb.PbFieldType.OD)
-    ..e<Priority>(14, _omitFieldNames ? '' : 'priority', $pb.PbFieldType.OE, defaultOrMaker: Priority.PRIORITY_UNSPECIFIED, valueOf: Priority.valueOf, enumValues: Priority.values)
-    ..e<TranslationProgressStatus>(15, _omitFieldNames ? '' : 'translationProgress', $pb.PbFieldType.OE, defaultOrMaker: TranslationProgressStatus.TRANSLATION_PROGRESS_STATUS_UNSPECIFIED, valueOf: TranslationProgressStatus.valueOf, enumValues: TranslationProgressStatus.values)
-    ..a<$core.int>(16, _omitFieldNames ? '' : 'paymentId', $pb.PbFieldType.OU3)
-    ..pc<TranslationOrder_BlankInfo>(17, _omitFieldNames ? '' : 'blanks', $pb.PbFieldType.PM, subBuilder: TranslationOrder_BlankInfo.create)
-    ..aOS(18, _omitFieldNames ? '' : 'notes')
-    ..e<ClientSource>(19, _omitFieldNames ? '' : 'source', $pb.PbFieldType.OE, defaultOrMaker: ClientSource.CLIENT_SOURCE_UNSPECIFIED, valueOf: ClientSource.valueOf, enumValues: ClientSource.values)
-    ..aOM<$2.Timestamp>(22, _omitFieldNames ? '' : 'createdAt', subBuilder: $2.Timestamp.create)
-    ..aOM<$2.Timestamp>(23, _omitFieldNames ? '' : 'doneAt', subBuilder: $2.Timestamp.create)
+    ..aOS(10, _omitFieldNames ? '' : 'clientName')
+    ..a<$core.int>(11, _omitFieldNames ? '' : 'pageCount', $pb.PbFieldType.O3)
+    ..a<$core.double>(12, _omitFieldNames ? '' : 'translationSum', $pb.PbFieldType.OD)
+    ..a<$core.double>(13, _omitFieldNames ? '' : 'notarialSum', $pb.PbFieldType.OD)
+    ..a<$core.double>(14, _omitFieldNames ? '' : 'totalSum', $pb.PbFieldType.OD)
+    ..e<Priority>(15, _omitFieldNames ? '' : 'priority', $pb.PbFieldType.OE, defaultOrMaker: Priority.PRIORITY_UNSPECIFIED, valueOf: Priority.valueOf, enumValues: Priority.values)
+    ..e<TranslationProgressStatus>(16, _omitFieldNames ? '' : 'translationProgress', $pb.PbFieldType.OE, defaultOrMaker: TranslationProgressStatus.TRANSLATION_PROGRESS_STATUS_UNSPECIFIED, valueOf: TranslationProgressStatus.valueOf, enumValues: TranslationProgressStatus.values)
+    ..a<$core.int>(17, _omitFieldNames ? '' : 'paymentId', $pb.PbFieldType.OU3)
+    ..pc<TranslationOrder_BlankInfo>(18, _omitFieldNames ? '' : 'blanks', $pb.PbFieldType.PM, subBuilder: TranslationOrder_BlankInfo.create)
+    ..aOS(19, _omitFieldNames ? '' : 'notes')
+    ..e<ClientSource>(20, _omitFieldNames ? '' : 'source', $pb.PbFieldType.OE, defaultOrMaker: ClientSource.CLIENT_SOURCE_UNSPECIFIED, valueOf: ClientSource.valueOf, enumValues: ClientSource.values)
+    ..aOM<$2.Timestamp>(21, _omitFieldNames ? '' : 'createdAt', subBuilder: $2.Timestamp.create)
+    ..aOM<$2.Timestamp>(22, _omitFieldNames ? '' : 'doneAt', subBuilder: $2.Timestamp.create)
     ..hasRequiredFields = false
   ;
 
@@ -1211,114 +1216,123 @@ class TranslationOrder extends $pb.GeneratedMessage {
   void clearTargetLanguage() => $_clearField(9);
 
   @$pb.TagNumber(10)
-  $core.int get pageCount => $_getIZ(9);
+  $core.String get clientName => $_getSZ(9);
   @$pb.TagNumber(10)
-  set pageCount($core.int v) { $_setSignedInt32(9, v); }
+  set clientName($core.String v) { $_setString(9, v); }
   @$pb.TagNumber(10)
-  $core.bool hasPageCount() => $_has(9);
+  $core.bool hasClientName() => $_has(9);
   @$pb.TagNumber(10)
-  void clearPageCount() => $_clearField(10);
+  void clearClientName() => $_clearField(10);
 
   @$pb.TagNumber(11)
-  $core.double get translationSum => $_getN(10);
+  $core.int get pageCount => $_getIZ(10);
   @$pb.TagNumber(11)
-  set translationSum($core.double v) { $_setDouble(10, v); }
+  set pageCount($core.int v) { $_setSignedInt32(10, v); }
   @$pb.TagNumber(11)
-  $core.bool hasTranslationSum() => $_has(10);
+  $core.bool hasPageCount() => $_has(10);
   @$pb.TagNumber(11)
-  void clearTranslationSum() => $_clearField(11);
+  void clearPageCount() => $_clearField(11);
 
   @$pb.TagNumber(12)
-  $core.double get notarialSum => $_getN(11);
+  $core.double get translationSum => $_getN(11);
   @$pb.TagNumber(12)
-  set notarialSum($core.double v) { $_setDouble(11, v); }
+  set translationSum($core.double v) { $_setDouble(11, v); }
   @$pb.TagNumber(12)
-  $core.bool hasNotarialSum() => $_has(11);
+  $core.bool hasTranslationSum() => $_has(11);
   @$pb.TagNumber(12)
-  void clearNotarialSum() => $_clearField(12);
+  void clearTranslationSum() => $_clearField(12);
 
   @$pb.TagNumber(13)
-  $core.double get totalSum => $_getN(12);
+  $core.double get notarialSum => $_getN(12);
   @$pb.TagNumber(13)
-  set totalSum($core.double v) { $_setDouble(12, v); }
+  set notarialSum($core.double v) { $_setDouble(12, v); }
   @$pb.TagNumber(13)
-  $core.bool hasTotalSum() => $_has(12);
+  $core.bool hasNotarialSum() => $_has(12);
   @$pb.TagNumber(13)
-  void clearTotalSum() => $_clearField(13);
+  void clearNotarialSum() => $_clearField(13);
 
   @$pb.TagNumber(14)
-  Priority get priority => $_getN(13);
+  $core.double get totalSum => $_getN(13);
   @$pb.TagNumber(14)
-  set priority(Priority v) { $_setField(14, v); }
+  set totalSum($core.double v) { $_setDouble(13, v); }
   @$pb.TagNumber(14)
-  $core.bool hasPriority() => $_has(13);
+  $core.bool hasTotalSum() => $_has(13);
   @$pb.TagNumber(14)
-  void clearPriority() => $_clearField(14);
+  void clearTotalSum() => $_clearField(14);
 
   @$pb.TagNumber(15)
-  TranslationProgressStatus get translationProgress => $_getN(14);
+  Priority get priority => $_getN(14);
   @$pb.TagNumber(15)
-  set translationProgress(TranslationProgressStatus v) { $_setField(15, v); }
+  set priority(Priority v) { $_setField(15, v); }
   @$pb.TagNumber(15)
-  $core.bool hasTranslationProgress() => $_has(14);
+  $core.bool hasPriority() => $_has(14);
   @$pb.TagNumber(15)
-  void clearTranslationProgress() => $_clearField(15);
+  void clearPriority() => $_clearField(15);
 
   @$pb.TagNumber(16)
-  $core.int get paymentId => $_getIZ(15);
+  TranslationProgressStatus get translationProgress => $_getN(15);
   @$pb.TagNumber(16)
-  set paymentId($core.int v) { $_setUnsignedInt32(15, v); }
+  set translationProgress(TranslationProgressStatus v) { $_setField(16, v); }
   @$pb.TagNumber(16)
-  $core.bool hasPaymentId() => $_has(15);
+  $core.bool hasTranslationProgress() => $_has(15);
   @$pb.TagNumber(16)
-  void clearPaymentId() => $_clearField(16);
+  void clearTranslationProgress() => $_clearField(16);
 
   @$pb.TagNumber(17)
-  $pb.PbList<TranslationOrder_BlankInfo> get blanks => $_getList(16);
+  $core.int get paymentId => $_getIZ(16);
+  @$pb.TagNumber(17)
+  set paymentId($core.int v) { $_setUnsignedInt32(16, v); }
+  @$pb.TagNumber(17)
+  $core.bool hasPaymentId() => $_has(16);
+  @$pb.TagNumber(17)
+  void clearPaymentId() => $_clearField(17);
+
+  @$pb.TagNumber(18)
+  $pb.PbList<TranslationOrder_BlankInfo> get blanks => $_getList(17);
 
   /// Notes about the translation order
-  @$pb.TagNumber(18)
-  $core.String get notes => $_getSZ(17);
-  @$pb.TagNumber(18)
-  set notes($core.String v) { $_setString(17, v); }
-  @$pb.TagNumber(18)
-  $core.bool hasNotes() => $_has(17);
-  @$pb.TagNumber(18)
-  void clearNotes() => $_clearField(18);
+  @$pb.TagNumber(19)
+  $core.String get notes => $_getSZ(18);
+  @$pb.TagNumber(19)
+  set notes($core.String v) { $_setString(18, v); }
+  @$pb.TagNumber(19)
+  $core.bool hasNotes() => $_has(18);
+  @$pb.TagNumber(19)
+  void clearNotes() => $_clearField(19);
 
-  @$pb.TagNumber(19)
-  ClientSource get source => $_getN(18);
-  @$pb.TagNumber(19)
-  set source(ClientSource v) { $_setField(19, v); }
-  @$pb.TagNumber(19)
-  $core.bool hasSource() => $_has(18);
-  @$pb.TagNumber(19)
-  void clearSource() => $_clearField(19);
+  @$pb.TagNumber(20)
+  ClientSource get source => $_getN(19);
+  @$pb.TagNumber(20)
+  set source(ClientSource v) { $_setField(20, v); }
+  @$pb.TagNumber(20)
+  $core.bool hasSource() => $_has(19);
+  @$pb.TagNumber(20)
+  void clearSource() => $_clearField(20);
 
   /// bool is_urgent = 19; // REMOVED - Redundant with Priority enum
   /// bool is_semi_urgent = 20; // REMOVED - Redundant with Priority enum
   /// client_notified field was here, now covered by TranslationProgressStatus.CLIENT_NOTIFIED
-  @$pb.TagNumber(22)
-  $2.Timestamp get createdAt => $_getN(19);
-  @$pb.TagNumber(22)
-  set createdAt($2.Timestamp v) { $_setField(22, v); }
-  @$pb.TagNumber(22)
-  $core.bool hasCreatedAt() => $_has(19);
-  @$pb.TagNumber(22)
-  void clearCreatedAt() => $_clearField(22);
-  @$pb.TagNumber(22)
-  $2.Timestamp ensureCreatedAt() => $_ensure(19);
+  @$pb.TagNumber(21)
+  $2.Timestamp get createdAt => $_getN(20);
+  @$pb.TagNumber(21)
+  set createdAt($2.Timestamp v) { $_setField(21, v); }
+  @$pb.TagNumber(21)
+  $core.bool hasCreatedAt() => $_has(20);
+  @$pb.TagNumber(21)
+  void clearCreatedAt() => $_clearField(21);
+  @$pb.TagNumber(21)
+  $2.Timestamp ensureCreatedAt() => $_ensure(20);
 
-  @$pb.TagNumber(23)
-  $2.Timestamp get doneAt => $_getN(20);
-  @$pb.TagNumber(23)
-  set doneAt($2.Timestamp v) { $_setField(23, v); }
-  @$pb.TagNumber(23)
-  $core.bool hasDoneAt() => $_has(20);
-  @$pb.TagNumber(23)
-  void clearDoneAt() => $_clearField(23);
-  @$pb.TagNumber(23)
-  $2.Timestamp ensureDoneAt() => $_ensure(20);
+  @$pb.TagNumber(22)
+  $2.Timestamp get doneAt => $_getN(21);
+  @$pb.TagNumber(22)
+  set doneAt($2.Timestamp v) { $_setField(22, v); }
+  @$pb.TagNumber(22)
+  $core.bool hasDoneAt() => $_has(21);
+  @$pb.TagNumber(22)
+  void clearDoneAt() => $_clearField(22);
+  @$pb.TagNumber(22)
+  $2.Timestamp ensureDoneAt() => $_ensure(21);
 }
 
 class InsurancePolicy extends $pb.GeneratedMessage {

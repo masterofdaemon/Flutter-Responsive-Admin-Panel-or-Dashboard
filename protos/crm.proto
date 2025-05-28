@@ -224,22 +224,23 @@ message TranslationOrder {
   optional string document_type_key = 7; // e.g., "passport_rf", "birth_certificate_usa"
   optional string source_language = 8;
   optional string target_language = 9;
-  optional int32 page_count = 10;
-  double translation_sum = 11; // Base translation cost before urgency/certification
-  double notarial_sum = 12;    // Manual entry for notarial/legal certification
-  double total_sum = 13;       // Calculated: (translation_sum * urgency_multiplier) + notarial_sum
-  Priority priority = 14;
-  TranslationProgressStatus translation_progress = 15; // Specific status for translation workflow
-  optional uint32 payment_id = 16;
-  repeated BlankInfo blanks = 17;
+  optional string client_name = 10;
+  optional int32 page_count = 11;
+  double translation_sum = 12; // Base translation cost before urgency/certification
+  double notarial_sum = 13;    // Manual entry for notarial/legal certification
+  double total_sum = 14;       // Calculated: (translation_sum * urgency_multiplier) + notarial_sum
+  Priority priority = 15;
+  TranslationProgressStatus translation_progress = 16; // Specific status for translation workflow
+  optional uint32 payment_id = 17;
+  repeated BlankInfo blanks = 18;
   // Notes about the translation order
-  optional string notes = 18;
-  optional ClientSource source = 19; // MOVED: Source of the client for this order
+  optional string notes = 19;
+  optional ClientSource source = 20; // MOVED: Source of the client for this order
   // bool is_urgent = 19; // REMOVED - Redundant with Priority enum
   // bool is_semi_urgent = 20; // REMOVED - Redundant with Priority enum
   // client_notified field was here, now covered by TranslationProgressStatus.CLIENT_NOTIFIED
-  google.protobuf.Timestamp created_at = 22;
-  optional google.protobuf.Timestamp done_at = 23;
+  google.protobuf.Timestamp created_at = 21;
+  google.protobuf.Timestamp done_at = 22;
 
   // For handling multiple distinct document types in a single order, consider:
   // repeated DocumentItem document_items = 24;

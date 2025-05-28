@@ -1,32 +1,16 @@
 // Replace the stub with real gRPC implementation for Employee service
 import 'package:flutter/foundation.dart'; // Import for kDebugMode
-import 'package:grpc/grpc.dart';
 import 'package:admin/generated/crm.pbgrpc.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
+import 'package:admin/services/grpc_client.dart';
 
 class GrpcEmployeeService {
-  late final ClientChannel _channel;
-  late final CrmServiceClient _client;
+  final CrmServiceClient _client = CrmServiceClient(GrpcClient().channel);
   static const String _tag = 'GrpcEmployeeService';
 
-  GrpcEmployeeService({
-    String host = '31.41.13.175',
-    int grpcPort = 50051,
-    bool useTls = false,
-  }) {
-    _channel = ClientChannel(
-      host,
-      port: grpcPort,
-      options: ChannelOptions(
-        credentials: useTls
-            ? const ChannelCredentials.secure()
-            : const ChannelCredentials.insecure(),
-      ),
-    );
-    _client = CrmServiceClient(_channel);
+  GrpcEmployeeService() {
     if (kDebugMode) {
-      print(
-          '$_tag: Initialized with host: $host, port: $grpcPort, useTls: $useTls');
+      print('$_tag: Initialized with shared authenticated client');
     }
   }
 
@@ -41,7 +25,8 @@ class GrpcEmployeeService {
       pageToken: pageToken,
     );
     try {
-      final response = await _client.listEmployees(request);
+      final response = await _client.listEmployees(request,
+          options: GrpcClient().getCallOptions());
       if (kDebugMode) {
         print(
             '$_tag: listEmployees successful, ${response.employees.length} employees fetched.');
@@ -69,7 +54,8 @@ class GrpcEmployeeService {
     }
     final request = crm.CreateEmployeeRequest(employee: employee);
     try {
-      final response = await _client.createEmployee(request);
+      final response = await _client.createEmployee(request,
+          options: GrpcClient().getCallOptions());
       if (kDebugMode) {
         print(
             '$_tag: createEmployee call successful, server responded with employeeId: ${response.employeeId}. Fetching created employee details...');
@@ -90,7 +76,8 @@ class GrpcEmployeeService {
     final request =
         crm.GetEmployeeRequest(employeeId: int.tryParse(employeeId) ?? 0);
     try {
-      final response = await _client.getEmployee(request);
+      final response = await _client.getEmployee(request,
+          options: GrpcClient().getCallOptions());
       if (kDebugMode) {
         print(
             '$_tag: getEmployee successful for employeeId: $employeeId. Employee data: ${response.employee.writeToJsonMap()}');
@@ -115,7 +102,8 @@ class GrpcEmployeeService {
       employeeData: data,
     );
     try {
-      final response = await _client.updateEmployee(request);
+      final response = await _client.updateEmployee(request,
+          options: GrpcClient().getCallOptions());
       if (kDebugMode) {
         print(
             '$_tag: updateEmployee successful for employeeId: $employeeId. Updated employee data: ${response.employee.writeToJsonMap()}');
@@ -136,7 +124,8 @@ class GrpcEmployeeService {
     final request =
         crm.DeleteEmployeeRequest(employeeId: int.tryParse(employeeId) ?? 0);
     try {
-      await _client.deleteEmployee(request);
+      await _client.deleteEmployee(request,
+          options: GrpcClient().getCallOptions());
       if (kDebugMode) {
         print('$_tag: deleteEmployee successful for employeeId: $employeeId');
       }
@@ -150,19 +139,9 @@ class GrpcEmployeeService {
 
   Future<void> shutdown() async {
     if (kDebugMode) {
-      print('$_tag: shutdown called');
+      print('$_tag: shutdown called - using shared client, no action needed');
     }
-    try {
-      await _channel.shutdown();
-      if (kDebugMode) {
-        print('$_tag: Channel shutdown complete.');
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('$_tag: Channel shutdown failed: $e');
-      }
-      rethrow;
-    }
+    // No need to shutdown the shared channel
   }
 }
 
@@ -171,10 +150,6 @@ GrpcEmployeeService getGrpcEmployeeService({
   int grpcPort = 50051,
   bool useTls = false,
 }) {
-  // This factory function itself doesn't need extensive logging usually,
-  // as the constructor of GrpcEmployeeService already logs initialization.
-  // if (kDebugMode) {
-  //   print('getGrpcEmployeeService: Creating instance with host: $host, port: $grpcPort, useTls: $useTls');
-  // }
-  return GrpcEmployeeService(host: host, grpcPort: grpcPort, useTls: useTls);
+  // Parameters are ignored as we use the shared authenticated client
+  return GrpcEmployeeService();
 }

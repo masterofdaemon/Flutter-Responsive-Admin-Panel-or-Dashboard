@@ -9,6 +9,8 @@ import 'package:admin/screens/user_form_screen.dart';
 import 'package:admin/screens/training_course_list_screen.dart';
 import 'package:admin/screens/business_registration_list_screen.dart';
 import 'package:admin/screens/lending_application_list_screen.dart';
+import 'package:admin/screens/banks/banks_screen.dart';
+import 'package:admin/screens/offices/offices_screen.dart';
 import 'package:admin/services/auth_service.dart';
 import 'package:admin/constants.dart';
 import 'package:admin/controllers/menu_app_controller.dart';
@@ -111,6 +113,29 @@ class SideMenu extends StatelessWidget {
                   press: () {
                     context.read<MenuAppController>().setSelectedScreen(
                           const LendingApplicationListScreen(),
+                        );
+                  },
+                ),
+              if (auth.canViewClients())
+                DrawerListTile(
+                  title: localizations.sideMenuBanks,
+                  svgSrc: "assets/icons/menu_store.svg",
+                  press: () {
+                    context.read<MenuAppController>().setSelectedScreen(
+                          const BanksScreen(),
+                        );
+                  },
+                ),
+              // Offices - accessible to chief managers and directors (or adjust as needed)
+              if (auth
+                  .canViewEmployees()) // Example: Same permission as employees for now
+                DrawerListTile(
+                  title: localizations
+                      .sideMenuOffices, // Add this to localization files
+                  svgSrc: "assets/icons/folder.svg", // Example icon
+                  press: () {
+                    context.read<MenuAppController>().setSelectedScreen(
+                          const OfficesScreen(),
                         );
                   },
                 ),

@@ -1,3 +1,4 @@
+import 'dart:developer'; // For log function
 import 'package:admin/generated/crm.pbgrpc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For TextInputFormatters
@@ -57,14 +58,16 @@ class _TranslationOrderFormScreenState
   crm.TranslationOrder? _initialOrderData;
 
   // --- Controllers & State Variables ---
-  final _titleController = TextEditingController();
   final _clientIdController =
       TextEditingController(); // Keep for ID, dropdown sets it
+  final _clientNameController =
+      TextEditingController(); // Add client name controller
   DateTime? _doneAt;
   final _sourceLangController = TextEditingController();
   final _targetLangController = TextEditingController();
   final _pageCountController = TextEditingController();
   final _notarialSumController = TextEditingController();
+  final _totalSumController = TextEditingController();
   final _paymentIdController = TextEditingController();
   final _notesController = TextEditingController();
   // Controller for editable document type
@@ -116,12 +119,13 @@ class _TranslationOrderFormScreenState
   @override
   void dispose() {
     // Dispose all controllers
-    _titleController.dispose();
     _clientIdController.dispose();
+    _clientNameController.dispose(); // Add disposal for client name controller
     _sourceLangController.dispose();
     _targetLangController.dispose();
     _pageCountController.dispose();
     _notarialSumController.dispose();
+    _totalSumController.dispose();
     _paymentIdController.dispose();
     _notesController.dispose();
     _documentTypeController.dispose();
@@ -235,12 +239,12 @@ class _TranslationOrderFormScreenState
       _selectedOffice = null; // Not found
       print(
           'Warning: Office ID ${order.officeId} not found in loaded offices.');
-    }
-
-    // Set controllers based on order data or selected objects
-    _titleController.text = order.hasTitle() ? order.title : '';
+    } // Set controllers based on order data or selected objects
     _clientIdController.text =
         order.clientId.toString(); // Convert int to string for controller
+    _clientNameController.text = order.hasClientName()
+        ? order.clientName
+        : ''; // Add client name population
     _doneAt = order.hasDoneAt() ? timestampToDateTime(order.doneAt) : null;
     _sourceLangController.text = order.sourceLanguage;
     _targetLangController.text = order.targetLanguage;
@@ -248,6 +252,12 @@ class _TranslationOrderFormScreenState
         order.hasPageCount() ? order.pageCount.toString() : '';
     _notarialSumController.text =
         order.notarialSum.toString(); // Assuming double
+    print('=== FORM POPULATION DEBUG ===');
+    print('Populating notarial sum from order: ${order.notarialSum}');
+    print('Controller set to: "${_notarialSumController.text}"');
+    print('=============================');
+    _totalSumController.text =
+        order.hasTotalSum() ? order.totalSum.toStringAsFixed(2) : '';
     _paymentIdController.text =
         order.hasPaymentId() ? order.paymentId.toString() : '';
     _notesController.text = order.hasNotes() ? order.notes : '';
@@ -293,7 +303,7 @@ class _TranslationOrderFormScreenState
           _initialOrderData?.createdAt ?? dateTimeToTimestamp(now);
       final orderData = crm.TranslationOrder(
         createdAt: createdAt,
-        title: _titleController.text.trim(),
+        title: "",
         doneAt: dateTimeToTimestamp(_doneAt),
         clientId: _selectedClient?.clientId ?? 0,
         managerId: _selectedManager?.employeeId ?? 0,
@@ -306,16 +316,27 @@ class _TranslationOrderFormScreenState
         targetLanguage: _targetLangController.text.isNotEmpty
             ? _targetLangController.text
             : null,
+        clientName: _clientNameController.text.isNotEmpty
+            ? _clientNameController.text
+            : null, // Add client name to save logic
         pageCount: int.tryParse(_pageCountController.text),
         paymentId: int.tryParse(_paymentIdController.text),
         notes: _notesController.text.isNotEmpty ? _notesController.text : null,
         notarialSum: double.tryParse(_notarialSumController.text) ?? 0.0,
+        totalSum: double.tryParse(_totalSumController.text) ?? 0.0,
         priority: _selectedPriority ?? crm.Priority.NORMAL,
         translationProgress: TranslationProgressStatus.valueOf(
             _currentTranslationProgress?.value ?? 0),
         source: _selectedClientSource, // Added for ClientSource
       );
 
+      // DEBUG: Print notarial sum details
+      print('=== NOTARIAL SUM DEBUG ===');
+      print('Controller text: "${_notarialSumController.text}"');
+      print('Parsed value: ${double.tryParse(_notarialSumController.text)}');
+      print('Final notarial sum: ${orderData.notarialSum}');
+      print('Order data: ${orderData.toString()}');
+      print('========================');
       // Add blanks using TranslationOrder_BlankInfo
       orderData.blanks.add(crm.TranslationOrder_BlankInfo()
         ..blankNumber = _blankNumberController.text.trim()
@@ -328,11 +349,18 @@ class _TranslationOrderFormScreenState
       }
 
       if (widget.orderId == null) {
-        await _orderService.createTranslationOrder(orderData);
+        final response = await _orderService.createTranslationOrder(orderData);
+        print('=== SERVER RESPONSE (CREATE) ===');
+        print('Response: ${response.toString()}');
+        print('==============================');
         successMessage =
             localizations.translationOrderFormScreenOrderCreatedSuccess;
       } else {
-        await _orderService.updateTranslationOrder(widget.orderId!, orderData);
+        final response = await _orderService.updateTranslationOrder(
+            widget.orderId!, orderData);
+        print('=== SERVER RESPONSE (UPDATE) ===');
+        print('Response: ${response.toString()}');
+        print('==============================');
         successMessage =
             localizations.translationOrderFormScreenOrderUpdatedSuccess;
       }
@@ -562,39 +590,6 @@ class _TranslationOrderFormScreenState
             ),
             const SizedBox(height: 24),
 
-            // Title Field
-            TextFormField(
-              controller: _titleController,
-              decoration: InputDecoration(
-                labelText:
-                    localizations.translationOrderFormScreenFieldTitleLabel,
-                hintText:
-                    localizations.translationOrderFormScreenFieldTitleHint,
-                prefixIcon: Icon(Icons.title, color: colorScheme.primary),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide:
-                      BorderSide(color: colorScheme.outline.withOpacity(0.3)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: colorScheme.primary, width: 2),
-                ),
-              ),
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return localizations
-                      .translationOrderFormScreenFieldTitleValidation;
-                }
-                return null;
-              },
-            ),
-
-            const SizedBox(height: 20),
-
             // Client and Office Row
             Row(
               children: [
@@ -692,6 +687,36 @@ class _TranslationOrderFormScreenState
               ],
             ),
 
+            const SizedBox(height: 20),
+
+            // Client Name Field
+            TextFormField(
+              controller: _clientNameController,
+              decoration: InputDecoration(
+                labelText: localizations
+                    .translationOrderFormScreenFieldClientNameLabel,
+                hintText:
+                    localizations.translationOrderFormScreenFieldClientNameHint,
+                prefixIcon: Icon(Icons.person, color: colorScheme.primary),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide:
+                      BorderSide(color: colorScheme.outline.withOpacity(0.3)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: colorScheme.primary, width: 2),
+                ),
+              ),
+              maxLength: 100,
+              validator: (value) {
+                // Optional field, no validation required
+                return null;
+              },
+            ),
             const SizedBox(height: 20),
 
             // Manager and Translator Row
@@ -1319,8 +1344,20 @@ class _TranslationOrderFormScreenState
               managerLevel: 'regular',
               notarialSum: double.tryParse(_notarialSumController.text) ?? 0.0,
               onPricingCalculated: (translationSum, totalSum) {
-                // The pricing widget displays the calculations internally
-                // No need to store them in state variables
+                print('=== PRICING CALLBACK DEBUG ===');
+                print('Translation sum: $translationSum');
+                print('Total sum: $totalSum');
+                print(
+                    'Current notarial sum controller: "${_notarialSumController.text}"');
+                print(
+                    'Current notarial sum parsed: ${double.tryParse(_notarialSumController.text) ?? 0.0}');
+                print('===============================');
+                // Update the total sum controller when pricing is calculated
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted) {
+                    _totalSumController.text = totalSum.toStringAsFixed(2);
+                  }
+                });
               },
             ),
 
@@ -1355,10 +1392,46 @@ class _TranslationOrderFormScreenState
                 FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))
               ],
               onChanged: (value) {
+                print('Notarial sum field changed to: "$value"');
                 setState(() {
-                  // Trigger pricing recalculation
+                  // Force rebuild to trigger pricing recalculation with new notarial sum
                 });
               },
+            ),
+
+            const SizedBox(height: 20),
+
+            // Total Sum Field (Read-only)
+            TextFormField(
+              controller: _totalSumController,
+              decoration: InputDecoration(
+                labelText:
+                    localizations.translationOrderFormScreenFieldTotalSumLabel,
+                hintText:
+                    localizations.translationOrderFormScreenFieldTotalSumHint,
+                prefixIcon: Icon(Icons.monetization_on_outlined,
+                    color: colorScheme.primary),
+                suffixText: '₽',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide:
+                      BorderSide(color: colorScheme.outline.withOpacity(0.3)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: colorScheme.primary, width: 2),
+                ),
+                filled: true,
+                fillColor: colorScheme.surfaceVariant.withOpacity(0.3),
+              ),
+              readOnly: true,
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                color: colorScheme.primary,
+              ),
             ),
 
             const SizedBox(height: 20),

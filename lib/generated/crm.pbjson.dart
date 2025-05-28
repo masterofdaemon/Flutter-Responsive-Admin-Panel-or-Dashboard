@@ -409,18 +409,19 @@ const TranslationOrder$json = {
     {'1': 'document_type_key', '3': 7, '4': 1, '5': 9, '9': 1, '10': 'documentTypeKey', '17': true},
     {'1': 'source_language', '3': 8, '4': 1, '5': 9, '9': 2, '10': 'sourceLanguage', '17': true},
     {'1': 'target_language', '3': 9, '4': 1, '5': 9, '9': 3, '10': 'targetLanguage', '17': true},
-    {'1': 'page_count', '3': 10, '4': 1, '5': 5, '9': 4, '10': 'pageCount', '17': true},
-    {'1': 'translation_sum', '3': 11, '4': 1, '5': 1, '10': 'translationSum'},
-    {'1': 'notarial_sum', '3': 12, '4': 1, '5': 1, '10': 'notarialSum'},
-    {'1': 'total_sum', '3': 13, '4': 1, '5': 1, '10': 'totalSum'},
-    {'1': 'priority', '3': 14, '4': 1, '5': 14, '6': '.proto.Priority', '10': 'priority'},
-    {'1': 'translation_progress', '3': 15, '4': 1, '5': 14, '6': '.proto.TranslationProgressStatus', '10': 'translationProgress'},
-    {'1': 'payment_id', '3': 16, '4': 1, '5': 13, '9': 5, '10': 'paymentId', '17': true},
-    {'1': 'blanks', '3': 17, '4': 3, '5': 11, '6': '.proto.TranslationOrder.BlankInfo', '10': 'blanks'},
-    {'1': 'notes', '3': 18, '4': 1, '5': 9, '9': 6, '10': 'notes', '17': true},
-    {'1': 'source', '3': 19, '4': 1, '5': 14, '6': '.proto.ClientSource', '9': 7, '10': 'source', '17': true},
-    {'1': 'created_at', '3': 22, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
-    {'1': 'done_at', '3': 23, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '9': 8, '10': 'doneAt', '17': true},
+    {'1': 'client_name', '3': 10, '4': 1, '5': 9, '9': 4, '10': 'clientName', '17': true},
+    {'1': 'page_count', '3': 11, '4': 1, '5': 5, '9': 5, '10': 'pageCount', '17': true},
+    {'1': 'translation_sum', '3': 12, '4': 1, '5': 1, '10': 'translationSum'},
+    {'1': 'notarial_sum', '3': 13, '4': 1, '5': 1, '10': 'notarialSum'},
+    {'1': 'total_sum', '3': 14, '4': 1, '5': 1, '10': 'totalSum'},
+    {'1': 'priority', '3': 15, '4': 1, '5': 14, '6': '.proto.Priority', '10': 'priority'},
+    {'1': 'translation_progress', '3': 16, '4': 1, '5': 14, '6': '.proto.TranslationProgressStatus', '10': 'translationProgress'},
+    {'1': 'payment_id', '3': 17, '4': 1, '5': 13, '9': 6, '10': 'paymentId', '17': true},
+    {'1': 'blanks', '3': 18, '4': 3, '5': 11, '6': '.proto.TranslationOrder.BlankInfo', '10': 'blanks'},
+    {'1': 'notes', '3': 19, '4': 1, '5': 9, '9': 7, '10': 'notes', '17': true},
+    {'1': 'source', '3': 20, '4': 1, '5': 14, '6': '.proto.ClientSource', '9': 8, '10': 'source', '17': true},
+    {'1': 'created_at', '3': 21, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'createdAt'},
+    {'1': 'done_at', '3': 22, '4': 1, '5': 11, '6': '.google.protobuf.Timestamp', '10': 'doneAt'},
   ],
   '3': [TranslationOrder_BlankInfo$json],
   '8': [
@@ -428,11 +429,11 @@ const TranslationOrder$json = {
     {'1': '_document_type_key'},
     {'1': '_source_language'},
     {'1': '_target_language'},
+    {'1': '_client_name'},
     {'1': '_page_count'},
     {'1': '_payment_id'},
     {'1': '_notes'},
     {'1': '_source'},
-    {'1': '_done_at'},
   ],
 };
 
@@ -454,22 +455,22 @@ final $typed_data.Uint8List translationOrderDescriptor = $convert.base64Decode(
     'gBARIbCglvZmZpY2VfaWQYBiABKA1SCG9mZmljZUlkEi8KEWRvY3VtZW50X3R5cGVfa2V5GAcg'
     'ASgJSAFSD2RvY3VtZW50VHlwZUtleYgBARIsCg9zb3VyY2VfbGFuZ3VhZ2UYCCABKAlIAlIOc2'
     '91cmNlTGFuZ3VhZ2WIAQESLAoPdGFyZ2V0X2xhbmd1YWdlGAkgASgJSANSDnRhcmdldExhbmd1'
-    'YWdliAEBEiIKCnBhZ2VfY291bnQYCiABKAVIBFIJcGFnZUNvdW50iAEBEicKD3RyYW5zbGF0aW'
-    '9uX3N1bRgLIAEoAVIOdHJhbnNsYXRpb25TdW0SIQoMbm90YXJpYWxfc3VtGAwgASgBUgtub3Rh'
-    'cmlhbFN1bRIbCgl0b3RhbF9zdW0YDSABKAFSCHRvdGFsU3VtEisKCHByaW9yaXR5GA4gASgOMg'
-    '8ucHJvdG8uUHJpb3JpdHlSCHByaW9yaXR5ElMKFHRyYW5zbGF0aW9uX3Byb2dyZXNzGA8gASgO'
-    'MiAucHJvdG8uVHJhbnNsYXRpb25Qcm9ncmVzc1N0YXR1c1ITdHJhbnNsYXRpb25Qcm9ncmVzcx'
-    'IiCgpwYXltZW50X2lkGBAgASgNSAVSCXBheW1lbnRJZIgBARI5CgZibGFua3MYESADKAsyIS5w'
-    'cm90by5UcmFuc2xhdGlvbk9yZGVyLkJsYW5rSW5mb1IGYmxhbmtzEhkKBW5vdGVzGBIgASgJSA'
-    'ZSBW5vdGVziAEBEjAKBnNvdXJjZRgTIAEoDjITLnByb3RvLkNsaWVudFNvdXJjZUgHUgZzb3Vy'
-    'Y2WIAQESOQoKY3JlYXRlZF9hdBgWIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCW'
-    'NyZWF0ZWRBdBI4Cgdkb25lX2F0GBcgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEgI'
-    'UgZkb25lQXSIAQEahwEKCUJsYW5rSW5mbxIhCgxibGFua19udW1iZXIYASABKAlSC2JsYW5rTn'
-    'VtYmVyEh0KCmlzX3Nwb2lsZWQYAiABKAhSCWlzU3BvaWxlZBI4ChhyZXBsYWNlbWVudF9ibGFu'
-    'a19udW1iZXIYAyABKAlSFnJlcGxhY2VtZW50QmxhbmtOdW1iZXJCEAoOX3RyYW5zbGF0b3JfaW'
-    'RCFAoSX2RvY3VtZW50X3R5cGVfa2V5QhIKEF9zb3VyY2VfbGFuZ3VhZ2VCEgoQX3RhcmdldF9s'
-    'YW5ndWFnZUINCgtfcGFnZV9jb3VudEINCgtfcGF5bWVudF9pZEIICgZfbm90ZXNCCQoHX3NvdX'
-    'JjZUIKCghfZG9uZV9hdA==');
+    'YWdliAEBEiQKC2NsaWVudF9uYW1lGAogASgJSARSCmNsaWVudE5hbWWIAQESIgoKcGFnZV9jb3'
+    'VudBgLIAEoBUgFUglwYWdlQ291bnSIAQESJwoPdHJhbnNsYXRpb25fc3VtGAwgASgBUg50cmFu'
+    'c2xhdGlvblN1bRIhCgxub3RhcmlhbF9zdW0YDSABKAFSC25vdGFyaWFsU3VtEhsKCXRvdGFsX3'
+    'N1bRgOIAEoAVIIdG90YWxTdW0SKwoIcHJpb3JpdHkYDyABKA4yDy5wcm90by5Qcmlvcml0eVII'
+    'cHJpb3JpdHkSUwoUdHJhbnNsYXRpb25fcHJvZ3Jlc3MYECABKA4yIC5wcm90by5UcmFuc2xhdG'
+    'lvblByb2dyZXNzU3RhdHVzUhN0cmFuc2xhdGlvblByb2dyZXNzEiIKCnBheW1lbnRfaWQYESAB'
+    'KA1IBlIJcGF5bWVudElkiAEBEjkKBmJsYW5rcxgSIAMoCzIhLnByb3RvLlRyYW5zbGF0aW9uT3'
+    'JkZXIuQmxhbmtJbmZvUgZibGFua3MSGQoFbm90ZXMYEyABKAlIB1IFbm90ZXOIAQESMAoGc291'
+    'cmNlGBQgASgOMhMucHJvdG8uQ2xpZW50U291cmNlSAhSBnNvdXJjZYgBARI5CgpjcmVhdGVkX2'
+    'F0GBUgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIJY3JlYXRlZEF0EjMKB2RvbmVf'
+    'YXQYFiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wUgZkb25lQXQahwEKCUJsYW5rSW'
+    '5mbxIhCgxibGFua19udW1iZXIYASABKAlSC2JsYW5rTnVtYmVyEh0KCmlzX3Nwb2lsZWQYAiAB'
+    'KAhSCWlzU3BvaWxlZBI4ChhyZXBsYWNlbWVudF9ibGFua19udW1iZXIYAyABKAlSFnJlcGxhY2'
+    'VtZW50QmxhbmtOdW1iZXJCEAoOX3RyYW5zbGF0b3JfaWRCFAoSX2RvY3VtZW50X3R5cGVfa2V5'
+    'QhIKEF9zb3VyY2VfbGFuZ3VhZ2VCEgoQX3RhcmdldF9sYW5ndWFnZUIOCgxfY2xpZW50X25hbW'
+    'VCDQoLX3BhZ2VfY291bnRCDQoLX3BheW1lbnRfaWRCCAoGX25vdGVzQgkKB19zb3VyY2U=');
 
 @$core.Deprecated('Use insurancePolicyDescriptor instead')
 const InsurancePolicy$json = {

@@ -691,6 +691,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sideMenuEmployees => 'Employees';
 
   @override
+  String get sideMenuOffices => 'Offices';
+
+  @override
   String get sideMenuTranslations => 'Translations';
 
   @override
@@ -704,6 +707,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sideMenuLendingApplications => 'Lending Applications';
+
+  @override
+  String get sideMenuBanks => 'Banks';
 
   @override
   String get sideMenuAdminTools => 'Admin Tools';
@@ -920,6 +926,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please select a client';
 
   @override
+  String get translationOrderFormScreenFieldClientNameLabel => 'Client Name';
+
+  @override
+  String get translationOrderFormScreenFieldClientNameHint =>
+      'Enter client name (optional)';
+
+  @override
   String get translationOrderFormScreenFieldManagerLabel => 'Manager *';
 
   @override
@@ -1093,6 +1106,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get translationOrderFormScreenFieldPaymentIdHint =>
       'Enter payment reference';
+
+  @override
+  String get translationOrderFormScreenFieldTotalSumLabel => 'Total Sum';
+
+  @override
+  String get translationOrderFormScreenFieldTotalSumHint =>
+      'Calculated automatically from pricing';
 
   @override
   String get translationOrderFormScreenSectionTitleActions => 'Actions';
@@ -1621,6 +1641,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translationOrderListScreenValueNo => 'No';
 
   @override
+  String get translationOrderListScreenTooltipAdd =>
+      'Add new translation order';
+
+  @override
   String get documentTypePassport => 'Passport';
 
   @override
@@ -1905,4 +1929,136 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get translationProgressStatusDelivered => 'Delivered';
+
+  @override
+  String get officesScreenTitle => 'Offices Management';
+
+  @override
+  String get officesScreenSearchHint => 'Search Offices (City, Address, Phone)';
+
+  @override
+  String get officesScreenTooltipAdd => 'Add New Office';
+
+  @override
+  String get officesScreenTooltipEdit => 'Edit Office';
+
+  @override
+  String get officesScreenTooltipDelete => 'Delete Office';
+
+  @override
+  String officesScreenErrorLoading(String error) {
+    return 'Failed to load offices: $error';
+  }
+
+  @override
+  String officesScreenErrorDeleting(String error) {
+    return 'Failed to delete office: $error';
+  }
+
+  @override
+  String officesScreenSuccessDeleted(String city) {
+    return 'Office \"$city\" deleted successfully';
+  }
+
+  @override
+  String get officesScreenConfirmDeleteTitle => 'Delete Office';
+
+  @override
+  String officesScreenConfirmDeleteMessage(String city) {
+    return 'Are you sure you want to delete the office in \"$city\"?';
+  }
+
+  @override
+  String get officesScreenConfirmDeleteCancel => 'Cancel';
+
+  @override
+  String get officesScreenConfirmDeleteConfirm => 'Delete';
+
+  @override
+  String get officeFormScreenTitleAdd => 'Add New Office';
+
+  @override
+  String get officeFormScreenTitleEdit => 'Edit Office';
+
+  @override
+  String get officeFormScreenLabelCity => 'City';
+
+  @override
+  String get officeFormScreenLabelAddress => 'Address (Optional)';
+
+  @override
+  String get officeFormScreenLabelPhone => 'Phone (Optional)';
+
+  @override
+  String get officeFormScreenLabelNotes => 'Notes (Optional)';
+
+  @override
+  String get officeFormScreenValidationCityRequired => 'City is required';
+
+  @override
+  String get officeFormScreenButtonCreate => 'Create Office';
+
+  @override
+  String get officeFormScreenButtonUpdate => 'Update Office';
+
+  @override
+  String officeFormScreenErrorLoading(String error) {
+    return 'Error loading office: $error';
+  }
+
+  @override
+  String officeFormScreenErrorSaving(String error) {
+    return 'Error saving office: $error';
+  }
+
+  @override
+  String get officeFormScreenSuccessCreated => 'Office created successfully';
+
+  @override
+  String get officeFormScreenSuccessUpdated => 'Office updated successfully';
+
+  @override
+  String get plutoGridFilterAllColumns => 'All Columns';
+
+  @override
+  String get plutoGridFilterContains => 'Contains';
+
+  @override
+  String get plutoGridFilterEquals => 'Equals';
+
+  @override
+  String get plutoGridFilterStartsWith => 'Starts with';
+
+  @override
+  String get plutoGridFilterEndsWith => 'Ends with';
+
+  @override
+  String get plutoGridFilterGreaterThan => 'Greater than';
+
+  @override
+  String get plutoGridFilterGreaterThanOrEqualTo => 'Greater than or equal to';
+
+  @override
+  String get plutoGridFilterLessThan => 'Less than';
+
+  @override
+  String get plutoGridFilterLessThanOrEqualTo => 'Less than or equal to';
+
+  @override
+  String get plutoGridFilterApply => 'Apply';
+
+  @override
+  String get plutoGridFilterClear => 'Clear';
+
+  @override
+  String get plutoGridFilterPopupTitle => 'Filter';
+
+  @override
+  String get plutoGridFilterColumn => 'Column';
+
+  @override
+  String get plutoGridFilterType => 'Type';
+
+  @override
+  String get plutoGridFilterValue => 'Value';
 }
