@@ -551,6 +551,7 @@ class _TranslationOrderListScreenState
   Future<void> _deleteOrder(String orderId) async {
     final localizations = AppLocalizations.of(context);
     final confirm = await showDialog<bool>(
+      barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
         title: Text(

@@ -65,6 +65,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
     // Optional: Show confirmation dialog
     final localizations = AppLocalizations.of(context);
     final confirm = await showDialog<bool>(
+      barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
         title: Text(localizations.employeeListScreenConfirmDeleteTitle),
@@ -132,6 +133,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
   void _showEmployeeFormModal({String? employeeId}) async {
     final result = await showDialog<bool>(
       context: context,
+      barrierDismissible: false,
       builder: (context) => EmployeeFormScreen(employeeId: employeeId),
     );
     if (result == true && mounted) {
@@ -206,7 +208,7 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
         field: 'actions',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
-        width: 120,
+        width: 100,
         readOnly: true,
         textAlign: PlutoColumnTextAlign.center,
         renderer: (rendererContext) {
@@ -225,30 +227,50 @@ class _EmployeeListScreenState extends State<EmployeeListScreen> {
             builder: (context, auth, _) {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   // Edit button - only show if user can manage employees
                   if (auth.canManageEmployees())
-                    IconButton(
-                      icon: const Icon(Icons.edit, color: primaryColor),
-                      onPressed: () =>
-                          _showEmployeeFormModal(employeeId: employeeIdStr),
-                      tooltip: localizations.employeeListScreenTooltipEdit,
-                      splashRadius: 20,
+                    Flexible(
+                      child: IconButton(
+                        icon: const Icon(Icons.edit, color: primaryColor),
+                        onPressed: () =>
+                            _showEmployeeFormModal(employeeId: employeeIdStr),
+                        tooltip: localizations.employeeListScreenTooltipEdit,
+                        splashRadius: 16,
+                        iconSize: 18,
+                        padding: const EdgeInsets.all(4),
+                        constraints: const BoxConstraints(
+                          minWidth: 32,
+                          minHeight: 32,
+                        ),
+                      ),
                     ),
                   // Delete button - only show if user can delete records (directors only)
                   if (auth.canDeleteRecords())
-                    IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.redAccent),
-                      onPressed: () => _deleteEmployee(employee),
-                      tooltip: localizations.employeeListScreenTooltipDelete,
-                      splashRadius: 20,
+                    Flexible(
+                      child: IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.redAccent),
+                        onPressed: () => _deleteEmployee(employee),
+                        tooltip: localizations.employeeListScreenTooltipDelete,
+                        splashRadius: 16,
+                        iconSize: 18,
+                        padding: const EdgeInsets.all(4),
+                        constraints: const BoxConstraints(
+                          minWidth: 32,
+                          minHeight: 32,
+                        ),
+                      ),
                     ),
                   // View-only indicator for users who can only view
                   if (!auth.canManageEmployees() && !auth.canDeleteRecords())
-                    Icon(
-                      Icons.visibility,
-                      color: Colors.grey,
-                      size: 20,
+                    const Padding(
+                      padding: EdgeInsets.all(4),
+                      child: Icon(
+                        Icons.visibility,
+                        color: Colors.grey,
+                        size: 18,
+                      ),
                     ),
                 ],
               );

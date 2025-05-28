@@ -488,8 +488,12 @@ class AuthService with ChangeNotifier {
     if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
       return true;
     }
-    // For employees, directors and managers can manage translation orders
-    return hasAnyRole([pb.EmployeeRole.DIRECTOR, pb.EmployeeRole.MANAGER]);
+    // For employees, directors, chief managers, and managers can manage translation orders
+    return hasAnyRole([
+      pb.EmployeeRole.DIRECTOR,
+      pb.EmployeeRole.CHIEF_MANAGER,
+      pb.EmployeeRole.MANAGER
+    ]);
   }
 
   /// Check if the current user can assign translators to orders
@@ -536,8 +540,9 @@ class AuthService with ChangeNotifier {
     if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
       return true;
     }
-    // For employees, only DIRECTOR can delete records
-    return hasRole(pb.EmployeeRole.DIRECTOR);
+    // For employees, only DIRECTOR can delete records, CHIEF_MANAGER can also delete
+    return hasAnyRole(
+        [pb.EmployeeRole.DIRECTOR, pb.EmployeeRole.CHIEF_MANAGER]);
   }
 
   /// Check if the current user can view admin tools

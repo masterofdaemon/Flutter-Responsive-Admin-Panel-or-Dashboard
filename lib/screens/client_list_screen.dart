@@ -93,6 +93,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
   // Method to show the form modal for adding or editing
   Future<void> _showClientFormModal({String? clientId}) async {
     final result = await showDialog<bool>(
+      barrierDismissible: false,
       context: context,
       builder: (context) => ClientFormScreen(clientId: clientId),
     );
@@ -106,6 +107,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
   Future<void> _deleteClient(String clientId, String clientName) async {
     final localizations = AppLocalizations.of(context); // Added
     final confirm = await showDialog<bool>(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(

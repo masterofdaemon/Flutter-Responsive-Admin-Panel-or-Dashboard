@@ -1522,6 +1522,7 @@ class _TranslationOrderFormScreenState
                       ? null
                       : () async {
                           final confirmed = await showDialog<bool>(
+                            barrierDismissible: false,
                             context: context,
                             builder: (context) => AlertDialog(
                               shape: RoundedRectangleBorder(
@@ -1769,6 +1770,7 @@ class _TranslationOrderFormScreenState
 
     final localizations = AppLocalizations.of(context);
     final confirmed = await showDialog<bool>(
+      barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
