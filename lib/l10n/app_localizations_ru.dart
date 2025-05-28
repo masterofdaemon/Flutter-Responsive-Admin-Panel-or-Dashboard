@@ -1015,7 +1015,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get clientSourceUnspecified => 'Не указан';
 
   @override
-  String get clientSourceColumnTitle => 'Источник';
+  String get clientSourceColumnTitle => 'Источник рекламы';
 
   @override
   String get translationOrderFormScreenFieldPriorityLabel => 'Приоритет *';
@@ -1644,7 +1644,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get translationOrderListScreenColumnDoneAt => 'Выполнено';
 
   @override
-  String get translationOrderListScreenColumnNotariallyCertified => 'заверенно';
+  String get translationOrderListScreenColumnNotariallyCertified =>
+      'Заверенние';
 
   @override
   String get translationOrderListScreenValueYes => 'Да';

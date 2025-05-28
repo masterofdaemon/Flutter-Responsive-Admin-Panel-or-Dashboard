@@ -460,12 +460,12 @@ class _TranslationOrderListScreenState
           return Consumer<AuthService>(
             builder: (context, authService, child) {
               final List<Widget> actionButtons = [];
-
+              const primaryColor = Color(0xFF2697FF);
               // Edit button - visible if user can manage translation orders
               if (authService.canManageTranslationOrders()) {
                 actionButtons.add(
                   IconButton(
-                    icon: const Icon(Icons.edit),
+                    icon: const Icon(Icons.edit, color: primaryColor),
                     iconSize: 20.0,
                     padding: const EdgeInsets.all(4.0),
                     constraints: const BoxConstraints(
@@ -485,7 +485,7 @@ class _TranslationOrderListScreenState
               if (authService.canDeleteRecords()) {
                 actionButtons.add(
                   IconButton(
-                    icon: const Icon(Icons.delete),
+                    icon: const Icon(Icons.delete, color: Colors.redAccent),
                     iconSize: 20.0,
                     padding: const EdgeInsets.all(4.0),
                     constraints: const BoxConstraints(
@@ -653,9 +653,10 @@ class _TranslationOrderListScreenState
                         style: PlutoGridStyleConfig(
                           gridBorderColor: Colors.grey,
                           rowHeight: 45,
-                          columnHeight: 90,
+                          rowColor: Colors.white,
+                          columnHeight: 65,
                           borderColor: Colors.black38,
-                          gridBackgroundColor: Colors.white,
+                          gridBackgroundColor: Colors.tealAccent,
                         ),
                         columnSize: PlutoGridColumnSizeConfig(
                           autoSizeMode: PlutoAutoSizeMode.scale,
