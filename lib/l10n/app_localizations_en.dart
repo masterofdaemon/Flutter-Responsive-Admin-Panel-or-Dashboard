@@ -2260,4 +2260,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get blankNumbersWidgetGuidelinesText =>
       '• Use exactly 6 digits (e.g., 123456)\n• Each blank number must be unique\n• Use \"Generate\" for timestamp-based numbers\n• Use \"Suggest\" for sequential numbering\n• Record damaged blanks for audit trail';
+
+  @override
+  String get searchableDropdownHint => 'Select an option...';
+
+  @override
+  String get searchableDropdownSearchHint => 'Search...';
+
+  @override
+  String get searchableDropdownNoResults => 'No results found';
 }

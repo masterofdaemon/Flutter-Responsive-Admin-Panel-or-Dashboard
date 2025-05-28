@@ -1091,5 +1091,8 @@
   "blankNumbersWidgetDamagedHint": "Number of the damaged blank being replaced",
   "blankNumbersWidgetDamagedWarning": "Record the damaged blank number for tracking and audit purposes. This helps maintain blank inventory accuracy.",
   "blankNumbersWidgetGuidelinesTitle": "Blank Number Guidelines",
-  "blankNumbersWidgetGuidelinesText": "• Use exactly 6 digits (e.g., 123456)\n• Each blank number must be unique\n• Use \"Generate\" for timestamp-based numbers\n• Use \"Suggest\" for sequential numbering\n• Record damaged blanks for audit trail"
+  "blankNumbersWidgetGuidelinesText": "• Use exactly 6 digits (e.g., 123456)\n• Each blank number must be unique\n• Use \"Generate\" for timestamp-based numbers\n• Use \"Suggest\" for sequential numbering\n• Record damaged blanks for audit trail",
+  "searchableDropdownHint": "Select an option...",
+  "searchableDropdownSearchHint": "Search...",
+  "searchableDropdownNoResults": "No results found"
 }

@@ -2285,4 +2285,13 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get blankNumbersWidgetGuidelinesText =>
       '• Используйте ровно 6 цифр (например, 123456)\n• Каждый номер бланка должен быть уникальным\n• Используйте \"Сгенерировать\" для номеров на основе времени\n• Используйте \"Предложить\" для последовательной нумерации\n• Записывайте поврежденные бланки для аудита';
+
+  @override
+  String get searchableDropdownHint => 'Выберите опцию...';
+
+  @override
+  String get searchableDropdownSearchHint => 'Поиск...';
+
+  @override
+  String get searchableDropdownNoResults => 'Результаты не найдены';
 }

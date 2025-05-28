@@ -4005,6 +4005,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'• Use exactly 6 digits (e.g., 123456)\n• Each blank number must be unique\n• Use \"Generate\" for timestamp-based numbers\n• Use \"Suggest\" for sequential numbering\n• Record damaged blanks for audit trail'**
   String get blankNumbersWidgetGuidelinesText;
+
+  /// No description provided for @searchableDropdownHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select an option...'**
+  String get searchableDropdownHint;
+
+  /// No description provided for @searchableDropdownSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search...'**
+  String get searchableDropdownSearchHint;
+
+  /// No description provided for @searchableDropdownNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No results found'**
+  String get searchableDropdownNoResults;
 }
 
 class _AppLocalizationsDelegate

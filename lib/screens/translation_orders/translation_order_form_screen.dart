@@ -13,6 +13,7 @@ import 'package:admin/l10n/app_localizations.dart';
 import 'package:admin/widgets/simple_document_type_dropdown.dart';
 import 'package:admin/widgets/translation_pricing_widget.dart';
 import 'package:admin/widgets/blank_number_field.dart';
+import 'package:admin/widgets/searchable_dropdown_form_field.dart';
 
 // Helper function to convert Timestamp to DateTime (handle null)
 DateTime? timestampToDateTime($timestamp.Timestamp? ts) {
@@ -271,7 +272,33 @@ class _TranslationOrderFormScreenState
             ? null // Added for ClientSource
             : order.source; // Added for ClientSource
 
-    // TODO: Handle population for 'blanks' if implementing complex UI
+    // Handle population for blank numbers
+    if (order.blanks.isNotEmpty) {
+      // Find the main blank (not spoiled)
+      crm.TranslationOrder_BlankInfo? mainBlank;
+      crm.TranslationOrder_BlankInfo? spoiledBlank;
+
+      for (final blank in order.blanks) {
+        if (blank.isSpoiled) {
+          spoiledBlank = blank;
+        } else {
+          mainBlank = blank;
+        }
+      }
+
+      // Populate main blank number
+      if (mainBlank != null) {
+        _blankNumberController.text = mainBlank.blankNumber;
+      } else if (order.blanks.isNotEmpty) {
+        // Fallback to first blank if no non-spoiled blank found
+        _blankNumberController.text = order.blanks.first.blankNumber;
+      }
+
+      // Populate spoiled/damaged blank number
+      if (spoiledBlank != null) {
+        _incorrectBlankController.text = spoiledBlank.blankNumber;
+      }
+    }
   }
 
   Future<void> _saveOrder() async {
@@ -705,15 +732,17 @@ class _TranslationOrderFormScreenState
             Row(
               children: [
                 Expanded(
-                  child: DropdownButtonFormField<crm.Employee>(
+                  child: SearchableDropdownFormField<crm.Employee>(
                     value: _selectedManager,
+                    items: _managers,
+                    itemAsString: (manager) => _getEmployeeDisplayName(manager),
+                    labelText: localizations
+                        .translationOrderFormScreenFieldManagerLabel,
+                    hintText: localizations
+                        .translationOrderFormScreenFieldManagerHint,
+                    prefixIcon: Icon(Icons.manage_accounts_outlined,
+                        color: colorScheme.primary),
                     decoration: InputDecoration(
-                      labelText: localizations
-                          .translationOrderFormScreenFieldManagerLabel,
-                      hintText: localizations
-                          .translationOrderFormScreenFieldManagerHint,
-                      prefixIcon: Icon(Icons.manage_accounts_outlined,
-                          color: colorScheme.primary),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -728,15 +757,6 @@ class _TranslationOrderFormScreenState
                             BorderSide(color: colorScheme.primary, width: 2),
                       ),
                     ),
-                    items: _managers.map((manager) {
-                      return DropdownMenuItem<crm.Employee>(
-                        value: manager,
-                        child: Text(
-                          _getEmployeeDisplayName(manager),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      );
-                    }).toList(),
                     onChanged: (crm.Employee? newValue) {
                       setState(() {
                         _selectedManager = newValue;
@@ -750,15 +770,18 @@ class _TranslationOrderFormScreenState
                 ),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: DropdownButtonFormField<crm.Employee>(
+                  child: SearchableDropdownFormField<crm.Employee>(
                     value: _selectedTranslator,
+                    items: _translators,
+                    itemAsString: (translator) =>
+                        _getEmployeeDisplayName(translator),
+                    labelText: localizations
+                        .translationOrderFormScreenFieldTranslatorLabel,
+                    hintText: localizations
+                        .translationOrderFormScreenFieldTranslatorHint,
+                    prefixIcon: Icon(Icons.translate_outlined,
+                        color: colorScheme.primary),
                     decoration: InputDecoration(
-                      labelText: localizations
-                          .translationOrderFormScreenFieldTranslatorLabel,
-                      hintText: localizations
-                          .translationOrderFormScreenFieldTranslatorHint,
-                      prefixIcon: Icon(Icons.translate_outlined,
-                          color: colorScheme.primary),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -773,15 +796,6 @@ class _TranslationOrderFormScreenState
                             BorderSide(color: colorScheme.primary, width: 2),
                       ),
                     ),
-                    items: _translators.map((translator) {
-                      return DropdownMenuItem<crm.Employee>(
-                        value: translator,
-                        child: Text(
-                          _getEmployeeDisplayName(translator),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      );
-                    }).toList(),
                     onChanged: (crm.Employee? newValue) {
                       setState(() {
                         _selectedTranslator = newValue;
