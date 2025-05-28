@@ -31,6 +31,36 @@ class FetchProfileResponse {
 }
 
 class AuthService with ChangeNotifier {
+  // Singleton implementation
+  static AuthService? _instance;
+  static bool _isInitialized = false;
+
+  static AuthService get instance {
+    if (_instance == null) {
+      throw StateError(
+          'AuthService must be initialized first. Call AuthService.initialize() before accessing instance.');
+    }
+    return _instance!;
+  }
+
+  // Static method to initialize the service asynchronously
+  static Future<void> initialize() async {
+    if (_instance == null) {
+      _instance = AuthService._internal();
+      await _instance!._initializeAsync();
+      _isInitialized = true;
+    }
+  }
+
+  // Check if the service is initialized
+  static bool get isInitialized => _isInitialized;
+
+  // Private constructor for singleton
+  AuthService._internal();
+
+  // Factory constructor that returns the singleton instance
+  factory AuthService() => instance;
+
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   String? _token;
   bool _isLoading = false;
@@ -60,10 +90,6 @@ class AuthService with ChangeNotifier {
 
   pb.User? get userProfile => _userProfile;
   pb.Employee? get employeeProfile => _employeeProfile;
-
-  AuthService() {
-    _checkToken();
-  }
 
   Future<void> _clearSessionData({bool notify = false}) async {
     print("AuthService: _clearSessionData called");
@@ -592,5 +618,10 @@ class AuthService with ChangeNotifier {
       default:
         return 'Unspecified';
     }
+  }
+
+  // Async initialization method
+  Future<void> _initializeAsync() async {
+    await _checkToken();
   }
 }

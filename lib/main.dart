@@ -10,16 +10,20 @@ import 'package:flutter_localizations/flutter_localizations.dart'; // Import thi
 import 'l10n/app_localizations.dart'; // Import your generated localizations
 // Import the extensions to make them available across the app
 
-void main() {
-  // Ensure GrpcClient is initialized if needed before runApp
-  // GrpcClient(); // Singleton initializes itself
+void main() async {
+  // Ensure Flutter is initialized
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize the AuthService singleton before starting the app
+  await AuthService.initialize();
+
   runApp(
     // Wrap the app with MultiProvider to provide AuthService
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => MenuAppController()),
-        ChangeNotifierProvider(
-            create: (context) => AuthService()), // Provide AuthService
+        ChangeNotifierProvider.value(
+            value: AuthService.instance), // Use singleton instance
       ],
       child: MyApp(),
     ),

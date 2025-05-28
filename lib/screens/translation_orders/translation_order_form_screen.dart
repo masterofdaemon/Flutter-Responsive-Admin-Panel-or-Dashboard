@@ -53,7 +53,7 @@ class _TranslationOrderFormScreenState
       GrpcTranslationOrderService();
   // Assuming a service to fetch related data like employees/offices
   final GrpcClientService _clientService = GrpcClientService();
-  final AuthService _authService = AuthService();
+  final AuthService _authService = AuthService.instance;
 
   bool _isLoading = false;
   bool _isFetchingInitialData = false; // Separate flag for initial load
