@@ -85,6 +85,7 @@ class _SimpleDocumentTypeDropdownState
   }
 
   void _showDocumentTypeBottomSheet() {
+    final localizations = AppLocalizations.of(context);
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -112,7 +113,7 @@ class _SimpleDocumentTypeDropdownState
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Select Document Type',
+                    localizations.documentTypeDropdownSelectTitle,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ],
@@ -127,8 +128,10 @@ class _SimpleDocumentTypeDropdownState
                     // Custom option at the end
                     return ListTile(
                       leading: const Icon(Icons.edit, color: Colors.orange),
-                      title: const Text('Other (specify)...'),
-                      subtitle: const Text('Enter custom document type'),
+                      title:
+                          Text(localizations.documentTypeDropdownCustomOption),
+                      subtitle: Text(
+                          localizations.documentTypeDropdownCustomSubtitle),
                       onTap: () {
                         Navigator.pop(context);
                         _showCustomTypeDialog();
@@ -153,7 +156,9 @@ class _SimpleDocumentTypeDropdownState
                       ),
                     ),
                     subtitle: Text(
-                        '\$${docType.basePrice.toStringAsFixed(0)} base price'),
+                        localizations.documentTypeDropdownBasePriceLabel(
+                            localizations.currencySymbolRuble,
+                            docType.basePrice.toStringAsFixed(0))),
                     trailing: isSelected
                         ? Icon(Icons.check,
                             color: Theme.of(context).primaryColor)
@@ -175,17 +180,18 @@ class _SimpleDocumentTypeDropdownState
   }
 
   void _showCustomTypeDialog() {
+    final localizations = AppLocalizations.of(context);
     _customTypeController.clear();
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Custom Document Type'),
+        title: Text(localizations.documentTypeDropdownCustomDialogTitle),
         content: TextField(
           controller: _customTypeController,
-          decoration: const InputDecoration(
-            labelText: 'Document Type',
-            hintText: 'Enter document type name',
+          decoration: InputDecoration(
+            labelText: localizations.documentTypeDropdownCustomDialogLabel,
+            hintText: localizations.documentTypeDropdownCustomDialogHint,
             border: OutlineInputBorder(),
           ),
           autofocus: true,
@@ -193,7 +199,7 @@ class _SimpleDocumentTypeDropdownState
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: Text(localizations.buttonCancel),
           ),
           TextButton(
             onPressed: () {
@@ -204,7 +210,7 @@ class _SimpleDocumentTypeDropdownState
                 Navigator.of(context).pop();
               }
             },
-            child: const Text('Select'),
+            child: Text(localizations.buttonSelect),
           ),
         ],
       ),

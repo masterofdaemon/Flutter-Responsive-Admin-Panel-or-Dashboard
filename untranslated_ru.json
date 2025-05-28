@@ -1,9 +1,19 @@
 {
   "ru": [
-    "interactionTypeCall",
-    "interactionTypeEmail",
-    "interactionTypeMeeting",
-    "interactionListManagerHeader",
-    "interactionListSummaryHeader"
+    "plutoGridFilterAllColumns",
+    "plutoGridFilterContains",
+    "plutoGridFilterEquals",
+    "plutoGridFilterStartsWith",
+    "plutoGridFilterEndsWith",
+    "plutoGridFilterGreaterThan",
+    "plutoGridFilterGreaterThanOrEqualTo",
+    "plutoGridFilterLessThan",
+    "plutoGridFilterLessThanOrEqualTo",
+    "plutoGridFilterApply",
+    "plutoGridFilterClear",
+    "plutoGridFilterPopupTitle",
+    "plutoGridFilterColumn",
+    "plutoGridFilterType",
+    "plutoGridFilterValue"
   ]
 }

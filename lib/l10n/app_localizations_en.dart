@@ -1931,6 +1931,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get translationProgressStatusDelivered => 'Delivered';
 
   @override
+  String get translationOrderFormScreenNewOrderStatusInfo =>
+      'This order will be created with \"Pending Assignment\" status';
+
+  @override
+  String translationOrderFormScreenOrderIdLabel(String orderId) {
+    return 'ID: $orderId';
+  }
+
+  @override
   String get officesScreenTitle => 'Offices Management';
 
   @override
@@ -2061,4 +2070,194 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get plutoGridFilterValue => 'Value';
+
+  @override
+  String translationOrderFormScreenErrorGeneric(String error) {
+    return 'Error: $error';
+  }
+
+  @override
+  String get currencySymbolRuble => '₽';
+
+  @override
+  String get defaultCityName => 'Moscow';
+
+  @override
+  String get managerLevelRegular => 'regular';
+
+  @override
+  String get documentTypeDropdownSelectTitle => 'Select Document Type';
+
+  @override
+  String get documentTypeDropdownCustomOption => 'Other (specify)...';
+
+  @override
+  String get documentTypeDropdownCustomSubtitle => 'Enter custom document type';
+
+  @override
+  String documentTypeDropdownBasePriceLabel(
+      String currencySymbol, String price) {
+    return '$currencySymbol$price base price';
+  }
+
+  @override
+  String get documentTypeDropdownCustomDialogTitle => 'Custom Document Type';
+
+  @override
+  String get documentTypeDropdownCustomDialogLabel => 'Document Type';
+
+  @override
+  String get documentTypeDropdownCustomDialogHint => 'Enter document type name';
+
+  @override
+  String get buttonCancel => 'Cancel';
+
+  @override
+  String get buttonSelect => 'Select';
+
+  @override
+  String get translationPricingBasePriceLabel => 'Base Price (per page)';
+
+  @override
+  String get translationPricingNumberOfPagesLabel => 'Number of Pages';
+
+  @override
+  String get translationPricingTranslationSumLabel => 'Translation Sum';
+
+  @override
+  String get translationPricingUrgentTranslationSumLabel =>
+      'Urgent Translation Sum';
+
+  @override
+  String get translationPricingNotarialSumLabel =>
+      'Notarial/Legal Certification';
+
+  @override
+  String get translationPricingTotalLabel => 'TOTAL';
+
+  @override
+  String get translationPricingUrgentSurcharge => 'Urgent (+100%)';
+
+  @override
+  String get translationPricingSemiUrgentSurcharge => 'Semi-Urgent (+50%)';
+
+  @override
+  String get translationPricingPriorityMultiplier => 'Priority Multiplier';
+
+  @override
+  String get translationPricingInformationTitle => 'Pricing Information';
+
+  @override
+  String get translationPricingUrgentSurchargeInfo =>
+      'Urgent orders require 100% surcharge';
+
+  @override
+  String get translationPricingSemiUrgentSurchargeInfo =>
+      'Semi-urgent orders require 50% surcharge';
+
+  @override
+  String translationPricingLocationDiscountInfo(String cityName, int discount) {
+    return '$cityName location provides $discount% discount';
+  }
+
+  @override
+  String translationPricingLocationSurchargeInfo(
+      String cityName, int surcharge) {
+    return '$cityName location adds $surcharge% surcharge';
+  }
+
+  @override
+  String translationPricingComplexityBonusInfo(int percentage) {
+    return 'Complexity bonus: $percentage%';
+  }
+
+  @override
+  String get translationPricingStandardPricing => 'Standard pricing applies';
+
+  @override
+  String get translationPricingCalculationTitle => 'Pricing Calculation';
+
+  @override
+  String get translationPricingSelectDocumentTypeMessage =>
+      'Please select a document type to see pricing';
+
+  @override
+  String get translationPricingCalculatingMessage => 'Calculating pricing...';
+
+  @override
+  String translationPricingCityMultiplierText(
+      double multiplier, String cityName) {
+    return 'City: ${multiplier}x ($cityName)';
+  }
+
+  @override
+  String translationPricingManagerMultiplierText(
+      double multiplier, String managerLevel) {
+    return 'Manager: ${multiplier}x ($managerLevel)';
+  }
+
+  @override
+  String get blankNumberFieldHintText => 'Enter 6-digit number (e.g., 123456)';
+
+  @override
+  String get blankNumberFieldGenerateTooltip => 'Generate blank number';
+
+  @override
+  String get blankNumberFieldSuggestTooltip => 'Suggest next number';
+
+  @override
+  String get blankNumberFieldHelperText => 'Format: 6 digits (000000-999999)';
+
+  @override
+  String get blankNumberFieldRequiredError => 'Blank number is required';
+
+  @override
+  String get blankNumberFieldInvalidFormatError =>
+      'Invalid format. Must be exactly 6 digits';
+
+  @override
+  String get blankNumberFieldDuplicateError =>
+      'This blank number is already used';
+
+  @override
+  String blankNumberFieldGeneratedMessage(String action, String number) {
+    return '$action blank number: $number';
+  }
+
+  @override
+  String get blankNumberFieldActionGenerated => 'Generated';
+
+  @override
+  String get blankNumberFieldActionSuggested => 'Suggested';
+
+  @override
+  String get blankNumbersWidgetTitle => 'Blank Numbers';
+
+  @override
+  String get blankNumbersWidgetMainLabel => 'Main Blank Number *';
+
+  @override
+  String get blankNumbersWidgetDamagedCheckbox => 'Add Damaged/Spoiled Blank';
+
+  @override
+  String get blankNumbersWidgetDamagedSubtitle =>
+      'Check if a blank was damaged and needs replacement';
+
+  @override
+  String get blankNumbersWidgetDamagedLabel => 'Damaged Blank Number';
+
+  @override
+  String get blankNumbersWidgetDamagedHint =>
+      'Number of the damaged blank being replaced';
+
+  @override
+  String get blankNumbersWidgetDamagedWarning =>
+      'Record the damaged blank number for tracking and audit purposes. This helps maintain blank inventory accuracy.';
+
+  @override
+  String get blankNumbersWidgetGuidelinesTitle => 'Blank Number Guidelines';
+
+  @override
+  String get blankNumbersWidgetGuidelinesText =>
+      '• Use exactly 6 digits (e.g., 123456)\n• Each blank number must be unique\n• Use \"Generate\" for timestamp-based numbers\n• Use \"Suggest\" for sequential numbering\n• Record damaged blanks for audit trail';
 }

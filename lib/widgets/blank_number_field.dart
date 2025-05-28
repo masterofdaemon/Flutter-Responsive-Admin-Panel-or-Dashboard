@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:admin/services/translation_pricing_service.dart';
+import 'package:admin/l10n/app_localizations.dart';
 
 /// Widget for entering and validating 6-digit blank numbers
 class BlankNumberField extends StatefulWidget {
@@ -29,27 +30,29 @@ class _BlankNumberFieldState extends State<BlankNumberField> {
   final TranslationPricingService _pricingService = TranslationPricingService();
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+
     return TextFormField(
       controller: widget.controller,
       decoration: InputDecoration(
         labelText: widget.labelText,
-        hintText: widget.hintText ?? 'Enter 6-digit number (e.g., 123456)',
+        hintText: widget.hintText ?? localizations.blankNumberFieldHintText,
         suffixIcon: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
               icon: const Icon(Icons.auto_awesome),
-              tooltip: 'Generate blank number',
+              tooltip: localizations.blankNumberFieldGenerateTooltip,
               onPressed: _generateBlankNumber,
             ),
             IconButton(
               icon: const Icon(Icons.add_circle_outline),
-              tooltip: 'Suggest next number',
+              tooltip: localizations.blankNumberFieldSuggestTooltip,
               onPressed: _suggestNextNumber,
             ),
           ],
         ),
-        helperText: 'Format: 6 digits (000000-999999)',
+        helperText: localizations.blankNumberFieldHelperText,
       ),
       keyboardType: TextInputType.number,
       inputFormatters: [
@@ -59,17 +62,17 @@ class _BlankNumberFieldState extends State<BlankNumberField> {
       ],
       validator: (value) {
         if (widget.isRequired && (value == null || value.trim().isEmpty)) {
-          return 'Blank number is required';
+          return localizations.blankNumberFieldRequiredError;
         }
 
         if (value != null && value.isNotEmpty) {
           if (!_pricingService.isValidBlankNumber(value)) {
-            return 'Invalid format. Must be exactly 6 digits';
+            return localizations.blankNumberFieldInvalidFormatError;
           }
 
           // Check for duplicates
           if (widget.existingBlankNumbers.contains(value)) {
-            return 'This blank number is already used';
+            return localizations.blankNumberFieldDuplicateError;
           }
         }
 
@@ -83,24 +86,30 @@ class _BlankNumberFieldState extends State<BlankNumberField> {
   }
 
   void _generateBlankNumber() {
+    final localizations = AppLocalizations.of(context);
     final newNumber = _pricingService.generateBlankNumber();
     widget.controller.text = newNumber;
     widget.onChanged?.call(newNumber);
-    _showGenerationDialog('Generated', newNumber);
+    _showGenerationDialog(
+        localizations.blankNumberFieldActionGenerated, newNumber);
   }
 
   void _suggestNextNumber() {
+    final localizations = AppLocalizations.of(context);
     final suggestedNumber =
         _pricingService.suggestNextBlankNumber(widget.existingBlankNumbers);
     widget.controller.text = suggestedNumber;
     widget.onChanged?.call(suggestedNumber);
-    _showGenerationDialog('Suggested', suggestedNumber);
+    _showGenerationDialog(
+        localizations.blankNumberFieldActionSuggested, suggestedNumber);
   }
 
   void _showGenerationDialog(String action, String number) {
+    final localizations = AppLocalizations.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('$action blank number: $number'),
+        content: Text(
+            localizations.blankNumberFieldGeneratedMessage(action, number)),
         duration: const Duration(seconds: 2),
         backgroundColor: Colors.green,
       ),
@@ -170,6 +179,8 @@ class _BlankNumbersWidgetState extends State<BlankNumbersWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context);
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -181,7 +192,7 @@ class _BlankNumbersWidgetState extends State<BlankNumbersWidget> {
                 const Icon(Icons.confirmation_number, color: Colors.blue),
                 const SizedBox(width: 8),
                 Text(
-                  'Blank Numbers',
+                  localizations.blankNumbersWidgetTitle,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -193,7 +204,7 @@ class _BlankNumbersWidgetState extends State<BlankNumbersWidget> {
             // Main blank number field
             BlankNumberField(
               controller: widget.mainBlankController,
-              labelText: 'Main Blank Number *',
+              labelText: localizations.blankNumbersWidgetMainLabel,
               isRequired: true,
               existingBlankNumbers: widget.existingBlankNumbers,
               onChanged: (value) => _notifyChange(),
@@ -203,9 +214,8 @@ class _BlankNumbersWidgetState extends State<BlankNumbersWidget> {
 
             // Checkbox for damaged blank
             CheckboxListTile(
-              title: const Text('Add Damaged/Spoiled Blank'),
-              subtitle: const Text(
-                  'Check if a blank was damaged and needs replacement'),
+              title: Text(localizations.blankNumbersWidgetDamagedCheckbox),
+              subtitle: Text(localizations.blankNumbersWidgetDamagedSubtitle),
               value: _hasDamagedBlank,
               onChanged: (value) {
                 setState(() {
@@ -224,8 +234,8 @@ class _BlankNumbersWidgetState extends State<BlankNumbersWidget> {
               const SizedBox(height: 8),
               BlankNumberField(
                 controller: _localDamagedController,
-                labelText: 'Damaged Blank Number',
-                hintText: 'Number of the damaged blank being replaced',
+                labelText: localizations.blankNumbersWidgetDamagedLabel,
+                hintText: localizations.blankNumbersWidgetDamagedHint,
                 existingBlankNumbers: widget.existingBlankNumbers,
                 onChanged: (value) => _notifyChange(),
               ),
@@ -237,14 +247,16 @@ class _BlankNumbersWidgetState extends State<BlankNumbersWidget> {
                   borderRadius: BorderRadius.circular(8.0),
                   border: Border.all(color: Colors.orange.shade200),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Icon(Icons.warning_amber, color: Colors.orange, size: 20),
-                    SizedBox(width: 8),
+                    const Icon(Icons.warning_amber,
+                        color: Colors.orange, size: 20),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Record the damaged blank number for tracking and audit purposes. This helps maintain blank inventory accuracy.',
-                        style: TextStyle(fontSize: 12, color: Colors.orange),
+                        localizations.blankNumbersWidgetDamagedWarning,
+                        style:
+                            const TextStyle(fontSize: 12, color: Colors.orange),
                       ),
                     ),
                   ],
@@ -262,16 +274,17 @@ class _BlankNumbersWidgetState extends State<BlankNumbersWidget> {
                 borderRadius: BorderRadius.circular(8.0),
                 border: Border.all(color: Colors.blue.shade200),
               ),
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.info_outline, size: 16, color: Colors.blue),
-                      SizedBox(width: 4),
+                      const Icon(Icons.info_outline,
+                          size: 16, color: Colors.blue),
+                      const SizedBox(width: 4),
                       Text(
-                        'Blank Number Guidelines',
-                        style: TextStyle(
+                        localizations.blankNumbersWidgetGuidelinesTitle,
+                        style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                           color: Colors.blue,
@@ -279,14 +292,10 @@ class _BlankNumbersWidgetState extends State<BlankNumbersWidget> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   Text(
-                    '• Use exactly 6 digits (e.g., 123456)\n'
-                    '• Each blank number must be unique\n'
-                    '• Use "Generate" for timestamp-based numbers\n'
-                    '• Use "Suggest" for sequential numbering\n'
-                    '• Record damaged blanks for audit trail',
-                    style: TextStyle(fontSize: 12, color: Colors.blue),
+                    localizations.blankNumbersWidgetGuidelinesText,
+                    style: const TextStyle(fontSize: 12, color: Colors.blue),
                   ),
                 ],
               ),

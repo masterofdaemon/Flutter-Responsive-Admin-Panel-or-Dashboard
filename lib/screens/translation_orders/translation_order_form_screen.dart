@@ -1,4 +1,3 @@
-import 'dart:developer'; // For log function
 import 'package:admin/generated/crm.pbgrpc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // For TextInputFormatters
@@ -168,11 +167,6 @@ class _TranslationOrderFormScreenState
           .toList();
 
       // Debug print filtered managers
-      print('Filtered managers:');
-      for (final m in _managers) {
-        print(
-            'Manager: id=${m.employeeId}, name=${m.name}, role=${m.role}, isActive=${m.hasIsActive() ? m.isActive : 'unset'}');
-      }
       _translators = allEmployees
           .where((e) => e.role == crm.EmployeeRole.TRANSLATOR)
           .toList();
@@ -252,10 +246,6 @@ class _TranslationOrderFormScreenState
         order.hasPageCount() ? order.pageCount.toString() : '';
     _notarialSumController.text =
         order.notarialSum.toString(); // Assuming double
-    print('=== FORM POPULATION DEBUG ===');
-    print('Populating notarial sum from order: ${order.notarialSum}');
-    print('Controller set to: "${_notarialSumController.text}"');
-    print('=============================');
     _totalSumController.text =
         order.hasTotalSum() ? order.totalSum.toStringAsFixed(2) : '';
     _paymentIdController.text =
@@ -331,12 +321,7 @@ class _TranslationOrderFormScreenState
       );
 
       // DEBUG: Print notarial sum details
-      print('=== NOTARIAL SUM DEBUG ===');
-      print('Controller text: "${_notarialSumController.text}"');
-      print('Parsed value: ${double.tryParse(_notarialSumController.text)}');
-      print('Final notarial sum: ${orderData.notarialSum}');
-      print('Order data: ${orderData.toString()}');
-      print('========================');
+
       // Add blanks using TranslationOrder_BlankInfo
       orderData.blanks.add(crm.TranslationOrder_BlankInfo()
         ..blankNumber = _blankNumberController.text.trim()
@@ -350,17 +335,13 @@ class _TranslationOrderFormScreenState
 
       if (widget.orderId == null) {
         final response = await _orderService.createTranslationOrder(orderData);
-        print('=== SERVER RESPONSE (CREATE) ===');
-        print('Response: ${response.toString()}');
-        print('==============================');
+
         successMessage =
             localizations.translationOrderFormScreenOrderCreatedSuccess;
       } else {
         final response = await _orderService.updateTranslationOrder(
             widget.orderId!, orderData);
-        print('=== SERVER RESPONSE (UPDATE) ===');
-        print('Response: ${response.toString()}');
-        print('==============================');
+
         successMessage =
             localizations.translationOrderFormScreenOrderUpdatedSuccess;
       }
@@ -544,7 +525,8 @@ class _TranslationOrderFormScreenState
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    'ID: ${widget.orderId}',
+                    localizations.translationOrderFormScreenOrderIdLabel(
+                        widget.orderId!),
                     style: theme.textTheme.labelMedium?.copyWith(
                       color: colorScheme.primary,
                       fontWeight: FontWeight.w600,
@@ -947,7 +929,6 @@ class _TranslationOrderFormScreenState
             SimpleDocumentTypeDropdown(
               selectedDocumentTypeKey: _selectedDocumentTypeKey,
               onChanged: (documentType) {
-                print('Document type selected: $documentType'); // Debug
                 setState(() {
                   _selectedDocumentTypeKey = documentType;
                 });
@@ -1287,7 +1268,8 @@ class _TranslationOrderFormScreenState
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'This order will be created with "Pending Assignment" status',
+                        localizations
+                            .translationOrderFormScreenNewOrderStatusInfo,
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: colorScheme.onPrimaryContainer,
                         ),
@@ -1340,18 +1322,10 @@ class _TranslationOrderFormScreenState
               documentTypeKey: _selectedDocumentTypeKey,
               pageCount: int.tryParse(_pageCountController.text) ?? 1,
               priority: _selectedPriority ?? crm.Priority.NORMAL,
-              cityName: _selectedOffice?.city ?? 'Moscow',
-              managerLevel: 'regular',
+              cityName: _selectedOffice?.city ?? localizations.defaultCityName,
+              managerLevel: localizations.managerLevelRegular,
               notarialSum: double.tryParse(_notarialSumController.text) ?? 0.0,
               onPricingCalculated: (translationSum, totalSum) {
-                print('=== PRICING CALLBACK DEBUG ===');
-                print('Translation sum: $translationSum');
-                print('Total sum: $totalSum');
-                print(
-                    'Current notarial sum controller: "${_notarialSumController.text}"');
-                print(
-                    'Current notarial sum parsed: ${double.tryParse(_notarialSumController.text) ?? 0.0}');
-                print('===============================');
                 // Update the total sum controller when pricing is calculated
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (mounted) {
@@ -1373,7 +1347,7 @@ class _TranslationOrderFormScreenState
                     .translationOrderFormScreenFieldNotarialSumHint,
                 prefixIcon:
                     Icon(Icons.gavel_outlined, color: colorScheme.primary),
-                suffixText: '₽',
+                suffixText: localizations.currencySymbolRuble,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -1392,7 +1366,6 @@ class _TranslationOrderFormScreenState
                 FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*'))
               ],
               onChanged: (value) {
-                print('Notarial sum field changed to: "$value"');
                 setState(() {
                   // Force rebuild to trigger pricing recalculation with new notarial sum
                 });
@@ -1411,7 +1384,7 @@ class _TranslationOrderFormScreenState
                     localizations.translationOrderFormScreenFieldTotalSumHint,
                 prefixIcon: Icon(Icons.monetization_on_outlined,
                     color: colorScheme.primary),
-                suffixText: '₽',
+                suffixText: localizations.currencySymbolRuble,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -1604,7 +1577,9 @@ class _TranslationOrderFormScreenState
                                       children: [
                                         Icon(Icons.error, color: Colors.white),
                                         const SizedBox(width: 8),
-                                        Text('Error: ${e.toString()}'),
+                                        Text(localizations
+                                            .translationOrderFormScreenErrorGeneric(
+                                                e.toString())),
                                       ],
                                     ),
                                     backgroundColor: Colors.red,
@@ -1827,7 +1802,8 @@ class _TranslationOrderFormScreenState
           setState(() => _isLoading = false);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Error deleting order: $e'),
+              content: Text(localizations
+                  .translationOrderFormScreenErrorDeletingOrder(e.toString())),
               backgroundColor: Theme.of(context).colorScheme.error,
             ),
           );

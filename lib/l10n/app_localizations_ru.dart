@@ -1949,6 +1949,15 @@ class AppLocalizationsRu extends AppLocalizations {
   String get translationProgressStatusDelivered => 'Доставлен';
 
   @override
+  String get translationOrderFormScreenNewOrderStatusInfo =>
+      'Этот заказ будет создан со статусом \"Ожидает назначения\"';
+
+  @override
+  String translationOrderFormScreenOrderIdLabel(String orderId) {
+    return 'ID: $orderId';
+  }
+
+  @override
   String get officesScreenTitle => 'Управление офисами';
 
   @override
@@ -2079,4 +2088,201 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get plutoGridFilterValue => 'Value';
+
+  @override
+  String translationOrderFormScreenErrorGeneric(String error) {
+    return 'Ошибка: $error';
+  }
+
+  @override
+  String get currencySymbolRuble => '₽';
+
+  @override
+  String get defaultCityName => 'Москва';
+
+  @override
+  String get managerLevelRegular => 'обычный';
+
+  @override
+  String get documentTypeDropdownSelectTitle => 'Выберите тип документа';
+
+  @override
+  String get documentTypeDropdownCustomOption => 'Другой (указать)...';
+
+  @override
+  String get documentTypeDropdownCustomSubtitle =>
+      'Введите пользовательский тип документа';
+
+  @override
+  String documentTypeDropdownBasePriceLabel(
+      String currencySymbol, String price) {
+    return '$currencySymbol$price базовая цена';
+  }
+
+  @override
+  String get documentTypeDropdownCustomDialogTitle =>
+      'Пользовательский тип документа';
+
+  @override
+  String get documentTypeDropdownCustomDialogLabel => 'Тип документа';
+
+  @override
+  String get documentTypeDropdownCustomDialogHint =>
+      'Введите название типа документа';
+
+  @override
+  String get buttonCancel => 'Отмена';
+
+  @override
+  String get buttonSelect => 'Выбрать';
+
+  @override
+  String get translationPricingBasePriceLabel => 'Базовая цена (за страницу)';
+
+  @override
+  String get translationPricingNumberOfPagesLabel => 'Количество страниц';
+
+  @override
+  String get translationPricingTranslationSumLabel => 'Сумма перевода';
+
+  @override
+  String get translationPricingUrgentTranslationSumLabel =>
+      'Сумма срочного перевода';
+
+  @override
+  String get translationPricingNotarialSumLabel =>
+      'Нотариальное/Юридическое заверение';
+
+  @override
+  String get translationPricingTotalLabel => 'ИТОГО';
+
+  @override
+  String get translationPricingUrgentSurcharge => 'Срочный (+100%)';
+
+  @override
+  String get translationPricingSemiUrgentSurcharge => 'Полусрочный (+50%)';
+
+  @override
+  String get translationPricingPriorityMultiplier => 'Множитель приоритета';
+
+  @override
+  String get translationPricingInformationTitle =>
+      'Информация о ценообразовании';
+
+  @override
+  String get translationPricingUrgentSurchargeInfo =>
+      'Срочные заказы требуют доплаты 100%';
+
+  @override
+  String get translationPricingSemiUrgentSurchargeInfo =>
+      'Полу-срочные заказы требуют доплаты 50%';
+
+  @override
+  String translationPricingLocationDiscountInfo(String cityName, int discount) {
+    return 'Локация $cityName предоставляет скидку $discount%';
+  }
+
+  @override
+  String translationPricingLocationSurchargeInfo(
+      String cityName, int surcharge) {
+    return 'Локация $cityName добавляет наценку $surcharge%';
+  }
+
+  @override
+  String translationPricingComplexityBonusInfo(int percentage) {
+    return 'Бонус за сложность: $percentage%';
+  }
+
+  @override
+  String get translationPricingStandardPricing =>
+      'Применяется стандартное ценообразование';
+
+  @override
+  String get translationPricingCalculationTitle => 'Расчет стоимости';
+
+  @override
+  String get translationPricingSelectDocumentTypeMessage =>
+      'Пожалуйста, выберите тип документа для просмотра стоимости';
+
+  @override
+  String get translationPricingCalculatingMessage => 'Расчет стоимости...';
+
+  @override
+  String translationPricingCityMultiplierText(
+      double multiplier, String cityName) {
+    return 'Город: ${multiplier}x ($cityName)';
+  }
+
+  @override
+  String translationPricingManagerMultiplierText(
+      double multiplier, String managerLevel) {
+    return 'Менеджер: ${multiplier}x ($managerLevel)';
+  }
+
+  @override
+  String get blankNumberFieldHintText =>
+      'Введите 6-значный номер (например, 123456)';
+
+  @override
+  String get blankNumberFieldGenerateTooltip => 'Сгенерировать номер бланка';
+
+  @override
+  String get blankNumberFieldSuggestTooltip => 'Предложить следующий номер';
+
+  @override
+  String get blankNumberFieldHelperText => 'Формат: 6 цифр (000000-999999)';
+
+  @override
+  String get blankNumberFieldRequiredError => 'Номер бланка обязателен';
+
+  @override
+  String get blankNumberFieldInvalidFormatError =>
+      'Неверный формат. Должно быть ровно 6 цифр';
+
+  @override
+  String get blankNumberFieldDuplicateError =>
+      'Этот номер бланка уже используется';
+
+  @override
+  String blankNumberFieldGeneratedMessage(String action, String number) {
+    return '$action номер бланка: $number';
+  }
+
+  @override
+  String get blankNumberFieldActionGenerated => 'Сгенерирован';
+
+  @override
+  String get blankNumberFieldActionSuggested => 'Предложен';
+
+  @override
+  String get blankNumbersWidgetTitle => 'Номера бланков';
+
+  @override
+  String get blankNumbersWidgetMainLabel => 'Основной номер бланка *';
+
+  @override
+  String get blankNumbersWidgetDamagedCheckbox =>
+      'Добавить поврежденный/испорченный бланк';
+
+  @override
+  String get blankNumbersWidgetDamagedSubtitle =>
+      'Отметьте, если бланк был поврежден и требует замены';
+
+  @override
+  String get blankNumbersWidgetDamagedLabel => 'Номер поврежденного бланка';
+
+  @override
+  String get blankNumbersWidgetDamagedHint =>
+      'Номер поврежденного бланка, который заменяется';
+
+  @override
+  String get blankNumbersWidgetDamagedWarning =>
+      'Запишите номер поврежденного бланка для отслеживания и аудита. Это помогает поддерживать точность инвентаря бланков.';
+
+  @override
+  String get blankNumbersWidgetGuidelinesTitle => 'Правила номеров бланков';
+
+  @override
+  String get blankNumbersWidgetGuidelinesText =>
+      '• Используйте ровно 6 цифр (например, 123456)\n• Каждый номер бланка должен быть уникальным\n• Используйте \"Сгенерировать\" для номеров на основе времени\n• Используйте \"Предложить\" для последовательной нумерации\n• Записывайте поврежденные бланки для аудита';
 }

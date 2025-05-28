@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:admin/services/translation_pricing_service.dart';
 import 'package:admin/generated/crm.pb.dart' as crm;
+import 'package:admin/l10n/app_localizations.dart';
 
 /// Widget that displays and calculates translation pricing in real-time
 class TranslationPricingWidget extends StatefulWidget {
@@ -24,7 +25,8 @@ class TranslationPricingWidget extends StatefulWidget {
   });
 
   @override
-  State<TranslationPricingWidget> createState() => _TranslationPricingWidgetState();
+  State<TranslationPricingWidget> createState() =>
+      _TranslationPricingWidgetState();
 }
 
 class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
@@ -70,7 +72,8 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
     // Notify parent about calculated pricing
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        widget.onPricingCalculated?.call(pricing.urgentTranslationSum, pricing.totalSum);
+        widget.onPricingCalculated
+            ?.call(pricing.urgentTranslationSum, pricing.totalSum);
       }
     });
   }
@@ -79,6 +82,7 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final localizations = AppLocalizations.of(context);
 
     if (widget.documentTypeKey == null || widget.documentTypeKey!.isEmpty) {
       return Card(
@@ -92,7 +96,7 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
                   Icon(Icons.calculate, color: colorScheme.primary),
                   const SizedBox(width: 8),
                   Text(
-                    'Pricing Calculation',
+                    localizations.translationPricingCalculationTitle,
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: colorScheme.onSurface,
@@ -102,7 +106,7 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Please select a document type to see pricing',
+                localizations.translationPricingSelectDocumentTypeMessage,
                 style: TextStyle(color: colorScheme.onSurface.withOpacity(0.6)),
               ),
             ],
@@ -124,7 +128,7 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
                   Icon(Icons.calculate, color: colorScheme.primary),
                   const SizedBox(width: 8),
                   Text(
-                    'Pricing Calculation',
+                    localizations.translationPricingCalculationTitle,
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: colorScheme.onSurface,
@@ -134,7 +138,7 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Calculating pricing...',
+                localizations.translationPricingCalculatingMessage,
                 style: TextStyle(color: colorScheme.onSurface.withOpacity(0.6)),
               ),
             ],
@@ -154,7 +158,7 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
                 Icon(Icons.calculate, color: colorScheme.primary),
                 const SizedBox(width: 8),
                 Text(
-                  'Pricing Calculation',
+                  localizations.translationPricingCalculationTitle,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: colorScheme.onSurface,
@@ -173,28 +177,29 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
   Widget _buildPricingBreakdown(
       BuildContext context, TranslationPricing pricing) {
     final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Base price row
         _buildPricingRow(
-          'Base Price (per page)',
-          '\$${pricing.basePrice.toStringAsFixed(2)}',
+          localizations.translationPricingBasePriceLabel,
+          '${localizations.currencySymbolRuble}${pricing.basePrice.toStringAsFixed(2)}',
           isSubtle: true,
         ),
 
         // Page count row
         _buildPricingRow(
-          'Number of Pages',
+          localizations.translationPricingNumberOfPagesLabel,
           '${pricing.pageCount}',
           isSubtle: true,
         ),
 
         // Translation sum before urgency
         _buildPricingRow(
-          'Translation Sum',
-          '\$${pricing.translationSum.toStringAsFixed(2)}',
+          localizations.translationPricingTranslationSumLabel,
+          '${localizations.currencySymbolRuble}${pricing.translationSum.toStringAsFixed(2)}',
           subtitle:
               pricing.cityMultiplier != 1.0 || pricing.managerMultiplier != 1.0
                   ? _buildMultiplierText(pricing)
@@ -209,8 +214,8 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
             color: _getUrgencyColor(pricing.urgencyMultiplier, context),
           ),
           _buildPricingRow(
-            'Urgent Translation Sum',
-            '\$${pricing.urgentTranslationSum.toStringAsFixed(2)}',
+            localizations.translationPricingUrgentTranslationSumLabel,
+            '${localizations.currencySymbolRuble}${pricing.urgentTranslationSum.toStringAsFixed(2)}',
             isBold: true,
           ),
         ],
@@ -218,8 +223,8 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
         // Notarial sum (if applicable)
         if (pricing.notarialSum > 0) ...[
           _buildPricingRow(
-            'Notarial/Legal Certification',
-            '\$${pricing.notarialSum.toStringAsFixed(2)}',
+            localizations.translationPricingNotarialSumLabel,
+            '${localizations.currencySymbolRuble}${pricing.notarialSum.toStringAsFixed(2)}',
           ),
         ],
 
@@ -227,8 +232,8 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
 
         // Total sum
         _buildPricingRow(
-          'TOTAL',
-          '\$${pricing.totalSum.toStringAsFixed(2)}',
+          localizations.translationPricingTotalLabel,
+          '${localizations.currencySymbolRuble}${pricing.totalSum.toStringAsFixed(2)}',
           isBold: true,
           isTotal: true,
           color: theme.primaryColor,
@@ -237,7 +242,7 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
         // Additional info
         if (pricing.cityName != null || pricing.urgencyMultiplier != 1.0) ...[
           const SizedBox(height: 8),
-          _buildAdditionalInfo(pricing, context),
+          _buildAdditionalInfo(pricing, context, localizations),
         ],
       ],
     );
@@ -304,27 +309,30 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
   }
 
   String _buildMultiplierText(TranslationPricing pricing) {
+    final localizations = AppLocalizations.of(context);
     final parts = <String>[];
 
     if (pricing.cityMultiplier != 1.0) {
-      parts.add('City: ${pricing.cityMultiplier}x (${pricing.cityName})');
+      parts.add(localizations.translationPricingCityMultiplierText(
+          pricing.cityMultiplier, pricing.cityName ?? ''));
     }
 
     if (pricing.managerMultiplier != 1.0) {
-      parts.add(
-          'Manager: ${pricing.managerMultiplier}x (${pricing.managerLevel})');
+      parts.add(localizations.translationPricingManagerMultiplierText(
+          pricing.managerMultiplier, pricing.managerLevel ?? ''));
     }
 
     return parts.join(' | ');
   }
 
   String _getUrgencyText(double multiplier) {
+    final localizations = AppLocalizations.of(context);
     if (multiplier == 2.0) {
-      return 'Urgent (+100%)';
+      return localizations.translationPricingUrgentSurcharge;
     } else if (multiplier == 1.5) {
-      return 'Semi-Urgent (+50%)';
+      return localizations.translationPricingSemiUrgentSurcharge;
     }
-    return 'Priority Multiplier';
+    return localizations.translationPricingPriorityMultiplier;
   }
 
   Color _getUrgencyColor(double multiplier, BuildContext context) {
@@ -337,8 +345,8 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
     return colorScheme.primary;
   }
 
-  Widget _buildAdditionalInfo(
-      TranslationPricing pricing, BuildContext context) {
+  Widget _buildAdditionalInfo(TranslationPricing pricing, BuildContext context,
+      AppLocalizations localizations) {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Container(
@@ -356,7 +364,7 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
               Icon(Icons.info_outline, size: 16, color: colorScheme.primary),
               const SizedBox(width: 4),
               Text(
-                'Pricing Information',
+                localizations.translationPricingInformationTitle,
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -367,7 +375,7 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
           ),
           const SizedBox(height: 4),
           Text(
-            _buildInfoText(pricing),
+            _buildInfoText(pricing, localizations),
             style:
                 TextStyle(fontSize: 12, color: colorScheme.onPrimaryContainer),
           ),
@@ -376,27 +384,30 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
     );
   }
 
-  String _buildInfoText(TranslationPricing pricing) {
+  String _buildInfoText(
+      TranslationPricing pricing, AppLocalizations localizations) {
     final parts = <String>[];
 
     if (pricing.urgencyMultiplier == 2.0) {
-      parts.add('Urgent orders require 100% surcharge');
+      parts.add(localizations.translationPricingUrgentSurchargeInfo);
     } else if (pricing.urgencyMultiplier == 1.5) {
-      parts.add('Semi-urgent orders require 50% surcharge');
+      parts.add(localizations.translationPricingSemiUrgentSurchargeInfo);
     }
 
     if (pricing.cityMultiplier != 1.0) {
       if (pricing.cityMultiplier < 1.0) {
         final discount = ((1.0 - pricing.cityMultiplier) * 100).round();
-        parts.add('${pricing.cityName} location provides $discount% discount');
+        parts.add(localizations.translationPricingLocationDiscountInfo(
+            pricing.cityName ?? '', discount));
       } else {
         final surcharge = ((pricing.cityMultiplier - 1.0) * 100).round();
-        parts.add('${pricing.cityName} location adds $surcharge% surcharge');
+        parts.add(localizations.translationPricingLocationSurchargeInfo(
+            pricing.cityName ?? '', surcharge));
       }
     }
 
     if (parts.isEmpty) {
-      parts.add('Standard pricing applies');
+      parts.add(localizations.translationPricingStandardPricing);
     }
 
     return parts.join('. ');

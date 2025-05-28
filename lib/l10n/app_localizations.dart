@@ -3432,6 +3432,18 @@ abstract class AppLocalizations {
   /// **'Delivered'**
   String get translationProgressStatusDelivered;
 
+  /// No description provided for @translationOrderFormScreenNewOrderStatusInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'This order will be created with \"Pending Assignment\" status'**
+  String get translationOrderFormScreenNewOrderStatusInfo;
+
+  /// No description provided for @translationOrderFormScreenOrderIdLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'ID: {orderId}'**
+  String translationOrderFormScreenOrderIdLabel(String orderId);
+
   /// No description provided for @officesScreenTitle.
   ///
   /// In en, this message translates to:
@@ -3671,6 +3683,328 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Value'**
   String get plutoGridFilterValue;
+
+  /// No description provided for @translationOrderFormScreenErrorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {error}'**
+  String translationOrderFormScreenErrorGeneric(String error);
+
+  /// No description provided for @currencySymbolRuble.
+  ///
+  /// In en, this message translates to:
+  /// **'₽'**
+  String get currencySymbolRuble;
+
+  /// No description provided for @defaultCityName.
+  ///
+  /// In en, this message translates to:
+  /// **'Moscow'**
+  String get defaultCityName;
+
+  /// No description provided for @managerLevelRegular.
+  ///
+  /// In en, this message translates to:
+  /// **'regular'**
+  String get managerLevelRegular;
+
+  /// No description provided for @documentTypeDropdownSelectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Document Type'**
+  String get documentTypeDropdownSelectTitle;
+
+  /// No description provided for @documentTypeDropdownCustomOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Other (specify)...'**
+  String get documentTypeDropdownCustomOption;
+
+  /// No description provided for @documentTypeDropdownCustomSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter custom document type'**
+  String get documentTypeDropdownCustomSubtitle;
+
+  /// No description provided for @documentTypeDropdownBasePriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{currencySymbol}{price} base price'**
+  String documentTypeDropdownBasePriceLabel(
+      String currencySymbol, String price);
+
+  /// No description provided for @documentTypeDropdownCustomDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Document Type'**
+  String get documentTypeDropdownCustomDialogTitle;
+
+  /// No description provided for @documentTypeDropdownCustomDialogLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Document Type'**
+  String get documentTypeDropdownCustomDialogLabel;
+
+  /// No description provided for @documentTypeDropdownCustomDialogHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter document type name'**
+  String get documentTypeDropdownCustomDialogHint;
+
+  /// No description provided for @buttonCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get buttonCancel;
+
+  /// No description provided for @buttonSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get buttonSelect;
+
+  /// No description provided for @translationPricingBasePriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Base Price (per page)'**
+  String get translationPricingBasePriceLabel;
+
+  /// No description provided for @translationPricingNumberOfPagesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of Pages'**
+  String get translationPricingNumberOfPagesLabel;
+
+  /// No description provided for @translationPricingTranslationSumLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation Sum'**
+  String get translationPricingTranslationSumLabel;
+
+  /// No description provided for @translationPricingUrgentTranslationSumLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Urgent Translation Sum'**
+  String get translationPricingUrgentTranslationSumLabel;
+
+  /// No description provided for @translationPricingNotarialSumLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Notarial/Legal Certification'**
+  String get translationPricingNotarialSumLabel;
+
+  /// No description provided for @translationPricingTotalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'TOTAL'**
+  String get translationPricingTotalLabel;
+
+  /// No description provided for @translationPricingUrgentSurcharge.
+  ///
+  /// In en, this message translates to:
+  /// **'Urgent (+100%)'**
+  String get translationPricingUrgentSurcharge;
+
+  /// No description provided for @translationPricingSemiUrgentSurcharge.
+  ///
+  /// In en, this message translates to:
+  /// **'Semi-Urgent (+50%)'**
+  String get translationPricingSemiUrgentSurcharge;
+
+  /// No description provided for @translationPricingPriorityMultiplier.
+  ///
+  /// In en, this message translates to:
+  /// **'Priority Multiplier'**
+  String get translationPricingPriorityMultiplier;
+
+  /// No description provided for @translationPricingInformationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pricing Information'**
+  String get translationPricingInformationTitle;
+
+  /// No description provided for @translationPricingUrgentSurchargeInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Urgent orders require 100% surcharge'**
+  String get translationPricingUrgentSurchargeInfo;
+
+  /// No description provided for @translationPricingSemiUrgentSurchargeInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Semi-urgent orders require 50% surcharge'**
+  String get translationPricingSemiUrgentSurchargeInfo;
+
+  /// No description provided for @translationPricingLocationDiscountInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'{cityName} location provides {discount}% discount'**
+  String translationPricingLocationDiscountInfo(String cityName, int discount);
+
+  /// No description provided for @translationPricingLocationSurchargeInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'{cityName} location adds {surcharge}% surcharge'**
+  String translationPricingLocationSurchargeInfo(
+      String cityName, int surcharge);
+
+  /// No description provided for @translationPricingComplexityBonusInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Complexity bonus: {percentage}%'**
+  String translationPricingComplexityBonusInfo(int percentage);
+
+  /// No description provided for @translationPricingStandardPricing.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard pricing applies'**
+  String get translationPricingStandardPricing;
+
+  /// No description provided for @translationPricingCalculationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pricing Calculation'**
+  String get translationPricingCalculationTitle;
+
+  /// No description provided for @translationPricingSelectDocumentTypeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a document type to see pricing'**
+  String get translationPricingSelectDocumentTypeMessage;
+
+  /// No description provided for @translationPricingCalculatingMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculating pricing...'**
+  String get translationPricingCalculatingMessage;
+
+  /// No description provided for @translationPricingCityMultiplierText.
+  ///
+  /// In en, this message translates to:
+  /// **'City: {multiplier}x ({cityName})'**
+  String translationPricingCityMultiplierText(
+      double multiplier, String cityName);
+
+  /// No description provided for @translationPricingManagerMultiplierText.
+  ///
+  /// In en, this message translates to:
+  /// **'Manager: {multiplier}x ({managerLevel})'**
+  String translationPricingManagerMultiplierText(
+      double multiplier, String managerLevel);
+
+  /// No description provided for @blankNumberFieldHintText.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter 6-digit number (e.g., 123456)'**
+  String get blankNumberFieldHintText;
+
+  /// No description provided for @blankNumberFieldGenerateTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate blank number'**
+  String get blankNumberFieldGenerateTooltip;
+
+  /// No description provided for @blankNumberFieldSuggestTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest next number'**
+  String get blankNumberFieldSuggestTooltip;
+
+  /// No description provided for @blankNumberFieldHelperText.
+  ///
+  /// In en, this message translates to:
+  /// **'Format: 6 digits (000000-999999)'**
+  String get blankNumberFieldHelperText;
+
+  /// No description provided for @blankNumberFieldRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Blank number is required'**
+  String get blankNumberFieldRequiredError;
+
+  /// No description provided for @blankNumberFieldInvalidFormatError.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid format. Must be exactly 6 digits'**
+  String get blankNumberFieldInvalidFormatError;
+
+  /// No description provided for @blankNumberFieldDuplicateError.
+  ///
+  /// In en, this message translates to:
+  /// **'This blank number is already used'**
+  String get blankNumberFieldDuplicateError;
+
+  /// No description provided for @blankNumberFieldGeneratedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{action} blank number: {number}'**
+  String blankNumberFieldGeneratedMessage(String action, String number);
+
+  /// No description provided for @blankNumberFieldActionGenerated.
+  ///
+  /// In en, this message translates to:
+  /// **'Generated'**
+  String get blankNumberFieldActionGenerated;
+
+  /// No description provided for @blankNumberFieldActionSuggested.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested'**
+  String get blankNumberFieldActionSuggested;
+
+  /// No description provided for @blankNumbersWidgetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Blank Numbers'**
+  String get blankNumbersWidgetTitle;
+
+  /// No description provided for @blankNumbersWidgetMainLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Main Blank Number *'**
+  String get blankNumbersWidgetMainLabel;
+
+  /// No description provided for @blankNumbersWidgetDamagedCheckbox.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Damaged/Spoiled Blank'**
+  String get blankNumbersWidgetDamagedCheckbox;
+
+  /// No description provided for @blankNumbersWidgetDamagedSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Check if a blank was damaged and needs replacement'**
+  String get blankNumbersWidgetDamagedSubtitle;
+
+  /// No description provided for @blankNumbersWidgetDamagedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Damaged Blank Number'**
+  String get blankNumbersWidgetDamagedLabel;
+
+  /// No description provided for @blankNumbersWidgetDamagedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Number of the damaged blank being replaced'**
+  String get blankNumbersWidgetDamagedHint;
+
+  /// No description provided for @blankNumbersWidgetDamagedWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Record the damaged blank number for tracking and audit purposes. This helps maintain blank inventory accuracy.'**
+  String get blankNumbersWidgetDamagedWarning;
+
+  /// No description provided for @blankNumbersWidgetGuidelinesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Blank Number Guidelines'**
+  String get blankNumbersWidgetGuidelinesTitle;
+
+  /// No description provided for @blankNumbersWidgetGuidelinesText.
+  ///
+  /// In en, this message translates to:
+  /// **'• Use exactly 6 digits (e.g., 123456)\n• Each blank number must be unique\n• Use \"Generate\" for timestamp-based numbers\n• Use \"Suggest\" for sequential numbering\n• Record damaged blanks for audit trail'**
+  String get blankNumbersWidgetGuidelinesText;
 }
 
 class _AppLocalizationsDelegate
