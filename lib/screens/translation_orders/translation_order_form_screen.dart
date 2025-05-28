@@ -228,6 +228,22 @@ class _TranslationOrderFormScreenState
       // Current employee is not in managers list (might be translator, etc.)
       print('Current employee not found in managers list or is not a manager.');
     }
+
+    // Set default values for new orders
+    _setDefaultValues();
+  }
+
+  void _setDefaultValues() {
+    setState(() {
+      // Set default source language to Ukrainian
+      _sourceLangController.text = 'ua';
+
+      // Set default target language to Russian
+      _targetLangController.text = 'ru';
+
+      // Set default priority to NORMAL
+      _selectedPriority = crm.Priority.NORMAL;
+    });
   }
 
   void _populateFormFields() {
@@ -397,12 +413,12 @@ class _TranslationOrderFormScreenState
       }
 
       if (widget.orderId == null) {
-        final response = await _orderService.createTranslationOrder(orderData);
+        final _ = await _orderService.createTranslationOrder(orderData);
 
         successMessage =
             localizations.translationOrderFormScreenOrderCreatedSuccess;
       } else {
-        final response = await _orderService.updateTranslationOrder(
+        final _ = await _orderService.updateTranslationOrder(
             widget.orderId!, orderData);
 
         successMessage =
