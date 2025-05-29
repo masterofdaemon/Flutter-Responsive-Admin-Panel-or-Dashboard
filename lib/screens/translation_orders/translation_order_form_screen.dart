@@ -701,6 +701,8 @@ class _TranslationOrderFormScreenState
                     prefixIcon:
                         Icon(Icons.person_outline, color: colorScheme.primary),
                     onChanged: (crm.Client? newValue) {
+                      print(
+                          'Client Dropdown onChanged: ${newValue?.clientId} - ${newValue?.firstName}'); // DEBUG
                       setState(() {
                         _selectedClient = newValue;
                         _clientIdController.text =

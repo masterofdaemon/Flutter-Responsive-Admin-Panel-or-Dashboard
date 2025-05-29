@@ -9,6 +9,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'package:admin/services/grpc_client_service.dart';
 import 'package:admin/services/auth_service.dart';
 import 'package:provider/provider.dart';
+import 'package:admin/services/document_type_service.dart'; // Added import
 
 class TranslationOrderListScreen extends StatefulWidget {
   const TranslationOrderListScreen({super.key});
@@ -23,6 +24,8 @@ class _TranslationOrderListScreenState
   final GrpcTranslationOrderService _service = GrpcTranslationOrderService();
   final GrpcClientService _clientService =
       GrpcClientService(); // Added client service
+  final DocumentTypeService _documentTypeService =
+      DocumentTypeService(); // Added service instance
   late Future<List<crm.TranslationOrder>> _ordersFuture;
   List<crm.TranslationOrder> _orders = [];
   Map<String, crm.Client> _clientsMap = {}; // Added map to store clients
@@ -241,20 +244,9 @@ class _TranslationOrderListScreenState
 
   String _getDocumentTypeDisplayName(String documentTypeKey) {
     final localizations = AppLocalizations.of(context);
-    switch (documentTypeKey.toLowerCase()) {
-      case 'passport':
-        return localizations.documentTypePassport;
-      case 'diploma':
-        return localizations.documentTypeDiploma;
-      case 'birth_certificate':
-        return localizations.documentTypeBirthCertificate;
-      case 'contract':
-        return localizations.documentTypeContract;
-      case 'other':
-        return localizations.documentTypeOther;
-      default:
-        return documentTypeKey; // Return the original key if no match found
-    }
+    // Use DocumentTypeService to get the display name
+    return _documentTypeService.getDocumentTypeDisplayName(
+        documentTypeKey, localizations);
   }
 
   String _getTranslationProgressStatusDisplayName(

@@ -236,7 +236,7 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
           '${localizations.currencySymbolRuble}${pricing.totalSum.toStringAsFixed(2)}',
           isBold: true,
           isTotal: true,
-          color: theme.primaryColor,
+          // color: theme.primaryColor,
         ),
 
         // Additional info
@@ -278,8 +278,10 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
                           : FontWeight.normal,
                       fontSize: isTotal ? 16 : 14,
                       color: isSubtle
-                          ? colorScheme.onSurface.withOpacity(0.6)
-                          : (color ?? colorScheme.onSurface),
+                          ? theme.textTheme.bodyLarge?.color
+                          : (color ??
+                              theme.textTheme.bodyLarge
+                                  ?.color), // Use theme's default text color
                     ),
                   ),
                   if (subtitle != null)
@@ -287,7 +289,7 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
                       subtitle,
                       style: TextStyle(
                         fontSize: 12,
-                        color: colorScheme.onSurface.withOpacity(0.6),
+                        color: theme.textTheme.bodyLarge?.color,
                       ),
                     ),
                 ],
@@ -299,7 +301,9 @@ class _TranslationPricingWidgetState extends State<TranslationPricingWidget> {
                 fontWeight:
                     isBold || isTotal ? FontWeight.bold : FontWeight.normal,
                 fontSize: isTotal ? 16 : 14,
-                color: color ?? colorScheme.onSurface,
+                color: color ??
+                    theme.textTheme.bodyLarge
+                        ?.color, // Use theme's default text color
               ),
             ),
           ],
