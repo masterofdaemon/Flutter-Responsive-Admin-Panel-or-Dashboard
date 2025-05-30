@@ -130,8 +130,7 @@ class SideMenu extends StatelessWidget {
               if (auth
                   .canViewEmployees()) // Example: Same permission as employees for now
                 DrawerListTile(
-                  title: localizations
-                      .sideMenuOffices, // Add this to localization files
+                  title: localizations.sideMenuOffices,
                   svgSrc: "assets/icons/folder.svg", // Example icon
                   press: () {
                     context.read<MenuAppController>().setSelectedScreen(
@@ -148,7 +147,7 @@ class SideMenu extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),
                       child: Text(
-                        'Admin Section', // Use localization key if available
+                        localizations.sideMenuAdminTools,
                         style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 12,
@@ -157,8 +156,7 @@ class SideMenu extends StatelessWidget {
                       ),
                     ),
                     DrawerListTile(
-                      title:
-                          'User Management', // Use localization key if available
+                      title: localizations.sideMenuCreateUser,
                       svgSrc: "assets/icons/menu_profile.svg",
                       press: () {
                         context.read<MenuAppController>().setSelectedScreen(
@@ -221,7 +219,7 @@ class SideMenu extends StatelessWidget {
                     height: 16,
                   ),
                   title: Text(
-                    'Logout', // Use localization key if available
+                    localizations.sideMenuLogout,
                     style: const TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.w500,
