@@ -737,6 +737,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get sideMenuLogout => 'Выйти';
 
   @override
+  String get logoutConfirmationTitle => 'Выйти';
+
+  @override
+  String get logoutConfirmationMessage => 'Вы уверены, что хотите выйти?';
+
+  @override
+  String get logoutConfirmationCancel => 'Отмена';
+
+  @override
+  String get logoutConfirmationConfirm => 'Выйти';
+
+  @override
   String get dashboardHeaderTitle => 'Панель управления';
 
   @override
@@ -2294,4 +2306,118 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get searchableDropdownNoResults => 'Результаты не найдены';
+
+  @override
+  String get topActionButtonsApplications => 'Заявки';
+
+  @override
+  String get topActionButtonsClients => 'Клиенты';
+
+  @override
+  String get sideMenuDirections => 'Направления';
+
+  @override
+  String get sideMenuAdminPanel => 'Панель администратора';
+
+  @override
+  String get sideMenuAllApplications => 'Все заявки';
+
+  @override
+  String get sideMenuPartners => 'Партнеры';
+
+  @override
+  String get sideMenuActs => 'Акты';
+
+  @override
+  String get directionTranslationAgency => 'Переводческое агентство';
+
+  @override
+  String get directionLegalServices => 'Юридические услуги';
+
+  @override
+  String get directionInsuranceServices => 'Страховые услуги';
+
+  @override
+  String get directionLending => 'Кредитование';
+
+  @override
+  String get directionOpeningAccounts => 'Открытие счетов';
+
+  @override
+  String get directionAdvancedTraining => 'Курсы повышения квалификации';
+
+  @override
+  String get directionCopyrightProtection => 'Защита авторских прав';
+
+  @override
+  String get directionPropertyValuation => 'Оценка недвижимости';
+
+  @override
+  String get rightSidebarCalendarHeader => 'Календарь';
+
+  @override
+  String get rightSidebarNotificationsHeader => 'Уведомления';
+
+  @override
+  String get calendarToday => 'Сегодня';
+
+  @override
+  String get calendarViewAll => 'Посмотреть все события';
+
+  @override
+  String get calendarUpcomingEvents => 'Предстоящие события';
+
+  @override
+  String get calendarNoEvents => 'Нет запланированных событий';
+
+  @override
+  String get notificationsMarkAllRead => 'Отметить все прочитанными';
+
+  @override
+  String get notificationsViewAll => 'Посмотреть все';
+
+  @override
+  String get notificationsNoNew => 'Нет новых уведомлений';
+
+  @override
+  String get notificationApplicationSubmitted => 'Подана новая заявка';
+
+  @override
+  String get notificationClientRegistered => 'Зарегистрирован новый клиент';
+
+  @override
+  String get notificationDocumentUploaded => 'Документ загружен';
+
+  @override
+  String get notificationPaymentReceived => 'Платеж получен';
+
+  @override
+  String get notificationsMins => 'мин';
+
+  @override
+  String get rightSidebarTitle => 'Информационная панель';
+
+  @override
+  String get rightSidebarCloseTooltip => 'Закрыть боковую панель';
+
+  @override
+  String get calendarTitle => 'Календарь';
+
+  @override
+  String get calendarAddEventTooltip => 'Добавить новое событие';
+
+  @override
+  String get calendarTodaysEvents => 'События сегодня';
+
+  @override
+  String get calendarNoEventsToday => 'Нет событий на сегодня';
+
+  @override
+  String get notificationsTitle => 'Уведомления';
+
+  @override
+  String get notificationsUnreadOnly => 'Только непрочитанные';
+
+  @override
+  String get notificationsEmpty => 'Нет уведомлений';
 }

@@ -14,6 +14,7 @@ class StorageDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context);
     return Container(
+      constraints: BoxConstraints(minWidth: 100), // Ensure minimum width
       padding: EdgeInsets.all(defaultPadding),
       decoration: BoxDecoration(
         color: secondaryColor,

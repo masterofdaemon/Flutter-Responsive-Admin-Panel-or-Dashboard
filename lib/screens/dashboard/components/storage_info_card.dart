@@ -27,37 +27,94 @@ class StorageInfoCard extends StatelessWidget {
           Radius.circular(defaultPadding),
         ),
       ),
-      child: Row(
-        children: [
-          SizedBox(
-            height: 20,
-            width: 20,
-            child: SvgPicture.asset(svgSrc),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // If available width is too narrow, use vertical layout
+          if (constraints.maxWidth < 120) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    SizedBox(
+                      height: 16,
+                      width: 16,
+                      child: SvgPicture.asset(svgSrc),
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 4),
+                Text(
+                  "$numOfFiles Files",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(color: Colors.white70, fontSize: 10),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  amountOfFiles,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 11,
                   ),
-                  Text(
-                    "$numOfFiles Files",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: Colors.white70),
-                  ),
-                ],
+                ),
+              ],
+            );
+          }
+          
+          // Standard horizontal layout for wider containers
+          return Row(
+            children: [
+              SizedBox(
+                height: 20,
+                width: 20,
+                child: SvgPicture.asset(svgSrc),
               ),
-            ),
-          ),
-          Text(amountOfFiles)
-        ],
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        "$numOfFiles Files",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(color: Colors.white70),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Flexible(
+                child: Text(
+                  amountOfFiles,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.end,
+                ),
+              )
+            ],
+          );
+        },
       ),
     );
   }

@@ -41,7 +41,10 @@ class DashboardScreen extends StatelessWidget {
                 if (!Responsive.isMobile(context))
                   Expanded(
                     flex: 2,
-                    child: StorageDetails(),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(minWidth: 250, maxWidth: 400),
+                      child: StorageDetails(),
+                    ),
                   ),
               ],
             )

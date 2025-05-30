@@ -1366,6 +1366,30 @@ abstract class AppLocalizations {
   /// **'Logout'**
   String get sideMenuLogout;
 
+  /// No description provided for @logoutConfirmationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logoutConfirmationTitle;
+
+  /// No description provided for @logoutConfirmationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to logout?'**
+  String get logoutConfirmationMessage;
+
+  /// No description provided for @logoutConfirmationCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get logoutConfirmationCancel;
+
+  /// No description provided for @logoutConfirmationConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logoutConfirmationConfirm;
+
   /// No description provided for @dashboardHeaderTitle.
   ///
   /// In en, this message translates to:
@@ -4023,6 +4047,234 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No results found'**
   String get searchableDropdownNoResults;
+
+  /// No description provided for @topActionButtonsApplications.
+  ///
+  /// In en, this message translates to:
+  /// **'Applications'**
+  String get topActionButtonsApplications;
+
+  /// No description provided for @topActionButtonsClients.
+  ///
+  /// In en, this message translates to:
+  /// **'Clients'**
+  String get topActionButtonsClients;
+
+  /// No description provided for @sideMenuDirections.
+  ///
+  /// In en, this message translates to:
+  /// **'Directions'**
+  String get sideMenuDirections;
+
+  /// No description provided for @sideMenuAdminPanel.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin Panel'**
+  String get sideMenuAdminPanel;
+
+  /// No description provided for @sideMenuAllApplications.
+  ///
+  /// In en, this message translates to:
+  /// **'All Applications'**
+  String get sideMenuAllApplications;
+
+  /// No description provided for @sideMenuPartners.
+  ///
+  /// In en, this message translates to:
+  /// **'Partners'**
+  String get sideMenuPartners;
+
+  /// No description provided for @sideMenuActs.
+  ///
+  /// In en, this message translates to:
+  /// **'Acts'**
+  String get sideMenuActs;
+
+  /// No description provided for @directionTranslationAgency.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation Agency'**
+  String get directionTranslationAgency;
+
+  /// No description provided for @directionLegalServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal Services'**
+  String get directionLegalServices;
+
+  /// No description provided for @directionInsuranceServices.
+  ///
+  /// In en, this message translates to:
+  /// **'Insurance Services'**
+  String get directionInsuranceServices;
+
+  /// No description provided for @directionLending.
+  ///
+  /// In en, this message translates to:
+  /// **'Lending'**
+  String get directionLending;
+
+  /// No description provided for @directionOpeningAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening Accounts'**
+  String get directionOpeningAccounts;
+
+  /// No description provided for @directionAdvancedTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced Training'**
+  String get directionAdvancedTraining;
+
+  /// No description provided for @directionCopyrightProtection.
+  ///
+  /// In en, this message translates to:
+  /// **'Copyright Protection'**
+  String get directionCopyrightProtection;
+
+  /// No description provided for @directionPropertyValuation.
+  ///
+  /// In en, this message translates to:
+  /// **'Property Valuation'**
+  String get directionPropertyValuation;
+
+  /// No description provided for @rightSidebarCalendarHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get rightSidebarCalendarHeader;
+
+  /// No description provided for @rightSidebarNotificationsHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get rightSidebarNotificationsHeader;
+
+  /// No description provided for @calendarToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get calendarToday;
+
+  /// No description provided for @calendarViewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View All Events'**
+  String get calendarViewAll;
+
+  /// No description provided for @calendarUpcomingEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming Events'**
+  String get calendarUpcomingEvents;
+
+  /// No description provided for @calendarNoEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'No events scheduled'**
+  String get calendarNoEvents;
+
+  /// No description provided for @notificationsMarkAllRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark All Read'**
+  String get notificationsMarkAllRead;
+
+  /// No description provided for @notificationsViewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View All'**
+  String get notificationsViewAll;
+
+  /// No description provided for @notificationsNoNew.
+  ///
+  /// In en, this message translates to:
+  /// **'No new notifications'**
+  String get notificationsNoNew;
+
+  /// No description provided for @notificationApplicationSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'New application submitted'**
+  String get notificationApplicationSubmitted;
+
+  /// No description provided for @notificationClientRegistered.
+  ///
+  /// In en, this message translates to:
+  /// **'New client registered'**
+  String get notificationClientRegistered;
+
+  /// No description provided for @notificationDocumentUploaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Document uploaded'**
+  String get notificationDocumentUploaded;
+
+  /// No description provided for @notificationPaymentReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment received'**
+  String get notificationPaymentReceived;
+
+  /// No description provided for @notificationsMins.
+  ///
+  /// In en, this message translates to:
+  /// **'mins'**
+  String get notificationsMins;
+
+  /// No description provided for @rightSidebarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Information Panel'**
+  String get rightSidebarTitle;
+
+  /// No description provided for @rightSidebarCloseTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Close sidebar'**
+  String get rightSidebarCloseTooltip;
+
+  /// No description provided for @calendarTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get calendarTitle;
+
+  /// No description provided for @calendarAddEventTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Add new event'**
+  String get calendarAddEventTooltip;
+
+  /// No description provided for @calendarTodaysEvents.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Events'**
+  String get calendarTodaysEvents;
+
+  /// No description provided for @calendarNoEventsToday.
+  ///
+  /// In en, this message translates to:
+  /// **'No events scheduled for today'**
+  String get calendarNoEventsToday;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsUnreadOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread only'**
+  String get notificationsUnreadOnly;
+
+  /// No description provided for @notificationsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications'**
+  String get notificationsEmpty;
 }
 
 class _AppLocalizationsDelegate

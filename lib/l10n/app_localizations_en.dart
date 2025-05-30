@@ -736,6 +736,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sideMenuLogout => 'Logout';
 
   @override
+  String get logoutConfirmationTitle => 'Logout';
+
+  @override
+  String get logoutConfirmationMessage => 'Are you sure you want to logout?';
+
+  @override
+  String get logoutConfirmationCancel => 'Cancel';
+
+  @override
+  String get logoutConfirmationConfirm => 'Logout';
+
+  @override
   String get dashboardHeaderTitle => 'Dashboard';
 
   @override
@@ -2269,4 +2281,118 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchableDropdownNoResults => 'No results found';
+
+  @override
+  String get topActionButtonsApplications => 'Applications';
+
+  @override
+  String get topActionButtonsClients => 'Clients';
+
+  @override
+  String get sideMenuDirections => 'Directions';
+
+  @override
+  String get sideMenuAdminPanel => 'Admin Panel';
+
+  @override
+  String get sideMenuAllApplications => 'All Applications';
+
+  @override
+  String get sideMenuPartners => 'Partners';
+
+  @override
+  String get sideMenuActs => 'Acts';
+
+  @override
+  String get directionTranslationAgency => 'Translation Agency';
+
+  @override
+  String get directionLegalServices => 'Legal Services';
+
+  @override
+  String get directionInsuranceServices => 'Insurance Services';
+
+  @override
+  String get directionLending => 'Lending';
+
+  @override
+  String get directionOpeningAccounts => 'Opening Accounts';
+
+  @override
+  String get directionAdvancedTraining => 'Advanced Training';
+
+  @override
+  String get directionCopyrightProtection => 'Copyright Protection';
+
+  @override
+  String get directionPropertyValuation => 'Property Valuation';
+
+  @override
+  String get rightSidebarCalendarHeader => 'Calendar';
+
+  @override
+  String get rightSidebarNotificationsHeader => 'Notifications';
+
+  @override
+  String get calendarToday => 'Today';
+
+  @override
+  String get calendarViewAll => 'View All Events';
+
+  @override
+  String get calendarUpcomingEvents => 'Upcoming Events';
+
+  @override
+  String get calendarNoEvents => 'No events scheduled';
+
+  @override
+  String get notificationsMarkAllRead => 'Mark All Read';
+
+  @override
+  String get notificationsViewAll => 'View All';
+
+  @override
+  String get notificationsNoNew => 'No new notifications';
+
+  @override
+  String get notificationApplicationSubmitted => 'New application submitted';
+
+  @override
+  String get notificationClientRegistered => 'New client registered';
+
+  @override
+  String get notificationDocumentUploaded => 'Document uploaded';
+
+  @override
+  String get notificationPaymentReceived => 'Payment received';
+
+  @override
+  String get notificationsMins => 'mins';
+
+  @override
+  String get rightSidebarTitle => 'Information Panel';
+
+  @override
+  String get rightSidebarCloseTooltip => 'Close sidebar';
+
+  @override
+  String get calendarTitle => 'Calendar';
+
+  @override
+  String get calendarAddEventTooltip => 'Add new event';
+
+  @override
+  String get calendarTodaysEvents => 'Today\'s Events';
+
+  @override
+  String get calendarNoEventsToday => 'No events scheduled for today';
+
+  @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String get notificationsUnreadOnly => 'Unread only';
+
+  @override
+  String get notificationsEmpty => 'No notifications';
 }

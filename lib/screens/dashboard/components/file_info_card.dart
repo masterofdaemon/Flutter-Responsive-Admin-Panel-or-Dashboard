@@ -25,7 +25,6 @@ class FileInfoCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
                 padding: EdgeInsets.all(defaultPadding * 0.75),
@@ -41,7 +40,8 @@ class FileInfoCard extends StatelessWidget {
                       info.color ?? Colors.black, BlendMode.srcIn),
                 ),
               ),
-              Icon(Icons.more_vert, color: Colors.white54)
+              const Spacer(),
+              const Icon(Icons.more_vert, color: Colors.white54, size: 18)
             ],
           ),
           Text(
@@ -54,9 +54,8 @@ class FileInfoCard extends StatelessWidget {
             percentage: info.percentage,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
+              Expanded(
                 child: Text(
                   "${info.numOfFiles} Files",
                   style: Theme.of(context)
@@ -66,7 +65,8 @@ class FileInfoCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              Flexible(
+              const SizedBox(width: 8),
+              Expanded(
                 child: Text(
                   info.totalStorage!,
                   style: Theme.of(context)

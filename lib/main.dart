@@ -1,8 +1,12 @@
 import 'package:admin/constants.dart';
 import 'package:admin/controllers/menu_app_controller.dart';
+import 'package:admin/controllers/layout_controller.dart';
 import 'package:admin/screens/main/main_screen.dart';
 import 'package:admin/screens/login_screen.dart'; // Import LoginScreen
 import 'package:admin/services/auth_service.dart'; // Import AuthService
+import 'package:admin/services/direction_service.dart'; // Import DirectionService
+import 'package:admin/services/notification_service.dart'; // Import NotificationService
+import 'package:admin/services/calendar_service.dart'; // Import CalendarService
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -22,8 +26,16 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => MenuAppController()),
+        ChangeNotifierProvider(create: (context) => LayoutController()),
+        ChangeNotifierProvider.value(value: NotificationService.instance),
+        ChangeNotifierProvider.value(value: CalendarService.instance),
         ChangeNotifierProvider.value(
             value: AuthService.instance), // Use singleton instance
+        ChangeNotifierProxyProvider<AuthService, DirectionService>(
+          create: (context) => DirectionService(AuthService.instance),
+          update: (context, authService, directionService) =>
+              directionService ?? DirectionService(authService),
+        ),
       ],
       child: MyApp(),
     ),

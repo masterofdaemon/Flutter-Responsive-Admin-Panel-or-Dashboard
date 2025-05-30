@@ -620,6 +620,39 @@ class AuthService with ChangeNotifier {
     }
   }
 
+  /// Check if the current user can manage applications
+  bool canManageApplications() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, directors and managers can manage applications
+    return hasAnyRole([
+      pb.EmployeeRole.DIRECTOR,
+      pb.EmployeeRole.CHIEF_MANAGER,
+      pb.EmployeeRole.MANAGER
+    ]);
+  }
+
+  /// Check if the current user can manage users
+  bool canManageUsers() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, directors and managers can manage users
+    return hasAnyRole([
+      pb.EmployeeRole.DIRECTOR,
+      pb.EmployeeRole.CHIEF_MANAGER,
+      pb.EmployeeRole.MANAGER
+    ]);
+  }
+
+  /// Check if the current user is an accountant
+  bool isAccountant() {
+    return hasRole(pb.EmployeeRole.ACCOUNTANT);
+  }
+
   // Async initialization method
   Future<void> _initializeAsync() async {
     await _checkToken();
