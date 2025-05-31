@@ -1330,6 +1330,12 @@ abstract class AppLocalizations {
   /// **'Create User'**
   String get sideMenuCreateUser;
 
+  /// No description provided for @sideMenuUserManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'User Management'**
+  String get sideMenuUserManagement;
+
   /// No description provided for @sideMenuTask.
   ///
   /// In en, this message translates to:
@@ -4275,6 +4281,336 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No notifications'**
   String get notificationsEmpty;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @userManagement.
+  ///
+  /// In en, this message translates to:
+  /// **'User Management'**
+  String get userManagement;
+
+  /// No description provided for @userManagementDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage employees, roles, and access permissions'**
+  String get userManagementDescription;
+
+  /// No description provided for @addEmployee.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Employee'**
+  String get addEmployee;
+
+  /// No description provided for @refresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get refresh;
+
+  /// No description provided for @searchUsers.
+  ///
+  /// In en, this message translates to:
+  /// **'Search users...'**
+  String get searchUsers;
+
+  /// No description provided for @role.
+  ///
+  /// In en, this message translates to:
+  /// **'Role'**
+  String get role;
+
+  /// No description provided for @allRoles.
+  ///
+  /// In en, this message translates to:
+  /// **'All Roles'**
+  String get allRoles;
+
+  /// No description provided for @status.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get status;
+
+  /// No description provided for @allStatuses.
+  ///
+  /// In en, this message translates to:
+  /// **'All Statuses'**
+  String get allStatuses;
+
+  /// No description provided for @active.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get active;
+
+  /// No description provided for @disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Disabled'**
+  String get disabled;
+
+  /// No description provided for @selectedItems.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String selectedItems(int count);
+
+  /// No description provided for @clearSelection.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Selection'**
+  String get clearSelection;
+
+  /// No description provided for @disableSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable Selected'**
+  String get disableSelected;
+
+  /// No description provided for @enableSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Selected'**
+  String get enableSelected;
+
+  /// No description provided for @noUsersFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No users found'**
+  String get noUsersFound;
+
+  /// No description provided for @tryAdjustingFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Try adjusting your search criteria or filters'**
+  String get tryAdjustingFilters;
+
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get name;
+
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get email;
+
+  /// No description provided for @lastLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Login'**
+  String get lastLogin;
+
+  /// No description provided for @viewProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'View Profile'**
+  String get viewProfile;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @resetPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password'**
+  String get resetPassword;
+
+  /// No description provided for @disableAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable Account'**
+  String get disableAccount;
+
+  /// No description provided for @enableAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Account'**
+  String get enableAccount;
+
+  /// No description provided for @employeeDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Employee Details'**
+  String get employeeDetails;
+
+  /// No description provided for @login.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get login;
+
+  /// No description provided for @telegramId.
+  ///
+  /// In en, this message translates to:
+  /// **'Telegram ID'**
+  String get telegramId;
+
+  /// No description provided for @whatsappNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'WhatsApp Number'**
+  String get whatsappNumber;
+
+  /// No description provided for @notes.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes'**
+  String get notes;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @resetPasswordWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to reset the password for {name}? They will need to use the new password to log in.'**
+  String resetPasswordWarning(String name);
+
+  /// No description provided for @reason.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason'**
+  String get reason;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @reasonRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason is required'**
+  String get reasonRequired;
+
+  /// No description provided for @passwordResetFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to reset password'**
+  String get passwordResetFailed;
+
+  /// No description provided for @passwordResetSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset successful'**
+  String get passwordResetSuccess;
+
+  /// No description provided for @newPasswordGenerated.
+  ///
+  /// In en, this message translates to:
+  /// **'New password for {name}: {password}'**
+  String newPasswordGenerated(String name, String password);
+
+  /// No description provided for @copiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Password copied to clipboard'**
+  String get copiedToClipboard;
+
+  /// No description provided for @copyPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Password'**
+  String get copyPassword;
+
+  /// No description provided for @passwordResetInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'The new password has been copied to your clipboard. Please share it securely with the employee.'**
+  String get passwordResetInstructions;
+
+  /// No description provided for @understood.
+  ///
+  /// In en, this message translates to:
+  /// **'Understood'**
+  String get understood;
+
+  /// No description provided for @disableAccountWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to disable the account for {name}?'**
+  String disableAccountWarning(String name);
+
+  /// No description provided for @disableAccountConsequences.
+  ///
+  /// In en, this message translates to:
+  /// **'This will:\n• Change their password to a random value\n• Force logout from all active sessions\n• Block access until reactivated'**
+  String get disableAccountConsequences;
+
+  /// No description provided for @accountDisabledSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Account for {name} has been disabled successfully'**
+  String accountDisabledSuccess(String name);
+
+  /// No description provided for @accountDisableFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to disable account'**
+  String get accountDisableFailed;
+
+  /// No description provided for @enableAccountConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to enable the account for {name}?'**
+  String enableAccountConfirmation(String name);
+
+  /// No description provided for @accountEnabledSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Account for {name} has been enabled successfully'**
+  String accountEnabledSuccess(String name);
+
+  /// No description provided for @accountEnableFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to enable account'**
+  String get accountEnableFailed;
+
+  /// No description provided for @bulkDisableAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Disable Multiple Accounts'**
+  String get bulkDisableAccounts;
+
+  /// No description provided for @bulkDisableWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to disable {count} employee accounts?'**
+  String bulkDisableWarning(int count);
+
+  /// No description provided for @bulkOperationResult.
+  ///
+  /// In en, this message translates to:
+  /// **'{successful} accounts processed successfully, {failed} failed'**
+  String bulkOperationResult(int successful, int failed);
+
+  /// No description provided for @bulkEnableAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Multiple Accounts'**
+  String get bulkEnableAccounts;
+
+  /// No description provided for @bulkEnableConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to enable {count} employee accounts?'**
+  String bulkEnableConfirmation(int count);
 }
 
 class _AppLocalizationsDelegate

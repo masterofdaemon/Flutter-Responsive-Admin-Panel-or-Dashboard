@@ -7,6 +7,7 @@ import 'package:admin/services/auth_service.dart'; // Import AuthService
 import 'package:admin/services/direction_service.dart'; // Import DirectionService
 import 'package:admin/services/notification_service.dart'; // Import NotificationService
 import 'package:admin/services/calendar_service.dart'; // Import CalendarService
+import 'package:admin/services/user_management_service.dart'; // Import UserManagementService
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +32,8 @@ void main() async {
         ChangeNotifierProvider.value(value: CalendarService.instance),
         ChangeNotifierProvider.value(
             value: AuthService.instance), // Use singleton instance
+        ChangeNotifierProvider.value(
+            value: UserManagementService.instance), // Add UserManagementService
         ChangeNotifierProxyProvider<AuthService, DirectionService>(
           create: (context) => DirectionService(AuthService.instance),
           update: (context, authService, directionService) =>

@@ -719,6 +719,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get sideMenuCreateUser => 'Создать пользователя';
 
   @override
+  String get sideMenuUserManagement => 'Управление пользователями';
+
+  @override
   String get sideMenuTask => 'Задача';
 
   @override
@@ -2420,4 +2423,193 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get notificationsEmpty => 'Нет уведомлений';
+
+  @override
+  String get retry => 'Повторить';
+
+  @override
+  String get userManagement => 'Управление пользователями';
+
+  @override
+  String get userManagementDescription =>
+      'Управление сотрудниками, ролями и правами доступа';
+
+  @override
+  String get addEmployee => 'Добавить сотрудника';
+
+  @override
+  String get refresh => 'Обновить';
+
+  @override
+  String get searchUsers => 'Поиск пользователей...';
+
+  @override
+  String get role => 'Роль';
+
+  @override
+  String get allRoles => 'Все роли';
+
+  @override
+  String get status => 'Статус';
+
+  @override
+  String get allStatuses => 'Все статусы';
+
+  @override
+  String get active => 'Активный';
+
+  @override
+  String get disabled => 'Отключен';
+
+  @override
+  String selectedItems(int count) {
+    return 'Выбрано: $count';
+  }
+
+  @override
+  String get clearSelection => 'Очистить выбор';
+
+  @override
+  String get disableSelected => 'Отключить выбранных';
+
+  @override
+  String get enableSelected => 'Включить выбранных';
+
+  @override
+  String get noUsersFound => 'Пользователи не найдены';
+
+  @override
+  String get tryAdjustingFilters =>
+      'Попробуйте изменить критерии поиска или фильтры';
+
+  @override
+  String get name => 'Имя';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get lastLogin => 'Последний вход';
+
+  @override
+  String get viewProfile => 'Просмотреть профиль';
+
+  @override
+  String get edit => 'Редактировать';
+
+  @override
+  String get resetPassword => 'Сбросить пароль';
+
+  @override
+  String get disableAccount => 'Отключить аккаунт';
+
+  @override
+  String get enableAccount => 'Включить аккаунт';
+
+  @override
+  String get employeeDetails => 'Данные сотрудника';
+
+  @override
+  String get login => 'Логин';
+
+  @override
+  String get telegramId => 'Telegram ID';
+
+  @override
+  String get whatsappNumber => 'Номер WhatsApp';
+
+  @override
+  String get notes => 'Заметки';
+
+  @override
+  String get close => 'Закрыть';
+
+  @override
+  String resetPasswordWarning(String name) {
+    return 'Вы уверены, что хотите сбросить пароль для $name? Им потребуется использовать новый пароль для входа.';
+  }
+
+  @override
+  String get reason => 'Причина';
+
+  @override
+  String get cancel => 'Отмена';
+
+  @override
+  String get reasonRequired => 'Причина обязательна';
+
+  @override
+  String get passwordResetFailed => 'Не удалось сбросить пароль';
+
+  @override
+  String get passwordResetSuccess => 'Пароль успешно сброшен';
+
+  @override
+  String newPasswordGenerated(String name, String password) {
+    return 'Новый пароль для $name: $password';
+  }
+
+  @override
+  String get copiedToClipboard => 'Пароль скопирован в буфер обмена';
+
+  @override
+  String get copyPassword => 'Копировать пароль';
+
+  @override
+  String get passwordResetInstructions =>
+      'Новый пароль скопирован в буфер обмена. Пожалуйста, передайте его сотруднику безопасным способом.';
+
+  @override
+  String get understood => 'Понятно';
+
+  @override
+  String disableAccountWarning(String name) {
+    return 'Вы уверены, что хотите отключить аккаунт для $name?';
+  }
+
+  @override
+  String get disableAccountConsequences =>
+      'Это приведет к:\n• Изменению пароля на случайное значение\n• Принудительному выходу из всех активных сессий\n• Блокировке доступа до повторной активации';
+
+  @override
+  String accountDisabledSuccess(String name) {
+    return 'Аккаунт для $name успешно отключен';
+  }
+
+  @override
+  String get accountDisableFailed => 'Не удалось отключить аккаунт';
+
+  @override
+  String enableAccountConfirmation(String name) {
+    return 'Вы уверены, что хотите включить аккаунт для $name?';
+  }
+
+  @override
+  String accountEnabledSuccess(String name) {
+    return 'Аккаунт для $name успешно включен';
+  }
+
+  @override
+  String get accountEnableFailed => 'Не удалось включить аккаунт';
+
+  @override
+  String get bulkDisableAccounts => 'Отключить несколько аккаунтов';
+
+  @override
+  String bulkDisableWarning(int count) {
+    return 'Вы уверены, что хотите отключить $count аккаунтов сотрудников?';
+  }
+
+  @override
+  String bulkOperationResult(int successful, int failed) {
+    return '$successful аккаунтов обработано успешно, $failed неудачно';
+  }
+
+  @override
+  String get bulkEnableAccounts => 'Включить несколько аккаунтов';
+
+  @override
+  String bulkEnableConfirmation(int count) {
+    return 'Вы уверены, что хотите включить $count аккаунтов сотрудников?';
+  }
 }

@@ -452,7 +452,7 @@ class _TranslationOrderListScreenState
           return Consumer<AuthService>(
             builder: (context, authService, child) {
               final List<Widget> actionButtons = [];
-              const primaryColor = Color(0xFF2697FF);
+              const primaryColor = Color.fromARGB(255, 230, 243, 255);
               // Edit button - visible if user can manage translation orders
               if (authService.canManageTranslationOrders()) {
                 actionButtons.add(
@@ -649,7 +649,8 @@ class _TranslationOrderListScreenState
                           rowColor: Colors.white,
                           columnHeight: 65,
                           borderColor: Colors.black38,
-                          gridBackgroundColor: Colors.tealAccent,
+                          gridBackgroundColor:
+                              Color.fromARGB(255, 250, 255, 254),
                         ),
                         columnSize: PlutoGridColumnSizeConfig(
                           autoSizeMode: PlutoAutoSizeMode.scale,

@@ -11,10 +11,10 @@ import 'package:admin/screens/translation_orders/translation_order_list_screen.d
 import 'package:admin/screens/insurance_policy_list_screen.dart';
 import 'package:admin/screens/training_course_list_screen.dart';
 import 'package:admin/screens/legal_case_list_screen.dart';
-
 import 'package:admin/screens/lending_application_list_screen.dart';
 import 'package:admin/screens/banks/banks_screen.dart';
 import 'package:admin/screens/user_form_screen.dart';
+import 'package:admin/screens/user_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -276,6 +276,18 @@ class NewSideMenu extends StatelessWidget {
 
     // Admin sections
     if (authService.canViewAdminTools()) {
+      sections.add(_buildGeneralTile(
+        title: localizations.sideMenuUserManagement,
+        icon: "assets/icons/menu_profile.svg",
+        onPressed: () {
+          print('🎯 User Management clicked');
+          context.read<MenuAppController>().setSelectedScreen(
+                const UserListScreen(),
+              );
+        },
+        isCollapsed: isCollapsed,
+      ));
+
       sections.add(_buildGeneralTile(
         title: localizations.sideMenuCreateUser,
         icon: "assets/icons/menu_profile.svg",

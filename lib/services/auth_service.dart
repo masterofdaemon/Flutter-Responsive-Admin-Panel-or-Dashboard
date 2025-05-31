@@ -653,7 +653,220 @@ class AuthService with ChangeNotifier {
     return hasRole(pb.EmployeeRole.ACCOUNTANT);
   }
 
-  // Async initialization method
+  // === ENHANCED USER MANAGEMENT ROLE-BASED ACCESS CONTROL METHODS ===
+
+  /// Check if current user is a Manager role
+  bool isManager() {
+    return hasRole(pb.EmployeeRole.MANAGER);
+  }
+
+  /// Check if current user is an Administrator role (Director in our system)
+  bool isAdministrator() {
+    return hasRole(pb.EmployeeRole.DIRECTOR);
+  }
+
+  /// Check if current user can disable employees (Manager or Administrator)
+  bool canDisableEmployees() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, managers and directors can disable employees
+    return hasAnyRole([pb.EmployeeRole.MANAGER, pb.EmployeeRole.DIRECTOR]);
+  }
+
+  /// Check if current user can disable a specific employee by their role
+  /// Manager: Can disable any employee including Administrator
+  /// Administrator: Cannot disable Manager accounts
+  bool canDisableSpecificEmployee(pb.EmployeeRole targetEmployeeRole) {
+    if (!canDisableEmployees()) return false;
+
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+
+    final currentRole = currentUserRole;
+    if (currentRole == null) return false;
+
+    switch (currentRole) {
+      case pb.EmployeeRole.MANAGER:
+        // Manager can disable any employee, including Administrator (Director)
+        return true;
+      case pb.EmployeeRole.DIRECTOR: // Administrator in requirements
+        // Administrator cannot disable Manager accounts
+        return targetEmployeeRole != pb.EmployeeRole.MANAGER;
+      default:
+        return false;
+    }
+  }
+
+  /// Check if current user can view all user accounts
+  bool canViewAllUsers() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, managers and directors can view all users
+    return hasAnyRole([pb.EmployeeRole.MANAGER, pb.EmployeeRole.DIRECTOR]);
+  }
+
+  /// Check if current user can create new employee accounts
+  bool canCreateEmployees() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, managers and directors can create employees
+    return hasAnyRole([pb.EmployeeRole.MANAGER, pb.EmployeeRole.DIRECTOR]);
+  }
+
+  /// Check if current user can edit employee information
+  bool canEditEmployeeInfo() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, managers and directors can edit employee info
+    return hasAnyRole([pb.EmployeeRole.MANAGER, pb.EmployeeRole.DIRECTOR]);
+  }
+
+  /// Check if current user can manage user roles (except Manager role management)
+  bool canManageUserRoles() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, directors can manage user roles
+    return hasRole(pb.EmployeeRole.DIRECTOR);
+  }
+
+  /// Check if current user can assign Manager role to users
+  bool canAssignManagerRole() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // Only directors can assign manager roles, managers cannot create other managers
+    return hasRole(pb.EmployeeRole.DIRECTOR);
+  }
+
+  /// Check if current user can view audit logs and user activity
+  bool canViewUserAuditLogs() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, managers and directors can view audit logs
+    return hasAnyRole([pb.EmployeeRole.MANAGER, pb.EmployeeRole.DIRECTOR]);
+  }
+
+  /// Check if current user can access system settings related to user management
+  bool canAccessUserManagementSettings() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, directors can access user management settings
+    return hasRole(pb.EmployeeRole.DIRECTOR);
+  }
+
+  /// Check if current user can force logout other users
+  bool canForceLogoutUsers() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, managers and directors can force logout users
+    return hasAnyRole([pb.EmployeeRole.MANAGER, pb.EmployeeRole.DIRECTOR]);
+  }
+
+  /// Check if current user can reset passwords for other users
+  bool canResetUserPasswords() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, managers and directors can reset passwords
+    return hasAnyRole([pb.EmployeeRole.MANAGER, pb.EmployeeRole.DIRECTOR]);
+  }
+
+  /// Check if current user can view summary and critical notifications
+  bool canViewCriticalNotifications() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, managers can view critical notifications
+    return hasRole(pb.EmployeeRole.MANAGER);
+  }
+
+  /// Check if current user can access backup management
+  bool canAccessBackups() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, only managers can access backups (according to requirements)
+    return hasRole(pb.EmployeeRole.MANAGER);
+  }
+
+  /// Check if current user can perform bulk operations on users
+  bool canPerformBulkUserOperations() {
+    // If authenticated as a user (not employee), allow access
+    if (_isAuthenticated && _userProfile != null && _employeeProfile == null) {
+      return true;
+    }
+    // For employees, managers and directors can perform bulk operations
+    return hasAnyRole([pb.EmployeeRole.MANAGER, pb.EmployeeRole.DIRECTOR]);
+  }
+
+  /// Get the maximum role that the current user can assign to others
+  pb.EmployeeRole? getMaxAssignableRole() {
+    final currentRole = currentUserRole;
+    if (currentRole == null) return null;
+
+    switch (currentRole) {
+      case pb.EmployeeRole.MANAGER:
+        // Manager can assign any role including Administrator
+        return pb.EmployeeRole.DIRECTOR;
+      case pb.EmployeeRole.DIRECTOR: // Administrator
+        // Administrator can assign all roles except Manager
+        return pb.EmployeeRole.ACCOUNTANT; // Highest non-manager role
+      default:
+        return null;
+    }
+  }
+
+  /// Get available roles that current user can assign
+  List<pb.EmployeeRole> getAssignableRoles() {
+    final currentRole = currentUserRole;
+    if (currentRole == null) return [];
+
+    switch (currentRole) {
+      case pb.EmployeeRole.MANAGER:
+        // Manager can assign any role
+        return [
+          pb.EmployeeRole.DIRECTOR,
+          pb.EmployeeRole.CHIEF_MANAGER,
+          pb.EmployeeRole.MANAGER,
+          pb.EmployeeRole.ACCOUNTANT,
+          pb.EmployeeRole.TRANSLATOR,
+        ];
+      case pb.EmployeeRole.DIRECTOR: // Administrator
+        // Administrator can assign all roles except Manager
+        return [
+          pb.EmployeeRole.DIRECTOR,
+          pb.EmployeeRole.CHIEF_MANAGER,
+          pb.EmployeeRole.ACCOUNTANT,
+          pb.EmployeeRole.TRANSLATOR,
+        ];
+      default:
+        return [];
+    }
+  }
+
+  /// Async initialization method
   Future<void> _initializeAsync() async {
     await _checkToken();
   }

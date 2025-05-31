@@ -6,7 +6,6 @@ import 'package:admin/controllers/layout_controller.dart';
 import 'package:admin/controllers/menu_app_controller.dart';
 import 'package:admin/l10n/app_localizations.dart';
 import 'package:admin/responsive.dart';
-import 'package:admin/controllers/menu_app_controller.dart';
 
 class QuickActionBar extends StatelessWidget {
   final String? screenType; // Made optional to auto-detect

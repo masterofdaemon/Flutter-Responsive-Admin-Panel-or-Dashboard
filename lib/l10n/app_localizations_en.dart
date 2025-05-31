@@ -718,6 +718,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sideMenuCreateUser => 'Create User';
 
   @override
+  String get sideMenuUserManagement => 'User Management';
+
+  @override
   String get sideMenuTask => 'Task';
 
   @override
@@ -2395,4 +2398,193 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationsEmpty => 'No notifications';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get userManagement => 'User Management';
+
+  @override
+  String get userManagementDescription =>
+      'Manage employees, roles, and access permissions';
+
+  @override
+  String get addEmployee => 'Add Employee';
+
+  @override
+  String get refresh => 'Refresh';
+
+  @override
+  String get searchUsers => 'Search users...';
+
+  @override
+  String get role => 'Role';
+
+  @override
+  String get allRoles => 'All Roles';
+
+  @override
+  String get status => 'Status';
+
+  @override
+  String get allStatuses => 'All Statuses';
+
+  @override
+  String get active => 'Active';
+
+  @override
+  String get disabled => 'Disabled';
+
+  @override
+  String selectedItems(int count) {
+    return '$count selected';
+  }
+
+  @override
+  String get clearSelection => 'Clear Selection';
+
+  @override
+  String get disableSelected => 'Disable Selected';
+
+  @override
+  String get enableSelected => 'Enable Selected';
+
+  @override
+  String get noUsersFound => 'No users found';
+
+  @override
+  String get tryAdjustingFilters =>
+      'Try adjusting your search criteria or filters';
+
+  @override
+  String get name => 'Name';
+
+  @override
+  String get email => 'Email';
+
+  @override
+  String get lastLogin => 'Last Login';
+
+  @override
+  String get viewProfile => 'View Profile';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get resetPassword => 'Reset Password';
+
+  @override
+  String get disableAccount => 'Disable Account';
+
+  @override
+  String get enableAccount => 'Enable Account';
+
+  @override
+  String get employeeDetails => 'Employee Details';
+
+  @override
+  String get login => 'Login';
+
+  @override
+  String get telegramId => 'Telegram ID';
+
+  @override
+  String get whatsappNumber => 'WhatsApp Number';
+
+  @override
+  String get notes => 'Notes';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String resetPasswordWarning(String name) {
+    return 'Are you sure you want to reset the password for $name? They will need to use the new password to log in.';
+  }
+
+  @override
+  String get reason => 'Reason';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get reasonRequired => 'Reason is required';
+
+  @override
+  String get passwordResetFailed => 'Failed to reset password';
+
+  @override
+  String get passwordResetSuccess => 'Password reset successful';
+
+  @override
+  String newPasswordGenerated(String name, String password) {
+    return 'New password for $name: $password';
+  }
+
+  @override
+  String get copiedToClipboard => 'Password copied to clipboard';
+
+  @override
+  String get copyPassword => 'Copy Password';
+
+  @override
+  String get passwordResetInstructions =>
+      'The new password has been copied to your clipboard. Please share it securely with the employee.';
+
+  @override
+  String get understood => 'Understood';
+
+  @override
+  String disableAccountWarning(String name) {
+    return 'Are you sure you want to disable the account for $name?';
+  }
+
+  @override
+  String get disableAccountConsequences =>
+      'This will:\n• Change their password to a random value\n• Force logout from all active sessions\n• Block access until reactivated';
+
+  @override
+  String accountDisabledSuccess(String name) {
+    return 'Account for $name has been disabled successfully';
+  }
+
+  @override
+  String get accountDisableFailed => 'Failed to disable account';
+
+  @override
+  String enableAccountConfirmation(String name) {
+    return 'Are you sure you want to enable the account for $name?';
+  }
+
+  @override
+  String accountEnabledSuccess(String name) {
+    return 'Account for $name has been enabled successfully';
+  }
+
+  @override
+  String get accountEnableFailed => 'Failed to enable account';
+
+  @override
+  String get bulkDisableAccounts => 'Disable Multiple Accounts';
+
+  @override
+  String bulkDisableWarning(int count) {
+    return 'Are you sure you want to disable $count employee accounts?';
+  }
+
+  @override
+  String bulkOperationResult(int successful, int failed) {
+    return '$successful accounts processed successfully, $failed failed';
+  }
+
+  @override
+  String get bulkEnableAccounts => 'Enable Multiple Accounts';
+
+  @override
+  String bulkEnableConfirmation(int count) {
+    return 'Are you sure you want to enable $count employee accounts?';
+  }
 }
